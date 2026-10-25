@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  --glow: #a6ff5c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #06120d;
+  color: #eef6e0;
+  font-family: var(--font-figtree), system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--glow);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
