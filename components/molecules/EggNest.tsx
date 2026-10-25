@@ -21,9 +21,12 @@ export function EggNest({ eggs, hint, openLabel, closeLabel }: EggNestProps) {
 
   return (
     <div className="max-w-[calc(var(--u)*38.9)] min-w-[290px] flex-[1_1_440px]">
-      <div className="relative mt-5 h-[290px]">
+      <div
+        data-testid="egg-nest"
+        className="mt-fluid-3 relative h-[clamp(12rem,calc(var(--u)*20),18rem)]"
+      >
         <NestBack aria-hidden="true" className="absolute bottom-0 left-0 h-auto w-full" />
-        <ul className="absolute inset-x-0 top-[46px] flex justify-center gap-[clamp(6px,2vw,22px)] px-2">
+        <ul className="absolute inset-x-0 top-[16%] flex justify-center gap-[clamp(6px,2vw,22px)] px-2">
           {eggs.map((egg) => (
             <li key={egg.id}>
               <ContactEgg
@@ -31,7 +34,9 @@ export function EggNest({ eggs, hint, openLabel, closeLabel }: EggNestProps) {
                 color={egg.color}
                 open={egg.id === openId}
                 ariaLabel={`${egg.id === openId ? closeLabel : openLabel} ${egg.label}`}
-                art={<EggArt width={104} height={130} />}
+                art={
+                  <EggArt className="h-auto w-[clamp(3.6rem,calc(var(--u)*7.2),6.5rem)]" />
+                }
                 onToggle={() => setOpenId(egg.id === openId ? null : egg.id)}
               />
             </li>

@@ -111,7 +111,7 @@
 }
 .pit {
   position: relative;
-  height: 218px;
+  height: clamp(10.5rem, calc(var(--u) * 15), 15rem);
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid rgba(255, 196, 110, 0.25);
@@ -180,6 +180,9 @@
 }
 .lake {
   position: relative;
+  /* Cabe completo en el alto visible: el SVG es 1120x520 y el panel mide ~6rem */
+  max-width: min(100%, calc((100svh - var(--nav-h) - 7rem) * 1120 / 520));
+  margin-inline: auto;
   border-radius: 28px;
   overflow: hidden;
   border: 1px solid rgba(110, 240, 224, 0.3);

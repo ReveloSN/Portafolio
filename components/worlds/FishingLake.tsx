@@ -25,7 +25,7 @@ export function FishingLake({ fishing }: FishingLakeProps) {
   const info = current ? describeCatch(current) : null;
 
   return (
-    <div className="lake">
+    <div className="lake" data-testid="lake-scene">
       <LakeScene
         phase={toCssPhase(state.phase)}
         leaping={leaping}

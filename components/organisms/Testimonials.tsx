@@ -47,7 +47,8 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           intro={copy.intro}
         />
         <div
-          className="mt-fluid-6 relative h-[430px] [perspective:1500px]"
+          data-testid="carousel-stage"
+          className="mt-fluid-6 relative h-[clamp(19rem,calc(var(--u)*29),30rem)] [perspective:1500px]"
           aria-roledescription="carrusel"
         >
           {testimonials.map((testimonial, i) => {

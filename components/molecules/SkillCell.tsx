@@ -40,7 +40,7 @@ export function SkillCell({
   const done = layersDug >= totalLayers;
   const left = totalLayers - layersDug;
   return (
-    <article className={cn("cell", done && "full")}>
+    <article data-testid="dig-cell" className={cn("cell", done && "full")}>
       <div className="flex items-start justify-between gap-2.5">
         <div>
           <p className="text-glow-amber text-fluid-xs font-mono tracking-[.2em]">
