@@ -35,3 +35,18 @@
 .stage-w {
   width: calc(var(--w) * var(--sf));
 }
+
+/* Agua: se puede bajar en pantallas bajas sin mover el resto de la escena */
+.stage-water {
+  bottom: calc((var(--b) - var(--water-drop, 0)) * var(--sf));
+}
+
+/* Pantallas bajas (p. ej. 1280x575 con escala 150%):
+   dino, canoa y hojas más pequeños, troncos más angostos y el agua más abajo */
+@media (max-height: 640px) {
+  .stage {
+    --sf: min(var(--s), calc(100cqh / 900));
+    --water-drop: 70;
+    --trunk-ratio: 0.85;
+  }
+}

@@ -42,8 +42,8 @@ const CORNERS: readonly Corner[] = [
   },
 ];
 
-/** Ancho de cada tronco: nunca más de 680px, media pantalla ni 1.1 veces el alto visible. */
-const TRUNK_WIDTH = "min(680px, 50vw, calc(100svh * 1.1))";
+/** Ancho de cada tronco: nunca más de 680px, media pantalla ni 1.1 veces el alto visible (0.85 en pantallas bajas). */
+const TRUNK_WIDTH = "min(680px, 50vw, calc(100svh * var(--trunk-ratio, 1.1)))";
 
 const GLOW =
   "radial-gradient(ellipse 46% 44% at 52% 34%, color-mix(in srgb, var(--glow) 55%, transparent) 0%, color-mix(in srgb, var(--glow) 16%, transparent) 45%, transparent 100%)";
@@ -92,7 +92,7 @@ export function JungleBackdrop({
       {back}
       <div
         aria-hidden="true"
-        className="drift2 stage-bottom pointer-events-none absolute -left-[6%] h-[calc(420*var(--sf))] w-[112%]"
+        className="drift2 stage-water pointer-events-none absolute -left-[6%] h-[calc(420*var(--sf))] w-[112%]"
         style={{ "--b": waterBottom } as StageVars}
       >
         <Image

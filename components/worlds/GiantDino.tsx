@@ -10,6 +10,9 @@ interface GiantDinoProps {
 /** Posición del dino en coordenadas del diseño (1440x900): anclado arriba para no recortar la cabeza. */
 const DINO_PLACEMENT = { "--x": 576, "--y": -70, "--w": 835 } as StageVars;
 
+/** La imagen del dino termina en un corte recto a la derecha: se desvanece para que nunca se note. */
+const BODY_FADE = "linear-gradient(to right, #000 78%, transparent 99%)";
+
 const EYE_POSITION = { left: "28.43%", top: "32.81%" } as const;
 
 /** Dinosaurio de cuello largo: respira, parpadea y su iris sigue el cursor. */
@@ -24,7 +27,14 @@ export function GiantDino({ alt }: GiantDinoProps) {
       }}
     >
       <div className="breathe">
-        <div className="relative w-full" style={{ aspectRatio: "1365 / 1152" }}>
+        <div
+          className="relative w-full"
+          style={{
+            aspectRatio: "1365 / 1152",
+            maskImage: BODY_FADE,
+            WebkitMaskImage: BODY_FADE,
+          }}
+        >
           <Image
             src="/images/ojo.webp"
             alt=""
