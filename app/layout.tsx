@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Figtree, JetBrains_Mono, Outfit } from "next/font/google";
+import { COPY } from "@/data/copy";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -20,7 +21,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portafolio | Expedición",
+  title: COPY.site.title,
   description:
     "Portafolio personal con tema de expedición: selva, océano y cueva de fósiles.",
 };
