@@ -19,7 +19,12 @@
 
 /* Ancho máximo: nunca invade la cabeza del dinosaurio (que empieza ~55% del ancho) */
 .hero-copy-inner {
-  width: clamp(min(20rem, 100%), 44%, calc(var(--u) * 40));
+  /* Termina antes del 44% del ancho, donde empieza el dinosaurio */
+  width: clamp(
+    min(20rem, 100%),
+    calc(44vw - var(--space-gutter) - 1rem),
+    calc(var(--u) * 40)
+  );
 }
 
 .hero-avatar {

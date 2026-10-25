@@ -3,6 +3,7 @@ import { Icon } from "@/components/atoms/Icon";
 import { Avatar } from "@/components/molecules/Avatar";
 import { ParallaxStage } from "@/components/molecules/ParallaxStage";
 import { Canoe } from "@/components/worlds/Canoe";
+import { DinoWater } from "@/components/worlds/DinoWater";
 import { Fireflies } from "@/components/worlds/Fireflies";
 import { GiantDino } from "@/components/worlds/GiantDino";
 import { JungleBackdrop, type StageVars } from "@/components/worlds/JungleBackdrop";
@@ -39,12 +40,15 @@ export function Hero({ profile }: HeroProps) {
           </>
         }
         mid={
-          <div
-            className="stage-bottom pointer-events-none absolute right-0 left-0 flex justify-center"
-            style={CANOE_PLACEMENT}
-          >
-            <Canoe alt={hero.canoeAlt} withReflection testId="hero-canoe" />
-          </div>
+          <>
+            <DinoWater />
+            <div
+              className="stage-bottom pointer-events-none absolute right-0 left-0 flex justify-center"
+              style={CANOE_PLACEMENT}
+            >
+              <Canoe alt={hero.canoeAlt} withReflection testId="hero-canoe" />
+            </div>
+          </>
         }
       >
         <Fireflies particles={FIREFLIES} />

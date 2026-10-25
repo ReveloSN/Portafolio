@@ -4,14 +4,14 @@ export const PARALLAX_FRAME_MS = 1000 / PARALLAX_MAX_FPS;
 /** Multiplicadores (px) de cada capa del paralaje del Hero. */
 export const HERO_LAYERS = {
   background: { x: 6, y: 4 },
-  dino: { x: 12, y: 7 },
+  dino: { x: 4, y: 2 },
   trunks: { x: 8, y: 4 },
   canoe: { x: 6, y: 3 },
   foliage: { x: 40, y: 18 },
 } as const;
 
-export const EYE_TRAVEL = { x: 13, y: 18 } as const;
-export const DINO_TILT = { x: 3, y: 4 } as const;
+/** Recorrido del iris (porcentaje de su propio tamaño): no sale de la cuenca. */
+export const EYE_TRAVEL = { x: 45, y: 55 } as const;
 
 export const FIREFLY_COUNT = 14;
 export const WORLD_PARTICLE_COUNT = 16;

@@ -44,6 +44,9 @@ const CORNERS: readonly Corner[] = [
 
 /** Ancho de cada tronco: nunca más de 680px, media pantalla ni 1.1 veces el alto visible (0.85 en pantallas bajas). */
 const TRUNK_WIDTH = "min(680px, 50vw, calc(100svh * var(--trunk-ratio, 1.1)))";
+/** El tronco derecho es más angosto y más pegado al borde para no tapar la cola del dino. */
+const TRUNK_RIGHT_WIDTH = `calc(${TRUNK_WIDTH} * 0.75)`;
+const TRUNK_RIGHT_OFFSET = -0.18;
 
 const GLOW =
   "radial-gradient(ellipse 46% 44% at 52% 34%, color-mix(in srgb, var(--glow) 55%, transparent) 0%, color-mix(in srgb, var(--glow) 16%, transparent) 45%, transparent 100%)";
@@ -121,8 +124,12 @@ export function JungleBackdrop({
       </div>
       <div
         data-testid="trunk-right"
-        className="px pointer-events-none absolute top-[-4%] right-[-8%]"
-        style={{ width: TRUNK_WIDTH, transform: layerShift(trunks.x, trunks.y, 1) }}
+        className="px pointer-events-none absolute top-[-4%]"
+        style={{
+          width: TRUNK_RIGHT_WIDTH,
+          right: `calc(${TRUNK_RIGHT_WIDTH} * ${TRUNK_RIGHT_OFFSET})`,
+          transform: layerShift(trunks.x, trunks.y, 1),
+        }}
       >
         <Image
           src="/images/trunkR.webp"

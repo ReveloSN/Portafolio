@@ -51,6 +51,8 @@ const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT_DIR = path.join(process.cwd(), "screenshots");
 const TOLERANCE_PX = 0.5;
 const ASSET_TIMEOUT_MS = 8_000;
+/** Parte de la cola que puede salir por el borde derecho (fracción del ancho del dino). */
+const TAIL_TIP_FRACTION = 0.04;
 const SETTLE_MS = 400;
 
 /** Espera fuentes e imágenes visibles; las imágenes diferidas fuera de pantalla no se esperan. */
@@ -85,7 +87,7 @@ async function checkFirstScreen(
   withTrunks: boolean,
 ): Promise<string[]> {
   return page.evaluate(
-    ({ ids, tolerance, withTrunks }) => {
+    ({ ids, tolerance, withTrunks, tailTipFraction }) => {
       const errors: string[] = [];
       const vw = window.innerWidth;
       const vh = window.innerHeight;
@@ -117,6 +119,36 @@ async function checkFirstScreen(
         return r.left + r.width / 2;
       };
       if (!withTrunks) return errors;
+
+      // Dinosaurio: completo bajo el navbar (salvo la punta de la cola) y sin tocar el h1
+      const dino = document.querySelector('[data-testid="hero-dino"]');
+      const title = document.querySelector('[data-testid="hero-title"]');
+      if (!dino) errors.push("hero-dino: no existe");
+      if (dino && title) {
+        const d = dino.getBoundingClientRect();
+        const t = title.getBoundingClientRect();
+        const rootStyle = getComputedStyle(document.documentElement);
+        const navPx =
+          parseFloat(rootStyle.getPropertyValue("--nav-h")) *
+          parseFloat(rootStyle.fontSize);
+        const tailTip = d.width * tailTipFraction;
+        if (
+          d.left < -tolerance ||
+          d.top < navPx - tolerance ||
+          d.bottom > vh + tolerance ||
+          d.right > vw + tailTip
+        ) {
+          errors.push(
+            `dinosaurio fuera del viewport (${Math.round(d.left)},${Math.round(d.top)} → ${Math.round(d.right)},${Math.round(d.bottom)})`,
+          );
+        }
+        const behindText = window.matchMedia(
+          "(max-aspect-ratio: 4/5) and (max-width: 900px)",
+        ).matches;
+        const overlaps =
+          d.left < t.right && t.left < d.right && d.top < t.bottom && t.top < d.bottom;
+        if (overlaps && !behindText) errors.push("el dinosaurio se superpone con el h1");
+      }
       const left = center("trunk-left");
       const right = center("trunk-right");
       if (left === null || left >= vw / 2)
@@ -125,7 +157,7 @@ async function checkFirstScreen(
         errors.push(`tronco derecho no está en la mitad derecha (${right})`);
       return errors;
     },
-    { ids, tolerance: TOLERANCE_PX, withTrunks },
+    { ids, tolerance: TOLERANCE_PX, withTrunks, tailTipFraction: TAIL_TIP_FRACTION },
   );
 }
 

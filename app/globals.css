@@ -4,6 +4,7 @@
 @import "./motion.css";
 @import "./stage.css";
 @import "./hero.css";
+@import "./dino.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));
@@ -119,7 +120,8 @@ section {
     transition-duration: 0.01ms !important;
   }
   /* Las ondas solo tienen sentido animadas */
-  .ripple {
+  .ripple,
+  .dino-ripple {
     opacity: 0;
   }
 }
