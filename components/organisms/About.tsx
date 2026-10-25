@@ -1,7 +1,10 @@
+import type { CSSProperties } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
 import { ExplorerCard } from "@/components/molecules/ExplorerCard";
+import { RevealGroup } from "@/components/molecules/RevealGroup";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
+import { StaggerText } from "@/components/molecules/StaggerText";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
@@ -18,6 +21,9 @@ const FACT_COLORS: Readonly<Record<QuickFact["icon"], string>> = {
   heart: "#ffc46e",
 };
 
+/** Orden en la entrada escalonada: primero el texto, luego datos rápidos y tecnologías. */
+const FACTS_START = 4;
+const CHIPS_START = 7;
 const CHIP_COLORS = ["166,255,92", "110,240,224", "255,196,110"] as const;
 const BACKGROUND = seamBackground(
   "--seam-about-start",
@@ -32,24 +38,32 @@ export function About({ profile }: AboutProps) {
       id={SECTION_IDS.about}
       background={BACKGROUND}
       decoration={<SeamLayer seam="hero-about" host="lower" />}
+      className="py-[clamp(3rem,calc(var(--u)*6),6.5rem)]"
     >
-      <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(40px,6vw,88px)]">
+      <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(2rem,calc(var(--u)*4),5rem)]">
         <ExplorerCard profile={profile} />
-        <div className="max-w-[calc(var(--u)*41.7)] min-w-[280px] flex-[1_1_440px]">
+        <RevealGroup className="max-w-[calc(var(--u)*41.7)] min-w-[280px] flex-[1_1_440px]">
           <p className="font-display text-glow text-fluid-sm font-medium tracking-[.5em]">
             {about.eyebrow}
           </p>
           <h2 className="font-display text-display mt-3.5 mb-5 leading-none font-extrabold tracking-[-.02em]">
             {about.title}
           </h2>
-          <p className="text-fluid-md leading-[1.75] opacity-90">{profile.aboutText}</p>
+          <StaggerText
+            text={profile.aboutText}
+            className="text-fluid-md leading-[1.75] opacity-90"
+          />
 
           <h3 className="mt-fluid-4 text-fluid-xs font-mono font-medium tracking-[.2em] opacity-70">
             {about.factsTitle}
           </h3>
           <ul className="mt-3 flex flex-wrap gap-2.5">
-            {profile.quickFacts.map((fact) => (
-              <li key={fact.text}>
+            {profile.quickFacts.map((fact, i) => (
+              <li
+                key={fact.text}
+                className="stagger-item"
+                style={{ "--i": FACTS_START + i } as CSSProperties}
+              >
                 <Tag className="text-fluid-sm inline-flex items-center gap-2 px-4 py-2">
                   <Icon
                     name={fact.icon}
@@ -71,19 +85,24 @@ export function About({ profile }: AboutProps) {
               return (
                 <li
                   key={tech}
-                  className="chip-float rounded-full border px-5 py-2.5 font-semibold"
-                  style={{
-                    borderColor: `rgba(${rgb},.55)`,
-                    background: `rgba(${rgb},.08)`,
-                    animationDelay: `${-i}s`,
-                  }}
+                  className="stagger-item"
+                  style={{ "--i": CHIPS_START + i } as CSSProperties}
                 >
-                  {tech}
+                  <span
+                    className="chip-float block rounded-full border px-5 py-2.5 font-semibold"
+                    style={{
+                      borderColor: `rgba(${rgb},.55)`,
+                      background: `rgba(${rgb},.08)`,
+                      animationDelay: `${-i}s`,
+                    }}
+                  >
+                    {tech}
+                  </span>
                 </li>
               );
             })}
           </ul>
-        </div>
+        </RevealGroup>
       </div>
     </SectionShell>
   );

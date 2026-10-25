@@ -511,10 +511,24 @@
   opacity: 0;
   transform: translateY(28px);
   transition:
-    opacity 0.7s ease-out,
-    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity var(--dur-enter) var(--ease-enter),
+    transform var(--dur-enter) var(--ease-enter);
 }
 .fade-up-in {
   opacity: 1;
   transform: none;
+}
+
+/* Entrada escalonada (RevealGroup + .stagger-item con --i) */
+[data-reveal] .stagger-item {
+  opacity: 0;
+  translate: 0 0.9em;
+  transition:
+    opacity var(--dur-enter) var(--ease-enter),
+    translate var(--dur-enter) var(--ease-enter);
+  transition-delay: calc(var(--i, 0) * var(--stagger-step));
+}
+[data-reveal][data-inview] .stagger-item {
+  opacity: 1;
+  translate: 0 0;
 }

@@ -67,6 +67,11 @@
   --seam-skills-start: var(--seam-contact-end);
   --seam-skills-end: #05100b;
 
+  /* Movimiento: todas las entradas usan la misma duración y curva */
+  --dur-enter: 0.7s;
+  --ease-enter: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --stagger-step: 80ms;
+
   /* Tema */
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;
