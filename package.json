@@ -9,7 +9,8 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "screenshots": "tsx scripts/screenshots.ts"
+    "screenshots": "tsx scripts/screenshots.ts",
+    "seams": "tsx scripts/seams.ts"
   },
   "dependencies": {
     "next": "16.4.3",
