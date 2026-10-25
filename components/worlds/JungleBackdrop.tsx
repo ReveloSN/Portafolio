@@ -13,11 +13,73 @@ interface JungleBackdropProps {
   readonly children?: ReactNode;
 }
 
+interface FrontLayer {
+  readonly src: string;
+  readonly width: number;
+  readonly height: number;
+  readonly sizes: string;
+  readonly position: string;
+  readonly depth: keyof typeof HERO_LAYERS;
+  readonly scale: number;
+  readonly imageClassName?: string;
+}
+
+const FRONT_LAYERS: readonly FrontLayer[] = [
+  {
+    src: "tronco-izq",
+    width: 1024,
+    height: 1536,
+    sizes: "680px",
+    position: "-left-[150px] -top-[60px] w-[680px]",
+    depth: "trunks",
+    scale: 1.04,
+  },
+  {
+    src: "tronco-der",
+    width: 1024,
+    height: 1536,
+    sizes: "680px",
+    position: "-right-[150px] -top-[60px] w-[680px]",
+    depth: "trunks",
+    scale: 1.04,
+  },
+  {
+    src: "foliage-bl",
+    width: 1536,
+    height: 1024,
+    sizes: "520px",
+    position: "-right-5 -top-5 w-[32vw] max-w-[520px]",
+    depth: "foliage",
+    scale: 1.05,
+    imageClassName: "rotate-180",
+  },
+  {
+    src: "foliage-br",
+    width: 1536,
+    height: 1024,
+    sizes: "640px",
+    position: "-right-5 -bottom-10 w-[43vw] max-w-[640px]",
+    depth: "foliage",
+    scale: 1.05,
+  },
+  {
+    src: "foliage-bl",
+    width: 1536,
+    height: 1024,
+    sizes: "590px",
+    position: "-left-[60px] -bottom-10 w-[40vw] max-w-[590px]",
+    depth: "foliage",
+    scale: 1.05,
+  },
+];
+
 const GLOW =
   "radial-gradient(ellipse 46% 44% at 52% 34%, color-mix(in srgb, var(--glow) 55%, transparent) 0%, color-mix(in srgb, var(--glow) 16%, transparent) 45%, transparent 100%)";
 const MIST =
   "radial-gradient(ellipse at center, rgba(217,255,201,.13), rgba(217,255,201,0) 70%)";
 const WATER_MASK = "linear-gradient(to bottom, transparent, #000 24%)";
+const VIGNETTE =
+  "radial-gradient(ellipse at 50% 48%, transparent 55%, rgba(0,0,0,.55) 100%)";
 
 /** Selva de fondo: río, resplandor, niebla, agua, troncos y hojas con paralaje. */
 export function JungleBackdrop({
@@ -26,7 +88,7 @@ export function JungleBackdrop({
   waterTop = 520,
   children,
 }: JungleBackdropProps) {
-  const { background, trunks, foliage } = HERO_LAYERS;
+  const { background } = HERO_LAYERS;
   return (
     <>
       <div
@@ -68,78 +130,29 @@ export function JungleBackdrop({
         />
       </div>
       {mid}
-      <div
-        className="px pointer-events-none absolute -top-[60px] -left-[150px] w-[680px]"
-        style={{ transform: `${layerShift(trunks.x, trunks.y)} scale(1.04)` }}
-      >
-        <Image
-          src="/images/tronco-izq.webp"
-          alt=""
-          width={1024}
-          height={1536}
-          sizes="680px"
-          className="h-auto w-full"
-        />
-      </div>
-      <div
-        className="px pointer-events-none absolute -top-[60px] -right-[150px] w-[680px]"
-        style={{ transform: `${layerShift(trunks.x, trunks.y)} scale(1.04)` }}
-      >
-        <Image
-          src="/images/tronco-der.webp"
-          alt=""
-          width={1024}
-          height={1536}
-          sizes="680px"
-          className="h-auto w-full"
-        />
-      </div>
-      <div
-        className="px pointer-events-none absolute -top-5 -right-5 w-[32vw] max-w-[520px]"
-        style={{ transform: `${layerShift(foliage.x, foliage.y)} scale(1.05)` }}
-      >
-        <Image
-          src="/images/foliage-bl.webp"
-          alt=""
-          width={1536}
-          height={1024}
-          sizes="520px"
-          className="h-auto w-full rotate-180"
-        />
-      </div>
-      <div
-        className="px pointer-events-none absolute -right-5 -bottom-10 w-[43vw] max-w-[640px]"
-        style={{ transform: `${layerShift(foliage.x, foliage.y)} scale(1.05)` }}
-      >
-        <Image
-          src="/images/foliage-br.webp"
-          alt=""
-          width={1536}
-          height={1024}
-          sizes="640px"
-          className="h-auto w-full"
-        />
-      </div>
-      <div
-        className="px pointer-events-none absolute -bottom-10 -left-[60px] w-[40vw] max-w-[590px]"
-        style={{ transform: `${layerShift(foliage.x, foliage.y)} scale(1.05)` }}
-      >
-        <Image
-          src="/images/foliage-bl.webp"
-          alt=""
-          width={1536}
-          height={1024}
-          sizes="590px"
-          className="h-auto w-full"
-        />
-      </div>
+      {FRONT_LAYERS.map((layer) => {
+        const shift = HERO_LAYERS[layer.depth];
+        return (
+          <div
+            key={`${layer.src}-${layer.position}`}
+            className={`px pointer-events-none absolute ${layer.position}`}
+            style={{ transform: `${layerShift(shift.x, shift.y)} scale(${layer.scale})` }}
+          >
+            <Image
+              src={`/images/${layer.src}.webp`}
+              alt=""
+              width={layer.width}
+              height={layer.height}
+              sizes={layer.sizes}
+              className={`h-auto w-full ${layer.imageClassName ?? ""}`}
+            />
+          </div>
+        );
+      })}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 48%, transparent 55%, rgba(0,0,0,.55) 100%)",
-        }}
+        style={{ background: VIGNETTE }}
       />
       {children}
     </>

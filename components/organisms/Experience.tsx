@@ -1,27 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { Icon } from "@/components/atoms/Icon";
 import { ExperienceCard } from "@/components/molecules/ExperienceCard";
-import { LakeHud } from "@/components/molecules/LakeHud";
+import { KindLegend } from "@/components/molecules/KindLegend";
 import { RareCard } from "@/components/molecules/RareCard";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { FishIcon } from "@/components/worlds/art/FishIcon";
 import { Megalodon } from "@/components/worlds/art/Megalodon";
 import { Mosasaur } from "@/components/worlds/art/Mosasaur";
-import { LakeScene, type Leaping } from "@/components/worlds/LakeScene";
+import { FishingLake } from "@/components/worlds/FishingLake";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { useFishing } from "@/hooks/useFishing";
 import { catchSequence, sortedExperience } from "@/lib/collections";
-import {
-  describeCatch,
-  fishingStatus,
-  KIND_COLOR,
-  KIND_LABEL,
-  toCssPhase,
-} from "@/lib/fishingView";
+import { KIND_COLOR, KIND_LABEL } from "@/lib/fishingView";
 
 const BACKGROUND = "linear-gradient(#06120d, #0a1c26 40%, #08171e)";
 const SEQUENCE_INDEX = new Map(
@@ -31,38 +24,11 @@ const SEQUENCE_INDEX = new Map(
   ]),
 );
 
-function KindLegend({ glow }: { readonly glow: string }) {
-  const { experience: copy } = COPY;
-  return (
-    <ul className="mt-7 mb-10 flex flex-wrap justify-center gap-3.5">
-      <li className="border-glow/60 bg-glow/10 inline-flex items-center gap-2.5 rounded-full border px-5 py-[9px] font-semibold">
-        <Icon name="cap" style={{ color: glow }} />
-        {copy.academic}
-      </li>
-      <li className="inline-flex items-center gap-2.5 rounded-full border border-[rgba(255,196,110,.6)] bg-[rgba(255,196,110,.1)] px-5 py-[9px] font-semibold">
-        <Icon name="briefcase" style={{ color: "#ffc46e" }} />
-        {copy.work}
-      </li>
-    </ul>
-  );
-}
-
 export function Experience() {
   const { experience: copy } = COPY;
-  const total = catchSequence.length;
-  const fishing = useFishing(total);
-  const { state } = fishing;
-  const current =
-    state.currentIndex === null ? null : (catchSequence[state.currentIndex] ?? null);
+  const fishing = useFishing(catchSequence.length);
   const caught = (id: string) =>
-    state.caughtIndexes.includes(SEQUENCE_INDEX.get(id) ?? -1);
-
-  const leaping: Leaping | null = !current
-    ? null
-    : current.type === "rare"
-      ? { kind: current.creature }
-      : { kind: "fish", color: KIND_COLOR[current.entry.kind] };
-  const info = current ? describeCatch(current) : null;
+    fishing.state.caughtIndexes.includes(SEQUENCE_INDEX.get(id) ?? -1);
 
   return (
     <SectionShell
@@ -86,38 +52,8 @@ export function Experience() {
           title={copy.title}
           intro={copy.intro}
         />
-        <KindLegend glow="var(--glow)" />
-
-        <div className="lake">
-          <LakeScene
-            phase={toCssPhase(state.phase)}
-            leaping={leaping}
-            label={copy.lakeLabel}
-          />
-          {state.phase === "caught" && info ? (
-            <div className="reveal" aria-hidden="true">
-              <p className="text-glow font-mono text-xs tracking-[.28em] uppercase">
-                {info.kicker}
-              </p>
-              <p className="font-display mt-1.5 text-[clamp(20px,2.6vw,30px)] leading-[1.1] font-extrabold">
-                {info.title}
-              </p>
-              <p className="mx-auto mt-1 max-w-[520px] text-[15px] opacity-85">
-                {info.subtitle}
-              </p>
-            </div>
-          ) : null}
-          <LakeHud
-            phase={state.phase}
-            count={state.caughtIndexes.length}
-            total={total}
-            status={fishingStatus(state, total, current)}
-            labels={copy}
-            onCast={fishing.cast}
-            onPull={fishing.pull}
-            onReset={fishing.reset}
-          />
-        </div>
+        <KindLegend />
+        <FishingLake fishing={fishing} />
 
         <h3 className="font-display mt-14 mb-2 text-center text-[clamp(24px,3vw,36px)] font-extrabold">
           {copy.diaryTitle}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/atoms/Button";
+import { DigToolbar } from "@/components/molecules/DigToolbar";
 import { SkillCell } from "@/components/molecules/SkillCell";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { DigHorizon } from "@/components/worlds/art/DigHorizon";
@@ -70,20 +70,16 @@ export function Skills({ skills }: SkillsProps) {
           {copy.intro}
         </p>
 
-        <div className="mb-[34px] flex flex-wrap items-center gap-3.5 rounded-[18px] border border-[rgba(255,196,110,.25)] bg-[rgba(20,10,4,.55)] px-5 py-3.5">
-          <div aria-live="polite" className="min-w-[220px] flex-1">
-            <p className="font-mono text-xs tracking-[.22em] opacity-70">
-              {copy.findings} {site.found} / {skills.length}
-            </p>
-            <p className="mt-1 font-semibold">{message}</p>
-          </div>
-          <Button size="sm" onClick={site.digAll}>
-            {copy.digAll}
-          </Button>
-          <Button size="sm" variant="ghost" onClick={site.cover}>
-            {copy.cover}
-          </Button>
-        </div>
+        <DigToolbar
+          label={copy.findings}
+          found={site.found}
+          total={skills.length}
+          message={message}
+          digAllLabel={copy.digAll}
+          coverLabel={copy.cover}
+          onDigAll={site.digAll}
+          onCover={site.cover}
+        />
 
         <ul className="grid gap-[26px] md:grid-cols-2 lg:grid-cols-3">
           {skills.map((skill, i) => {

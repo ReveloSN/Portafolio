@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/molecules/SectionHeading";
+import { Reveal } from "@/components/molecules/Reveal";
 import { ProjectCard } from "@/components/molecules/ProjectCard";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { THUMBNAILS } from "@/components/worlds/registry";
@@ -25,19 +26,21 @@ export function Projects({ projects }: ProjectsProps) {
           titleClassName="max-w-[860px]"
         />
         <ul className="mt-[60px] grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {projects.map((project) => {
+          {projects.map((project, index) => {
             const world = worldsBySlug.get(project.slug);
             if (!world) return null;
             const Thumbnail = THUMBNAILS[project.slug];
             return (
               <li key={project.id} className="flex">
-                <ProjectCard
-                  project={project}
-                  worldLabel={`MUNDO ${world.number} · ${world.name}`}
-                  accent={world.accent}
-                  thumbnail={<Thumbnail />}
-                  labels={copy}
-                />
+                <Reveal className="flex w-full" delay={index * 120}>
+                  <ProjectCard
+                    project={project}
+                    worldLabel={`MUNDO ${world.number} · ${world.name}`}
+                    accent={world.accent}
+                    thumbnail={<Thumbnail />}
+                    labels={copy}
+                  />
+                </Reveal>
               </li>
             );
           })}

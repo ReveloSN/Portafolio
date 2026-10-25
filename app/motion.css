@@ -502,3 +502,16 @@
   background: #ffd98a;
   box-shadow: 0 0 12px 3px rgba(255, 190, 90, 0.8);
 }
+
+/* Entrada al hacer scroll (IntersectionObserver) */
+.fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.fade-up-in {
+  opacity: 1;
+  transform: none;
+}
