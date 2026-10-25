@@ -392,3 +392,28 @@
     transform: scaleY(1);
   }
 }
+@keyframes art-drift {
+  from {
+    transform: translate3d(0, var(--art-travel), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--art-travel) * -1), 0);
+  }
+}
+@keyframes vine-sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+@keyframes mist-drift {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(25%);
+  }
+}

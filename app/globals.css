@@ -5,6 +5,7 @@
 @import "./stage.css";
 @import "./hero.css";
 @import "./dino.css";
+@import "./art.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));
@@ -51,6 +52,7 @@
   --content-max: 1440px;
 
   /* Tema */
+  --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;
   --ink: #07160f;
   --glowA: rgba(166, 255, 92, 0.55);

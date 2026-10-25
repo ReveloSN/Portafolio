@@ -29,6 +29,8 @@ export interface DividerConfig {
   readonly parallaxSpeed: number;
   /** Desplazamiento de la costura dentro de la sección (p. ej. la línea de tierra). */
   readonly offset?: string;
+  /** Funde el borde lleno de la banda con el fondo (por defecto sí). */
+  readonly fadeEdge?: boolean;
   /** Carga inmediata (solo el primer divisor de la página). */
   readonly eager?: boolean;
 }

@@ -20,6 +20,8 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
       anchor: "top",
       zIndex: 1,
       parallaxSpeed: 0.4,
+      // Las hojas tapan el final del Hero: su borde superior no se desvanece
+      fadeEdge: false,
       eager: true,
     },
     accents: [

@@ -1,7 +1,7 @@
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SocialLink } from "@/components/molecules/SocialLink";
-import { FooterCanopy } from "@/components/worlds/art/FooterCanopy";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import type { NavLink } from "@/types/navigation";
@@ -17,12 +17,9 @@ const HEADING = "font-mono text-fluid-xs tracking-[.25em] text-glow mb-4";
 export function Footer({ profile, links }: FooterProps) {
   const { footer, site } = COPY;
   return (
-    <footer className="px-gutter relative -mt-px bg-[#05100b] pt-[clamp(70px,8vw,110px)] pb-9">
-      <FooterCanopy
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute -top-[89px] left-0 h-[90px] w-full"
-      />
-      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
+    <footer className="px-gutter relative isolate -mt-px bg-[#05100b] pt-[clamp(70px,8vw,110px)] pb-9">
+      <SeamLayer seam="skills-footer" host="lower" />
+      <div className="relative z-[2] mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
         <div className="flex flex-wrap justify-between gap-12">
           <div className="max-w-[calc(var(--u)*26.4)] flex-[1_1_280px]">
             <a

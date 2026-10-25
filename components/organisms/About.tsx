@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
 import { ExplorerCard } from "@/components/molecules/ExplorerCard";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
@@ -26,26 +26,7 @@ export function About({ profile }: AboutProps) {
     <SectionShell
       id={SECTION_IDS.about}
       background={BACKGROUND}
-      decoration={
-        <>
-          <Image
-            src="/images/foliage-bl.webp"
-            alt=""
-            width={1536}
-            height={1024}
-            sizes="520px"
-            className="pointer-events-none absolute -bottom-[60px] -left-[90px] w-[min(520px,44vw)] opacity-85"
-          />
-          <Image
-            src="/images/foliage-bl.webp"
-            alt=""
-            width={1536}
-            height={1024}
-            sizes="420px"
-            className="pointer-events-none absolute -top-[30px] -right-[60px] w-[min(420px,36vw)] rotate-180 opacity-80"
-          />
-        </>
-      }
+      decoration={<SeamLayer seam="hero-about" host="lower" />}
     >
       <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(40px,6vw,88px)]">
         <ExplorerCard profile={profile} />

@@ -1,6 +1,7 @@
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { Reveal } from "@/components/molecules/Reveal";
 import { ProjectCard } from "@/components/molecules/ProjectCard";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { THUMBNAILS } from "@/components/worlds/registry";
 import { COPY } from "@/data/copy";
@@ -17,7 +18,11 @@ const BACKGROUND = "linear-gradient(#0a1f17, #06120d)";
 export function Projects({ projects }: ProjectsProps) {
   const { projects: copy } = COPY;
   return (
-    <SectionShell id={SECTION_IDS.projects} background={BACKGROUND}>
+    <SectionShell
+      id={SECTION_IDS.projects}
+      background={BACKGROUND}
+      decoration={<SeamLayer seam="about-projects" host="lower" />}
+    >
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*88.9))]">
         <SectionHeading
           eyebrow={copy.eyebrow}

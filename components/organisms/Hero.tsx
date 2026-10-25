@@ -2,6 +2,7 @@ import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { Avatar } from "@/components/molecules/Avatar";
 import { ParallaxStage } from "@/components/molecules/ParallaxStage";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { Canoe } from "@/components/worlds/Canoe";
 import { DinoWater } from "@/components/worlds/DinoWater";
 import { Fireflies } from "@/components/worlds/Fireflies";
@@ -52,6 +53,7 @@ export function Hero({ profile }: HeroProps) {
         }
       >
         <Fireflies particles={FIREFLIES} />
+        <SeamLayer seam="hero-about" host="upper" />
         <div
           aria-hidden="true"
           className="coarse:hidden pointer-events-none absolute size-[150px] -translate-1/2 rounded-full transition-[left,top,opacity] duration-150 ease-out"
@@ -68,7 +70,7 @@ export function Hero({ profile }: HeroProps) {
         />
       </JungleBackdrop>
 
-      <div className="hero-copy pt-nav absolute inset-0 flex cursor-auto">
+      <div className="hero-copy pt-nav absolute inset-0 z-[3] flex cursor-auto">
         <div className="hero-copy-inner gap-fluid-3 flex flex-col">
           <div className="gap-fluid-2 flex items-center">
             <div className="hero-avatar flex-none rounded-full bg-[conic-gradient(var(--glow),#6ef0e0,var(--glow))] p-[3px]">
@@ -124,7 +126,7 @@ export function Hero({ profile }: HeroProps) {
 
       <a
         href={`#${SECTION_IDS.about}`}
-        className="text-fluid-xs short:hidden bottom-fluid-2 absolute left-1/2 flex -translate-x-1/2 cursor-auto flex-col items-center gap-1.5 tracking-[.3em] no-underline opacity-85"
+        className="text-fluid-xs short:hidden bottom-fluid-2 absolute z-[3] left-1/2 flex -translate-x-1/2 cursor-auto flex-col items-center gap-1.5 tracking-[.3em] no-underline opacity-85"
       >
         <span>{hero.scrollHint}</span>
         <Icon

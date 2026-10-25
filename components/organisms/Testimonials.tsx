@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { TestimonialCard } from "@/components/molecules/TestimonialCard";
 import { SectionShell } from "@/components/templates/SectionShell";
@@ -38,7 +39,11 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
   const carousel = useCarousel(testimonials.length);
 
   return (
-    <SectionShell id={SECTION_IDS.testimonials} background={BACKGROUND}>
+    <SectionShell
+      id={SECTION_IDS.testimonials}
+      background={BACKGROUND}
+      decoration={<SeamLayer seam="projects-testimonials" host="lower" />}
+    >
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*76.4))] text-center">
         <SectionHeading
           align="center"

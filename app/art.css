@@ -1,0 +1,112 @@
+/* ------------------------------------------------------------------ */
+/* Ilustraciones que suavizan las costuras entre secciones              */
+/* ------------------------------------------------------------------ */
+
+/* Paralaje de scroll: CSS si hay scroll-driven animations; si no, el hook
+   escribe --scroll-shift (-1..1) y se usa el mismo cálculo. */
+.art-parallax {
+  --art-travel: calc(var(--parallax-speed, 0.3) * var(--u) * 1.5);
+  transform: translate3d(0, calc(var(--scroll-shift, 0) * var(--art-travel) * -1), 0);
+}
+.art-parallax[data-inview] {
+  will-change: transform;
+}
+@supports (animation-timeline: view()) {
+  .art-parallax {
+    animation: art-drift linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+}
+
+/* Divisor de banda ancha (6:1). El solape cubre el recorrido del paralaje: sin línea de unión. */
+.section-divider {
+  --divider-overlap: calc(var(--u) * 1.5 + 4px);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+.section-divider[data-anchor="top"] {
+  top: calc(var(--divider-offset, 0px) - var(--divider-overlap));
+}
+.section-divider[data-anchor="bottom"] {
+  bottom: calc(100% - var(--divider-overlap));
+}
+.section-divider img {
+  aspect-ratio: 6 / 1;
+  /* En pantallas muy anchas la banda no crece sin límite: se recorta por los lados */
+  max-height: 34svh;
+  object-fit: cover;
+}
+/* El borde lleno de la banda se funde con el fondo de la sección */
+.section-divider[data-anchor="top"] img {
+  object-position: top;
+}
+.section-divider[data-anchor="top"][data-fade] img {
+  mask-image: linear-gradient(to bottom, transparent 0, #000 10%);
+}
+.section-divider[data-anchor="bottom"] img {
+  object-position: bottom;
+}
+.section-divider[data-anchor="bottom"][data-fade] img {
+  mask-image: linear-gradient(to top, transparent 0, #000 14%);
+}
+.section-divider[data-flip] img {
+  scale: 1 -1;
+}
+
+/* Hojas y lianas sueltas en el borde de una sección */
+.foliage-accent {
+  --accent-width: max(6rem, calc(var(--u) * var(--accent-w)));
+  position: absolute;
+  width: var(--accent-width);
+  pointer-events: none;
+}
+.foliage-accent > div {
+  rotate: var(--accent-rotate, 0deg);
+}
+.foliage-sway {
+  transform-origin: top center;
+  animation: vine-sway var(--sway-duration, 7s) ease-in-out var(--sway-delay, 0s) infinite;
+}
+
+/* Banda de niebla: capas que se desplazan despacio a velocidades distintas */
+.mist-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--u) * 16);
+  translate: 0 -50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.mist-layer {
+  position: absolute;
+  inset: -20% -50%;
+  background:
+    radial-gradient(ellipse 30% 45% at 25% 50%, var(--mist-color), transparent 70%),
+    radial-gradient(ellipse 25% 40% at 70% 55%, var(--mist-color), transparent 70%);
+  filter: blur(calc(var(--u) * 1.5));
+  animation: mist-drift var(--mist-duration, 55s) linear infinite;
+}
+
+/* Móvil: solo divisores; hojas grandes ocultas y lianas al 60 % */
+@media (max-width: 767px) {
+  .foliage-accent[data-large] {
+    display: none;
+  }
+  .foliage-accent {
+    --accent-width: max(3.6rem, calc(var(--u) * var(--accent-w) * 0.6));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-parallax,
+  .foliage-sway,
+  .mist-layer {
+    animation: none !important;
+    transform: none;
+  }
+}

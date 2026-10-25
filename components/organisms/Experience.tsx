@@ -41,7 +41,7 @@ export function Experience() {
           width={1024}
           height={1536}
           sizes="520px"
-          className="pointer-events-none absolute -top-20 -left-[260px] w-[520px] opacity-35"
+          className="pointer-events-none absolute top-0 -left-[260px] w-[520px] opacity-35"
         />
       }
     >

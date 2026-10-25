@@ -26,14 +26,16 @@ export function SectionShell({
     <section
       id={id}
       className={cn(
-        "px-gutter py-section relative scroll-mt-[72px]",
-        clip && "overflow-hidden",
+        // isolate: las ilustraciones quedan entre el fondo y el contenido de cada sección
+        "px-gutter py-section relative isolate",
+        // Recorte solo horizontal: los divisores pueden cruzar la costura en vertical
+        clip && "overflow-x-clip",
         className,
       )}
       style={{ background, ...style }}
     >
       {decoration}
-      <div className="relative">{children}</div>
+      <div className="relative z-[2]">{children}</div>
     </section>
   );
 }

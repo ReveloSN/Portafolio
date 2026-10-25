@@ -1,6 +1,8 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { DigToolbar } from "@/components/molecules/DigToolbar";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SkillCell } from "@/components/molecules/SkillCell";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { DigHorizon } from "@/components/worlds/art/DigHorizon";
@@ -21,7 +23,9 @@ interface SkillsProps {
 }
 
 const BACKGROUND =
-  "linear-gradient(#08171e 0, #08171e 170px, #2a1c10 170px, #5b3b22 175px, #4a2f1b 520px, #35210f 1000px, #241508 100%)";
+  "linear-gradient(#08171e 0, #08171e var(--dig-soil-line), #2a1c10 var(--dig-soil-line), #5b3b22 calc(var(--dig-soil-line) + 5px), #4a2f1b 520px, #35210f 1000px, #241508 100%)";
+/** Línea de tierra del sitio de excavación: ahí cuelgan las raíces del divisor. */
+const SOIL = { "--dig-soil-line": "170px" } as CSSProperties;
 const STRATA =
   "repeating-linear-gradient(180deg, transparent 0 150px, rgba(0,0,0,.18) 150px 154px, rgba(255,196,110,.05) 154px 230px)";
 const DIRT = [
@@ -44,16 +48,18 @@ export function Skills({ skills }: SkillsProps) {
     <SectionShell
       id={SECTION_IDS.skills}
       background={BACKGROUND}
+      style={SOIL}
       className="pt-[clamp(230px,18vw,280px)] pb-[clamp(90px,9vw,140px)]"
       decoration={
         <>
+          <SeamLayer seam="contact-skills" host="lower" />
           <DigHorizon
             preserveAspectRatio="xMidYMax slice"
             className="absolute top-0 left-0 h-[200px] w-full"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-[170px] bottom-0"
+            className="pointer-events-none absolute inset-x-0 top-(--dig-soil-line) bottom-0"
             style={{ background: STRATA }}
           />
         </>
