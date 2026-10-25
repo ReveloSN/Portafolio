@@ -64,13 +64,6 @@ const config: Config = {
       maxWidth: {
         content: "var(--content-max)",
       },
-      keyframes: {
-        float: {
-          "0%,100%": { transform: "translateY(0)", opacity: "0.2" },
-          "50%": { transform: "translateY(-18px)", opacity: "1" },
-        },
-      },
-      animation: { float: "float 4s ease-in-out infinite" },
     },
   },
 };
