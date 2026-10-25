@@ -39,7 +39,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
 
   return (
     <SectionShell id={SECTION_IDS.testimonials} background={BACKGROUND}>
-      <div className="mx-auto max-w-[1100px] text-center">
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*76.4))] text-center">
         <SectionHeading
           align="center"
           eyebrow={copy.eyebrow}
@@ -47,7 +47,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           intro={copy.intro}
         />
         <div
-          className="relative mt-[54px] h-[430px] [perspective:1500px]"
+          className="mt-fluid-6 relative h-[430px] [perspective:1500px]"
           aria-roledescription="carrusel"
         >
           {testimonials.map((testimonial, i) => {
@@ -64,7 +64,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
             );
           })}
         </div>
-        <div className="mt-[34px] flex items-center justify-center gap-[22px]">
+        <div className="mt-fluid-4 gap-fluid-3 flex items-center justify-center">
           <Button
             variant="ghost"
             size="icon"
@@ -102,7 +102,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           </Button>
         </div>
         <p
-          className="mt-4 font-mono text-[13px] tracking-[.2em] opacity-70"
+          className="text-fluid-xs mt-4 font-mono tracking-[.2em] opacity-70"
           aria-live="polite"
         >
           {carousel.index + 1} / {carousel.count}

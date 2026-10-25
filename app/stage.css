@@ -1,0 +1,37 @@
+/* ------------------------------------------------------------------ */
+/* Escena tipo "fondo que se recorta" (object-fit: cover)               */
+/* Las capas usan coordenadas del diseño (1440x900) multiplicadas por   */
+/* una escala calculada con container queries.                          */
+/*   --s  : escala cover (rellena ancho y alto; recorta lo que sobra)   */
+/*   --sf : escala de los motivos importantes (dino, canoa, hojas):     */
+/*          nunca mayor que la que permite verlos completos en alto.    */
+/* ------------------------------------------------------------------ */
+.stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  --stage-w: 1440;
+  --stage-h: 900;
+  --s: max(calc(100cqw / var(--stage-w)), calc(100cqh / var(--stage-h)));
+  --sf: min(var(--s), calc(100cqh / 760));
+}
+
+/* Posición horizontal relativa al centro del stage: x es la coordenada del diseño */
+.stage-x {
+  left: calc(50% + (var(--x) - 720) * var(--sf));
+}
+
+/* Anclada arriba: la parte superior (cabeza del dino) nunca se recorta */
+.stage-top {
+  top: calc(var(--y) * var(--sf));
+}
+
+/* Anclada abajo: la canoa y el agua siempre quedan completas */
+.stage-bottom {
+  bottom: calc(var(--b) * var(--sf));
+}
+
+.stage-w {
+  width: calc(var(--w) * var(--sf));
+}

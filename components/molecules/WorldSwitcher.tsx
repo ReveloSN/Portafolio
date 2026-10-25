@@ -18,7 +18,7 @@ export function WorldSwitcher({ worlds, current, hereLabel }: WorldSwitcherProps
             {world.slug === current ? (
               <span
                 aria-current="page"
-                className="bg-glow inline-flex items-center rounded-full px-6 py-[13px] text-[15px] font-semibold text-(--ink)"
+                className="bg-glow py-fluid-2 text-fluid-sm inline-flex items-center rounded-full px-6 font-semibold text-(--ink)"
               >
                 {label} · {hereLabel}
               </span>

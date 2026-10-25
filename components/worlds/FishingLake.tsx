@@ -33,13 +33,13 @@ export function FishingLake({ fishing }: FishingLakeProps) {
       />
       {state.phase === "caught" && info ? (
         <div className="reveal" aria-hidden="true">
-          <p className="text-glow font-mono text-xs tracking-[.28em] uppercase">
+          <p className="text-glow text-fluid-xs font-mono tracking-[.28em] uppercase">
             {info.kicker}
           </p>
-          <p className="font-display mt-1.5 text-[clamp(20px,2.6vw,30px)] leading-[1.1] font-extrabold">
+          <p className="font-display text-fluid-xl mt-1.5 leading-[1.1] font-extrabold">
             {info.title}
           </p>
-          <p className="mx-auto mt-1 max-w-[520px] text-[15px] opacity-85">
+          <p className="text-fluid-sm mx-auto mt-1 max-w-[calc(var(--u)*36.1)] opacity-85">
             {info.subtitle}
           </p>
         </div>

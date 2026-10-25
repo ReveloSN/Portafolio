@@ -26,7 +26,7 @@ interface FrontLayer {
 
 const FRONT_LAYERS: readonly FrontLayer[] = [
   {
-    src: "tronco-izq",
+    src: "trunkR",
     width: 1024,
     height: 1536,
     sizes: "680px",
@@ -35,7 +35,7 @@ const FRONT_LAYERS: readonly FrontLayer[] = [
     scale: 1.04,
   },
   {
-    src: "tronco-der",
+    src: "trunkL",
     width: 1024,
     height: 1536,
     sizes: "680px",
@@ -48,7 +48,7 @@ const FRONT_LAYERS: readonly FrontLayer[] = [
     width: 1536,
     height: 1024,
     sizes: "520px",
-    position: "-right-5 -top-5 w-[32vw] max-w-[520px]",
+    position: "-right-5 -top-5 w-[32vw] max-w-[calc(var(--u)*36.1)]",
     depth: "foliage",
     scale: 1.05,
     imageClassName: "rotate-180",
@@ -58,7 +58,7 @@ const FRONT_LAYERS: readonly FrontLayer[] = [
     width: 1536,
     height: 1024,
     sizes: "640px",
-    position: "-right-5 -bottom-10 w-[43vw] max-w-[640px]",
+    position: "-right-5 -bottom-10 w-[43vw] max-w-[calc(var(--u)*44.4)]",
     depth: "foliage",
     scale: 1.05,
   },
@@ -67,7 +67,7 @@ const FRONT_LAYERS: readonly FrontLayer[] = [
     width: 1536,
     height: 1024,
     sizes: "590px",
-    position: "-left-[60px] -bottom-10 w-[40vw] max-w-[590px]",
+    position: "-left-[60px] -bottom-10 w-[40vw] max-w-[calc(var(--u)*41.0)]",
     depth: "foliage",
     scale: 1.05,
   },

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import type { ContactFormValues } from "@/types/contact";
 
 const FIELD =
-  "w-full rounded-[14px] border-[1.5px] border-white/20 bg-[rgba(3,14,9,.55)] px-4 py-3.5 font-sans text-base text-leaf outline-none transition placeholder:text-leaf/45 focus:border-glow focus:shadow-[0_0_0_4px_rgba(166,255,92,.18)]";
+  "w-full rounded-[14px] border-[1.5px] border-white/20 bg-[rgba(3,14,9,.55)] px-4 py-3.5 font-sans text-fluid-base text-leaf outline-none transition placeholder:text-leaf/45 focus:border-glow focus:shadow-[0_0_0_4px_rgba(166,255,92,.18)]";
 
 interface FieldProps {
   readonly name: keyof ContactFormValues;
@@ -34,7 +34,7 @@ function Field({ name, label, error, multiline, type = "text", ...rest }: FieldP
   };
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-semibold">
+      <label htmlFor={id} className="text-fluid-sm mb-2 block font-semibold">
         {label}
       </label>
       {multiline ? (
@@ -48,7 +48,11 @@ function Field({ name, label, error, multiline, type = "text", ...rest }: FieldP
         <input type={type} {...shared} {...rest} />
       )}
       {error ? (
-        <p id={`${id}-error`} role="alert" className="mt-1.5 text-sm text-[#ffb3a8]">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="text-fluid-sm mt-1.5 text-[#ffb3a8]"
+        >
           {error}
         </p>
       ) : null}
@@ -62,13 +66,15 @@ export function ContactForm() {
 
   if (form.sent) {
     return (
-      <div role="status" className="px-1.5 py-[26px] text-center">
+      <div role="status" className="py-fluid-4 px-1.5 text-center">
         <HatchedEgg width={92} height={92} className="mx-auto" />
-        <h3 className="font-display mt-3.5 text-[28px] font-extrabold">
+        <h3 className="font-display text-fluid-xl mt-3.5 font-extrabold">
           {copy.sentTitle}
         </h3>
-        <p className="mt-2.5 text-[17px] leading-relaxed opacity-85">{copy.sentText}</p>
-        <Button variant="ghost" size="sm" className="mt-[22px]" onClick={form.reset}>
+        <p className="text-fluid-base mt-2.5 leading-relaxed opacity-85">
+          {copy.sentText}
+        </p>
+        <Button variant="ghost" size="sm" className="mt-fluid-3" onClick={form.reset}>
           {copy.sendAnother}
         </Button>
       </div>
@@ -77,7 +83,7 @@ export function ContactForm() {
 
   return (
     <form onSubmit={form.onSubmit} noValidate className="flex flex-col gap-4">
-      <h3 className="font-display text-[28px] font-extrabold">{copy.formTitle}</h3>
+      <h3 className="font-display text-fluid-xl font-extrabold">{copy.formTitle}</h3>
       <Field
         name="name"
         label={copy.name}
@@ -106,7 +112,7 @@ export function ContactForm() {
         error={form.errors.message}
         onChange={form.onChange}
       />
-      <Button type="submit" className="mt-1 text-[17px]">
+      <Button type="submit" className="text-fluid-base mt-1">
         {copy.submit} <span aria-hidden="true">→</span>
       </Button>
     </form>

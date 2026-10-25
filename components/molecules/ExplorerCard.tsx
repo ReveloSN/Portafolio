@@ -25,8 +25,8 @@ export function ExplorerCard({ profile }: ExplorerCardProps) {
   const { about } = COPY;
   return (
     <div className="min-w-[260px] flex-[0_1_360px]">
-      <div className="-rotate-3 rounded-[22px] bg-[#efe6cf] p-[18px] pb-[22px] text-[#17281d] shadow-[0_30px_60px_-24px_rgba(0,0,0,.7)] transition duration-500 ease-out hover:-translate-y-2 hover:rotate-0 hover:shadow-[0_40px_80px_-30px_rgba(166,255,92,.5)]">
-        <div className="mb-3 flex justify-between font-mono text-[11px] tracking-[.12em] text-[#4d5b3f]">
+      <div className="p-fluid-3 pb-fluid-3 -rotate-3 rounded-[22px] bg-[#efe6cf] text-[#17281d] shadow-[0_30px_60px_-24px_rgba(0,0,0,.7)] transition duration-500 ease-out hover:-translate-y-2 hover:rotate-0 hover:shadow-[0_40px_80px_-30px_rgba(166,255,92,.5)]">
+        <div className="text-fluid-xs mb-3 flex justify-between font-mono tracking-[.12em] text-[#4d5b3f]">
           <span>{about.idLeft}</span>
           <span>
             {about.idRight} {profile.year}
@@ -37,16 +37,16 @@ export function ExplorerCard({ profile }: ExplorerCardProps) {
             <circle cx="23" cy="19" r="10" fill="#4f7a5a" />
             <path d="M3 52c0-13 8-21 20-21s20 8 20 21z" fill="#4f7a5a" />
           </svg>
-          <p className="absolute inset-x-0 top-3.5 text-center text-[13px] font-semibold tracking-[.14em] text-[#2c4a30]">
+          <p className="text-fluid-xs absolute inset-x-0 top-3.5 text-center font-semibold tracking-[.14em] text-[#2c4a30]">
             {about.photoPlaceholder}
           </p>
         </div>
         <div className="mt-4 flex items-end justify-between gap-3">
           <div>
-            <p className="font-display text-2xl leading-[1.05] font-extrabold">
+            <p className="font-display text-fluid-lg leading-[1.05] font-extrabold">
               {profile.firstName}
             </p>
-            <p className="mt-0.5 text-sm text-[#41523a]">{profile.role}</p>
+            <p className="text-fluid-sm mt-0.5 text-[#41523a]">{profile.role}</p>
           </div>
           <svg width="76" height="34" viewBox="0 0 76 34" aria-hidden="true">
             <g fill="#17281d">

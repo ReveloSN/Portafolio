@@ -30,7 +30,7 @@ export function TestimonialCard({
       <div className="relative rounded-[10px] bg-[#f1e8d0] p-10 pb-8 text-left text-[#1b2a1f] shadow-[0_40px_70px_-26px_rgba(0,0,0,.8)]">
         <div
           aria-hidden="true"
-          className="absolute -top-3.5 left-1/2 -ml-[55px] h-[30px] w-[110px]"
+          className="absolute inset-x-0 -top-3.5 mx-auto h-[30px] w-[110px]"
           style={{ background: tapeColor, transform: `rotate(${tapeTilt}deg)` }}
         />
         <Icon
@@ -47,7 +47,7 @@ export function TestimonialCard({
             <Icon key={i} name="star" size={22} />
           ))}
         </div>
-        <p className="font-display mt-4 text-[clamp(19px,2vw,24px)] leading-normal font-medium">
+        <p className="font-display text-fluid-lg mt-4 leading-normal font-medium">
           {quote}
         </p>
         <div className="mt-6 flex items-center gap-3.5">
@@ -58,8 +58,8 @@ export function TestimonialCard({
             figureWidth="70%"
           />
           <div>
-            <p className="text-[17px] font-bold">{author}</p>
-            <p className="text-sm text-[#4d5b3f]">{relation}</p>
+            <p className="text-fluid-base font-bold">{author}</p>
+            <p className="text-fluid-sm text-[#4d5b3f]">{relation}</p>
           </div>
         </div>
       </div>

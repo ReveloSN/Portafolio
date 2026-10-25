@@ -2,12 +2,79 @@
 @config "../tailwind.config.ts";
 @import "./keyframes.css";
 @import "./motion.css";
+@import "./stage.css";
 
+/* Variantes por forma de pantalla (no por dispositivo) */
+@custom-variant short (@media (max-height: 640px));
+@custom-variant tiny-h (@media (max-height: 480px));
+@custom-variant portrait-narrow (@media (max-aspect-ratio: 4/5) and (max-width: 900px));
+@custom-variant ultrawide (@media (min-aspect-ratio: 21/9));
+@custom-variant coarse (@media (pointer: coarse));
+@custom-variant fine (@media (pointer: fine));
+
+/* ------------------------------------------------------------------ */
+/* Sistema de medidas fluidas                                           */
+/* --u respeta el ancho y el alto de la ventana; todo deriva de ella.   */
+/* ------------------------------------------------------------------ */
 :root {
+  --u: clamp(0.5rem, min(1vw, 1.75svh), 1.15rem);
+
+  /* Tipografía (mínimos legibles: el texto nunca baja de 13px) */
+  --fs-xs: max(13px, calc(var(--u) * 0.85));
+  --fs-sm: max(13px, calc(var(--u) * 1));
+  --fs-base: max(14px, calc(var(--u) * 1.15));
+  --fs-md: max(15px, calc(var(--u) * 1.3));
+  --fs-lg: max(17px, calc(var(--u) * 1.65));
+  --fs-xl: max(20px, calc(var(--u) * 2));
+  --fs-2xl: max(24px, calc(var(--u) * 2.6));
+  --fs-3xl: max(28px, calc(var(--u) * 3.6));
+  --fs-display: max(32px, calc(var(--u) * 5));
+  --fs-hero: clamp(2.4rem, calc(var(--u) * 6.6), 9rem);
+
+  /* Espaciado */
+  --space-1: calc(var(--u) * 0.5);
+  --space-2: calc(var(--u) * 1);
+  --space-3: calc(var(--u) * 1.5);
+  --space-4: calc(var(--u) * 2);
+  --space-5: calc(var(--u) * 3);
+  --space-6: calc(var(--u) * 4);
+  --space-7: calc(var(--u) * 6);
+  --space-8: calc(var(--u) * 8);
+  --space-section: max(3.5rem, calc(var(--u) * 8));
+  --space-gutter: max(1rem, calc(var(--u) * 3.5));
+
+  /* Navegación y pantalla */
+  --nav-h: 4.5rem;
+  --screen-h: 100svh;
+  --content-max: 1440px;
+
+  /* Tema */
   --glow: #a6ff5c;
   --ink: #07160f;
   --glowA: rgba(166, 255, 92, 0.55);
   --glowB: rgba(166, 255, 92, 0.16);
+}
+
+/* Pantallas bajas (laptops con escala, móviles en horizontal) */
+@media (max-height: 640px) {
+  :root {
+    --nav-h: 3.5rem;
+  }
+}
+
+/* Pantallas muy grandes: la unidad base crece para no verse diminuta */
+@media (min-width: 2200px) {
+  :root {
+    --u: clamp(0.5rem, min(1vw, 1.75svh), 1.6rem);
+    --content-max: 2000px;
+  }
+}
+
+/* Ultrawide: el contenido se limita y la escena rellena los lados */
+@media (min-aspect-ratio: 21/9) {
+  :root {
+    --content-max: 1600px;
+  }
 }
 
 html {
@@ -18,6 +85,11 @@ body {
   background: #06120d;
   color: #eef6e0;
   font-family: var(--font-figtree), system-ui, sans-serif;
+  font-size: var(--fs-base);
+}
+
+section {
+  scroll-margin-top: var(--nav-h);
 }
 
 :focus-visible {

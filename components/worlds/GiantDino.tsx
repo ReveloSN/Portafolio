@@ -13,7 +13,7 @@ export function GiantDino({ alt }: GiantDinoProps) {
   const { dino } = HERO_LAYERS;
   return (
     <div
-      className="px absolute -top-[70px] left-[40%] w-[58vw] max-w-[880px] origin-[60%_100%]"
+      className="px absolute -top-[70px] left-[40%] w-[58vw] max-w-[calc(var(--u)*61.1)] origin-[60%_100%]"
       style={{
         transform: `perspective(1400px) ${layerShift(dino.x, dino.y)} rotateY(calc(var(--mx, 0) * ${DINO_TILT.y}deg)) rotateX(calc(var(--my, 0) * ${-DINO_TILT.x}deg))`,
       }}

@@ -36,7 +36,7 @@ export function Experience() {
       background={BACKGROUND}
       decoration={
         <Image
-          src="/images/tronco-izq.webp"
+          src="/images/trunkL.webp"
           alt=""
           width={1024}
           height={1536}
@@ -45,7 +45,7 @@ export function Experience() {
         />
       }
     >
-      <div className="mx-auto max-w-[1120px]">
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*77.8))]">
         <SectionHeading
           align="center"
           eyebrow={copy.eyebrow}
@@ -55,13 +55,13 @@ export function Experience() {
         <KindLegend />
         <FishingLake fishing={fishing} />
 
-        <h3 className="font-display mt-14 mb-2 text-center text-[clamp(24px,3vw,36px)] font-extrabold">
+        <h3 className="font-display text-fluid-2xl mt-14 mb-2 text-center font-extrabold">
           {copy.diaryTitle}
         </h3>
-        <p className="mx-auto mb-[30px] max-w-[520px] text-center opacity-75">
+        <p className="mb-fluid-4 mx-auto max-w-[calc(var(--u)*36.1)] text-center opacity-75">
           {copy.diaryIntro}
         </p>
-        <ul className="grid gap-[22px] md:grid-cols-2">
+        <ul className="gap-fluid-3 grid md:grid-cols-2">
           {sortedExperience.map((entry) => (
             <li key={entry.id} className="flex">
               <ExperienceCard
@@ -76,7 +76,7 @@ export function Experience() {
           ))}
         </ul>
 
-        <div className="rares mt-7 grid gap-[22px] md:grid-cols-2">
+        <div className="rares gap-fluid-3 mt-7 grid md:grid-cols-2">
           <RareCard
             kicker={copy.rare.mosasaur.kicker}
             name={copy.rare.mosasaur.name}

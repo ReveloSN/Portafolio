@@ -26,20 +26,20 @@ export function ProjectCard({
   labels,
 }: ProjectCardProps) {
   return (
-    <article className="group hover:border-glow/50 flex flex-col gap-[22px] rounded-[30px] border border-white/12 bg-white/4 p-4 pb-7 transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-24px_rgba(166,255,92,.45)]">
+    <article className="group hover:border-glow/50 gap-fluid-3 flex flex-col rounded-[30px] border border-white/12 bg-white/4 p-4 pb-7 transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-24px_rgba(166,255,92,.45)]">
       <div className="h-[300px] overflow-hidden rounded-[200px_200px_18px_18px] border border-white/14">
         <div className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.12]">
           {thumbnail}
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-3 px-2.5">
-        <p className="font-mono text-xs tracking-[.25em]" style={{ color: accent }}>
+        <p className="text-fluid-xs font-mono tracking-[.25em]" style={{ color: accent }}>
           {worldLabel}
         </p>
-        <h3 className="font-display text-[28px] leading-[1.1] font-extrabold">
+        <h3 className="font-display text-fluid-xl leading-[1.1] font-extrabold">
           {project.name}
         </h3>
-        <p className="text-base leading-relaxed opacity-80">{project.summary}</p>
+        <p className="text-fluid-base leading-relaxed opacity-80">{project.summary}</p>
         <ul className="flex flex-wrap gap-2" aria-label="Tecnologías">
           {project.technologies.map((tech) => (
             <li key={tech}>

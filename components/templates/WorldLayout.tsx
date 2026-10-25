@@ -43,20 +43,20 @@ export function WorldLayout({
         <WorldDetails world={world} project={project} />
         <WorldGallery project={project} />
       </main>
-      <footer className="px-gutter pt-[50px] pb-14 text-center">
-        <div className="mx-auto max-w-[980px]">
-          <h2 className="font-display mb-3 text-[clamp(32px,5vw,60px)] leading-none font-extrabold tracking-[-.02em]">
+      <footer className="px-gutter pt-fluid-5 pb-14 text-center">
+        <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*68.1))]">
+          <h2 className="font-display text-fluid-3xl mb-3 leading-none font-extrabold tracking-[-.02em]">
             {copy.chooseTitle}
           </h2>
-          <p className="mb-7 text-lg opacity-80">{copy.chooseIntro}</p>
+          <p className="text-fluid-md mb-7 opacity-80">{copy.chooseIntro}</p>
           <WorldSwitcher worlds={worlds} current={world.slug} hereLabel={copy.here} />
-          <div className="mt-[30px]">
+          <div className="mt-fluid-4">
             <Button href="/">
               <span aria-hidden="true">←</span> {copy.back}
             </Button>
           </div>
         </div>
-        <div className="mx-auto mt-[70px] flex max-w-[1240px] flex-wrap justify-between gap-4 text-sm opacity-55">
+        <div className="mt-fluid-6 text-fluid-sm mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*86.1))] flex-wrap justify-between gap-4 opacity-55">
           <span>
             © {profile.year} {profile.firstName}
           </span>

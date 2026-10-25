@@ -15,9 +15,9 @@ const VARIANTS: Readonly<Record<ButtonVariant, string>> = {
 };
 
 const SIZES: Readonly<Record<ButtonSize, string>> = {
-  md: "px-[26px] py-3.5 text-base",
-  sm: "px-5 py-2.5 text-sm",
-  icon: "h-[52px] w-[52px] p-0",
+  md: "min-h-11 px-[max(1.1rem,calc(var(--u)*1.8))] py-[max(0.65rem,calc(var(--u)*0.95))] text-fluid-base",
+  sm: "min-h-10 px-[max(0.9rem,calc(var(--u)*1.4))] py-[max(0.5rem,calc(var(--u)*0.7))] text-fluid-sm",
+  icon: "size-[max(2.75rem,calc(var(--u)*3.6))] p-0",
 };
 
 interface CommonProps {

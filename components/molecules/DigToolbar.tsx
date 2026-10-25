@@ -23,9 +23,9 @@ export function DigToolbar({
   onCover,
 }: DigToolbarProps) {
   return (
-    <div className="mb-[34px] flex flex-wrap items-center gap-3.5 rounded-[18px] border border-[rgba(255,196,110,.25)] bg-[rgba(20,10,4,.55)] px-5 py-3.5">
+    <div className="mb-fluid-4 flex flex-wrap items-center gap-3.5 rounded-[18px] border border-[rgba(255,196,110,.25)] bg-[rgba(20,10,4,.55)] px-5 py-3.5">
       <div aria-live="polite" className="min-w-[220px] flex-1">
-        <p className="font-mono text-xs tracking-[.22em] opacity-70">
+        <p className="text-fluid-xs font-mono tracking-[.22em] opacity-70">
           {label} {found} / {total}
         </p>
         <p className="mt-1 font-semibold">{message}</p>

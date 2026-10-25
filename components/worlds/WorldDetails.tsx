@@ -21,7 +21,7 @@ export function WorldDetails({ world, project }: WorldDetailsProps) {
         kicker={copy.problem.kicker}
         heading={copy.problem.title}
       >
-        <p className="text-lg leading-[1.65] opacity-90">{project.problem}</p>
+        <p className="text-fluid-md leading-[1.65] opacity-90">{project.problem}</p>
       </DepthPanel>
       <DepthPanel
         reverse
@@ -33,7 +33,10 @@ export function WorldDetails({ world, project }: WorldDetailsProps) {
       >
         <ul className="flex flex-col gap-3">
           {project.roleItems.map((item) => (
-            <li key={item} className="flex gap-3 text-[17px] leading-normal opacity-90">
+            <li
+              key={item}
+              className="text-fluid-base flex gap-3 leading-normal opacity-90"
+            >
               <span
                 aria-hidden="true"
                 className="bg-glow mt-2 h-[9px] w-[9px] flex-none rounded-full"
@@ -54,25 +57,25 @@ export function WorldDetails({ world, project }: WorldDetailsProps) {
           {project.metrics.map((metric) => (
             <li
               key={metric.label}
-              className="rounded-2xl border border-white/18 bg-white/7 px-3.5 py-[18px] text-center"
+              className="py-fluid-3 rounded-2xl border border-white/18 bg-white/7 px-3.5 text-center"
             >
-              <p className="font-display text-glow text-[clamp(24px,3vw,36px)] font-extrabold">
+              <p className="font-display text-glow text-fluid-2xl font-extrabold">
                 {metric.value}
               </p>
-              <p className="mt-1 text-[13px] opacity-80">{metric.label}</p>
+              <p className="text-fluid-xs mt-1 opacity-80">{metric.label}</p>
             </li>
           ))}
         </ul>
       </DepthPanel>
-      <section className="px-gutter pt-10 pb-[70px]">
-        <div className="mx-auto max-w-[1240px]">
-          <p className="font-display text-glow text-[13px] tracking-[.4em]">
+      <section className="px-gutter pb-fluid-6 pt-10">
+        <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
+          <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
             {copy.featuresKicker}
           </p>
-          <h2 className="font-display mt-2.5 mb-7 text-[clamp(30px,4vw,56px)] leading-none font-extrabold">
+          <h2 className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold">
             {copy.featuresTitle}
           </h2>
-          <ul className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-[22px]">
+          <ul className="gap-fluid-3 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
             {project.features.map((feature, i) => (
               <li key={feature.title}>
                 <FeatureCard

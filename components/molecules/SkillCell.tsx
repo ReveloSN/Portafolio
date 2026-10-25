@@ -43,13 +43,13 @@ export function SkillCell({
     <article className={cn("cell", done && "full")}>
       <div className="flex items-start justify-between gap-2.5">
         <div>
-          <p className="text-glow-amber font-mono text-[11px] tracking-[.2em]">
+          <p className="text-glow-amber text-fluid-xs font-mono tracking-[.2em]">
             {labels.grid} {skill.grid} · {skill.depth}
           </p>
-          <h3 className="font-display mt-1.5 text-2xl leading-[1.1] font-extrabold">
+          <h3 className="font-display text-fluid-lg mt-1.5 leading-[1.1] font-extrabold">
             {skill.name}
           </h3>
-          <p className="mt-[3px] font-mono text-[11px] tracking-[.16em] opacity-70">
+          <p className="text-fluid-xs mt-[3px] font-mono tracking-[.16em] opacity-70">
             {skill.area}
           </p>
         </div>
@@ -59,13 +59,13 @@ export function SkillCell({
         <div className="find">
           <div className="flex items-center gap-3.5">
             {fossil}
-            <p className="text-glow-amber font-mono text-xs tracking-[.14em]">
+            <p className="text-glow-amber text-fluid-xs font-mono tracking-[.14em]">
               {labels.fossilFound}
             </p>
           </div>
-          <p className="text-sm leading-normal opacity-90">{skill.note}</p>
+          <p className="text-fluid-sm leading-normal opacity-90">{skill.note}</p>
           <div className="mt-auto">
-            <div className="flex justify-between text-[13px] font-semibold">
+            <div className="text-fluid-xs flex justify-between font-semibold">
               <span>{labels.level}</span>
               <span className="text-glow-amber">
                 {skill.levelLabel} · {skill.percent}%

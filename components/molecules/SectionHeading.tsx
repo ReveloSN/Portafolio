@@ -21,14 +21,14 @@ export function SectionHeading({
   return (
     <header className={cn(centered && "text-center")}>
       <p
-        className="font-display text-sm font-medium tracking-[.5em]"
+        className="font-display text-fluid-sm font-medium tracking-[.5em]"
         style={{ color: accent }}
       >
         {eyebrow}
       </p>
       <h2
         className={cn(
-          "font-display mt-3.5 mb-4 text-[clamp(34px,5vw,72px)] leading-none font-extrabold tracking-[-.02em]",
+          "font-display text-display mt-3.5 mb-4 leading-none font-extrabold tracking-[-.02em]",
           titleClassName,
         )}
       >
@@ -37,7 +37,7 @@ export function SectionHeading({
       {intro ? (
         <p
           className={cn(
-            "max-w-[560px] text-lg leading-relaxed opacity-80",
+            "text-fluid-md max-w-[calc(var(--u)*38.9)] leading-relaxed opacity-80",
             centered && "mx-auto",
           )}
         >

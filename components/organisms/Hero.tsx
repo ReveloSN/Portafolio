@@ -47,7 +47,7 @@ export function Hero({ profile }: HeroProps) {
         <Fireflies particles={FIREFLIES} />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -mt-[75px] -ml-[75px] h-[150px] w-[150px] rounded-full transition-[left,top,opacity] duration-150 ease-out"
+          className="-mt-fluid-7 -ml-fluid-7 pointer-events-none absolute h-[150px] w-[150px] rounded-full transition-[left,top,opacity] duration-150 ease-out"
           style={{
             left: "var(--px, 50%)",
             top: "var(--py, 40%)",
@@ -74,26 +74,26 @@ export function Hero({ profile }: HeroProps) {
             />
           </div>
           <div className="text-left">
-            <p className="font-display text-glow text-[13px] font-medium tracking-[.5em]">
+            <p className="font-display text-glow text-fluid-xs font-medium tracking-[.5em]">
               {hero.eyebrow} · {profile.year}
             </p>
-            <p className="font-display mt-1 text-lg font-medium opacity-90">
+            <p className="font-display text-fluid-md mt-1 font-medium opacity-90">
               {hero.greeting}
             </p>
           </div>
         </div>
-        <h1 className="font-display text-[clamp(44px,6.4vw,96px)] leading-[.95] font-extrabold tracking-[-.02em] [text-shadow:0_8px_40px_rgba(0,0,0,.45)]">
+        <h1 className="font-display text-hero leading-[.95] font-extrabold tracking-[-.02em] [text-shadow:0_8px_40px_rgba(0,0,0,.45)]">
           {profile.firstName}
           <br />
           {profile.lastName}
         </h1>
-        <p className="font-display text-glow text-[clamp(16px,1.7vw,24px)] font-medium tracking-[.2em] uppercase">
+        <p className="font-display text-glow text-fluid-lg font-medium tracking-[.2em] uppercase">
           {profile.role}
           <span className="cursor-blink" aria-hidden="true">
             _
           </span>
         </p>
-        <p className="max-w-[460px] text-[clamp(16px,1.4vw,19px)] leading-relaxed opacity-90">
+        <p className="text-fluid-md max-w-[calc(var(--u)*31.9)] leading-relaxed opacity-90">
           {profile.tagline}
         </p>
         <div className="mt-1.5 flex flex-wrap justify-center gap-3.5 md:justify-start">
@@ -109,7 +109,7 @@ export function Hero({ profile }: HeroProps) {
 
       <a
         href={`#${SECTION_IDS.about}`}
-        className="absolute bottom-5 left-1/2 flex -translate-x-1/2 cursor-auto flex-col items-center gap-1.5 text-xs tracking-[.3em] no-underline opacity-85"
+        className="text-fluid-xs absolute bottom-5 left-1/2 flex -translate-x-1/2 cursor-auto flex-col items-center gap-1.5 tracking-[.3em] no-underline opacity-85"
       >
         <span>{hero.scrollHint}</span>
         <Icon name="arrowDown" size={18} strokeWidth={2} className="h-[26px] w-[18px]" />

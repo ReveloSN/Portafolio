@@ -32,14 +32,14 @@ export function Contact({ eggs }: ContactProps) {
         />
       }
     >
-      <div className="mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
         <div className="mb-14">
           <SectionHeading
             align="center"
             eyebrow={copy.eyebrow}
             title={copy.title}
             intro={copy.intro}
-            titleClassName="text-[clamp(34px,5.4vw,80px)]"
+            titleClassName="text-display"
           />
         </div>
         <div className="flex flex-wrap items-center justify-center gap-[clamp(36px,5vw,64px)]">
@@ -49,7 +49,7 @@ export function Contact({ eggs }: ContactProps) {
             openLabel={copy.open}
             closeLabel={copy.close}
           />
-          <div className="max-w-[520px] min-w-[280px] flex-[1_1_400px] rounded-[28px] border border-white/16 bg-[rgba(5,16,11,.72)] p-[clamp(24px,3vw,38px)] backdrop-blur-[10px]">
+          <div className="max-w-[calc(var(--u)*36.1)] min-w-[280px] flex-[1_1_400px] rounded-[28px] border border-white/16 bg-[rgba(5,16,11,.72)] p-[clamp(24px,3vw,38px)] backdrop-blur-[10px]">
             <ContactForm />
           </div>
         </div>

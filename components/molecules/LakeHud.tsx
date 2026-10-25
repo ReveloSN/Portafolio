@@ -33,12 +33,12 @@ export function LakeHud({
 }: LakeHudProps) {
   const busy = phase === "waiting" || phase === "reeling" || phase === "caught";
   return (
-    <div className="flex flex-wrap items-center gap-4 border-t border-[rgba(110,240,224,.2)] bg-[rgba(4,20,28,.92)] px-4 py-3.5 sm:px-[22px] sm:py-4">
+    <div className="sm:px-fluid-3 flex flex-wrap items-center gap-4 border-t border-[rgba(110,240,224,.2)] bg-[rgba(4,20,28,.92)] px-4 py-3.5 sm:py-4">
       <div aria-live="polite" className="min-w-[200px] flex-1">
-        <p className="font-mono text-xs tracking-[.22em] opacity-70">
+        <p className="text-fluid-xs font-mono tracking-[.22em] opacity-70">
           {labels.captures} {count} / {total}
         </p>
-        <p className="mt-1 text-[17px] font-semibold">{status}</p>
+        <p className="text-fluid-base mt-1 font-semibold">{status}</p>
       </div>
       <div className="flex flex-wrap gap-2.5">
         {count > 0 ? (

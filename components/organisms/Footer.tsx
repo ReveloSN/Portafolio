@@ -12,7 +12,7 @@ interface FooterProps {
   readonly links: readonly NavLink[];
 }
 
-const HEADING = "font-mono text-xs tracking-[.25em] text-glow mb-4";
+const HEADING = "font-mono text-fluid-xs tracking-[.25em] text-glow mb-4";
 
 export function Footer({ profile, links }: FooterProps) {
   const { footer, site } = COPY;
@@ -22,17 +22,17 @@ export function Footer({ profile, links }: FooterProps) {
         preserveAspectRatio="none"
         className="pointer-events-none absolute -top-[89px] left-0 h-[90px] w-full"
       />
-      <div className="mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
         <div className="flex flex-wrap justify-between gap-12">
-          <div className="max-w-[380px] flex-[1_1_280px]">
+          <div className="max-w-[calc(var(--u)*26.4)] flex-[1_1_280px]">
             <a
               href={`#${SECTION_IDS.home}`}
               className="inline-flex items-center gap-3 no-underline"
             >
-              <span className="font-display bg-glow flex h-11 w-11 items-center justify-center rounded-xl text-[17px] font-extrabold text-(--ink)">
+              <span className="font-display bg-glow text-fluid-base flex h-11 w-11 items-center justify-center rounded-xl font-extrabold text-(--ink)">
                 {profile.initials}
               </span>
-              <span className="font-display text-[22px] font-extrabold">
+              <span className="font-display text-fluid-lg font-extrabold">
                 {profile.firstName}
               </span>
             </a>
@@ -66,8 +66,8 @@ export function Footer({ profile, links }: FooterProps) {
             </ul>
           </div>
         </div>
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-5 border-t border-dashed border-white/18 pt-[26px]">
-          <p className="text-sm leading-relaxed opacity-70">
+        <div className="pt-fluid-4 mt-14 flex flex-wrap items-center justify-between gap-5 border-t border-dashed border-white/18">
+          <p className="text-fluid-sm leading-relaxed opacity-70">
             © {profile.year} {profile.firstName} · {site.madeWith}
           </p>
           <Button

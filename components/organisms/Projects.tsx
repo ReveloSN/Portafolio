@@ -18,14 +18,14 @@ export function Projects({ projects }: ProjectsProps) {
   const { projects: copy } = COPY;
   return (
     <SectionShell id={SECTION_IDS.projects} background={BACKGROUND}>
-      <div className="mx-auto max-w-[1280px]">
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*88.9))]">
         <SectionHeading
           eyebrow={copy.eyebrow}
           title={copy.title}
           intro={copy.intro}
-          titleClassName="max-w-[860px]"
+          titleClassName="max-w-[calc(var(--u)*59.7)]"
         />
-        <ul className="mt-[60px] grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <ul className="mt-fluid-6 grid grid-cols-1 gap-8 lg:grid-cols-3">
           {projects.map((project, index) => {
             const world = worldsBySlug.get(project.slug);
             if (!world) return null;

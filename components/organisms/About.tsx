@@ -47,24 +47,24 @@ export function About({ profile }: AboutProps) {
         </>
       }
     >
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-[clamp(40px,6vw,88px)]">
+      <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(40px,6vw,88px)]">
         <ExplorerCard profile={profile} />
-        <div className="max-w-[600px] min-w-[280px] flex-[1_1_440px]">
-          <p className="font-display text-glow text-sm font-medium tracking-[.5em]">
+        <div className="max-w-[calc(var(--u)*41.7)] min-w-[280px] flex-[1_1_440px]">
+          <p className="font-display text-glow text-fluid-sm font-medium tracking-[.5em]">
             {about.eyebrow}
           </p>
-          <h2 className="font-display mt-3.5 mb-5 text-[clamp(34px,4.6vw,64px)] leading-none font-extrabold tracking-[-.02em]">
+          <h2 className="font-display text-display mt-3.5 mb-5 leading-none font-extrabold tracking-[-.02em]">
             {about.title}
           </h2>
-          <p className="text-lg leading-[1.75] opacity-90">{profile.aboutText}</p>
+          <p className="text-fluid-md leading-[1.75] opacity-90">{profile.aboutText}</p>
 
-          <h3 className="mt-[30px] font-mono text-xs font-medium tracking-[.2em] opacity-70">
+          <h3 className="mt-fluid-4 text-fluid-xs font-mono font-medium tracking-[.2em] opacity-70">
             {about.factsTitle}
           </h3>
           <ul className="mt-3 flex flex-wrap gap-2.5">
             {profile.quickFacts.map((fact) => (
               <li key={fact.text}>
-                <Tag className="inline-flex items-center gap-2 px-4 py-2 text-sm">
+                <Tag className="text-fluid-sm inline-flex items-center gap-2 px-4 py-2">
                   <Icon
                     name={fact.icon}
                     size={16}
@@ -76,7 +76,7 @@ export function About({ profile }: AboutProps) {
             ))}
           </ul>
 
-          <h3 className="mt-[30px] font-mono text-xs font-medium tracking-[.2em] opacity-70">
+          <h3 className="mt-fluid-4 text-fluid-xs font-mono font-medium tracking-[.2em] opacity-70">
             {about.skillsTitle}
           </h3>
           <ul className="mt-3.5 flex flex-wrap gap-3">

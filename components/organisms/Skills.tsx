@@ -59,14 +59,14 @@ export function Skills({ skills }: SkillsProps) {
         </>
       }
     >
-      <div className="mx-auto max-w-[1240px]">
-        <p className="font-display text-glow-amber text-sm font-medium tracking-[.5em]">
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
+        <p className="font-display text-glow-amber text-fluid-sm font-medium tracking-[.5em]">
           {copy.eyebrow}
         </p>
-        <h2 className="font-display mt-3.5 mb-[18px] max-w-[860px] text-[clamp(34px,5vw,72px)] leading-none font-extrabold tracking-[-.02em]">
+        <h2 className="font-display mb-fluid-3 text-display mt-3.5 max-w-[calc(var(--u)*59.7)] leading-none font-extrabold tracking-[-.02em]">
           {copy.title}
         </h2>
-        <p className="mb-[34px] max-w-[600px] text-lg leading-relaxed opacity-85">
+        <p className="mb-fluid-4 text-fluid-md max-w-[calc(var(--u)*41.7)] leading-relaxed opacity-85">
           {copy.intro}
         </p>
 
@@ -81,7 +81,7 @@ export function Skills({ skills }: SkillsProps) {
           onCover={site.cover}
         />
 
-        <ul className="grid gap-[26px] md:grid-cols-2 lg:grid-cols-3">
+        <ul className="gap-fluid-4 grid md:grid-cols-2 lg:grid-cols-3">
           {skills.map((skill, i) => {
             const dug = site.state.layers[i] ?? 0;
             const left = DIG_LAYERS_PER_CELL - dug;
