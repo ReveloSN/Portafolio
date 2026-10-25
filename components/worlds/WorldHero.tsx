@@ -16,7 +16,7 @@ interface WorldHeroProps {
 export function WorldHero({ world, project, ownerName, Scene }: WorldHeroProps) {
   const { world: copy, projects } = COPY;
   return (
-    <ParallaxStage as="header" className="relative h-[860px] overflow-hidden">
+    <ParallaxStage as="header" className="relative h-svh min-h-80 overflow-hidden">
       <Scene />
       <div className="px-gutter absolute inset-x-0 top-0 flex flex-wrap items-center justify-between gap-4 py-7">
         <Button
@@ -34,7 +34,10 @@ export function WorldHero({ world, project, ownerName, Scene }: WorldHeroProps) 
         <p className="font-display text-glow text-fluid-sm font-medium tracking-[.5em]">
           MUNDO {world.number} · {world.name}
         </p>
-        <h1 className="font-display text-hero mt-2.5 mb-3 leading-[.95] font-extrabold tracking-[-.02em] [text-shadow:0_8px_40px_rgba(0,0,0,.5)]">
+        <h1
+          data-testid="world-title"
+          className="font-display text-hero mt-2.5 mb-3 leading-[.95] font-extrabold tracking-[-.02em] [text-shadow:0_8px_40px_rgba(0,0,0,.5)]"
+        >
           {project.name}
         </h1>
         <p className="text-fluid-md mb-5 max-w-[calc(var(--u)*43.1)] leading-normal [text-shadow:0_2px_14px_rgba(0,0,0,.6)]">
@@ -54,13 +57,19 @@ export function WorldHero({ world, project, ownerName, Scene }: WorldHeroProps) 
           <Button
             variant="dark"
             href={project.repoUrl}
+            data-testid="world-cta-code"
             target="_blank"
             rel="noopener noreferrer"
           >
             <Icon name="github" />
             {projects.github}
           </Button>
-          <Button href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+          <Button
+            href={project.demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="world-cta-demo"
+          >
             <Icon name="vercel" size={14} />
             {projects.demo}
           </Button>

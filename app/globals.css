@@ -3,6 +3,7 @@
 @import "./keyframes.css";
 @import "./motion.css";
 @import "./stage.css";
+@import "./hero.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));
@@ -59,6 +60,7 @@
 @media (max-height: 640px) {
   :root {
     --nav-h: 3.5rem;
+    --fs-hero: clamp(2rem, calc(var(--u) * 5.6), 7rem);
   }
 }
 
@@ -73,7 +75,15 @@
 /* Ultrawide: el contenido se limita y la escena rellena los lados */
 @media (min-aspect-ratio: 21/9) {
   :root {
-    --content-max: 1600px;
+    /* 1600px del diseño, expresados en --u para que escale con la tipografía */
+    --content-max: calc(var(--u) * 111);
+  }
+}
+
+/* Vertical estrecho (tablets y móviles): la unidad crece con el ancho */
+@media (max-aspect-ratio: 4/5) and (max-width: 900px) {
+  :root {
+    --u: clamp(0.5rem, min(1.6vw, 1.75svh), 1.15rem);
   }
 }
 
@@ -107,5 +117,9 @@ section {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* Las ondas solo tienen sentido animadas */
+  .ripple {
+    opacity: 0;
   }
 }

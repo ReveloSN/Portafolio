@@ -1,0 +1,87 @@
+/* ------------------------------------------------------------------ */
+/* Capa de texto del Hero: NO escala con el stage, usa --u.             */
+/* Reglas por forma de pantalla, no por dispositivo.                    */
+/* ------------------------------------------------------------------ */
+.hero-shade {
+  background: linear-gradient(
+    90deg,
+    rgba(3, 14, 9, 0.82) 0,
+    rgba(3, 14, 9, 0.55) 26%,
+    rgba(3, 14, 9, 0) 52%
+  );
+}
+
+.hero-copy {
+  align-items: center;
+  padding-inline: var(--space-gutter);
+  padding-bottom: var(--space-4);
+}
+
+/* Ancho máximo: nunca invade la cabeza del dinosaurio (que empieza ~55% del ancho) */
+.hero-copy-inner {
+  width: clamp(min(20rem, 100%), 44%, calc(var(--u) * 40));
+}
+
+.hero-avatar {
+  width: max(2.75rem, calc(var(--u) * 4.7));
+  aspect-ratio: 1;
+}
+
+.hero-tagline {
+  max-width: calc(var(--u) * 32);
+}
+
+/* Pantallas bajas: avatar y frase más pequeños, menos aire */
+@media (max-height: 640px) {
+  .hero-avatar {
+    width: 2.6rem;
+  }
+  .hero-copy-inner {
+    gap: var(--space-2);
+  }
+  .hero-tagline {
+    font-size: var(--fs-sm);
+  }
+}
+
+/* Ultrawide: el texto se alinea con el contenido limitado; la escena rellena los lados */
+@media (min-aspect-ratio: 21/9) {
+  .hero-copy {
+    padding-inline: max(
+      var(--space-gutter),
+      calc((100% - var(--content-max)) / 2 + var(--space-gutter))
+    );
+  }
+}
+
+/* Móvil vertical: texto centrado arriba, dino detrás, botones en columna */
+@media (max-aspect-ratio: 4/5) and (max-width: 900px) {
+  .hero-copy {
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: calc(var(--nav-h) + var(--space-4));
+    text-align: center;
+  }
+  .hero-copy-inner {
+    width: 100%;
+    max-width: 34rem;
+    align-items: center;
+  }
+  .hero-tagline {
+    max-width: none;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 20rem;
+  }
+  .hero-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(3, 14, 9, 0.7) 0,
+      rgba(3, 14, 9, 0.35) 45%,
+      rgba(3, 14, 9, 0) 70%
+    );
+  }
+}

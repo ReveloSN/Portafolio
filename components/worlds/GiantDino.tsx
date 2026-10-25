@@ -1,10 +1,14 @@
 import Image from "next/image";
 import { DINO_TILT, EYE_TRAVEL, HERO_LAYERS } from "@/lib/constants";
 import { layerShift } from "@/lib/parallax";
+import type { StageVars } from "./JungleBackdrop";
 
 interface GiantDinoProps {
   readonly alt: string;
 }
+
+/** Posición del dino en coordenadas del diseño (1440x900): anclado arriba para no recortar la cabeza. */
+const DINO_PLACEMENT = { "--x": 576, "--y": -70, "--w": 835 } as StageVars;
 
 const EYE_POSITION = { left: "28.43%", top: "32.81%" } as const;
 
@@ -13,8 +17,9 @@ export function GiantDino({ alt }: GiantDinoProps) {
   const { dino } = HERO_LAYERS;
   return (
     <div
-      className="px absolute -top-[70px] left-[40%] w-[58vw] max-w-[calc(var(--u)*61.1)] origin-[60%_100%]"
+      className="px stage-x stage-top stage-w portrait-narrow:opacity-75 absolute origin-[60%_100%]"
       style={{
+        ...DINO_PLACEMENT,
         transform: `perspective(1400px) ${layerShift(dino.x, dino.y)} rotateY(calc(var(--mx, 0) * ${DINO_TILT.y}deg)) rotateX(calc(var(--my, 0) * ${-DINO_TILT.x}deg))`,
       }}
     >

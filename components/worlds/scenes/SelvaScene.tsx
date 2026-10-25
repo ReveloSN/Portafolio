@@ -1,19 +1,24 @@
 import { Canoe } from "@/components/worlds/Canoe";
 import { Fireflies } from "@/components/worlds/Fireflies";
-import { JungleBackdrop } from "@/components/worlds/JungleBackdrop";
+import { JungleBackdrop, type StageVars } from "@/components/worlds/JungleBackdrop";
 import { COPY } from "@/data/copy";
 import { WORLD_PARTICLE_COUNT } from "@/lib/constants";
 import { makeParticles, WORLD_PARTICLES } from "@/lib/particles";
 
+/** La canoa flota a media altura, sobre el título del proyecto. */
+const CANOE_PLACEMENT = { "--b": 200 } as StageVars;
 const PARTICLES = makeParticles(WORLD_PARTICLE_COUNT, WORLD_PARTICLES);
 
 export function SelvaScene() {
   return (
     <>
       <JungleBackdrop
-        waterTop={540}
+        waterBottom={-60}
         mid={
-          <div className="pointer-events-none absolute top-[420px] right-0 left-0 flex justify-center">
+          <div
+            className="stage-bottom pointer-events-none absolute right-0 left-0 flex justify-center"
+            style={CANOE_PLACEMENT}
+          >
             <Canoe alt={COPY.hero.canoeAlt} />
           </div>
         }

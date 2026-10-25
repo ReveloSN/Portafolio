@@ -16,7 +16,8 @@ export function useParallax<T extends HTMLElement>() {
     if (!element) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reducedMotion.matches) return;
+    const coarsePointer = window.matchMedia("(pointer: coarse)");
+    if (reducedMotion.matches || coarsePointer.matches) return;
 
     let frame = 0;
     let lastPaint = 0;

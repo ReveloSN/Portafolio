@@ -6,14 +6,16 @@ interface CanoeProps {
   readonly alt: string;
   /** Sombra, ondas y reflejo bajo la canoa (Hero principal). */
   readonly withReflection?: boolean;
+  readonly testId?: string;
 }
 
 const RIPPLE =
   "ripple absolute -left-[30%] top-[88%] h-[18%] w-[160%] rounded-full border-2 border-[rgba(214,255,159,.5)]";
-const CANOE_SIZE = "clamp(190px, 16.5vw, 250px)";
+/** Ancho de la canoa: 238 unidades del diseño, escaladas con el stage (mínimo legible 7.5rem). */
+const CANOE_SIZE = "max(7.5rem, calc(238 * var(--sf, 1px)))";
 const FADE = "linear-gradient(to top, #000 0, transparent 55%)";
 
-export function Canoe({ alt, withReflection = false }: CanoeProps) {
+export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
   const { canoe } = HERO_LAYERS;
   return (
     <div
@@ -54,6 +56,7 @@ export function Canoe({ alt, withReflection = false }: CanoeProps) {
           <Image
             src="/images/canoa.webp"
             alt={alt}
+            data-testid={testId}
             width={1254}
             height={1254}
             sizes="250px"
