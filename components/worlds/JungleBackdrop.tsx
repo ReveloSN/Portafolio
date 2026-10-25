@@ -27,18 +27,18 @@ const CORNERS: readonly Corner[] = [
   {
     src: "foliage-bl",
     className: "top-[calc(-20*var(--sf))] right-[calc(-20*var(--sf))]",
-    width: 520,
+    width: 400,
     flip: true,
   },
   {
     src: "foliage-br",
     className: "right-[calc(-20*var(--sf))] bottom-[calc(-40*var(--sf))]",
-    width: 640,
+    width: 480,
   },
   {
     src: "foliage-bl",
     className: "bottom-[calc(-40*var(--sf))] left-[calc(-60*var(--sf))]",
-    width: 590,
+    width: 440,
   },
 ];
 
@@ -149,7 +149,7 @@ export function JungleBackdrop({
             alt=""
             width={1536}
             height={1024}
-            sizes="(min-width: 1440px) 640px, 45vw"
+            sizes="(min-width: 1440px) 480px, 34vw"
             className={`h-auto w-full ${corner.flip ? "rotate-180" : ""}`}
           />
         </div>

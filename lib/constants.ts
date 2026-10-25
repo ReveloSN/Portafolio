@@ -5,7 +5,7 @@ export const PARALLAX_FRAME_MS = 1000 / PARALLAX_MAX_FPS;
 export const HERO_LAYERS = {
   background: { x: 6, y: 4 },
   dino: { x: 12, y: 7 },
-  trunks: { x: 24, y: 12 },
+  trunks: { x: 8, y: 4 },
   canoe: { x: 6, y: 3 },
   foliage: { x: 40, y: 18 },
 } as const;
