@@ -1,8 +1,11 @@
 @import "tailwindcss";
 @config "../tailwind.config.ts";
+@import "./keyframes.css";
+@import "./motion.css";
 
 :root {
   --glow: #a6ff5c;
+  --ink: #07160f;
 }
 
 html {

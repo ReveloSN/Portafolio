@@ -1,0 +1,440 @@
+/* Movimiento y estados de las escenas interactivas (del diseño de referencia) */
+.px {
+  transition: transform 0.25s ease-out;
+  will-change: transform;
+}
+.bob2 {
+  animation: bob 4.5s ease-in-out infinite;
+}
+.breathe {
+  animation: breathe 7s ease-in-out infinite;
+  transform-origin: 85% 95%;
+}
+.blink {
+  animation: blink 6s ease-in-out infinite;
+}
+.fly {
+  animation: fly 32s linear infinite;
+}
+.fly2 {
+  animation: fly 46s linear infinite;
+  animation-delay: -18s;
+}
+.drift {
+  animation: drift 14s ease-in-out infinite;
+}
+.drift2 {
+  animation: drift 20s ease-in-out infinite reverse;
+}
+.ripple {
+  animation: ripple 5s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.ff {
+  position: absolute;
+  border-radius: 50%;
+  background: #e9ff9c;
+  box-shadow: 0 0 14px 4px rgba(190, 255, 120, 0.8);
+  pointer-events: none;
+  animation: flick 4s ease-in-out infinite;
+}
+.chip-float {
+  animation: float 6s ease-in-out infinite;
+}
+.cursor-blink {
+  animation: cblink 1s steps(2, start) infinite;
+}
+.rise {
+  animation: rise 9s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.swim {
+  animation: swimp 8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.idcard {
+  transform: rotate(-3deg);
+  transition:
+    transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.5s;
+}
+.idcard:hover {
+  transform: rotate(0deg) translateY(-8px);
+  box-shadow: 0 40px 80px -30px rgba(166, 255, 92, 0.5);
+}
+.cell {
+  position: relative;
+  padding: 22px 22px 24px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(90, 61, 38, 0.85), rgba(40, 24, 12, 0.9));
+  border: 1px solid rgba(255, 196, 110, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition:
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+.cell:before,
+.cell:after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  width: 10px;
+  height: 26px;
+  border-radius: 2px;
+  background: #e0612b;
+}
+.cell:before {
+  left: 22px;
+}
+.cell:after {
+  right: 22px;
+}
+.cell.full {
+  border-color: #ffc46e;
+  box-shadow: 0 0 36px rgba(255, 170, 70, 0.28);
+}
+.stat {
+  flex: none;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(255, 196, 110, 0.45);
+  color: #ffc46e;
+  white-space: nowrap;
+}
+.pit {
+  position: relative;
+  height: 218px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 196, 110, 0.25);
+  background: #2a1a0e;
+}
+.find {
+  position: absolute;
+  inset: 0;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: radial-gradient(circle at 28% 18%, #6a4629, #2a1a0e 75%);
+}
+.dirt {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: #fff;
+}
+.dirt.done {
+  display: none;
+}
+.dl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition:
+    transform 0.6s cubic-bezier(0.5, 0, 0.8, 0.4),
+    opacity 0.5s;
+  pointer-events: none;
+}
+.dl.gone {
+  transform: translateY(70%) rotate(5deg);
+  opacity: 0;
+}
+.dirt:hover .dl {
+  filter: brightness(1.12);
+}
+.dhint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(20, 10, 4, 0.78);
+  border: 1px solid rgba(255, 196, 110, 0.5);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hitA {
+  animation: shakeA 0.4s;
+}
+.hitB {
+  animation: shakeB 0.4s;
+}
+.lake {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(110, 240, 224, 0.3);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  background: #06202c;
+}
+.lake .lakesvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+  background: rgba(4, 20, 28, 0.92);
+  border-top: 1px solid rgba(110, 240, 224, 0.2);
+}
+.reveal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 18px;
+  margin: 0 auto;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  text-align: center;
+  padding: 16px 26px;
+  border-radius: 20px;
+  background: rgba(4, 20, 28, 0.88);
+  border: 1px solid var(--glow);
+  box-shadow: 0 0 40px var(--glowB);
+  backdrop-filter: blur(8px);
+  animation: revealIn 0.5s 0.45s both;
+}
+.bobi,
+.rod,
+.cr {
+  transform-box: view-box;
+}
+.bobi.idle {
+  transform: translate(-200px, -230px);
+}
+.bobi.wait {
+  animation:
+    castFly 0.85s cubic-bezier(0.3, 0.7, 0.4, 1) 1,
+    bobW 2.4s ease-in-out 0.85s infinite;
+}
+.bobi.bite {
+  animation: bobB 0.5s ease-in-out infinite;
+}
+.bobi.leap {
+  opacity: 0;
+}
+.alert {
+  opacity: 0;
+}
+.alert.bite {
+  opacity: 1;
+  animation: alertPop 0.35s ease-in-out infinite alternate;
+}
+.ln {
+  opacity: 0;
+}
+.ln.wait {
+  opacity: 1;
+  transition: opacity 0.2s 0.6s;
+}
+.ln.bite {
+  opacity: 1;
+}
+.rod {
+  transform-origin: 280px 240px;
+}
+.rod.bite {
+  animation: rodTug 0.22s ease-in-out infinite alternate;
+}
+.rg,
+.splash {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.rg.wait,
+.rg.bite {
+  animation: rgo 2.4s ease-out 1s infinite;
+}
+.rg2.wait,
+.rg2.bite {
+  animation-delay: 2.2s;
+}
+.splash.leap {
+  animation: rgo 1.1s ease-out 3;
+}
+.cr {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.cr.big {
+  animation: leapBig 3.4s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+.cr.sm {
+  animation: leapSm 2.8s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+.pull {
+  animation: pulsebtn 0.5s ease-in-out infinite alternate;
+}
+.xc {
+  padding: 22px 26px;
+  border-radius: 18px;
+  border: 1px solid rgba(238, 246, 224, 0.18);
+  background: rgba(238, 246, 224, 0.04);
+  opacity: 0.62;
+  transition:
+    opacity 0.5s,
+    border-color 0.5s,
+    box-shadow 0.5s,
+    transform 0.35s;
+}
+.xc.got {
+  opacity: 1;
+  border-color: var(--c);
+  background: color-mix(in srgb, var(--c) 9%, transparent);
+  box-shadow: 0 0 34px color-mix(in srgb, var(--c) 28%, transparent);
+}
+.xc:hover {
+  transform: translateY(-5px);
+}
+.rares > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 24px;
+  border-radius: 18px;
+  border: 1px dashed rgba(238, 246, 224, 0.25);
+  transition:
+    border-color 0.5s,
+    background 0.5s;
+}
+.rares svg {
+  width: 46%;
+  flex: none;
+}
+.rares svg {
+  filter: brightness(0) opacity(0.45);
+  transition: filter 0.6s;
+}
+.rares > div b {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  font-weight: 500;
+}
+.rares > div span {
+  display: block;
+  margin-top: 4px;
+  font-family: "Outfit", sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+}
+.rares > div.got {
+  border: 1px solid var(--glow);
+  background: var(--glowB);
+}
+.rares > div.got svg {
+  filter: none;
+}
+.rares > div:not(.got) span {
+  filter: blur(6px);
+}
+.egg {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #eef6e0;
+  font-family: "Figtree", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+.egg svg {
+  overflow: visible;
+}
+.egg:hover svg {
+  animation: wobble 0.6s;
+}
+.egg .shell {
+  fill: var(--c);
+}
+.egg .cap {
+  transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+  transform-box: fill-box;
+  transform-origin: 20% 100%;
+}
+.egg.open .cap {
+  transform: translate(-16px, -46px) rotate(-26deg);
+}
+.egg .baby {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.4s 0.15s,
+    transform 0.6s 0.15s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.egg.open .baby {
+  opacity: 1;
+  transform: translateY(-6px);
+}
+.fossil {
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s,
+    border-color 0.4s;
+}
+.fossil:hover {
+  transform: translateY(-10px) rotate(-1deg);
+  border-color: rgba(255, 196, 110, 0.7);
+  box-shadow: 0 30px 60px -24px rgba(255, 170, 70, 0.45);
+}
+.bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transform-origin: left;
+  animation: grow 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@supports (animation-timeline: view()) {
+  .dig {
+    animation: dig linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 85%;
+  }
+}
+.bar-fill {
+  transform-origin: left;
+  animation: grow 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.dl > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
