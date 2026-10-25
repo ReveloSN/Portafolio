@@ -22,7 +22,12 @@ const config: Config = {
           500: "#92683f",
           400: "#b58a5c",
         },
-        glow: { DEFAULT: "#a6ff5c", teal: "#6ef0e0", amber: "#ffc46e", pink: "#ff8fb1" },
+        glow: {
+          DEFAULT: "var(--glow)",
+          teal: "#6ef0e0",
+          amber: "#ffc46e",
+          pink: "#ff8fb1",
+        },
         leaf: "#eef6e0",
         parchment: "#f1d9a8",
       },

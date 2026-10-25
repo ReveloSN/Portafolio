@@ -6,6 +6,8 @@
 :root {
   --glow: #a6ff5c;
   --ink: #07160f;
+  --glowA: rgba(166, 255, 92, 0.55);
+  --glowB: rgba(166, 255, 92, 0.16);
 }
 
 html {
