@@ -6,6 +6,7 @@ import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import type { Profile, QuickFact } from "@/types/profile";
+import { seamBackground } from "@/lib/seams";
 
 interface AboutProps {
   readonly profile: Profile;
@@ -18,7 +19,11 @@ const FACT_COLORS: Readonly<Record<QuickFact["icon"], string>> = {
 };
 
 const CHIP_COLORS = ["166,255,92", "110,240,224", "255,196,110"] as const;
-const BACKGROUND = "linear-gradient(#07160f 0, #0a2418 60%, #0a1f17 100%)";
+const BACKGROUND = seamBackground(
+  "--seam-about-start",
+  "--seam-about-end",
+  "linear-gradient(var(--seam-about-start) 0, #0a2418 60%, var(--seam-about-end) 100%)",
+);
 
 export function About({ profile }: AboutProps) {
   const { about } = COPY;

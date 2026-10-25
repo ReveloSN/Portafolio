@@ -15,8 +15,13 @@ import { SECTION_IDS } from "@/data/navigation";
 import { useFishing } from "@/hooks/useFishing";
 import { catchSequence, sortedExperience } from "@/lib/collections";
 import { KIND_COLOR, KIND_LABEL } from "@/lib/fishingView";
+import { seamBackground } from "@/lib/seams";
 
-const BACKGROUND = "linear-gradient(#06120d, #0a1c26 40%, #08171e)";
+const BACKGROUND = seamBackground(
+  "--seam-experience-start",
+  "--seam-experience-end",
+  "linear-gradient(var(--seam-experience-start), #0a1c26 40%, var(--seam-experience-end))",
+);
 const SEQUENCE_INDEX = new Map(
   catchSequence.map((item, index) => [
     item.type === "entry" ? item.entry.id : item.creature,

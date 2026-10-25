@@ -8,12 +8,17 @@ import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { worldsBySlug } from "@/lib/collections";
 import type { Project } from "@/types/project";
+import { seamBackground } from "@/lib/seams";
 
 interface ProjectsProps {
   readonly projects: readonly Project[];
 }
 
-const BACKGROUND = "linear-gradient(#0a1f17, #06120d)";
+const BACKGROUND = seamBackground(
+  "--seam-projects-start",
+  "--seam-projects-end",
+  "linear-gradient(var(--seam-projects-start), var(--seam-projects-end))",
+);
 
 export function Projects({ projects }: ProjectsProps) {
   const { projects: copy } = COPY;

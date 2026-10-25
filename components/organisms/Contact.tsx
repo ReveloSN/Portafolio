@@ -8,12 +8,17 @@ import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import type { ContactEgg } from "@/types/contact";
+import { seamBackground } from "@/lib/seams";
 
 interface ContactProps {
   readonly eggs: readonly ContactEgg[];
 }
 
-const BACKGROUND = "radial-gradient(ellipse 80% 60% at 30% 70%, #1d4a22 0, #08171e 70%)";
+const BACKGROUND = seamBackground(
+  "--seam-contact-start",
+  "--seam-contact-end",
+  "radial-gradient(ellipse 80% 60% at 30% 70%, #1d4a22 0, var(--seam-contact-end) 70%)",
+);
 
 export function Contact({ eggs }: ContactProps) {
   const { contact: copy } = COPY;

@@ -22,6 +22,9 @@ interface HeroProps {
 const FIREFLIES = makeParticles(FIREFLY_COUNT, HERO_FIREFLIES);
 /** Distancia de la canoa al borde inferior, en coordenadas del diseño. */
 const CANOE_PLACEMENT = { "--b": 64 } as StageVars;
+/** El final del Hero se funde con el color de inicio de Sobre mí. */
+const SEAM_FADE =
+  "linear-gradient(to bottom, transparent 0, color-mix(in srgb, var(--seam-hero-end) 60%, transparent) 60%, var(--seam-hero-end) 100%)";
 const CURSOR_LIGHT =
   "radial-gradient(circle, rgba(210,255,140,.55) 0, rgba(166,255,92,.18) 40%, rgba(166,255,92,0) 70%)";
 
@@ -69,6 +72,12 @@ export function Hero({ profile }: HeroProps) {
           className="hero-shade pointer-events-none absolute inset-0"
         />
       </JungleBackdrop>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[12svh]"
+        style={{ background: SEAM_FADE }}
+      />
 
       <div className="hero-copy pt-nav absolute inset-0 z-[3] flex cursor-auto">
         <div className="hero-copy-inner gap-fluid-3 flex flex-col">
@@ -126,7 +135,7 @@ export function Hero({ profile }: HeroProps) {
 
       <a
         href={`#${SECTION_IDS.about}`}
-        className="text-fluid-xs short:hidden bottom-fluid-2 absolute z-[3] left-1/2 flex -translate-x-1/2 cursor-auto flex-col items-center gap-1.5 tracking-[.3em] no-underline opacity-85"
+        className="text-fluid-xs short:hidden bottom-fluid-2 absolute left-1/2 z-[3] flex -translate-x-1/2 cursor-auto flex-col items-center gap-1.5 tracking-[.3em] no-underline opacity-85"
       >
         <span>{hero.scrollHint}</span>
         <Icon

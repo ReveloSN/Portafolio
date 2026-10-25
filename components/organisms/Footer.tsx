@@ -17,7 +17,7 @@ const HEADING = "font-mono text-fluid-xs tracking-[.25em] text-glow mb-4";
 export function Footer({ profile, links }: FooterProps) {
   const { footer, site } = COPY;
   return (
-    <footer className="px-gutter relative isolate -mt-px bg-[#05100b] pt-[clamp(70px,8vw,110px)] pb-9">
+    <footer className="px-gutter relative isolate -mt-px bg-(--seam-skills-end) pt-[clamp(70px,8vw,110px)] pb-9">
       <SeamLayer seam="skills-footer" host="lower" />
       <div className="relative z-[2] mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
         <div className="flex flex-wrap justify-between gap-12">

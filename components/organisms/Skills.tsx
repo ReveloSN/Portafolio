@@ -23,7 +23,7 @@ interface SkillsProps {
 }
 
 const BACKGROUND =
-  "linear-gradient(#08171e 0, #08171e var(--dig-soil-line), #2a1c10 var(--dig-soil-line), #5b3b22 calc(var(--dig-soil-line) + 5px), #4a2f1b 520px, #35210f 1000px, #241508 100%)";
+  "linear-gradient(var(--seam-skills-start) 0, var(--seam-skills-start) var(--dig-soil-line), #2a1c10 var(--dig-soil-line), #5b3b22 calc(var(--dig-soil-line) + 5px), #4a2f1b 520px, #35210f 1000px, #241508 calc(100% - var(--seam-blend)), var(--seam-skills-end) 100%)";
 /** Línea de tierra del sitio de excavación: ahí cuelgan las raíces del divisor. */
 const SOIL = { "--dig-soil-line": "170px" } as CSSProperties;
 const STRATA =

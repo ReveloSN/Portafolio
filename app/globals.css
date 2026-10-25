@@ -51,6 +51,22 @@
   --screen-h: 100svh;
   --content-max: 1440px;
 
+  /* Costuras: el final de cada sección es exactamente el inicio de la siguiente */
+  --seam-blend: 16svh;
+  --seam-hero-end: #07160f;
+  --seam-about-start: var(--seam-hero-end);
+  --seam-about-end: #0a1f17;
+  --seam-projects-start: var(--seam-about-end);
+  --seam-projects-end: #06120d;
+  --seam-testimonials-start: var(--seam-projects-end);
+  --seam-testimonials-end: #06120d;
+  --seam-experience-start: var(--seam-testimonials-end);
+  --seam-experience-end: #08171e;
+  --seam-contact-start: var(--seam-experience-end);
+  --seam-contact-end: #08171e;
+  --seam-skills-start: var(--seam-contact-end);
+  --seam-skills-end: #05100b;
+
   /* Tema */
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;

@@ -17,12 +17,17 @@ import {
   CAROUSEL_SIDE_SCALE,
 } from "@/lib/constants";
 import type { Testimonial } from "@/types/testimonial";
+import { seamBackground } from "@/lib/seams";
 
 interface TestimonialsProps {
   readonly testimonials: readonly Testimonial[];
 }
 
-const BACKGROUND = "radial-gradient(ellipse 70% 60% at 50% 40%, #123a27 0, #06120d 75%)";
+const BACKGROUND = seamBackground(
+  "--seam-testimonials-start",
+  "--seam-testimonials-end",
+  "radial-gradient(ellipse 70% 60% at 50% 40%, #123a27 0, var(--seam-testimonials-end) 75%)",
+);
 const TAPE_TILTS = [-3, 2, -1] as const;
 
 function cardStyle(offset: -1 | 0 | 1) {
