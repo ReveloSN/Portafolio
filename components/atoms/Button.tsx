@@ -3,7 +3,7 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "reac
 import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "lime" | "ghost" | "dark";
-export type ButtonSize = "md" | "sm";
+export type ButtonSize = "md" | "sm" | "icon";
 
 const BASE =
   "inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-full border-[1.5px] border-transparent font-sans font-semibold no-underline transition duration-300 hover:-translate-y-[3px] disabled:cursor-default disabled:opacity-55 disabled:hover:translate-y-0";
@@ -17,6 +17,7 @@ const VARIANTS: Readonly<Record<ButtonVariant, string>> = {
 const SIZES: Readonly<Record<ButtonSize, string>> = {
   md: "px-[26px] py-3.5 text-base",
   sm: "px-5 py-2.5 text-sm",
+  icon: "h-[52px] w-[52px] p-0",
 };
 
 interface CommonProps {
