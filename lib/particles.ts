@@ -74,3 +74,10 @@ export function makeParticles(
     duration: recipe.durationBase + (i % recipe.durationMod) * recipe.durationStep,
   }));
 }
+
+/** Burbujas del océano: más grandes y lentas que las luciérnagas. */
+export const OCEAN_BUBBLES: ParticleRecipe = {
+  ...WORLD_PARTICLES,
+  sizeBonus: 5,
+  durationBase: 8,
+};
