@@ -438,3 +438,67 @@
   width: 100%;
   height: 100%;
 }
+
+/* Mundo océano */
+.swimA {
+  animation: swimA 9s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.swimB {
+  animation: swimB 12s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.flap {
+  animation: flap 2.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 100% 0;
+}
+.flapB {
+  animation: flap 3.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 0 0;
+}
+.rays {
+  animation: rays 10s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.rays2 {
+  animation: rays 14s ease-in-out infinite reverse;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.bub {
+  position: absolute;
+  bottom: -30px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  animation: up 10s linear infinite;
+}
+.jelly {
+  animation: jelly 5s ease-in-out infinite;
+}
+.pulse {
+  animation: pulse 3s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+/* Mundo cueva */
+.flame {
+  animation: flame 0.7s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.cg {
+  animation: cglow 3.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.ff-torch {
+  background: #ffd98a;
+  box-shadow: 0 0 12px 3px rgba(255, 190, 90, 0.8);
+}
