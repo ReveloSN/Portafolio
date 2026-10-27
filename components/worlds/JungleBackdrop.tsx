@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Illustration } from "@/components/atoms/Illustration";
 import type { CSSProperties, ReactNode } from "react";
 import { HERO_LAYERS } from "@/lib/constants";
 import { layerShift } from "@/lib/parallax";
@@ -22,31 +23,31 @@ interface Corner {
   readonly flip?: boolean;
 }
 
-/** Hojas de las esquinas, ancladas a cada esquina y escaladas con el stage. */
+/** Hojas de las esquinas: ancladas a cada esquina, completas y sin desplazarse fuera del borde. */
 const CORNERS: readonly Corner[] = [
   {
     src: "foliage-bl",
-    className: "top-[calc(-20*var(--sf))] right-[calc(-20*var(--sf))]",
+    className: "top-0 right-0",
     width: 400,
     flip: true,
   },
   {
     src: "foliage-br",
-    className: "right-[calc(-20*var(--sf))] bottom-[calc(-40*var(--sf))]",
+    className: "right-0 bottom-0",
     width: 480,
   },
   {
     src: "foliage-bl",
-    className: "bottom-[calc(-40*var(--sf))] left-[calc(-60*var(--sf))]",
+    className: "bottom-0 left-0",
     width: 440,
   },
 ];
 
 /** Ancho de cada tronco: nunca más de 680px, media pantalla ni 1.1 veces el alto visible (0.85 en pantallas bajas). */
 const TRUNK_WIDTH = "min(680px, 50cqw, calc(100cqh * var(--trunk-ratio, 1.1)))";
-/** El tronco derecho es más angosto y más pegado al borde para no tapar la cola del dino. */
+/** El tronco derecho es más angosto, anclado al borde y completo, para no tapar la cola del dino. */
 const TRUNK_RIGHT_WIDTH = `calc(${TRUNK_WIDTH} * 0.75)`;
-const TRUNK_RIGHT_OFFSET = -0.18;
+const TRUNK_RIGHT_OFFSET = 0;
 
 const GLOW =
   "radial-gradient(ellipse 46% 44% at 52% 34%, color-mix(in srgb, var(--glow) 55%, transparent) 0%, color-mix(in srgb, var(--glow) 16%, transparent) 45%, transparent 100%)";
@@ -66,7 +67,7 @@ export function JungleBackdrop({
   waterBottom = -40,
   children,
 }: JungleBackdropProps) {
-  const { background, trunks, foliage } = HERO_LAYERS;
+  const { background, trunks } = HERO_LAYERS;
   return (
     <div className="stage">
       <div
@@ -113,13 +114,13 @@ export function JungleBackdrop({
         className="px pointer-events-none absolute top-[-4%] left-[-8%]"
         style={{ width: TRUNK_WIDTH, transform: layerShift(trunks.x, trunks.y, -1) }}
       >
-        <Image
+        <Illustration
+          decorative
+          priority
           src="/images/trunkL.webp"
-          alt=""
           width={1024}
           height={1536}
-          sizes="680px"
-          className="h-auto w-full"
+          sizes="(min-width: 1400px) 680px, 50vw"
         />
       </div>
       <div
@@ -131,33 +132,32 @@ export function JungleBackdrop({
           transform: layerShift(trunks.x, trunks.y, 1),
         }}
       >
-        <Image
+        <Illustration
+          decorative
+          priority
           src="/images/trunkR.webp"
-          alt=""
           width={1024}
           height={1536}
-          sizes="680px"
-          className="h-auto w-full"
+          sizes="(min-width: 1400px) 680px, 50vw"
         />
       </div>
       {CORNERS.map((corner) => (
         <div
           key={corner.className}
-          className={`px stage-w pointer-events-none absolute ${corner.className}`}
+          className={`stage-w pointer-events-none absolute ${corner.className}`}
           style={
             {
               "--w": corner.width,
-              transform: `${layerShift(foliage.x, foliage.y)} scale(1.05)`,
             } as StageVars
           }
         >
-          <Image
+          <Illustration
+            decorative
             src={`/images/${corner.src}.webp`}
-            alt=""
             width={1536}
             height={1024}
             sizes="(min-width: 1440px) 480px, 34vw"
-            className={`h-auto w-full ${corner.flip ? "rotate-180" : ""}`}
+            imageClassName={corner.flip ? "rotate-180" : undefined}
           />
         </div>
       ))}

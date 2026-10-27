@@ -7,7 +7,6 @@ export const HERO_LAYERS = {
   dino: { x: 4, y: 2 },
   trunks: { x: 8, y: 4 },
   canoe: { x: 6, y: 3 },
-  foliage: { x: 40, y: 18 },
 } as const;
 
 /** Recorrido del iris (porcentaje de su propio tamaño): no sale de la cuenca. */
