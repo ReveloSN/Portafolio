@@ -4,6 +4,7 @@ import { Tag } from "@/components/atoms/Tag";
 import { ExplorerCard } from "@/components/molecules/ExplorerCard";
 import { RevealGroup } from "@/components/molecules/RevealGroup";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
+import { TechTrail } from "@/components/molecules/TechTrail";
 import { StaggerText } from "@/components/molecules/StaggerText";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
@@ -23,8 +24,7 @@ const FACT_COLORS: Readonly<Record<QuickFact["icon"], string>> = {
 
 /** Orden en la entrada escalonada: primero el texto, luego datos rápidos y tecnologías. */
 const FACTS_START = 4;
-const CHIPS_START = 7;
-const CHIP_COLORS = ["166,255,92", "110,240,224", "255,196,110"] as const;
+const TRAIL_START = 7;
 const BACKGROUND = seamBackground(
   "--seam-about-start",
   "--seam-about-end",
@@ -79,29 +79,7 @@ export function About({ profile }: AboutProps) {
           <h3 className="mt-fluid-4 text-fluid-xs font-mono font-medium tracking-[.2em] opacity-70">
             {about.skillsTitle}
           </h3>
-          <ul className="mt-3.5 flex flex-wrap gap-3">
-            {profile.technologies.map((tech, i) => {
-              const rgb = CHIP_COLORS[i % CHIP_COLORS.length];
-              return (
-                <li
-                  key={tech}
-                  className="stagger-item"
-                  style={{ "--i": CHIPS_START + i } as CSSProperties}
-                >
-                  <span
-                    className="chip-float block rounded-full border px-5 py-2.5 font-semibold"
-                    style={{
-                      borderColor: `rgba(${rgb},.55)`,
-                      background: `rgba(${rgb},.08)`,
-                      animationDelay: `${-i}s`,
-                    }}
-                  >
-                    {tech}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
+          <TechTrail technologies={profile.technologies} startIndex={TRAIL_START} />
         </RevealGroup>
       </div>
     </SectionShell>

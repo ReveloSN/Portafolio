@@ -11,6 +11,12 @@ export interface QuickFact {
   readonly text: string;
 }
 
+/** Tecnología del camino de huellas: el monograma va dentro de la huella. */
+export interface Technology {
+  readonly name: string;
+  readonly glyph: string;
+}
+
 export interface Profile {
   readonly firstName: string;
   readonly lastName: string;
@@ -21,6 +27,6 @@ export interface Profile {
   readonly cvUrl: string;
   readonly aboutText: string;
   readonly quickFacts: readonly QuickFact[];
-  readonly technologies: readonly string[];
+  readonly technologies: readonly Technology[];
   readonly socials: readonly Social[];
 }

@@ -532,3 +532,8 @@
   opacity: 1;
   translate: 0 0;
 }
+
+/* Camino de huellas: zigzag de pie izquierdo y derecho */
+.track-step[data-lift="down"] {
+  margin-top: calc(var(--u) * 1.1);
+}
