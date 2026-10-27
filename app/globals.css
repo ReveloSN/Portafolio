@@ -113,6 +113,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Tema oscuro también para los controles del navegador: sin barra de scroll blanca */
+  color-scheme: dark;
+  scrollbar-color: #2f5a3e var(--seam-projects-end);
+  background: var(--seam-projects-end);
 }
 
 body {

@@ -43,7 +43,7 @@ const CORNERS: readonly Corner[] = [
 ];
 
 /** Ancho de cada tronco: nunca más de 680px, media pantalla ni 1.1 veces el alto visible (0.85 en pantallas bajas). */
-const TRUNK_WIDTH = "min(680px, 50vw, calc(100svh * var(--trunk-ratio, 1.1)))";
+const TRUNK_WIDTH = "min(680px, 50cqw, calc(100cqh * var(--trunk-ratio, 1.1)))";
 /** El tronco derecho es más angosto y más pegado al borde para no tapar la cola del dino. */
 const TRUNK_RIGHT_WIDTH = `calc(${TRUNK_WIDTH} * 0.75)`;
 const TRUNK_RIGHT_OFFSET = -0.18;
