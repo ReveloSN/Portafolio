@@ -53,6 +53,8 @@
 
   /* Costuras: el final de cada sección es exactamente el inicio de la siguiente */
   --seam-blend: 16svh;
+  /* Espacio libre bajo el contenido cuando la sección siguiente trae una banda 6:1 que sube */
+  --divider-clearance: 13%; /* padding en %: relativo al ancho (1/6 × 78%) */
   --seam-hero-end: #07160f;
   --seam-about-start: var(--seam-hero-end);
   --seam-about-end: #0a1f17;
