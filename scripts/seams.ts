@@ -22,6 +22,7 @@ const SEAMS = [
   { name: "hero-about", selector: "#sobre-mi" },
   { name: "about-proyectos", selector: "#proyectos" },
   { name: "proyectos-testimonios", selector: "#testimonios" },
+  { name: "testimonios-experiencia", selector: "#experiencia" },
   { name: "contacto-habilidades", selector: "#habilidades" },
   { name: "habilidades-footer", selector: "footer" },
 ] as const;

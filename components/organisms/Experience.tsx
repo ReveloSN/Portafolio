@@ -4,6 +4,7 @@ import { ArtLayer } from "@/components/atoms/ArtLayer";
 import { ExperienceCard } from "@/components/molecules/ExperienceCard";
 import { KindLegend } from "@/components/molecules/KindLegend";
 import { RareCard } from "@/components/molecules/RareCard";
+import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { FishIcon } from "@/components/worlds/art/FishIcon";
@@ -40,13 +41,16 @@ export function Experience() {
       id={SECTION_IDS.experience}
       background={BACKGROUND}
       decoration={
-        <ArtLayer
-          src="/images/trunkL.webp"
-          width={1024}
-          height={1536}
-          sizes="(min-width: 1200px) 320px, 22vw"
-          className="absolute top-0 left-0 w-[min(20rem,22vw)] opacity-35"
-        />
+        <>
+          <SeamLayer seam="testimonials-experience" host="lower" />
+          <ArtLayer
+            src="/images/trunkL.webp"
+            width={1024}
+            height={1536}
+            sizes="(min-width: 1200px) 320px, 22vw"
+            className="absolute top-0 left-0 w-[min(20rem,22vw)] opacity-35"
+          />
+        </>
       }
     >
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*77.8))]">
