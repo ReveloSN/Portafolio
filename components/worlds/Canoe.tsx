@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Illustration } from "@/components/atoms/Illustration";
 import { HERO_LAYERS } from "@/lib/constants";
 import { layerShift } from "@/lib/parallax";
 
@@ -53,14 +54,13 @@ export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
               style={{ maskImage: FADE, WebkitMaskImage: FADE }}
             />
           ) : null}
-          <Image
+          <Illustration
             src="/images/canoa.webp"
             alt={alt}
-            data-testid={testId}
+            testId={testId}
             width={1254}
             height={1254}
             sizes="250px"
-            className="relative block h-auto w-full"
           />
         </div>
       </div>

@@ -4,7 +4,7 @@ export function CuevaThumbnail(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 390 460"
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
       className="block h-full w-full"
       {...props}

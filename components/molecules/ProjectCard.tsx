@@ -18,6 +18,9 @@ interface ProjectCardProps {
   readonly labels: ProjectCardLabels;
 }
 
+/** Proporción del dibujo de cada mundo (viewBox 390x460). */
+const THUMBNAIL_RATIO = "390 / 460";
+
 export function ProjectCard({
   project,
   worldLabel,
@@ -27,10 +30,12 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <article className="group hover:border-glow/50 gap-fluid-3 flex flex-col rounded-[30px] border border-white/12 bg-white/4 p-4 pb-7 transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-24px_rgba(166,255,92,.45)]">
-      <div className="h-[300px] overflow-hidden rounded-[200px_200px_18px_18px] border border-white/14">
-        <div className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.12]">
-          {thumbnail}
-        </div>
+      {/* La escena se ve completa: el arco toma la proporción del dibujo (390x460) */}
+      <div
+        className="mx-auto w-full max-w-[calc(var(--u)*19)] overflow-hidden rounded-[200px_200px_18px_18px] border border-white/14 transition-transform duration-500 group-hover:-translate-y-1"
+        style={{ aspectRatio: THUMBNAIL_RATIO }}
+      >
+        {thumbnail}
       </div>
       <div className="flex flex-1 flex-col gap-3 px-2.5">
         <p className="text-fluid-xs font-mono tracking-[.25em]" style={{ color: accent }}>

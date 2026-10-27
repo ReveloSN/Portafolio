@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { Illustration } from "@/components/atoms/Illustration";
 
 interface ArtLayerProps {
   readonly src: string;
@@ -7,23 +6,31 @@ interface ArtLayerProps {
   readonly height: number;
   readonly sizes: string;
   readonly className?: string;
+  readonly imageClassName?: string;
   /** Carga inmediata; por defecto las ilustraciones se cargan al acercarse. */
   readonly eager?: boolean;
 }
 
-/** Imagen puramente decorativa: invisible para lectores de pantalla y para el puntero. */
-export function ArtLayer({ src, width, height, sizes, className, eager }: ArtLayerProps) {
+/** Ilustración puramente decorativa: invisible para lectores de pantalla y para el puntero. */
+export function ArtLayer({
+  src,
+  width,
+  height,
+  sizes,
+  className,
+  imageClassName,
+  eager,
+}: ArtLayerProps) {
   return (
-    <Image
+    <Illustration
+      decorative
       src={src}
-      alt=""
-      aria-hidden="true"
       width={width}
       height={height}
       sizes={sizes}
-      draggable={false}
       loading={eager ? "eager" : "lazy"}
-      className={cn("pointer-events-none block h-auto w-full select-none", className)}
+      className={className}
+      imageClassName={imageClassName}
     />
   );
 }

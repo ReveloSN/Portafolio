@@ -33,12 +33,6 @@
 .section-divider[data-anchor="bottom"] {
   bottom: calc(100% - var(--divider-overlap));
 }
-.section-divider img {
-  aspect-ratio: 6 / 1;
-  /* En pantallas muy anchas la banda no crece sin límite: se recorta por los lados */
-  max-height: 34svh;
-  object-fit: cover;
-}
 /* El borde lleno de la banda se funde con el fondo de la sección */
 .section-divider[data-anchor="top"] img {
   object-position: top;

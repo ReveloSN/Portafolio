@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { ArtLayer } from "@/components/atoms/ArtLayer";
 import { ContactForm } from "@/components/molecules/ContactForm";
 import { EggNest } from "@/components/molecules/EggNest";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
@@ -27,13 +27,12 @@ export function Contact({ eggs }: ContactProps) {
       id={SECTION_IDS.contact}
       background={BACKGROUND}
       decoration={
-        <Image
+        <ArtLayer
           src="/images/foliage-br.webp"
-          alt=""
           width={1536}
           height={1024}
-          sizes="560px"
-          className="pointer-events-none absolute -right-[60px] -bottom-[60px] w-[min(560px,46vw)] opacity-80"
+          sizes="(min-width: 1200px) 560px, 46vw"
+          className="absolute right-0 bottom-0 w-[min(35rem,46vw)] opacity-80"
         />
       }
     >

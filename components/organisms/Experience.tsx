@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { ArtLayer } from "@/components/atoms/ArtLayer";
 import { ExperienceCard } from "@/components/molecules/ExperienceCard";
 import { KindLegend } from "@/components/molecules/KindLegend";
 import { RareCard } from "@/components/molecules/RareCard";
@@ -40,13 +40,12 @@ export function Experience() {
       id={SECTION_IDS.experience}
       background={BACKGROUND}
       decoration={
-        <Image
+        <ArtLayer
           src="/images/trunkL.webp"
-          alt=""
           width={1024}
           height={1536}
-          sizes="520px"
-          className="pointer-events-none absolute top-0 -left-[260px] w-[520px] opacity-35"
+          sizes="(min-width: 1200px) 320px, 22vw"
+          className="absolute top-0 left-0 w-[min(20rem,22vw)] opacity-35"
         />
       }
     >
