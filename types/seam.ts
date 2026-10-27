@@ -1,8 +1,11 @@
+import type { ArtEntry } from "./art";
+
 /** Costuras entre secciones consecutivas (orden de la página). */
 export type SeamId =
   | "hero-about"
   | "about-projects"
   | "projects-testimonials"
+  | "testimonials-experience"
   | "contact-skills"
   | "skills-footer";
 
@@ -14,17 +17,13 @@ export type SeamId =
  */
 export type DividerAnchor = "top" | "bottom";
 
-export interface ArtAsset {
-  readonly src: string;
-  readonly width: number;
-  readonly height: number;
-}
-
 export interface DividerConfig {
-  readonly art: ArtAsset;
+  readonly art: ArtEntry;
   readonly anchor: DividerAnchor;
   readonly flipY?: boolean;
   readonly zIndex: number;
+  /** Solape con la sección vecina, en múltiplos de --u (más 4px fijos). */
+  readonly overlapU: number;
   /** Velocidad del paralaje de scroll; negativa = sentido contrario. */
   readonly parallaxSpeed: number;
   /** Desplazamiento de la costura dentro de la sección (p. ej. la línea de tierra). */
@@ -35,26 +34,36 @@ export interface DividerConfig {
   readonly eager?: boolean;
 }
 
-/** Sección que pinta el elemento: la de arriba (queda recortado) o la de abajo (cruza la costura). */
+/** Sección que pinta el elemento: la de arriba o la de abajo (que puede cruzar hacia arriba). */
 export type SeamHost = "upper" | "lower";
+
+/** Balanceo: liana (desde arriba, ±2.5°) o cola (desde el borde derecho, ±3°). */
+export interface SwayConfig {
+  readonly kind: "vine" | "tail";
+  readonly duration: number;
+  readonly delay: number;
+}
 
 export interface AccentConfig {
   readonly id: string;
-  readonly art: ArtAsset;
+  readonly art: ArtEntry;
   readonly host: SeamHost;
   readonly side: "left" | "right";
+  /** Borde de la sección al que se ancla. */
+  readonly edge: "top" | "bottom";
   /** Ancho en múltiplos de --u. */
   readonly widthU: number;
-  /** Parte del ancho que queda fuera del borde lateral (0–1). */
-  readonly outside: number;
-  /** Parte del alto que cruza la costura (0–1). */
+  /** Parte del alto que sale por el borde (cruza la costura); 0 = al ras, completa. */
   readonly cross: number;
   readonly rotate: number;
   readonly parallaxSpeed: number;
-  /** Balanceo de liana: duración y retraso en segundos. */
-  readonly sway?: { readonly duration: number; readonly delay: number };
+  /** Orden dentro de la sección; las lianas van debajo del divisor (que tapa su extremo). */
+  readonly zIndex: number;
+  readonly sway?: SwayConfig;
   /** Los grandes se ocultan en móvil; los demás se reducen al 60 %. */
   readonly large?: boolean;
+  /** Solo en pantallas de 1024px o más. */
+  readonly desktopOnly?: boolean;
 }
 
 export interface SeamConfig {

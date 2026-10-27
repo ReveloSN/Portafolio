@@ -3,7 +3,6 @@
 import type { CSSProperties } from "react";
 import { ArtLayer } from "@/components/atoms/ArtLayer";
 import { useScrollParallax } from "@/hooks/useScrollParallax";
-import { cn } from "@/lib/utils";
 import type { AccentConfig } from "@/types/seam";
 
 interface FoliageAccentProps {
@@ -12,24 +11,25 @@ interface FoliageAccentProps {
 
 type AccentVars = CSSProperties & Record<`--${string}`, string | number>;
 
+const SWAY_CLASS = { vine: "foliage-sway", tail: "tail-sway" } as const;
+
 /**
- * Hoja o liana suelta en el borde de una sección. `cross` positivo la hace subir
- * por encima del borde superior (cruza la costura); negativo la deja bajar por el inferior.
+ * Hoja, liana o cola suelta en el borde de una sección: se ve completa (nunca se
+ * recorta por los lados) y `cross` indica cuánto de su alto sale por el borde.
  */
 export function FoliageAccent({ accent }: FoliageAccentProps) {
   const ref = useScrollParallax<HTMLDivElement>();
-  const { art, side, outside, cross, sway } = accent;
+  const { art, side, edge, cross, sway } = accent;
   const heightRatio = art.height / art.width;
-  const edge = cross >= 0 ? "top" : "bottom";
 
   const style: AccentVars = {
     "--accent-w": accent.widthU,
     "--accent-rotate": `${accent.rotate}deg`,
     "--parallax-speed": accent.parallaxSpeed,
-    [side]: `calc(var(--accent-width) * ${-outside})`,
-    // El alto depende del ancho: se cruza una fracción del propio alto
-    [edge]: `calc(var(--accent-width) * ${(-Math.abs(cross) * heightRatio).toFixed(3)})`,
-    zIndex: 1,
+    [side]: 0,
+    // El alto depende del ancho: sale una fracción del propio alto
+    [edge]: `calc(var(--accent-width) * ${(-cross * heightRatio).toFixed(3)})`,
+    zIndex: accent.zIndex,
     ...(sway
       ? { "--sway-duration": `${sway.duration}s`, "--sway-delay": `${sway.delay}s` }
       : {}),
@@ -39,10 +39,11 @@ export function FoliageAccent({ accent }: FoliageAccentProps) {
       ref={ref}
       className="foliage-accent art-parallax"
       data-large={accent.large ? "" : undefined}
+      data-desktop-only={accent.desktopOnly ? "" : undefined}
       data-accent={accent.id}
       style={style}
     >
-      <div className={cn(sway && "foliage-sway")}>
+      <div className={sway ? SWAY_CLASS[sway.kind] : undefined}>
         <ArtLayer
           src={art.src}
           width={art.width}

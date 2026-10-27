@@ -21,6 +21,7 @@ export function SectionDivider({ id }: SectionDividerProps) {
   const style: DividerVars = {
     zIndex: divider.zIndex,
     "--parallax-speed": divider.parallaxSpeed,
+    "--overlap-u": divider.overlapU,
     ...(divider.offset ? { "--divider-offset": divider.offset } : {}),
   };
   return (

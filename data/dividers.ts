@@ -1,24 +1,14 @@
-import type { ArtAsset, SeamConfig, SeamId } from "@/types/seam";
-
-const band = (name: string): ArtAsset => ({
-  src: `/art/dividers/${name}.webp`,
-  width: 3072,
-  height: 512,
-});
-
-const foliage = (name: string): ArtAsset => ({
-  src: `/art/foliage/${name}.png`,
-  width: 1024,
-  height: 1536,
-});
+import { ART } from "@/data/art";
+import type { SeamConfig, SeamId } from "@/types/seam";
 
 /** Un solo lugar para añadir o quitar divisores y elementos que cruzan las costuras. */
 export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
   "hero-about": {
     divider: {
-      art: band("canopy"),
+      art: ART.canopy,
       anchor: "top",
       zIndex: 1,
+      overlapU: 1.5,
       parallaxSpeed: 0.4,
       // Las hojas tapan el final del Hero: su borde superior no se desvanece
       fadeEdge: false,
@@ -26,49 +16,53 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
     },
     accents: [
       {
-        id: "hero-monstera",
-        art: foliage("monstera-left"),
+        id: "hero-leaf",
+        art: ART.leafBigLeft,
         host: "upper",
         side: "left",
-        widthU: 15,
-        outside: 0.25,
-        cross: -0.35,
-        rotate: 8,
-        parallaxSpeed: 0.2,
+        edge: "bottom",
+        widthU: 13,
+        cross: 0,
+        rotate: 0,
+        parallaxSpeed: 0,
+        zIndex: 1,
         large: true,
       },
       {
         id: "about-vine",
-        art: foliage("vine-straight"),
+        art: ART.vineHanging1,
         host: "lower",
         side: "right",
-        widthU: 9,
-        outside: 0,
-        cross: 0.3,
+        edge: "top",
+        widthU: 12,
+        cross: 0.12,
         rotate: 0,
         parallaxSpeed: 0.3,
-        sway: { duration: 7, delay: 0 },
+        zIndex: 0,
+        sway: { kind: "vine", duration: 7, delay: 0 },
       },
     ],
   },
   "about-projects": {
     divider: {
-      art: band("ferns"),
+      art: ART.ferns,
       anchor: "bottom",
       zIndex: 1,
+      overlapU: 1.5,
       parallaxSpeed: -0.4,
     },
     accents: [
       {
-        id: "projects-monstera",
-        art: foliage("monstera-right"),
+        id: "projects-leaf",
+        art: ART.leafBigRight,
         host: "lower",
         side: "right",
-        widthU: 14,
-        outside: 0.3,
-        cross: 0.45,
-        rotate: -6,
+        edge: "top",
+        widthU: 13,
+        cross: 0.4,
+        rotate: 0,
         parallaxSpeed: -0.25,
+        zIndex: 1,
         large: true,
       },
     ],
@@ -78,23 +72,44 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
     accents: [
       {
         id: "testimonials-vine",
-        art: foliage("vine-curl"),
+        art: ART.vineHanging2,
         host: "lower",
         side: "left",
-        widthU: 9,
-        outside: 0,
-        cross: 0.3,
+        edge: "top",
+        widthU: 12,
+        cross: 0.08,
         rotate: 0,
         parallaxSpeed: 0.3,
-        sway: { duration: 8.5, delay: -2 },
+        zIndex: 0,
+        sway: { kind: "vine", duration: 8.5, delay: -2 },
+      },
+    ],
+  },
+  "testimonials-experience": {
+    accents: [
+      {
+        id: "experience-tail",
+        art: ART.dinoTail,
+        host: "lower",
+        side: "right",
+        edge: "top",
+        widthU: 42,
+        cross: 0.55,
+        rotate: 0,
+        parallaxSpeed: 0.2,
+        zIndex: 1,
+        sway: { kind: "tail", duration: 5, delay: 0 },
+        large: true,
+        desktopOnly: true,
       },
     ],
   },
   "contact-skills": {
     divider: {
-      art: band("roots"),
+      art: ART.roots,
       anchor: "top",
       zIndex: 1,
+      overlapU: 1.5,
       parallaxSpeed: 0.3,
       // Las raíces cuelgan desde la línea de tierra del sitio de excavación
       offset: "var(--dig-soil-line)",
@@ -103,9 +118,10 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
   },
   "skills-footer": {
     divider: {
-      art: band("treeline"),
+      art: ART.treeline,
       anchor: "bottom",
       zIndex: 1,
+      overlapU: 1.5,
       parallaxSpeed: -0.3,
     },
     accents: [],

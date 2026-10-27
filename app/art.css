@@ -21,7 +21,7 @@
 
 /* Divisor de banda ancha (6:1). El solape cubre el recorrido del paralaje: sin línea de unión. */
 .section-divider {
-  --divider-overlap: calc(var(--u) * 1.5 + 4px);
+  --divider-overlap: calc(var(--u) * var(--overlap-u, 1.5) + 4px);
   position: absolute;
   left: 0;
   width: 100%;
@@ -64,6 +64,19 @@
   transform-origin: top center;
   animation: vine-sway var(--sway-duration, 7s) ease-in-out var(--sway-delay, 0s) infinite;
 }
+/* Cola del dino: gira desde el borde derecho, por donde entra a la pantalla */
+.tail-sway {
+  transform-origin: right center;
+  animation: tail-sway var(--sway-duration, 5s) ease-in-out var(--sway-delay, 0s) infinite;
+}
+.foliage-accent[data-desktop-only] {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .foliage-accent[data-desktop-only] {
+    display: block;
+  }
+}
 
 /* Banda de niebla: capas que se desplazan despacio a velocidades distintas */
 .mist-band {
@@ -99,6 +112,7 @@
 @media (prefers-reduced-motion: reduce) {
   .art-parallax,
   .foliage-sway,
+  .tail-sway,
   .mist-layer {
     animation: none !important;
     transform: none;
