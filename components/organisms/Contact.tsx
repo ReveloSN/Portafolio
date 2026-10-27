@@ -3,10 +3,12 @@
 import { ArtLayer } from "@/components/atoms/ArtLayer";
 import { ContactForm } from "@/components/molecules/ContactForm";
 import { EggNest } from "@/components/molecules/EggNest";
+import { Fireflies } from "@/components/molecules/Fireflies";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
+import { FIREFLY_COUNT } from "@/lib/constants";
 import type { ContactEgg } from "@/types/contact";
 import { seamBackground } from "@/lib/seams";
 
@@ -27,13 +29,16 @@ export function Contact({ eggs }: ContactProps) {
       id={SECTION_IDS.contact}
       background={BACKGROUND}
       decoration={
-        <ArtLayer
-          src="/images/foliage-br.webp"
-          width={1536}
-          height={1024}
-          sizes="(min-width: 1200px) 560px, 46vw"
-          className="absolute right-0 bottom-0 w-[min(35rem,46vw)] opacity-80"
-        />
+        <>
+          <ArtLayer
+            src="/images/foliage-br.webp"
+            width={1536}
+            height={1024}
+            sizes="(min-width: 1200px) 560px, 46vw"
+            className="absolute right-0 bottom-0 w-[min(35rem,46vw)] opacity-80"
+          />
+          <Fireflies count={FIREFLY_COUNT.contact} />
+        </>
       }
     >
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">

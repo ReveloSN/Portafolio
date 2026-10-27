@@ -1,25 +1,23 @@
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { Avatar } from "@/components/molecules/Avatar";
+import { Fireflies } from "@/components/molecules/Fireflies";
 import { ParallaxStage } from "@/components/molecules/ParallaxStage";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { Canoe } from "@/components/worlds/Canoe";
 import { DinoWater } from "@/components/worlds/DinoWater";
-import { Fireflies } from "@/components/worlds/Fireflies";
 import { GiantDino } from "@/components/worlds/GiantDino";
 import { JungleBackdrop, type StageVars } from "@/components/worlds/JungleBackdrop";
 import { Pterodactyls } from "@/components/worlds/art/Pterodactyls";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { FIREFLY_COUNT } from "@/lib/constants";
-import { HERO_FIREFLIES, makeParticles } from "@/lib/particles";
 import type { Profile } from "@/types/profile";
 
 interface HeroProps {
   readonly profile: Profile;
 }
 
-const FIREFLIES = makeParticles(FIREFLY_COUNT, HERO_FIREFLIES);
 /** Distancia de la canoa al borde inferior, en coordenadas del diseño. */
 const CANOE_PLACEMENT = { "--b": 64 } as StageVars;
 /** El final del Hero se funde con el color de inicio de Sobre mí. */
@@ -55,7 +53,7 @@ export function Hero({ profile }: HeroProps) {
           </>
         }
       >
-        <Fireflies particles={FIREFLIES} />
+        <Fireflies count={FIREFLY_COUNT.hero} />
         <SeamLayer seam="hero-about" host="upper" />
         <div
           aria-hidden="true"

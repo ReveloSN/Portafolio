@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
 import { ExplorerCard } from "@/components/molecules/ExplorerCard";
+import { Fireflies } from "@/components/molecules/Fireflies";
 import { RevealGroup } from "@/components/molecules/RevealGroup";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { TechTrail } from "@/components/molecules/TechTrail";
@@ -9,6 +10,7 @@ import { StaggerText } from "@/components/molecules/StaggerText";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
+import { FIREFLY_COUNT } from "@/lib/constants";
 import type { Profile, QuickFact } from "@/types/profile";
 import { seamBackground } from "@/lib/seams";
 
@@ -37,8 +39,13 @@ export function About({ profile }: AboutProps) {
     <SectionShell
       id={SECTION_IDS.about}
       background={BACKGROUND}
-      decoration={<SeamLayer seam="hero-about" host="lower" />}
-      className="py-[clamp(3rem,calc(var(--u)*6),6.5rem)]"
+      decoration={
+        <>
+          <SeamLayer seam="hero-about" host="lower" />
+          <Fireflies count={FIREFLY_COUNT.about} />
+        </>
+      }
+      className="pt-[clamp(3rem,calc(var(--u)*6),6.5rem)] pb-[max(clamp(3rem,calc(var(--u)*6),6.5rem),var(--divider-clearance))]"
     >
       <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(2rem,calc(var(--u)*4),5rem)]">
         <ExplorerCard profile={profile} />

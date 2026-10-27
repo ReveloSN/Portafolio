@@ -24,25 +24,6 @@ interface ParticleRecipe {
   readonly durationMod: number;
 }
 
-/** Receta de las luciérnagas del Hero principal. */
-export const HERO_FIREFLIES: ParticleRecipe = {
-  xBase: 4,
-  xStep: 37,
-  xSpan: 92,
-  yBase: 150,
-  yStep: 113,
-  ySpan: 640,
-  sizeBase: 3,
-  sizeStep: 1,
-  sizeMod: 3,
-  sizeBonus: 0,
-  delayStep: 0.7,
-  delaySpan: 5,
-  durationBase: 3,
-  durationStep: 1,
-  durationMod: 4,
-};
-
 /** Receta de las partículas de las páginas de mundo. */
 export const WORLD_PARTICLES: ParticleRecipe = {
   xBase: 3,

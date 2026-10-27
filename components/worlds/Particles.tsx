@@ -3,18 +3,18 @@ import type { Particle } from "@/lib/particles";
 /** Alto de referencia del diseño: las alturas de las partículas se expresan sobre él. */
 const SCENE_HEIGHT = 900;
 
-interface FirefliesProps {
+interface ParticlesProps {
   readonly particles: readonly Particle[];
   readonly className?: string;
   /** Para burbujas: la posición vertical la define la animación, no `top`. */
   readonly omitTop?: boolean;
 }
 
-export function Fireflies({
+export function Particles({
   particles,
   className = "ff",
   omitTop = false,
-}: FirefliesProps) {
+}: ParticlesProps) {
   return (
     <>
       {particles.map((p, i) => (

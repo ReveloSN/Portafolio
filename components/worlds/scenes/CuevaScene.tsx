@@ -1,4 +1,4 @@
-import { Fireflies } from "@/components/worlds/Fireflies";
+import { Particles } from "@/components/worlds/Particles";
 import { CuevaArt } from "@/components/worlds/art/CuevaArt";
 import { WORLD_PARTICLE_COUNT } from "@/lib/constants";
 import { makeParticles, WORLD_PARTICLES } from "@/lib/particles";
@@ -17,7 +17,7 @@ export function CuevaScene() {
             "radial-gradient(ellipse at 50% 48%, transparent 50%, rgba(0,0,0,.6) 100%)",
         }}
       />
-      <Fireflies particles={EMBERS} className="ff ff-torch" />
+      <Particles particles={EMBERS} className="ff ff-torch" />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute right-0 bottom-0 left-0 h-[62%]"

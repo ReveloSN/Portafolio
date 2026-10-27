@@ -118,3 +118,33 @@
     transform: none;
   }
 }
+
+/* Luciérnagas ilustradas: trayectoria suave + parpadeo del brillo */
+.firefly {
+  position: absolute;
+  width: calc(var(--u) * var(--firefly-size, 2.4));
+  min-width: 1.6rem;
+  animation: firefly-path-0 var(--firefly-duration, 12s) ease-in-out
+    var(--firefly-delay, 0s) infinite;
+}
+.firefly[data-path="1"] {
+  animation-name: firefly-path-1;
+}
+.firefly[data-path="2"] {
+  animation-name: firefly-path-2;
+}
+.firefly-glow {
+  animation: firefly-blink var(--firefly-blink, 3s) ease-in-out var(--firefly-delay, 0s)
+    infinite;
+}
+@media (max-width: 767px) {
+  .firefly:nth-child(n + 5) {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .firefly,
+  .firefly-glow {
+    animation-play-state: paused;
+  }
+}

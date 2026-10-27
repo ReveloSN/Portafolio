@@ -1,5 +1,5 @@
 import { Canoe } from "@/components/worlds/Canoe";
-import { Fireflies } from "@/components/worlds/Fireflies";
+import { Particles } from "@/components/worlds/Particles";
 import { JungleBackdrop, type StageVars } from "@/components/worlds/JungleBackdrop";
 import { COPY } from "@/data/copy";
 import { WORLD_PARTICLE_COUNT } from "@/lib/constants";
@@ -23,7 +23,7 @@ export function SelvaScene() {
           </div>
         }
       >
-        <Fireflies particles={PARTICLES} />
+        <Particles particles={PARTICLES} />
       </JungleBackdrop>
       <div
         aria-hidden="true"

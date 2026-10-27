@@ -12,7 +12,8 @@ export const HERO_LAYERS = {
 /** Recorrido del iris (porcentaje de su propio tamaño): no sale de la cuenca. */
 export const EYE_TRAVEL = { x: 45, y: 55 } as const;
 
-export const FIREFLY_COUNT = 14;
+/** Luciérnagas ilustradas por sección (en móvil el CSS deja 4). */
+export const FIREFLY_COUNT = { hero: 10, about: 8, contact: 8 } as const;
 export const WORLD_PARTICLE_COUNT = 16;
 
 export const BITE_DELAY_MIN_MS = 1800;
