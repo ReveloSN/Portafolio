@@ -545,3 +545,13 @@
 .cell.full .bone-fill {
   animation: bone-reveal var(--dur-enter) var(--ease-enter) both;
 }
+
+/* Pantallas bajas: el pozo de excavación se compacta para que la celda quepa entera */
+@media (max-height: 640px) {
+  .pit {
+    height: 12rem;
+  }
+  .bone-meter {
+    width: 4.75rem;
+  }
+}
