@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "screenshots": "tsx scripts/screenshots.ts",
-    "seams": "tsx scripts/seams.ts"
+    "seams": "tsx scripts/seams.ts",
+    "capture": "tsx scripts/capture.ts"
   },
   "dependencies": {
     "next": "16.4.3",

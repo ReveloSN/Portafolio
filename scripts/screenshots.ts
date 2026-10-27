@@ -24,6 +24,7 @@ const VIEWPORTS: readonly ViewportCase[] = [
   { name: "1440x900", width: 1440, height: 900 },
   { name: "1536x730", width: 1536, height: 730 },
   { name: "1920x1080", width: 1920, height: 1080 },
+  { name: "2560x1080", width: 2560, height: 1080 },
   { name: "2560x1440", width: 2560, height: 1440 },
   { name: "3440x1440-ultrawide", width: 3440, height: 1440 },
   { name: "820x1180-tablet", width: 820, height: 1180, mobile: true },
