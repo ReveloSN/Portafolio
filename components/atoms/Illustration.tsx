@@ -43,7 +43,7 @@ export function Illustration(props: IllustrationProps) {
   const decorative = props.decorative === true;
   return (
     <div
-      className={cn("relative", className)}
+      className={className}
       style={{ aspectRatio: `${width} / ${height}`, ...style }}
       aria-hidden={decorative || undefined}
     >
