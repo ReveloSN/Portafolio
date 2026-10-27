@@ -114,8 +114,9 @@
 /* Móvil vertical: centrado detrás del texto, todo el ancho y más tenue */
 @media (max-aspect-ratio: 4/5) and (max-width: 900px) {
   .dino {
-    --dino-w: 100cqw;
-    left: 0;
+    /* Casi todo el ancho: deja margen para que la respiración no lo saque del borde */
+    --dino-w: 94cqw;
+    left: 3cqw;
     opacity: 0.55;
   }
 }
