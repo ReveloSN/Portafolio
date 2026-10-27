@@ -1,9 +1,14 @@
 import type { ReactNode } from "react";
 import { Badge } from "@/components/atoms/Badge";
 import { Icon } from "@/components/atoms/Icon";
-import { ProgressBar } from "@/components/atoms/ProgressBar";
+import { Illustration } from "@/components/atoms/Illustration";
+import { BoneMeter } from "@/components/molecules/BoneMeter";
+import { ART } from "@/data/art";
 import { cn } from "@/lib/utils";
-import type { Skill } from "@/types/skill";
+import type { BoneKind, Skill } from "@/types/skill";
+import type { ArtEntry } from "@/types/art";
+
+const BONES: Readonly<Record<BoneKind, ArtEntry>> = { femur: ART.bone1, rib: ART.bone2 };
 
 export interface SkillCellLabels {
   readonly grid: string;
@@ -64,19 +69,28 @@ export function SkillCell({
             </p>
           </div>
           <p className="text-fluid-sm leading-normal opacity-90">{skill.note}</p>
-          <div className="mt-auto">
-            <div className="text-fluid-xs flex justify-between font-semibold">
-              <span>{labels.level}</span>
-              <span className="text-glow-amber">
+          <div className="mt-auto flex items-end justify-between gap-3">
+            <div className="text-fluid-xs font-semibold">
+              <span className="flex items-center gap-1.5">
+                <Illustration
+                  decorative
+                  src={ART.boneSmall.src}
+                  width={ART.boneSmall.width}
+                  height={ART.boneSmall.height}
+                  sizes="24px"
+                  className="w-5 flex-none"
+                />
+                {labels.level}
+              </span>
+              <span className="text-glow-amber mt-1 block">
                 {skill.levelLabel} · {skill.percent}%
               </span>
             </div>
-            <div className="mt-1.5">
-              <ProgressBar
-                percent={skill.percent}
-                label={`${labels.level} ${skill.name}`}
-              />
-            </div>
+            <BoneMeter
+              bone={BONES[skill.bone]}
+              percent={skill.percent}
+              label={`${labels.level} ${skill.name}`}
+            />
           </div>
         </div>
         <button

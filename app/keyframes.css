@@ -426,3 +426,8 @@
     transform: rotate(3deg);
   }
 }
+@keyframes bone-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}

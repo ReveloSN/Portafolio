@@ -111,7 +111,7 @@
 }
 .pit {
   position: relative;
-  height: clamp(10.5rem, calc(var(--u) * 15), 15rem);
+  height: clamp(12.5rem, calc(var(--u) * 17), 16.5rem);
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid rgba(255, 196, 110, 0.25);
@@ -536,4 +536,12 @@
 /* Camino de huellas: zigzag de pie izquierdo y derecho */
 .track-step[data-lift="down"] {
   margin-top: calc(var(--u) * 1.1);
+}
+
+/* Barra de nivel en hueso: se revela de izquierda a derecha al desenterrar la celda */
+.bone-fill {
+  clip-path: inset(0 var(--bone-fill, 0%) 0 0);
+}
+.cell.full .bone-fill {
+  animation: bone-reveal var(--dur-enter) var(--ease-enter) both;
 }

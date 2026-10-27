@@ -12,6 +12,7 @@ export const SKILLS: readonly Skill[] = [
     fossil: "ammonite",
     levelLabel: "Intermedio",
     percent: 75,
+    bone: "femur",
     note: NOTE,
   },
   {
@@ -23,6 +24,7 @@ export const SKILLS: readonly Skill[] = [
     fossil: "bone",
     levelLabel: "Intermedio",
     percent: 65,
+    bone: "femur",
     note: NOTE,
   },
   {
@@ -34,6 +36,7 @@ export const SKILLS: readonly Skill[] = [
     fossil: "fern",
     levelLabel: "Avanzado",
     percent: 80,
+    bone: "femur",
     note: NOTE,
   },
   {
@@ -45,6 +48,7 @@ export const SKILLS: readonly Skill[] = [
     fossil: "trilobite",
     levelLabel: "Intermedio",
     percent: 70,
+    bone: "rib",
     note: NOTE,
   },
   {
@@ -56,6 +60,7 @@ export const SKILLS: readonly Skill[] = [
     fossil: "shell",
     levelLabel: "Avanzado",
     percent: 85,
+    bone: "rib",
     note: NOTE,
   },
   {
@@ -67,6 +72,7 @@ export const SKILLS: readonly Skill[] = [
     fossil: "nautilus",
     levelLabel: "En camino",
     percent: 60,
+    bone: "femur",
     note: NOTE,
   },
 ];
