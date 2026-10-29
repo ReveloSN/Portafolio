@@ -29,6 +29,8 @@ export const COPY = {
     idLeft: "EXPLORADOR Nº 001",
     idRight: "EXPEDICIÓN",
     photoPlaceholder: "[TU FOTO AQUÍ]",
+    flipLabel: "Girar tarjeta para ver un dato curioso",
+    flipHint: "Toca para volver",
   },
   projects: {
     eyebrow: "MIS PROYECTOS",

@@ -1,7 +1,8 @@
 import type { CSSProperties } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
-import { ExplorerCard } from "@/components/molecules/ExplorerCard";
+
+import { AboutCard } from "@/components/organisms/AboutCard";
 import { Fireflies } from "@/components/molecules/Fireflies";
 import { RevealGroup } from "@/components/molecules/RevealGroup";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
@@ -48,7 +49,7 @@ export function About({ profile }: AboutProps) {
       className="pt-[clamp(3rem,calc(var(--u)*6),6.5rem)] pb-[max(clamp(3rem,calc(var(--u)*6),6.5rem),var(--divider-clearance))]"
     >
       <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(2rem,calc(var(--u)*4),5rem)]">
-        <ExplorerCard profile={profile} />
+        <AboutCard profile={profile} />
         <RevealGroup className="max-w-[calc(var(--u)*41.7)] min-w-[280px] flex-[1_1_440px]">
           <p className="font-display text-glow text-fluid-sm font-medium tracking-[.5em]">
             {about.eyebrow}

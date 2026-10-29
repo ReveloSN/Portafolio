@@ -17,6 +17,19 @@ export interface Technology {
   readonly glyph: string;
 }
 
+/** Reverso de la credencial: un dato curioso sobre la persona. */
+export interface FunFact {
+  readonly title: string;
+  readonly text: string;
+}
+
+/** Datos opcionales del pie del reverso; si faltan se usan los del perfil. */
+export interface CardBackMeta {
+  readonly motto?: string;
+  readonly role?: string;
+  readonly year?: number;
+}
+
 export interface Profile {
   readonly firstName: string;
   readonly lastName: string;
@@ -26,6 +39,8 @@ export interface Profile {
   readonly year: number;
   readonly cvUrl: string;
   readonly aboutText: string;
+  readonly funFact: FunFact;
+  readonly backMeta?: CardBackMeta;
   readonly quickFacts: readonly QuickFact[];
   readonly technologies: readonly Technology[];
   readonly socials: readonly Social[];

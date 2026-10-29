@@ -2,39 +2,42 @@
 /* Tarjeta que gira (FlipCard)                                         */
 /* Contenedor con perspectiva > "inner" en 3D > dos caras.              */
 /* ------------------------------------------------------------------ */
-.flip-card {
-  --flip-rest: 0deg;
-  --flip-duration: 0.8s;
-  position: relative;
-  display: block;
-  perspective: 1400px;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-.flip-card:focus-visible {
-  outline-offset: 8px;
-}
+/* En la capa components: las utilidades (p. ej. [--flip-rest:-3deg]) la sobrescriben */
+@layer components {
+  .flip-card {
+    --flip-rest: 0deg;
+    --flip-duration: 0.8s;
+    position: relative;
+    display: block;
+    perspective: 1400px;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .flip-card:focus-visible {
+    outline-offset: 8px;
+  }
 
-/* Misma lista de funciones en reposo y girada: interpola sin pasar por matrices */
-.flip-inner {
-  position: relative;
-  transform-style: preserve-3d;
-  transform: rotate(var(--flip-rest)) rotateY(0deg);
-  transition: transform var(--flip-duration) var(--ease-enter);
-}
-.flip-card[data-flipped] .flip-inner {
-  transform: rotate(0deg) rotateY(180deg);
-}
+  /* Misma lista de funciones en reposo y girada: interpola sin pasar por matrices */
+  .flip-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotate(var(--flip-rest)) rotateY(0deg);
+    transition: transform var(--flip-duration) var(--ease-enter);
+  }
+  .flip-card[data-flipped] .flip-inner {
+    transform: rotate(0deg) rotateY(180deg);
+  }
 
-.flip-face {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  /* Firefox y Safari: cada cara en su propio plano 3D, sin parpadeo */
-  transform: rotateY(0deg) translateZ(0.1px);
-}
-.flip-face-back {
-  position: absolute;
-  inset: 0;
-  transform: rotateY(180deg) translateZ(0.1px);
+  .flip-face {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    /* Firefox y Safari: cada cara en su propio plano 3D, sin parpadeo */
+    transform: rotateY(0deg) translateZ(0.1px);
+  }
+  .flip-face-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg) translateZ(0.1px);
+  }
 }

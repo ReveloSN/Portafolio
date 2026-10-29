@@ -10,6 +10,13 @@ export const PROFILE: Profile = {
   cvUrl: "/cv.pdf",
   aboutText:
     "[Escribe aquí entre 3 y 5 líneas, en primera persona: quién eres, qué estudias, qué te apasiona y qué sabes hacer. Que se pueda leer en 20 segundos y sin errores de ortografía.]",
+  funFact: {
+    title: "Dato curioso",
+    text: "[Escribe aquí un dato curioso sobre ti en 1 o 2 frases.]",
+  },
+  backMeta: {
+    motto: "[Tu lema de expedición]",
+  },
   quickFacts: [
     { icon: "pin", text: "[Ciudad, País]" },
     { icon: "cap", text: "[Semestre] · [Universidad]" },
