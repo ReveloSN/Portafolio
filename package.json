@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "screenshots": "tsx scripts/screenshots.ts",
     "seams": "tsx scripts/seams.ts",
-    "capture": "tsx scripts/capture.ts"
+    "capture": "tsx scripts/capture.ts",
+    "about": "tsx scripts/about.ts"
   },
   "dependencies": {
     "next": "16.4.3",
