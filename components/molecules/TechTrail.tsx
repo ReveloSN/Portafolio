@@ -14,12 +14,20 @@ const TILTS = [-12, 9] as const;
 /** Ritmo de la caminata: más lento que el texto (80 ms). */
 const STEP_MS = 120;
 
-/** Camino de huellas: aparecen una tras otra, alternando pie izquierdo y derecho. */
+/**
+ * Camino de huellas: aparecen una tras otra, alternando pie izquierdo y derecho.
+ * Una sola fila (una columna por tecnología); en pantallas estrechas, 4 por fila centradas.
+ */
 export function TechTrail({ technologies, startIndex }: TechTrailProps) {
   return (
     <ul
-      className="gap-x-fluid-2 gap-y-fluid-3 mt-3.5 flex flex-wrap items-start"
-      style={{ "--stagger-step": `${STEP_MS}ms` } as CSSProperties}
+      className="mt-[calc(var(--u)*.8)] flex flex-wrap items-start justify-center gap-y-[calc(var(--u)*1)] sm:grid sm:grid-cols-[repeat(var(--trail-cols),minmax(0,1fr))] sm:gap-x-[calc(var(--u)*.6)]"
+      style={
+        {
+          "--stagger-step": `${STEP_MS}ms`,
+          "--trail-cols": technologies.length,
+        } as CSSProperties
+      }
     >
       {technologies.map((tech, i) => (
         <TrackStep

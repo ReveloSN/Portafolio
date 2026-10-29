@@ -27,6 +27,7 @@ const FACT_COLORS: Readonly<Record<QuickFact["icon"], string>> = {
 
 /** Orden en la entrada escalonada: primero el texto, luego datos rápidos y tecnologías. */
 const FACTS_START = 4;
+const FACT_ICON_PX = 14;
 const TRAIL_START = 7;
 const BACKGROUND = seamBackground(
   "--seam-about-start",
@@ -50,7 +51,7 @@ export function About({ profile }: AboutProps) {
     >
       <div className="mx-auto grid w-full max-w-[min(var(--content-max),calc(var(--u)*92))] items-center gap-[clamp(1.75rem,calc(var(--u)*4.5),5rem)] lg:grid-cols-[auto_minmax(0,1fr)]">
         <AboutCard profile={profile} />
-        <RevealGroup className="mx-auto w-full max-w-[calc(var(--u)*56)] lg:mx-0">
+        <RevealGroup className="mx-auto w-full max-w-[calc(var(--u)*64)] lg:mx-0">
           <p className="font-display text-glow text-fluid-xs font-medium tracking-[.4em]">
             {about.eyebrow}
           </p>
@@ -62,20 +63,20 @@ export function About({ profile }: AboutProps) {
             className="max-w-[60ch] text-[clamp(.9rem,calc(var(--u)*1.35),1.1rem)] leading-[1.5] opacity-90"
           />
 
-          <h3 className="mt-fluid-4 text-fluid-xs font-mono font-medium tracking-[.2em] opacity-70">
+          <h3 className="text-fluid-xs mt-[var(--about-gap)] font-mono font-medium tracking-[.2em] opacity-70">
             {about.factsTitle}
           </h3>
-          <ul className="mt-3 flex flex-wrap gap-2.5">
+          <ul className="mt-[calc(var(--u)*.6)] flex flex-wrap gap-[calc(var(--u)*.6)]">
             {profile.quickFacts.map((fact, i) => (
               <li
                 key={fact.text}
                 className="stagger-item"
                 style={{ "--i": FACTS_START + i } as CSSProperties}
               >
-                <Tag className="text-fluid-sm inline-flex items-center gap-2 px-4 py-2">
+                <Tag className="inline-flex items-center gap-[.5em] px-[1em] py-[.35em] whitespace-nowrap">
                   <Icon
                     name={fact.icon}
-                    size={16}
+                    size={FACT_ICON_PX}
                     style={{ color: FACT_COLORS[fact.icon] }}
                   />
                   {fact.text}
@@ -84,7 +85,7 @@ export function About({ profile }: AboutProps) {
             ))}
           </ul>
 
-          <h3 className="mt-fluid-4 text-fluid-xs font-mono font-medium tracking-[.2em] opacity-70">
+          <h3 className="text-fluid-xs mt-[var(--about-gap)] font-mono font-medium tracking-[.2em] opacity-70">
             {about.skillsTitle}
           </h3>
           <TechTrail technologies={profile.technologies} startIndex={TRAIL_START} />

@@ -17,12 +17,12 @@ interface TrackStepProps {
 export function TrackStep({ name, glyph, footprint, order, tilt, lift }: TrackStepProps) {
   return (
     <li
-      className="track-step stagger-item flex flex-col items-center gap-1"
+      className="track-step stagger-item flex basis-1/4 flex-col items-center gap-1 sm:basis-auto"
       data-lift={lift}
       style={{ "--i": order } as CSSProperties}
     >
       <div
-        className="relative w-[max(4rem,calc(var(--u)*5.6))]"
+        className="relative w-[clamp(2.75rem,calc(var(--u)*5),5.5rem)]"
         style={{ rotate: `${tilt}deg` }}
       >
         <Illustration
@@ -40,7 +40,9 @@ export function TrackStep({ name, glyph, footprint, order, tilt, lift }: TrackSt
           {glyph}
         </span>
       </div>
-      <span className="text-fluid-xs text-center font-semibold opacity-85">{name}</span>
+      <span className="text-fluid-xs text-center leading-tight font-semibold opacity-85">
+        {name}
+      </span>
     </li>
   );
 }
