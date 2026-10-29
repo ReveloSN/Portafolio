@@ -162,7 +162,7 @@
 /* Tiñe el agua (centro de la huella) sin tocar el barro del borde */
 .track-tint {
   background: radial-gradient(
-    ellipse 34% 30% at 52% 60%,
+    ellipse 30% 26% at 51% 62%,
     var(--tech) 0,
     var(--tech) 55%,
     transparent 100%
@@ -172,21 +172,23 @@
 /* Resplandor del charco, que respira despacio */
 .track-glow {
   background: radial-gradient(
-    ellipse 30% 26% at 52% 60%,
-    color-mix(in srgb, var(--tech) 75%, transparent) 0,
+    ellipse 22% 19% at 51% 63%,
+    color-mix(in srgb, var(--tech) 60%, transparent) 0,
     transparent 100%
   );
   mix-blend-mode: screen;
   animation: track-glow 3.6s ease-in-out infinite;
   animation-delay: calc(var(--i, 0) * -0.45s);
 }
+/* El logo es luz dentro del agua: pequeño, en el centro del charco y fundido con
+   su textura (screen), con un resplandor corto que no se sale del barro */
 .track-icon {
   position: absolute;
-  left: 52%;
-  top: 60%;
-  width: 48%;
+  left: 51%;
+  top: 63%;
+  width: 30%;
   translate: -50% -50%;
-  color: color-mix(in srgb, var(--tech) 40%, #fff);
-  filter: drop-shadow(0 0 calc(var(--u) * 0.25) var(--tech))
-    drop-shadow(0 0 calc(var(--u) * 0.7) color-mix(in srgb, var(--tech) 65%, transparent));
+  color: color-mix(in srgb, var(--tech) 45%, #fff);
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 calc(var(--u) * 0.18) var(--tech));
 }

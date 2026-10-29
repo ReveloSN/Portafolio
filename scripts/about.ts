@@ -26,19 +26,21 @@ const FLIP = "[data-testid=flip-card]";
 const FIT_MIN_WIDTH = 1024;
 const SETTLE_MS = 2600;
 const FLIP_MS = 1000;
+const TRAIL_SCALE = 3;
 
 type Viewport = (typeof VIEWPORTS)[number];
 
 async function openAbout(
   browser: Browser,
   vp: Viewport,
-  options: { touch?: boolean; reducedMotion?: boolean } = {},
+  options: { touch?: boolean; reducedMotion?: boolean; scale?: number } = {},
 ) {
   const context = await browser.newContext({
     viewport: { width: vp.width, height: vp.height },
     isMobile: vp.mobile,
     hasTouch: vp.mobile || options.touch === true,
     reducedMotion: options.reducedMotion ? "reduce" : "no-preference",
+    deviceScaleFactor: options.scale ?? 1,
   });
   const page = await context.newPage();
   await page.goto(BASE_URL, { waitUntil: "load" });
@@ -156,6 +158,16 @@ async function reducedMotionChecks(browser: Browser, vp: Viewport): Promise<stri
   ];
 }
 
+/** Primer plano (x3) del camino de huellas para revisar el detalle de cada logo. */
+async function trailCloseup(browser: Browser, vp: Viewport, outDir: string) {
+  const { context, page } = await openAbout(browser, vp, { scale: TRAIL_SCALE });
+  await page
+    .locator(`${SECTION} ul`)
+    .nth(1)
+    .screenshot({ path: path.join(outDir, `about-${vp.name}-trail.png`) });
+  await context.close();
+}
+
 async function main() {
   const label = process.argv[2] ?? "after";
   const outDir = path.join(process.cwd(), "screenshots", label);
@@ -196,6 +208,7 @@ async function main() {
       if (!vp.mobile) problems.push(...(await keyboardChecks(page)));
     }
     if (flip && !vp.mobile) problems.push(...(await touchBack(browser, vp, outDir)));
+    if (vp.name === "1440x900") await trailCloseup(browser, vp, outDir);
     if (flip && vp.name === "1440x900")
       problems.push(...(await reducedMotionChecks(browser, vp)));
     console.log(`${vp.name}: ${JSON.stringify(m)} ${problems.join("; ") || "ok"}`);
