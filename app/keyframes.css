@@ -478,3 +478,13 @@
     transform: scale(1.05);
   }
 }
+
+@keyframes track-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}

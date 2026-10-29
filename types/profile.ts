@@ -11,10 +11,15 @@ export interface QuickFact {
   readonly text: string;
 }
 
-/** Tecnología del camino de huellas: el monograma va dentro de la huella. */
+export type TechIconId =
+  "react" | "kotlin" | "python" | "godot" | "tailwind" | "nextjs" | "typescript";
+
+/** Tecnología del camino de huellas: su logotipo llena la huella y brilla con su color. */
 export interface Technology {
   readonly name: string;
-  readonly glyph: string;
+  readonly icon: TechIconId;
+  /** Color de marca (hex) para el brillo; los logos negros usan un tono claro. */
+  readonly color: string;
 }
 
 /** Reverso de la credencial: un dato curioso sobre la persona. */

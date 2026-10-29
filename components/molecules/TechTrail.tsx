@@ -32,8 +32,7 @@ export function TechTrail({ technologies, startIndex }: TechTrailProps) {
       {technologies.map((tech, i) => (
         <TrackStep
           key={tech.name}
-          name={tech.name}
-          glyph={tech.glyph}
+          tech={tech}
           footprint={FOOTPRINTS[i % FOOTPRINTS.length] ?? FOOTPRINTS[0]}
           order={startIndex + i}
           tilt={TILTS[i % TILTS.length] ?? 0}

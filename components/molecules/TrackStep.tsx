@@ -1,10 +1,11 @@
 import type { CSSProperties } from "react";
 import { Illustration } from "@/components/atoms/Illustration";
+import { TechIcon } from "@/components/atoms/TechIcon";
 import type { ArtEntry } from "@/types/art";
+import type { Technology } from "@/types/profile";
 
 interface TrackStepProps {
-  readonly name: string;
-  readonly glyph: string;
+  readonly tech: Technology;
   readonly footprint: ArtEntry;
   /** Posición en la entrada escalonada (variable --i del RevealGroup). */
   readonly order: number;
@@ -13,8 +14,19 @@ interface TrackStepProps {
   readonly lift: "up" | "down";
 }
 
-/** Una huella en el barro con el monograma de la tecnología sobre el agua verde. */
-export function TrackStep({ name, glyph, footprint, order, tilt, lift }: TrackStepProps) {
+type PrintVars = CSSProperties & Record<`--${string}`, string | number>;
+
+/**
+ * Una huella en el barro con el logotipo de la tecnología en el agua: el charco toma
+ * el color de la marca y brilla. La propia huella sirve de máscara para que el color
+ * no se salga del barro.
+ */
+export function TrackStep({ tech, footprint, order, tilt, lift }: TrackStepProps) {
+  const vars: PrintVars = {
+    rotate: `${tilt}deg`,
+    "--tech": tech.color,
+    "--print": `url(${footprint.src})`,
+  };
   return (
     <li
       className="track-step stagger-item flex basis-1/4 flex-col items-center gap-1 sm:basis-auto"
@@ -22,26 +34,26 @@ export function TrackStep({ name, glyph, footprint, order, tilt, lift }: TrackSt
       style={{ "--i": order } as CSSProperties}
     >
       <div
-        className="relative w-[clamp(2.75rem,calc(var(--u)*5),5.5rem)]"
-        style={{ rotate: `${tilt}deg` }}
+        className="track-print relative w-[clamp(3rem,calc(var(--u)*5.4),6rem)]"
+        style={vars}
       >
         <Illustration
           decorative
           src={footprint.src}
           width={footprint.width}
           height={footprint.height}
-          sizes="90px"
+          sizes="96px"
         />
-        <span
-          aria-hidden="true"
-          className="text-fluid-sm absolute inset-x-0 top-[52%] -translate-y-1/2 text-center font-mono font-medium text-[#eaffd0] [text-shadow:0_1px_6px_rgba(0,30,10,.9)]"
+        <span aria-hidden="true" className="track-tint" />
+        <span aria-hidden="true" className="track-glow" />
+        <TechIcon
+          id={tech.icon}
+          className="track-icon"
           style={{ rotate: `${-tilt}deg` }}
-        >
-          {glyph}
-        </span>
+        />
       </div>
       <span className="text-fluid-xs text-center leading-tight font-semibold opacity-85">
-        {name}
+        {tech.name}
       </span>
     </li>
   );

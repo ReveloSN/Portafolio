@@ -148,3 +148,45 @@
     animation-play-state: paused;
   }
 }
+
+/* Huellas de tecnologías: el charco toma el color de la marca y su logotipo brilla.  */
+/* La imagen de la huella hace de máscara: el color nunca se sale del barro.          */
+.track-tint,
+.track-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: var(--print) center / contain no-repeat;
+  mask: var(--print) center / contain no-repeat;
+}
+/* Tiñe el agua (centro de la huella) sin tocar el barro del borde */
+.track-tint {
+  background: radial-gradient(
+    ellipse 34% 30% at 52% 60%,
+    var(--tech) 0,
+    var(--tech) 55%,
+    transparent 100%
+  );
+  mix-blend-mode: color;
+}
+/* Resplandor del charco, que respira despacio */
+.track-glow {
+  background: radial-gradient(
+    ellipse 30% 26% at 52% 60%,
+    color-mix(in srgb, var(--tech) 75%, transparent) 0,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  animation: track-glow 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -0.45s);
+}
+.track-icon {
+  position: absolute;
+  left: 52%;
+  top: 60%;
+  width: 48%;
+  translate: -50% -50%;
+  color: color-mix(in srgb, var(--tech) 40%, #fff);
+  filter: drop-shadow(0 0 calc(var(--u) * 0.25) var(--tech))
+    drop-shadow(0 0 calc(var(--u) * 0.7) color-mix(in srgb, var(--tech) 65%, transparent));
+}
