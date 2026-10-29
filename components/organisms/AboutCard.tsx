@@ -14,7 +14,7 @@ interface AboutCardProps {
  */
 export function AboutCard({ profile }: AboutCardProps) {
   return (
-    <div className="@container mx-auto w-[var(--card-w,min(22rem,78vw))] shrink-0">
+    <div className="@container mx-auto w-[var(--card-w)] shrink-0">
       <FlipCard
         testId="flip-card"
         label={COPY.about.flipLabel}

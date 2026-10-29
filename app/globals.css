@@ -7,6 +7,7 @@
 @import "./dino.css";
 @import "./art.css";
 @import "./flip.css";
+@import "./about.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));

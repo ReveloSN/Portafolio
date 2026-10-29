@@ -46,11 +46,11 @@ export function About({ profile }: AboutProps) {
           <Fireflies count={FIREFLY_COUNT.about} />
         </>
       }
-      className="pt-[clamp(3rem,calc(var(--u)*6),6.5rem)] pb-[max(clamp(3rem,calc(var(--u)*6),6.5rem),var(--divider-clearance))]"
+      className="about-section pt-[var(--about-pt)] pb-[var(--about-pb)] lg:grid lg:min-h-svh lg:content-center"
     >
-      <div className="mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*83.3))] flex-wrap items-center justify-center gap-[clamp(2rem,calc(var(--u)*4),5rem)]">
+      <div className="mx-auto grid w-full max-w-[min(var(--content-max),calc(var(--u)*92))] items-center gap-[clamp(1.75rem,calc(var(--u)*4.5),5rem)] lg:grid-cols-[auto_minmax(0,1fr)]">
         <AboutCard profile={profile} />
-        <RevealGroup className="max-w-[calc(var(--u)*41.7)] min-w-[280px] flex-[1_1_440px]">
+        <RevealGroup className="mx-auto w-full max-w-[calc(var(--u)*56)] lg:mx-0">
           <p className="font-display text-glow text-fluid-sm font-medium tracking-[.5em]">
             {about.eyebrow}
           </p>

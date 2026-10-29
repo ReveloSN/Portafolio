@@ -1,0 +1,36 @@
+/* ------------------------------------------------------------------ */
+/* Sobre mí: desde 1024px cabe entera en una pantalla (100svh).         */
+/* Todo sale de --u (global) o de svh: si no cabe, baja la escala.      */
+/* ------------------------------------------------------------------ */
+.about-section {
+  /* Separación vertical entre bloques del texto */
+  --about-gap: clamp(0.75rem, calc(var(--u) * 1.6), 1.75rem);
+  --about-pt: clamp(3rem, calc(var(--u) * 6), 6.5rem);
+  --about-pb: max(clamp(3rem, calc(var(--u) * 6), 6.5rem), var(--divider-clearance));
+  /* Móvil: tarjeta centrada de hasta ~48svh de alto (proporción 2:3) */
+  --card-w: min(72vw, calc(48svh * 2 / 3));
+}
+
+@media (min-width: 768px) {
+  .about-section {
+    --card-w: min(calc(var(--u) * 30), calc(60svh * 2 / 3));
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-section {
+    /* La barra de navegación tapa el inicio: se descuenta en el padding superior */
+    --about-pt: calc(var(--nav-h) + clamp(0.75rem, calc(var(--u) * 2), 2.5rem));
+    /* Los helechos de Proyectos suben: hueco hasta 18svh para no quitar media pantalla */
+    --about-fern: 18svh;
+    --about-pb: max(calc(var(--u) * 3), min(var(--divider-clearance), var(--about-fern)));
+    /* Margen para la inclinación (-3°) y la elevación al girar */
+    --card-room: calc(var(--u) * 2);
+    --card-w: min(
+      calc(var(--u) * 24),
+      calc((100svh - var(--about-pt) - var(--about-fern) - var(--card-room)) * 2 / 3)
+    );
+    /* Se ancla al borde superior: la barra queda sobre el padding, no sobre el contenido */
+    scroll-margin-top: 0;
+  }
+}
