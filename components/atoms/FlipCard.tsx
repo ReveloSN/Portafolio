@@ -2,6 +2,7 @@
 
 import { useId, type ReactNode } from "react";
 import { useFlip } from "@/hooks/useFlip";
+import { useTilt } from "@/hooks/useTilt";
 import { cn } from "@/lib/utils";
 
 interface FlipCardProps {
@@ -14,6 +15,9 @@ interface FlipCardProps {
   readonly className?: string;
   readonly testId?: string;
 }
+
+/** Inclinación máxima (grados) que sigue al cursor. */
+const TILT_MAX_DEG = 6;
 
 /**
  * Tarjeta de dos caras que gira en 3D. No conoce su contenido: recibe el frente y el
@@ -29,12 +33,14 @@ export function FlipCard({
   testId,
 }: FlipCardProps) {
   const { flipped, turning, handlers } = useFlip({ flipped: controlled, onFlip });
+  const tiltRef = useTilt<HTMLDivElement>(TILT_MAX_DEG);
   const id = useId();
   const frontId = `${id}-front`;
   const backId = `${id}-back`;
 
   return (
     <div
+      ref={tiltRef}
       role="button"
       tabIndex={0}
       aria-pressed={flipped}
@@ -46,22 +52,25 @@ export function FlipCard({
       className={cn("flip-card", className)}
       {...handlers}
     >
-      <div className="flip-inner">
-        <div
-          id={frontId}
-          className="flip-face flip-face-front"
-          aria-hidden={flipped || undefined}
-          inert={flipped}
-        >
-          {front}
-        </div>
-        <div
-          id={backId}
-          className="flip-face flip-face-back"
-          aria-hidden={!flipped || undefined}
-          inert={!flipped}
-        >
-          {back}
+      <span aria-hidden="true" className="flip-shadow" />
+      <div className="flip-tilt">
+        <div className="flip-inner">
+          <div
+            id={frontId}
+            className="flip-face flip-face-front"
+            aria-hidden={flipped || undefined}
+            inert={flipped}
+          >
+            {front}
+          </div>
+          <div
+            id={backId}
+            className="flip-face flip-face-back"
+            aria-hidden={!flipped || undefined}
+            inert={!flipped}
+          >
+            {back}
+          </div>
         </div>
       </div>
     </div>

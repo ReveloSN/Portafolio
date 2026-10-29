@@ -7,15 +7,47 @@
   .flip-card {
     --flip-rest: 0deg;
     --flip-duration: 0.8s;
+    --flip-lift: -6px;
     position: relative;
     display: block;
     perspective: 1400px;
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    transition: translate calc(var(--flip-duration) / 2) var(--ease-enter);
   }
   .flip-card:focus-visible {
     outline-offset: 8px;
+  }
+
+  /* Mientras gira se eleva un poco; al terminar vuelve al reposo */
+  .flip-card[data-turning] {
+    translate: 0 var(--flip-lift);
+  }
+
+  /* Sombra extra que crece con la elevación (solo opacity y transform) */
+  .flip-shadow {
+    position: absolute;
+    inset: 8% 6% -2%;
+    border-radius: 8%;
+    box-shadow: 0 calc(var(--u) * 3) calc(var(--u) * 6) rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transform: scale(0.94);
+    transition:
+      opacity calc(var(--flip-duration) / 2) var(--ease-enter),
+      transform calc(var(--flip-duration) / 2) var(--ease-enter);
+    pointer-events: none;
+  }
+  .flip-card[data-turning] .flip-shadow {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  /* Inclinación que sigue al cursor (useTilt escribe --tilt-x / --tilt-y) */
+  .flip-tilt {
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.25s ease-out;
   }
 
   /* Misma lista de funciones en reposo y girada: interpola sin pasar por matrices */
@@ -28,6 +60,9 @@
   .flip-card[data-flipped] .flip-inner {
     transform: rotate(0deg) rotateY(180deg);
   }
+  .flip-card[data-turning] .flip-inner {
+    will-change: transform;
+  }
 
   .flip-face {
     -webkit-backface-visibility: hidden;
@@ -39,5 +74,28 @@
     position: absolute;
     inset: 0;
     transform: rotateY(180deg) translateZ(0.1px);
+  }
+
+  /* Movimiento reducido: sin rotación 3D; el reverso aparece con un fundido */
+  @media (prefers-reduced-motion: reduce) {
+    .flip-card[data-turning] {
+      translate: none;
+    }
+    .flip-shadow {
+      display: none;
+    }
+    .flip-card[data-flipped] .flip-inner {
+      transform: rotate(var(--flip-rest)) rotateY(0deg);
+    }
+    .flip-face,
+    .flip-face-back {
+      transform: none;
+      /* Gana a la regla global que anula todas las transiciones */
+      transition: opacity 0.2s linear !important;
+    }
+    .flip-card[data-flipped] .flip-face-front,
+    .flip-card:not([data-flipped]) .flip-face-back {
+      opacity: 0;
+    }
   }
 }
