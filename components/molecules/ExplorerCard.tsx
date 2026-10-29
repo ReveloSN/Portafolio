@@ -26,11 +26,12 @@ export function ExplorerCard({ profile }: ExplorerCardProps) {
   return (
     <div className="min-w-[260px] flex-[0_1_360px]">
       <div className="p-fluid-3 pb-fluid-3 -rotate-3 rounded-[22px] bg-[#efe6cf] text-[#17281d] shadow-[0_30px_60px_-24px_rgba(0,0,0,.7)] transition duration-500 ease-out hover:-translate-y-2 hover:rotate-0 hover:shadow-[0_40px_80px_-30px_rgba(166,255,92,.5)]">
-        <div className="text-fluid-xs mb-3 flex justify-between font-mono tracking-[.12em] text-[#4d5b3f]">
+        <div
+          data-testid="card-header"
+          className="mb-3 flex items-baseline justify-between gap-[clamp(.5rem,calc(var(--u)*1),1rem)] font-mono text-[clamp(.6rem,calc(var(--u)*.8),.85rem)] tracking-[.08em] whitespace-nowrap text-[#4d5b3f]"
+        >
           <span>{about.idLeft}</span>
-          <span>
-            {about.idRight} {profile.year}
-          </span>
+          <span>{`${about.idRight} ${profile.year}`}</span>
         </div>
         <div className="relative flex aspect-[4/5] flex-col items-center justify-end overflow-hidden rounded-[14px] border-2 border-dashed border-[#7d8a62] bg-[linear-gradient(160deg,#cfe3b2,#8fb77a)]">
           <svg width="62%" viewBox="0 0 46 52" aria-hidden="true" className="block">
