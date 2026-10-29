@@ -44,7 +44,8 @@ export function About({ profile }: AboutProps) {
       decoration={
         <>
           <SeamLayer seam="hero-about" host="lower" />
-          <Fireflies count={FIREFLY_COUNT.about} />
+          {/* Por debajo del contenido (z-0) y más tenues: no compiten con los datos rápidos */}
+          <Fireflies count={FIREFLY_COUNT.about} className="z-0 opacity-60" />
         </>
       }
       className="about-section pt-[var(--about-pt)] pb-[var(--about-pb)] lg:grid lg:min-h-svh lg:content-center"
