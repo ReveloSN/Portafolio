@@ -15,11 +15,21 @@ export type TechIconId =
   "fastapi" | "spring" | "nestjs" | "nextjs" | "react" | "tailwind" | "godot";
 
 /** Tecnología del camino de huellas: su logotipo llena la huella y brilla con su color. */
+/** Colores del interior de la huella; si faltan se derivan del color de marca. */
+export interface TechPalette {
+  /** Borde del charco (casi negro). */
+  readonly deep: string;
+  /** Centro del charco, detrás del logo. */
+  readonly mid: string;
+  readonly logo: string;
+}
+
 export interface Technology {
   readonly name: string;
   readonly icon: TechIconId;
   /** Color de marca (hex) para el brillo; los logos negros usan un tono claro. */
   readonly color: string;
+  readonly palette?: TechPalette;
 }
 
 /** Reverso de la credencial: un dato curioso sobre la persona. */

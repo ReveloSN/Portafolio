@@ -149,65 +149,80 @@
   }
 }
 
-/* Huellas de tecnologías: el logotipo brilla dentro de la huella con su color.      */
-/* La ilustración tiene un hueco y agua translúcida: el color va DETRÁS y se ve por  */
-/* ahí; la máscara del charco (scripts/pool-masks.py) evita que salga del barro.     */
-.track-print {
+/* Huella con el logo de una tecnología (TechFootprint).                             */
+/* Capas: tierra > relleno de la cavidad > resplandor del borde > halo > logo nítido. */
+/* Las máscaras (cavidad y borde interior) salen de scripts/track-masks.py: la        */
+/* transparencia del WebP no distingue el interior del exterior.                     */
+.tech-print {
+  --print-size: min(clamp(5rem, calc(var(--u) * 13), 15rem), 92%);
+  --fill-deep: color-mix(in srgb, var(--tech) 12%, #000);
+  --fill-mid: color-mix(in srgb, var(--tech) 42%, #000);
+  --logo-color: color-mix(in srgb, var(--tech) 82%, #fff);
   position: relative;
-  /* Grandes: 4 por fila (4 + 3), el logo se lee de un vistazo */
-  width: min(clamp(5rem, calc(var(--u) * 13), 15rem), 92%);
+  width: var(--print-size);
   aspect-ratio: 1;
+  rotate: var(--print-rotate, 0deg);
+  transition: scale 0.45s var(--ease-enter);
 }
-/* La ilustración trae ~9% de aire transparente por lado: se recupera sin ocupar layout */
-.track-art {
+/* La ilustración trae ~8% de aire transparente por lado: se recupera sin ocupar layout */
+.tech-print-art {
   position: absolute;
   inset: -7%;
 }
-.track-pool,
-.track-glow,
-.track-glow::before {
+.tech-print-fill,
+.tech-print-glow,
+.tech-print-rim {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
-.track-pool,
-.track-glow::before {
+/* Cavidad: degradado oscuro del color de la tecnología, más claro tras el logo */
+.tech-print-fill {
+  background: radial-gradient(
+    circle at var(--logo-x) var(--logo-y),
+    var(--fill-mid) 0,
+    var(--fill-deep) 62%
+  );
   -webkit-mask: var(--pool) center / contain no-repeat;
   mask: var(--pool) center / contain no-repeat;
 }
-/* Charco profundo del color de la marca, más claro en el centro */
-.track-pool {
-  background: radial-gradient(
-    circle at 50% 58%,
-    color-mix(in srgb, var(--tech) 40%, #000) 0,
-    color-mix(in srgb, var(--tech) 22%, #000) 50%,
-    color-mix(in srgb, var(--tech) 10%, #000) 100%
-  );
+/* Luz: más intensa con el cursor (opacidad) y respirando despacio (en el borde) */
+.tech-print-glow {
+  opacity: 0.85;
+  transition: opacity 0.45s var(--ease-enter);
 }
-/* Resplandor que ilumina el borde interior del barro: el charco difuminado, en screen */
-.track-glow {
+.tech-print-rim {
+  background: var(--tech);
   mix-blend-mode: screen;
-  filter: blur(calc(var(--u) * 0.2));
+  -webkit-mask: var(--rim) center / contain no-repeat;
+  mask: var(--rim) center / contain no-repeat;
   animation: track-glow 3.6s ease-in-out infinite;
   animation-delay: calc(var(--i, 0) * -0.45s);
 }
-.track-glow::before {
-  content: "";
-  /* Solo el contorno del charco: el centro queda oscuro y el borde de barro se enciende */
-  background: radial-gradient(
-    circle at 50% 58%,
-    transparent 0,
-    transparent 30%,
-    color-mix(in srgb, var(--tech) 55%, transparent) 100%
-  );
-}
-.track-icon {
+.tech-print-logo {
   position: absolute;
-  left: 50%;
-  top: 57%;
-  width: 38%;
+  left: var(--logo-x);
+  top: var(--logo-y);
+  width: var(--logo-size);
   translate: -50% -50%;
-  color: color-mix(in srgb, var(--tech) 80%, #fff);
-  filter: drop-shadow(0 0 calc(var(--u) * 0.3) var(--tech))
-    drop-shadow(0 0 calc(var(--u) * 0.8) color-mix(in srgb, var(--tech) 45%, transparent));
+  /* El logo se mantiene derecho aunque la huella esté girada */
+  rotate: calc(var(--print-rotate, 0deg) * -1);
+  color: var(--logo-color);
+  overflow: visible;
+}
+.tech-print-halo {
+  color: var(--tech);
+  filter: blur(calc(var(--u) * 0.5));
+  opacity: 0.6;
+}
+.track-step:hover .tech-print {
+  scale: 1.07;
+}
+.track-step:hover .tech-print-glow {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .track-step:hover .tech-print {
+    scale: none;
+  }
 }

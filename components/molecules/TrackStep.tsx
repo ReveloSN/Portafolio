@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
-import { Illustration } from "@/components/atoms/Illustration";
-import { TechIcon } from "@/components/atoms/TechIcon";
+import { TechFootprint } from "@/components/molecules/TechFootprint";
 import type { TrackArt } from "@/types/art";
 import type { Technology } from "@/types/profile";
 
@@ -14,45 +13,21 @@ interface TrackStepProps {
   readonly lift: "up" | "down";
 }
 
-type PrintVars = CSSProperties & Record<`--${string}`, string | number>;
-
-/**
- * Una huella con el logotipo de la tecnología brillando dentro. Capas: el charco
- * del color de la marca (detrás, se ve por el hueco y el agua), la ilustración,
- * el resplandor sobre el borde interior y el logotipo.
- */
+/** Un paso del camino: la huella con el logo y, debajo, el nombre de la tecnología. */
 export function TrackStep({ tech, footprint, order, tilt, lift }: TrackStepProps) {
-  const { art, pool } = footprint;
-  const vars: PrintVars = {
-    rotate: `${tilt}deg`,
-    "--tech": tech.color,
-    "--pool": `url(${pool})`,
-  };
   return (
     <li
       className="track-step stagger-item flex basis-1/4 flex-col items-center gap-[calc(var(--u)*.4)]"
       data-lift={lift}
       style={{ "--i": order } as CSSProperties}
     >
-      <div className="track-print" style={vars}>
-        <div className="track-art">
-          <span aria-hidden="true" className="track-pool" />
-          <Illustration
-            decorative
-            src={art.src}
-            width={art.width}
-            height={art.height}
-            sizes="(min-width: 1024px) 260px, 120px"
-            className="relative"
-          />
-          <span aria-hidden="true" className="track-glow" />
-          <TechIcon
-            id={tech.icon}
-            className="track-icon"
-            style={{ rotate: `${-tilt}deg` }}
-          />
-        </div>
-      </div>
+      <TechFootprint
+        icon={tech.icon}
+        color={tech.color}
+        palette={tech.palette}
+        footprint={footprint}
+        rotate={tilt}
+      />
       <span className="text-fluid-xs text-center leading-tight font-semibold opacity-85">
         {tech.name}
       </span>

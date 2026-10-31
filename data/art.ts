@@ -37,12 +37,22 @@ export const ART = {
 export type ArtKey = keyof typeof ART;
 
 /**
- * Huellas alternas del camino de tecnologías. `pool` es la máscara del charco
- * (hueco y agua), generada con scripts/pool-masks.py a partir de la ilustración.
+ * Huellas alternas del camino de tecnologías. Máscaras y posición del logo generadas
+ * con scripts/track-masks.py a partir de cada ilustración.
  */
 export const FOOTPRINTS: readonly [TrackArt, ...TrackArt[]] = [
-  { art: ART.footprint1, pool: "/art/tracks/footprint-1-pool.webp" },
-  { art: ART.footprint2, pool: "/art/tracks/footprint-2-pool.webp" },
+  {
+    art: ART.footprint1,
+    pool: "/art/tracks/footprint-1-pool.webp",
+    rim: "/art/tracks/footprint-1-rim.webp",
+    logo: { x: 53.4, y: 58.2, size: 29 },
+  },
+  {
+    art: ART.footprint2,
+    pool: "/art/tracks/footprint-2-pool.webp",
+    rim: "/art/tracks/footprint-2-rim.webp",
+    logo: { x: 46.5, y: 58.2, size: 29 },
+  },
 ];
 
 /** Las 6 luciérnagas rebanadas del sprite (scripts/slice-fireflies.py). */
