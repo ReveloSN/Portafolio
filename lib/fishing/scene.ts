@@ -1,4 +1,5 @@
 import type { CreatureSize, Depth } from "@/types/fishing";
+import type { LakeLayerId } from "@/types/lake";
 
 /**
  * Única fuente de verdad de la geometría del lago. Todo se mide en porcentajes de la
@@ -50,6 +51,18 @@ export const FOLIAGE_FREE_X = 15;
 
 /** Aguas de juego: donde caen la boya y nadan y saltan las criaturas. */
 export const PLAY_WATER = { left: 45, right: 95, top: 62, bottom: 95 } as const;
+
+/**
+ * Parallax con el ratón: desplazamiento máximo de cada capa en % de la escena. El agua y
+ * el muelle quedan fijos (ahí se juega); el primer plano va en sentido contrario.
+ */
+export const LAYER_PARALLAX: Readonly<Record<LakeLayerId, number>> = {
+  sky: 0.4,
+  trees: 0.8,
+  water: 0,
+  dock: 0,
+  foreground: -1.8,
+};
 
 /* ---------- Personaje, caña y carnada ---------- */
 

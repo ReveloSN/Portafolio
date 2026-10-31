@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { BucketArt } from "@/components/worlds/art/BucketArt";
 import { FishIcon } from "@/components/worlds/art/FishIcon";
-import { LakeDefs, LakeReeds, LakeScenery } from "@/components/worlds/art/LakeBackdrop";
 import { Megalodon } from "@/components/worlds/art/Megalodon";
 import { Mosasaur } from "@/components/worlds/art/Mosasaur";
 import type { LakeAsset, LakeSvgArt } from "@/types/lake";
@@ -19,13 +18,6 @@ const toSize = (box: ArtBox) => ({ x: box.x, y: box.y, width: box.w, height: box
 
 /** Registro (Factory) de las ilustraciones SVG provisionales. */
 const SVG_ART: Readonly<Record<LakeSvgArt, SvgRenderer>> = {
-  backdrop: () => (
-    <>
-      <LakeDefs />
-      <LakeScenery />
-    </>
-  ),
-  reeds: () => <LakeReeds />,
   fish: (box, tint) => (
     <g style={{ color: tint }}>
       <FishIcon x={box.x} y={box.y} width={box.w} height={box.h} />

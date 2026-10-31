@@ -20,7 +20,7 @@
   container: lakestage / inline-size;
   position: relative;
   min-width: 0;
-  background: linear-gradient(#06182a 50%, #041a24 50%);
+  background: linear-gradient(#082c2c 50%, #031815 50%);
 }
 /* Caja de la escena; en pantallas angostas reserva abajo la franja de muelle */
 .lake-scenebox {
@@ -28,9 +28,28 @@
   position: relative;
   padding-bottom: var(--strip-h);
 }
-/* Mismo tamaño que el SVG: los porcentajes de las capas HTML son los del viewBox */
+/* Caja con el aspecto del arte (2400 × 1116): capas, SVG y HTML comparten porcentajes.
+   Orden z: cielo 0, árboles 1, agua 2, muelle 3, objetos 4, juego 5, primer plano 7. */
 .lake-canvas {
   position: relative;
+  aspect-ratio: 2400 / 1116;
+}
+.lake-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.lake-layer {
+  position: absolute;
+  inset: 0;
+  /* Parallax: useParallax publica --mx/--my (-1 a 1); --depth sale de LAYER_PARALLAX */
+  transform: translate(
+      calc(var(--mx, 0) * var(--depth, 0%)),
+      calc(var(--my, 0) * var(--depth, 0%) * 0.5)
+    )
+    scale(var(--cover, 1));
+  transition: transform 0.6s var(--ease-enter);
 }
 @media (min-width: 1024px) {
   .lake-stage > .lake-scenebox {
@@ -41,11 +60,17 @@
 .lake-stage.is-shaking {
   animation: shakeA 0.42s;
 }
+/* Solo dibuja: los controles (baldes, zona de enganche) son HTML y reciben el puntero */
 .lakesvg {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
+
 .lake-panel {
   display: grid;
   align-content: start;
@@ -141,6 +166,7 @@
 
 /* Mensajes sobre la escena ------------------------------------------ */
 .lake-closing {
+  z-index: 9;
   position: absolute;
   top: 6%;
   left: 50%;
@@ -163,6 +189,8 @@
 /* Baldes de carnada ---------------------------------------------------- */
 /* Angosto: franja de tablones bajo la escena. Ancho: sobre el muelle.     */
 .lake-buckets {
+  /* Objetos (z 4): sobre el muelle y bajo el primer plano */
+  z-index: 4;
   --bucket-size: max(2.6rem, calc(var(--u) * 3.6));
   position: absolute;
   inset: auto 0 0;
@@ -363,6 +391,7 @@
 
 /* Arrastre de la carnada ------------------------------------------------ */
 .lake-hookzone {
+  z-index: 8;
   position: absolute;
   width: max(5.5rem, calc(var(--u) * 12));
   aspect-ratio: 1;
@@ -405,7 +434,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 3;
+  z-index: 9;
   width: max(2.25rem, calc(var(--u) * 3.2));
   aspect-ratio: 1;
   opacity: 0;

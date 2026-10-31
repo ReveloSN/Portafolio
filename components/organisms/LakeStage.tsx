@@ -1,10 +1,14 @@
+"use client";
+
 import type { ReactNode, Ref } from "react";
+import { LakeLayers } from "@/components/molecules/LakeLayers";
 import type { BucketInteraction } from "@/components/molecules/BaitBucket";
 import { BaitBuckets } from "@/components/organisms/BaitBuckets";
 import { LakeScene } from "@/components/organisms/LakeScene";
 import { COPY } from "@/data/copy";
 import { BAITS } from "@/data/creatures";
 import { LAKE_ASSETS } from "@/data/lakeAssets";
+import { useParallax } from "@/hooks/useParallax";
 import { isBetweenCasts } from "@/lib/fishing/engine";
 import { cn } from "@/lib/utils";
 import type { BaitId, Creature, GameState } from "@/types/fishing";
@@ -20,9 +24,14 @@ interface LakeStageProps {
   readonly children?: ReactNode;
 }
 
+/** Capas detrás del juego (cielo a muelle) y delante (primer plano). */
+const BACK_LAYERS = ["sky", "trees", "water", "dock"] as const;
+const FRONT_LAYERS = ["foreground"] as const;
+
 /**
- * La escena y lo que vive encima: los baldes del muelle y el mensaje final. Todo se
- * posiciona en porcentajes de la escena, así coincide en cualquier tamaño.
+ * La escena por capas: arte pintado detrás, el SVG del juego en medio y el primer plano
+ * delante; encima, los baldes y el mensaje final. Todo se coloca en porcentajes de la
+ * escena, así coincide en cualquier tamaño. El ratón mueve las capas (parallax).
  */
 export function LakeStage({
   state,
@@ -33,10 +42,12 @@ export function LakeStage({
   children,
 }: LakeStageProps) {
   const { experience: copy } = COPY;
+  const parallaxRef = useParallax<HTMLDivElement>();
   return (
     <div className={cn("lake-stage", shaking && "is-shaking")}>
-      <div className="lake-scenebox">
+      <div ref={parallaxRef} className="lake-scenebox">
         <div ref={canvasRef} className="lake-canvas" data-testid="lake-canvas">
+          <LakeLayers layers={BACK_LAYERS} />
           <LakeScene
             phase={state.phase}
             mode={state.mode}
@@ -48,6 +59,7 @@ export function LakeStage({
             assets={LAKE_ASSETS}
             label={copy.lakeLabel}
           />
+          <LakeLayers layers={FRONT_LAYERS} />
           {children}
           {state.phase === "complete" ? (
             <div className="lake-closing" data-testid="closing-message">

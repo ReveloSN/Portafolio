@@ -83,8 +83,6 @@ export const LAKE_ART: Readonly<Partial<Record<LakeArtId, LakeArtAsset>>> =
  * con cambiar una entrada por `{ kind: "image", src, width, height }`.
  */
 export const LAKE_ASSETS: LakeAssets = {
-  backdrop: { kind: "svg", art: "backdrop" },
-  foreground: { kind: "svg", art: "reeds" },
   canoe: { kind: "image", src: "/images/canoa.webp?v=2", width: 1254, height: 1254 },
   creatures: {
     lepidotes: { kind: "svg", art: "fish", tint: "#9fe6d0" },

@@ -3,7 +3,6 @@ import { CanoeReturn } from "@/components/worlds/lake/CanoeReturn";
 import { CreatureShadow } from "@/components/worlds/lake/CreatureShadow";
 import { FishingLine } from "@/components/worlds/lake/FishingLine";
 import { HookedBait } from "@/components/worlds/lake/HookedBait";
-import { LakeArt } from "@/components/worlds/lake/LakeArt";
 import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
 import { ProvisionalKid } from "@/components/worlds/lake/ProvisionalKid";
 import { Rod } from "@/components/worlds/lake/Rod";
@@ -47,7 +46,6 @@ const BOBBER_STATE: Partial<Readonly<Record<GamePhase, BobberState>>> = {
   bite: "biting",
   fighting: "fighting",
 };
-const FULL_VIEW = { x: 0, y: 0, w: LAKE_VIEWBOX.width, h: LAKE_VIEWBOX.height };
 
 /**
  * Escena del lago por capas: fondo, caña, hilo, boya, sombra, salto, canoa y primer
@@ -84,7 +82,6 @@ export function LakeScene({
       aria-label={label}
       data-phase={phase}
     >
-      <LakeArt asset={assets.backdrop} box={FULL_VIEW} />
       {showShadow ? (
         <CreatureShadow
           x={target.x}
@@ -117,7 +114,6 @@ export function LakeScene({
         />
       ) : null}
       {phase === "complete" ? <CanoeReturn asset={assets.canoe} /> : null}
-      <LakeArt asset={assets.foreground} box={FULL_VIEW} />
     </svg>
   );
 }
