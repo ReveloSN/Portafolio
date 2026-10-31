@@ -19,8 +19,13 @@
 
 @media (min-width: 1024px) {
   .about-section {
-    /* La barra de navegación tapa el inicio: se descuenta en el padding superior */
-    --about-pt: calc(var(--nav-h) + clamp(0.75rem, calc(var(--u) * 2), 2.5rem));
+    /* La barra tapa el inicio y la cortina de hojas del Hero cuelga sobre él: el
+       contenido empieza bajo la franja densa de la cortina (~11% del ancho), con tope */
+    --about-canopy: min(11vw, 16svh);
+    --about-pt: max(
+      calc(var(--nav-h) + clamp(0.75rem, calc(var(--u) * 2), 2.5rem)),
+      var(--about-canopy)
+    );
     /* Los helechos de Proyectos suben: hueco hasta 18svh para no quitar media pantalla */
     --about-fern: 18svh;
     --about-pb: max(calc(var(--u) * 3), min(var(--divider-clearance), var(--about-fern)));
