@@ -207,30 +207,41 @@ async function cast(page: Page, run: Run, depth: Depth, snap: Snap) {
   await snap("casting");
 }
 
+/**
+ * Pelea en modo desafío: el jugador automático vive en la página y decide en cada fotograma
+ * (recoger por debajo de TENSION_LOW, aflojar por encima de TENSION_HIGH). Desde Node
+ * llegaba tarde con la máquina cargada y rompía el hilo.
+ */
 async function fightChallenge(page: Page, run: Run, snap: Snap) {
-  const input = holdInput(page, run);
-  let holding = true;
-  const started = Date.now();
-  for (;;) {
-    const { phase, tension } = await page.evaluate(() => ({
-      phase: document.querySelector<SVGElement>(".lakesvg")?.dataset.phase ?? "",
-      tension: Number(
-        document
-          .querySelector("[data-testid=tension-meter]")
-          ?.getAttribute("aria-valuenow") ?? 0,
-      ),
-    }));
-    if (phase !== "fighting") break;
-    if (Date.now() - started > FIGHT_SNAPSHOT_MS) await snap("fighting");
-    if (holding && tension > TENSION_HIGH) {
-      await input.up();
-      holding = false;
-    } else if (!holding && tension < TENSION_LOW) {
-      await input.down();
-      holding = true;
-    }
-  }
-  if (holding) await input.up();
+  // Sin funciones con nombre dentro: tsx les añade un ayudante que la página no tiene.
+  const fight = page.evaluate(
+    async ([low, high]) => {
+      let holding = true;
+      for (;;) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        const phase = document.querySelector<SVGElement>(".lakesvg")?.dataset.phase;
+        if (phase !== "fighting") return;
+        const meter = document.querySelector("[data-testid=tension-meter]");
+        const tension = Number(meter?.getAttribute("aria-valuenow") ?? 0);
+        const action = document.querySelector("[data-testid=fishing-action]");
+        if (holding && tension > high) {
+          action?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
+          holding = false;
+        } else if (!holding && tension < low) {
+          action?.dispatchEvent(
+            new KeyboardEvent("keydown", { key: " ", bubbles: true }),
+          );
+          holding = true;
+        }
+      }
+    },
+    [TENSION_LOW, TENSION_HIGH] as const,
+  );
+  await page.waitForTimeout(FIGHT_SNAPSHOT_MS);
+  if ((await phaseOf(page)) === "fighting") await snap("fighting");
+  await fight;
+  // Ya soltado en la página: esto solo limpia el estado del teclado o del ratón.
+  await holdInput(page, run).up();
 }
 
 async function fightRelaxed(page: Page, snap: Snap) {
