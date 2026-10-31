@@ -23,13 +23,13 @@ export const PROFILE: Profile = {
     { icon: "heart", text: "[Tus intereses]" },
   ],
   technologies: [
+    { name: "FastAPI", icon: "fastapi", color: "#05a594" },
+    { name: "Spring Boot", icon: "spring", color: "#6db33f" },
+    { name: "NestJS", icon: "nestjs", color: "#e0234e" },
+    { name: "Next.js", icon: "nextjs", color: "#a9b6bf" },
     { name: "React Native", icon: "react", color: "#61dafb" },
-    { name: "Kotlin", icon: "kotlin", color: "#7f52ff" },
-    { name: "Python", icon: "python", color: "#4b8bd4" },
-    { name: "Godot", icon: "godot", color: "#478cbf" },
     { name: "Tailwind CSS", icon: "tailwind", color: "#06b6d4" },
-    { name: "Next.js", icon: "nextjs", color: "#9aa7b0" },
-    { name: "TypeScript", icon: "typescript", color: "#3178c6" },
+    { name: "Godot", icon: "godot", color: "#478cbf" },
   ],
   socials: [
     { kind: "github", label: "GitHub", href: "https://github.com/tu-usuario" },
