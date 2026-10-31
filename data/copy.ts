@@ -19,7 +19,7 @@ export const COPY = {
     secondaryCta: "Ver proyectos",
     scrollHint: "ENTRAR",
     dinoAlt: "Dinosaurio gigante de cuello largo mirando hacia abajo",
-    canoeAlt: "Niño remando en una canoa de madera",
+    canoeAlt: "Explorador con audífonos remando en una canoa de madera",
   },
   about: {
     eyebrow: "SOBRE MÍ",
