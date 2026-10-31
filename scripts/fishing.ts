@@ -174,18 +174,35 @@ async function takeBait(page: Page, run: Run, bait: Bait, snap: Snap) {
   await snap("bait-hooked");
 }
 
+/**
+ * Carga el lanzamiento y suelta en la zona pedida. Se suelta desde la propia página, en el
+ * mismo fotograma en que la barra entra en la zona: con la máquina cargada, soltar desde
+ * Playwright llega tarde y la boya cae en otra profundidad.
+ */
 async function cast(page: Page, run: Run, depth: Depth, snap: Snap) {
   const input = holdInput(page, run);
   await input.down();
-  await page.waitForFunction(
-    ([lo, hi]) => {
-      const bar = document.querySelector("[data-testid=cast-power] [role=progressbar]");
-      const value = Number(bar?.getAttribute("aria-valuenow"));
-      return value >= lo && value <= hi;
+  // Sin funciones con nombre dentro: tsx les añade un ayudante que la página no tiene.
+  await page.evaluate(
+    async ([lo, hi, kind]) => {
+      for (;;) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        const bar = document.querySelector("[data-testid=cast-power] [role=progressbar]");
+        const value = Number(bar?.getAttribute("aria-valuenow"));
+        if (value < lo || value > hi) continue;
+        document
+          .querySelector("[data-testid=fishing-action]")
+          ?.dispatchEvent(
+            kind === "mouse"
+              ? new PointerEvent("pointerup", { bubbles: true, isPrimary: true })
+              : new KeyboardEvent("keyup", { key: " ", bubbles: true }),
+          );
+        return;
+      }
     },
-    RELEASE_AT[depth],
-    { polling: "raf", timeout: 10_000 },
+    [...RELEASE_AT[depth], run === "drag" ? "mouse" : "key"] as const,
   );
+  // Ya soltado en la página: esto solo limpia el estado del teclado o del ratón.
   await input.up();
   await snap("casting");
 }
