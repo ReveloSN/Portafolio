@@ -8,5 +8,6 @@ export interface ExperienceEntry {
   readonly periodLabel: string;
   readonly title: string;
   readonly organization: string;
-  readonly description: string;
+  /** Se revelan al pescar la criatura que guarda la entrada (o con "Sacar todo"). */
+  readonly achievements: readonly string[];
 }

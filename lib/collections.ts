@@ -2,7 +2,6 @@ import { EXPERIENCE } from "@/data/experience";
 import { PROJECTS } from "@/data/projects";
 import { WORLDS } from "@/data/worlds";
 import type { ExperienceEntry } from "@/types/experience";
-import type { Catch, RareCreature } from "@/types/fishing";
 import type { Project } from "@/types/project";
 import type { World, WorldSlug } from "@/types/world";
 
@@ -25,16 +24,7 @@ export const sortedExperience: readonly ExperienceEntry[] = [...EXPERIENCE].sort
   (a, b) => b.startYear - a.startYear,
 );
 
-const RARE_AFTER_ENTRY: ReadonlyMap<number, RareCreature> = new Map([
-  [1, "mosasaur"],
-  [3, "megalodon"],
-]);
-
-/** Secuencia de capturas: las entradas en orden, con una criatura rara tras la 2.ª y la 4.ª. */
-export const catchSequence: readonly Catch[] = sortedExperience.flatMap(
-  (entry, index): Catch[] => {
-    const rare = RARE_AFTER_ENTRY.get(index);
-    const base: Catch = { type: "entry", entry };
-    return rare ? [base, { type: "rare", creature: rare }] : [base];
-  },
+export const experienceById: ReadonlyMap<string, ExperienceEntry> = indexBy(
+  EXPERIENCE,
+  (entry) => entry.id,
 );

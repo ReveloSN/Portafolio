@@ -9,8 +9,10 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
     periodLabel: "[2025] – Hoy",
     title: "[Cargo o rol]",
     organization: "[Empresa o proyecto freelance]",
-    description:
-      "[Describe en 1 o 2 líneas qué lograste: una cifra, un sistema, un resultado.]",
+    achievements: [
+      "[Logro con una cifra: p. ej. reduje un 30 % el tiempo de carga.]",
+      "[Sistema o resultado que construiste.]",
+    ],
   },
   {
     id: "e1",
@@ -20,8 +22,10 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
     periodLabel: "[2023] – Hoy",
     title: "[Programa / Título]",
     organization: "[Universidad o institución]",
-    description:
-      "[Describe en 1 o 2 líneas qué has aprendido o logrado: promedio, proyectos, reconocimientos.]",
+    achievements: [
+      "[Promedio, proyecto destacado o reconocimiento.]",
+      "[Materia o habilidad que dominaste.]",
+    ],
   },
   {
     id: "e2",
@@ -31,7 +35,7 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
     periodLabel: "[2022] – [2023]",
     title: "[Cargo o rol]",
     organization: "[Empresa o práctica]",
-    description: "[Describe en 1 o 2 líneas qué lograste.]",
+    achievements: ["[Qué lograste en 1 o 2 líneas.]"],
   },
   {
     id: "e3",
@@ -41,6 +45,26 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
     periodLabel: "[2021] – [2022]",
     title: "[Curso o certificación]",
     organization: "[Plataforma o institución]",
-    description: "[Describe en 1 o 2 líneas qué aprendiste.]",
+    achievements: ["[Qué aprendiste y dónde lo aplicaste.]"],
+  },
+  {
+    id: "e5",
+    kind: "work",
+    startYear: 2020,
+    endYear: 2021,
+    periodLabel: "[2020] – [2021]",
+    title: "[Voluntariado o primer proyecto]",
+    organization: "[Organización o comunidad]",
+    achievements: ["[A quién ayudaste o qué entregaste.]"],
+  },
+  {
+    id: "e4",
+    kind: "academic",
+    startYear: 2019,
+    endYear: 2020,
+    periodLabel: "[2019] – [2020]",
+    title: "[Bachillerato o colegio]",
+    organization: "[Colegio o institución]",
+    achievements: ["[Énfasis, premio o primer contacto con la programación.]"],
   },
 ];
