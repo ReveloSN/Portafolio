@@ -1,5 +1,8 @@
 "use client";
 
+import { useRef } from "react";
+import { HookZone } from "@/components/atoms/HookZone";
+import { BaitGhost } from "@/components/molecules/BaitGhost";
 import { ActionPanel } from "@/components/molecules/ActionPanel";
 import { BaitPicker } from "@/components/molecules/BaitPicker";
 import { CastPowerBar } from "@/components/molecules/CastPowerBar";
@@ -10,7 +13,9 @@ import { LakeStage } from "@/components/organisms/LakeStage";
 import { BAITS, CREATURES } from "@/data/creatures";
 import { COPY } from "@/data/copy";
 import type { FishingGameApi } from "@/hooks/useFishingGame";
+import { useBaitDrag } from "@/hooks/useBaitDrag";
 import { useGameFeedback } from "@/hooks/useGameFeedback";
+import { isBetweenCasts } from "@/lib/fishing/engine";
 import { experienceById } from "@/lib/collections";
 import {
   actionIntent,
@@ -32,6 +37,19 @@ export function FishingGame({ game }: FishingGameProps) {
   const { experience: copy } = COPY;
   const { state } = game;
   const feedback = useGameFeedback(state.phase);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const zoneRef = useRef<HTMLDivElement>(null);
+  const ghostRef = useRef<HTMLDivElement>(null);
+  const drag = useBaitDrag({
+    canvasRef,
+    zoneRef,
+    ghostRef,
+    dragEnabled: state.mode === "challenge",
+    onPick: game.pickBait,
+    onAttach: game.attachBait,
+  });
+  const awaitingHook =
+    isBetweenCasts(state.phase) && state.bait !== null && !state.baitAttached;
   const creature = sceneCreature(state);
   const revealed =
     state.phase === "caught" && creature
@@ -51,8 +69,12 @@ export function FishingGame({ game }: FishingGameProps) {
         state={state}
         creature={creature}
         shaking={feedback.shaking}
-        interactionFor={(bait) => ({ onClick: () => game.pickBait(bait) })}
-      />
+        interactionFor={drag.interactionFor}
+        canvasRef={canvasRef}
+      >
+        <HookZone ref={zoneRef} visible={awaitingHook} />
+        <BaitGhost ref={ghostRef} baits={BAITS} />
+      </LakeStage>
       <div className="lake-panel">
         {revealed ? (
           <div key={revealed.id} className="lake-reveal" data-testid="catch-reveal">

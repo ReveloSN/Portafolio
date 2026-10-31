@@ -6,7 +6,7 @@ interface HookedBaitProps {
   readonly bait: BaitId;
 }
 
-const SIZE = 26;
+const SIZE = 34;
 
 /** La carnada colgando del anzuelo, lista para lanzar. */
 export function HookedBait({ bait }: HookedBaitProps) {

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import type { BucketInteraction } from "@/components/molecules/BaitBucket";
 import { BaitBuckets } from "@/components/organisms/BaitBuckets";
 import { LakeScene } from "@/components/organisms/LakeScene";
@@ -14,6 +14,8 @@ interface LakeStageProps {
   readonly creature: Creature | null;
   readonly shaking: boolean;
   readonly interactionFor: (bait: BaitId) => BucketInteraction;
+  /** Capa del tamaño exacto de la escena (coordenadas del arrastre). */
+  readonly canvasRef?: Ref<HTMLDivElement>;
   /** Capas extra sobre la escena (zona de enganche, carnada en arrastre). */
   readonly children?: ReactNode;
 }
@@ -27,13 +29,14 @@ export function LakeStage({
   creature,
   shaking,
   interactionFor,
+  canvasRef,
   children,
 }: LakeStageProps) {
   const { experience: copy } = COPY;
   return (
     <div className={cn("lake-stage", shaking && "is-shaking")}>
       <div className="lake-scenebox">
-        <div className="lake-canvas" data-testid="lake-canvas">
+        <div ref={canvasRef} className="lake-canvas" data-testid="lake-canvas">
           <LakeScene
             phase={state.phase}
             mode={state.mode}
