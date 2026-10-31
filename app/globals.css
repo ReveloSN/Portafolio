@@ -8,6 +8,7 @@
 @import "./art.css";
 @import "./flip.css";
 @import "./about.css";
+@import "./lake.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));

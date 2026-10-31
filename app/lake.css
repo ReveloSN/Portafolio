@@ -1,0 +1,276 @@
+/* ------------------------------------------------------------------ */
+/* Lago de pesca (Experiencia): escena, panel y diario que se voltea    */
+/* Solo se animan transform y opacity.                                  */
+/* ------------------------------------------------------------------ */
+.lake {
+  display: grid;
+  overflow: hidden;
+  border-radius: max(18px, calc(var(--u) * 1.8));
+  border: 1px solid rgba(110, 240, 224, 0.3);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  background: #06202c;
+}
+@media (min-width: 1024px) {
+  .lake {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  }
+}
+/* Cielo arriba y agua abajo: si la escena no llena el alto, el borde continúa */
+.lake-stage {
+  position: relative;
+  min-width: 0;
+  background: linear-gradient(#06182a 50%, #041a24 50%);
+}
+@media (min-width: 1024px) {
+  .lake-stage > .lakesvg {
+    position: relative;
+    top: 50%;
+    translate: 0 -50%;
+  }
+}
+.lake-stage.is-shaking {
+  animation: shakeA 0.42s;
+}
+.lakesvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.lake-panel {
+  display: grid;
+  align-content: start;
+  gap: max(1rem, calc(var(--u) * 1.4));
+  min-width: 0;
+  padding: max(1rem, calc(var(--u) * 1.6));
+  background: rgba(4, 20, 28, 0.92);
+  border-top: 1px solid rgba(110, 240, 224, 0.2);
+}
+@media (min-width: 1024px) {
+  .lake-panel {
+    border-top: 0;
+    border-left: 1px solid rgba(110, 240, 224, 0.2);
+  }
+}
+
+/* Escena ------------------------------------------------------------ */
+.lake-rod {
+  transform-box: view-box;
+  transform-origin: 280px 240px;
+  transition: transform 0.12s linear;
+}
+.lake-rod.is-tugging {
+  animation: rodTug 0.22s ease-in-out infinite alternate;
+}
+.lake-bobber {
+  transform-box: view-box;
+  transition: transform 0.75s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+.lake-float {
+  transform-box: view-box;
+}
+.lake-float.is-floating {
+  animation: bobW 2.4s ease-in-out 0.75s infinite;
+}
+.lake-float.is-biting {
+  animation: bobB 0.5s ease-in-out infinite;
+}
+.lake-alert {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: alertPop 0.35s ease-in-out infinite alternate;
+}
+.lake-ripple,
+.lake-splash {
+  fill: none;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.lake-ripple {
+  stroke: #bff6f0;
+  stroke-width: 2;
+  animation: rgo 2.4s ease-out 0.8s infinite;
+}
+.lake-ripple-late {
+  animation-delay: 2s;
+}
+.lake-splash {
+  stroke: #fff;
+  stroke-width: 3;
+  animation: rgo 1.1s ease-out 3;
+}
+.lake-shadow {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: shadowPass 3.4s ease-in-out infinite;
+}
+.lake-shadow.is-biting {
+  opacity: 0.7;
+  animation: none;
+}
+.lake-leap {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.lake-leap.is-big {
+  animation: leapBig 3.4s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+.lake-leap.is-small {
+  animation: leapSm 2.8s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+.lake-canoe {
+  transform-box: view-box;
+  animation: canoeIn 3.2s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+.lake-canoe-bob {
+  transform-box: fill-box;
+  transform-origin: 50% 80%;
+  animation: bob 4.5s ease-in-out 3.2s infinite;
+}
+
+/* Mensajes sobre la escena ------------------------------------------ */
+.lake-closing {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  translate: -50% 0;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  padding: max(0.75rem, calc(var(--u) * 1.2)) max(1rem, calc(var(--u) * 2));
+  border-radius: 20px;
+  text-align: center;
+  background: rgba(4, 20, 28, 0.88);
+  border: 1px solid var(--glow);
+  box-shadow: 0 0 40px var(--glowB);
+  animation: revealIn 0.5s 0.4s both;
+}
+/* Móvil: la captura aparece debajo de la escena; desde 640px, encima */
+.lake-reveal {
+  padding: 0 max(1rem, calc(var(--u) * 1.6)) max(1rem, calc(var(--u) * 1.6));
+  font-size: var(--fs-sm);
+}
+@media (min-width: 640px) {
+  .lake-reveal {
+    position: absolute;
+    top: max(0.75rem, calc(var(--u) * 1));
+    right: max(0.75rem, calc(var(--u) * 1));
+    width: min(26rem, 52%);
+    max-height: calc(100% - 1.5rem);
+    padding: 0;
+    overflow-y: auto;
+    border-radius: 18px;
+  }
+  /* Al lado contrario de la boya: el salto de la criatura queda a la vista */
+  .lake-reveal[data-side="left"] {
+    right: auto;
+    left: max(0.75rem, calc(var(--u) * 1));
+  }
+}
+.lake-reveal .jcard-inner {
+  animation: jcardTurn 0.9s var(--ease-enter) 0.2s both;
+}
+.pull {
+  animation: pulsebtn 0.5s ease-in-out infinite alternate;
+}
+
+/* Diario: cada tarjeta tiene dos caras apiladas en la misma celda ----- */
+.jcard {
+  display: flex;
+  width: 100%;
+  perspective: 1400px;
+}
+.jcard-inner {
+  display: grid;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s var(--ease-enter);
+}
+.jcard[data-flipped] .jcard-inner {
+  transform: rotateY(180deg);
+}
+.jcard-face {
+  grid-area: 1 / 1;
+  min-width: 0;
+  padding: max(1rem, calc(var(--u) * 1.6)) max(1.1rem, calc(var(--u) * 1.9));
+  border-radius: 18px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background: #0a1c26;
+}
+.jcard-front {
+  border: 1px dashed rgba(238, 246, 224, 0.28);
+}
+.jcard-back {
+  transform: rotateY(180deg);
+  border: 1px solid var(--c);
+  background: color-mix(in srgb, var(--c) 9%, #0a1c26);
+  box-shadow: 0 0 34px color-mix(in srgb, var(--c) 26%, transparent);
+}
+
+@keyframes shadowPass {
+  0% {
+    opacity: 0;
+    transform: translateX(-170px) scaleX(0.9);
+  }
+  25%,
+  75% {
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateX(0) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(170px) scaleX(0.9);
+  }
+}
+@keyframes canoeIn {
+  from {
+    transform: translateX(560px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes jcardTurn {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Movimiento reducido: nada gira ni pasa; todo queda visible y quieto */
+@media (prefers-reduced-motion: reduce) {
+  .lake-shadow {
+    opacity: 0.55;
+    animation: none;
+  }
+  .lake-leap {
+    opacity: 1;
+    animation: none !important;
+    transform: translateY(-30px);
+  }
+  .lake-stage.is-shaking {
+    animation: none;
+  }
+  .jcard-inner,
+  .jcard[data-flipped] .jcard-inner,
+  .lake-reveal .jcard-inner {
+    transform: none;
+    animation: none;
+  }
+  .jcard-back {
+    transform: none;
+    opacity: 0;
+  }
+  .jcard[data-flipped] .jcard-back {
+    opacity: 1;
+  }
+  .jcard[data-flipped] .jcard-front {
+    opacity: 0;
+  }
+}
