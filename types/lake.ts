@@ -1,7 +1,15 @@
-import type { CreatureId } from "./fishing";
+import type { BaitId, CreatureId } from "./fishing";
 
 /** Ilustraciones SVG provisionales disponibles en el registro de la escena. */
-export type LakeSvgArt = "backdrop" | "reeds" | "fish" | "mosasaur" | "megalodon";
+export type LakeSvgArt =
+  | "backdrop"
+  | "reeds"
+  | "fish"
+  | "mosasaur"
+  | "megalodon"
+  | "bucket-worm"
+  | "bucket-minnow"
+  | "bucket-firefly";
 
 /** Una capa de la escena: hoy SVG provisional, mañana una imagen pintada. */
 export type LakeAsset =
@@ -18,4 +26,6 @@ export interface LakeAssets {
   readonly foreground: LakeAsset;
   readonly canoe: LakeAsset;
   readonly creatures: Readonly<Record<CreatureId, LakeAsset>>;
+  /** Los tres baldes de carnada del muelle. */
+  readonly buckets: Readonly<Record<BaitId, LakeAsset>>;
 }

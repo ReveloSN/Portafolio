@@ -16,4 +16,9 @@ export const LAKE_ASSETS: LakeAssets = {
     mosasaur: { kind: "svg", art: "mosasaur" },
     megalodon: { kind: "svg", art: "megalodon" },
   },
+  buckets: {
+    worm: { kind: "svg", art: "bucket-worm" },
+    minnow: { kind: "svg", art: "bucket-minnow" },
+    firefly: { kind: "svg", art: "bucket-firefly" },
+  },
 };

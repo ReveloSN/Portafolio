@@ -1,3 +1,5 @@
+import { DOCK_WIDTH, KID_OFFSET } from "@/lib/fishing/scene";
+
 export function LakeDefs() {
   return (
     <defs>
@@ -92,21 +94,23 @@ export function LakeScenery() {
           <rect x="36" y="278" width="16" height="130" />
           <rect x="146" y="278" width="16" height="140" />
           <rect x="256" y="278" width="16" height="130" />
-          <rect x="316" y="278" width="14" height="110" />
+          <rect x="366" y="278" width="16" height="136" />
+          <rect x="456" y="278" width="14" height="110" />
         </g>
 
-        <rect x="0" y="260" width="340" height="20" rx="3" fill="#8a5a2b" />
+        <rect x="0" y="260" width={DOCK_WIDTH} height="20" rx="3" fill="#8a5a2b" />
         <path
-          d="M0 270h340M60 260v20M130 260v20M200 260v20M270 260v20"
+          d="M0 270h480M60 260v20M130 260v20M200 260v20M270 260v20M340 260v20M410 260v20"
           stroke="#5e3a1b"
           strokeWidth="2"
         />
-        <rect x="52" y="214" width="8" height="48" fill="#4a2f17" />
-        <circle cx="56" cy="206" r="60" fill="url(#lamp)" />
-        <rect x="48" y="196" width="16" height="20" rx="3" fill="#ffc46e" />
+        <rect x="14" y="214" width="8" height="48" fill="#4a2f17" />
+        <circle cx="18" cy="206" r="60" fill="url(#lamp)" />
+        <rect x="10" y="196" width="16" height="20" rx="3" fill="#ffc46e" />
       </g>
 
-      <g>
+      {/* El niño, corrido hacia la punta del muelle: deja sitio a los baldes */}
+      <g transform={`translate(${KID_OFFSET} 0)`}>
         <path d="M254 262 H300 V274 H262Z" fill="#14312a" />
         <rect x="292" y="266" width="13" height="52" rx="6" fill="#14312a" />
         <path d="M290 316h22v8h-24z" fill="#3b2412" />

@@ -2,6 +2,7 @@ import { Bobber, type BobberState } from "@/components/worlds/lake/Bobber";
 import { CanoeReturn } from "@/components/worlds/lake/CanoeReturn";
 import { CreatureShadow } from "@/components/worlds/lake/CreatureShadow";
 import { FishingLine } from "@/components/worlds/lake/FishingLine";
+import { HookedBait } from "@/components/worlds/lake/HookedBait";
 import { LakeArt } from "@/components/worlds/lake/LakeArt";
 import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
 import { Rod } from "@/components/worlds/lake/Rod";
@@ -9,10 +10,18 @@ import {
   BOBBER_AT,
   LAKE_VIEWBOX,
   PULL_JITTER,
-  ROD_TIP,
+  DANGLE,
+  HOOK_POINT,
   SHADOW_RX,
 } from "@/lib/fishing/scene";
-import type { Creature, Depth, FightState, GameMode, GamePhase } from "@/types/fishing";
+import type {
+  BaitId,
+  Creature,
+  Depth,
+  FightState,
+  GameMode,
+  GamePhase,
+} from "@/types/fishing";
 import type { LakeAssets } from "@/types/lake";
 
 interface LakeSceneProps {
@@ -23,14 +32,14 @@ interface LakeSceneProps {
   readonly fight: FightState;
   /** La que pica o pelea, o la recién capturada. */
   readonly creature: Creature | null;
+  /** Carnada enganchada en el anzuelo (se ve colgando hasta lanzar). */
+  readonly attachedBait: BaitId | null;
   readonly assets: LakeAssets;
   readonly label: string;
 }
 
 const IN_WATER: ReadonlySet<GamePhase> = new Set(["waiting", "bite", "fighting"]);
 const LEAPING: ReadonlySet<GamePhase> = new Set(["caught", "complete"]);
-/** Boya colgando de la caña cuando no está en el agua. */
-const DANGLE = { x: ROD_TIP.x + 6, y: ROD_TIP.y + 70 } as const;
 const JITTER_SPEED = 0.05;
 const BOBBER_STATE: Partial<Readonly<Record<GamePhase, BobberState>>> = {
   waiting: "floating",
@@ -50,6 +59,7 @@ export function LakeScene({
   power,
   fight,
   creature,
+  attachedBait,
   assets,
   label,
 }: LakeSceneProps) {
@@ -83,13 +93,12 @@ export function LakeScene({
         />
       ) : null}
       <Rod power={phase === "casting" ? power : 0} tugging={biting || fighting} />
-      {inWater ? (
-        <FishingLine
-          x={bobber.x + jitter}
-          y={bobber.y}
-          tautness={fighting ? 0.5 + tension / 2 : biting ? 0.3 : 0}
-        />
-      ) : null}
+      <FishingLine
+        x={inWater ? bobber.x + jitter : HOOK_POINT.x}
+        y={inWater ? bobber.y : HOOK_POINT.y}
+        tautness={!inWater || fighting ? 0.5 + tension / 2 : biting ? 0.3 : 0}
+      />
+      {attachedBait && !inWater ? <HookedBait bait={attachedBait} /> : null}
       <Bobber
         x={bobber.x}
         y={bobber.y}

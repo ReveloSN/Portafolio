@@ -1,3 +1,4 @@
+import { ROD_BASE, ROD_TIP } from "@/lib/fishing/scene";
 import { cn } from "@/lib/utils";
 
 interface RodProps {
@@ -6,14 +7,18 @@ interface RodProps {
   readonly tugging: boolean;
 }
 
-const ROD_PATH = "M280 240 Q362 168 440 100";
+const BEND = { x: 82, y: 168 } as const;
+const ROD_PATH = `M${ROD_BASE.x} ${ROD_BASE.y} Q${ROD_BASE.x + BEND.x} ${BEND.y} ${ROD_TIP.x} ${ROD_TIP.y}`;
 const PULL_BACK_DEG = 28;
 
 export function Rod({ power, tugging }: RodProps) {
   return (
     <g
       className={cn("lake-rod", tugging && "is-tugging")}
-      style={{ transform: `rotate(${-power * PULL_BACK_DEG}deg)` }}
+      style={{
+        transform: `rotate(${-power * PULL_BACK_DEG}deg)`,
+        transformOrigin: `${ROD_BASE.x}px ${ROD_BASE.y}px`,
+      }}
     >
       <path
         d={ROD_PATH}
