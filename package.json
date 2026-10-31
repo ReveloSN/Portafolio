@@ -15,7 +15,8 @@
     "about": "tsx scripts/about.ts",
     "test": "vitest run",
     "fishing": "tsx scripts/fishing.ts",
-    "lake:shots": "tsx scripts/lake-shots.ts"
+    "lake:shots": "tsx scripts/lake-shots.ts",
+    "optimize:lake": "tsx scripts/optimize-lake.ts"
   },
   "dependencies": {
     "next": "16.4.3",
@@ -33,6 +34,7 @@
     "playwright": "^1.64.1",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5",
