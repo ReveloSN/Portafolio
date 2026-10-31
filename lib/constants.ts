@@ -16,12 +16,6 @@ export const EYE_TRAVEL = { x: 45, y: 55 } as const;
 export const FIREFLY_COUNT = { hero: 10, about: 8, contact: 8 } as const;
 export const WORLD_PARTICLE_COUNT = 16;
 
-export const BITE_DELAY_MIN_MS = 1800;
-export const BITE_DELAY_SPREAD_MS = 1800;
-export const BITE_WINDOW_MS = 3800;
-export const REEL_DURATION_MS = 900;
-export const CAUGHT_DISPLAY_MS = 3600;
-
 export const DIG_LAYERS_PER_CELL = 3;
 
 export const MIN_MESSAGE_LENGTH = 10;
