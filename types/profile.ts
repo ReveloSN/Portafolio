@@ -17,11 +17,10 @@ export type TechIconId =
 /** Tecnología del camino de huellas: su logotipo llena la huella y brilla con su color. */
 /** Colores del interior de la huella; si faltan se derivan del color de marca. */
 export interface TechPalette {
-  /** Borde del charco (casi negro). */
+  /** Borde del charco, en sombra. */
   readonly deep: string;
   /** Centro del charco, detrás del logo. */
   readonly mid: string;
-  readonly logo: string;
 }
 
 export interface Technology {

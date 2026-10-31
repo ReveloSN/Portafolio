@@ -1,15 +1,16 @@
 import type { CSSProperties } from "react";
 import { Illustration } from "@/components/atoms/Illustration";
 import { TechIcon } from "@/components/atoms/TechIcon";
+import { TECH_ICON_FIT } from "@/lib/techIcons";
 import { cn } from "@/lib/utils";
 import type { TrackArt } from "@/types/art";
 import type { TechIconId, TechPalette } from "@/types/profile";
 
 interface TechFootprintProps {
   readonly icon: TechIconId;
-  /** Color de marca: resplandor del logo y del borde interior de la tierra. */
+  /** Color de marca: tiñe la cavidad y la luz tenue de su borde interior. */
   readonly color: string;
-  /** Interior y logo; si se omite se deriva de `color`. */
+  /** Interior del charco; si se omite se deriva de `color`. */
   readonly palette?: TechPalette;
   readonly footprint: TrackArt;
   /** Orientación de la huella en grados; el logo se mantiene derecho. */
@@ -22,9 +23,10 @@ interface TechFootprintProps {
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
 /**
- * Huella de dinosaurio con el logo de una tecnología. Capas, de abajo arriba:
- * tierra (ilustración), relleno de la cavidad, resplandor del borde interior,
- * halo del logo y logo nítido. El color solo toca la cavidad y su luz.
+ * Huella de dinosaurio con el logo de una tecnología grabado en el fondo. Capas, de
+ * abajo arriba: tierra (ilustración), relleno de la cavidad, sombra bajo el borde,
+ * luz tenue del borde y logo marfil hundido (filtro EngraveFilter). El color solo
+ * toca la cavidad; la profundidad sale de las sombras.
  */
 export function TechFootprint({
   icon,
@@ -44,12 +46,12 @@ export function TechFootprint({
     "--logo-x": `${logo.x}%`,
     "--logo-y": `${logo.y}%`,
     "--logo-size": `${logo.size}%`,
+    "--icon-fit": TECH_ICON_FIT[icon],
     ...(size ? { "--print-size": size } : {}),
     ...(palette
       ? {
           "--fill-deep": palette.deep,
           "--fill-mid": palette.mid,
-          "--logo-color": palette.logo,
         }
       : {}),
   };
@@ -64,10 +66,8 @@ export function TechFootprint({
           sizes="(min-width: 1024px) 260px, 120px"
         />
         <span className="tech-print-fill" />
-        <span className="tech-print-glow">
-          <span className="tech-print-rim" />
-          <TechIcon id={icon} className="tech-print-logo tech-print-halo" />
-        </span>
+        <span className="tech-print-shade" />
+        <span className="tech-print-glow" />
         <TechIcon id={icon} className="tech-print-logo" />
       </div>
     </div>

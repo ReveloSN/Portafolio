@@ -29,7 +29,7 @@ export const PROFILE: Profile = {
       name: "NestJS",
       icon: "nestjs",
       color: "#ff5e6c",
-      palette: { deep: "#16030a", mid: "#5e0b19", logo: "#ff6b74" },
+      palette: { deep: "#4a0812", mid: "#a8182c" },
     },
     { name: "Next.js", icon: "nextjs", color: "#a9b6bf" },
     { name: "React Native", icon: "react", color: "#61dafb" },

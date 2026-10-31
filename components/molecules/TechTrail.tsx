@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { EngraveFilter } from "@/components/atoms/EngraveFilter";
 import { TrackStep } from "@/components/molecules/TrackStep";
 import { FOOTPRINTS } from "@/data/art";
 import type { Technology } from "@/types/profile";
@@ -20,24 +21,27 @@ const STEP_MS = 120;
  */
 export function TechTrail({ technologies, startIndex }: TechTrailProps) {
   return (
-    <ul
-      className="mt-[calc(var(--u)*1.2)] flex flex-wrap items-start justify-center gap-y-[calc(var(--u)*1.6)]"
-      style={
-        {
-          "--stagger-step": `${STEP_MS}ms`,
-        } as CSSProperties
-      }
-    >
-      {technologies.map((tech, i) => (
-        <TrackStep
-          key={tech.name}
-          tech={tech}
-          footprint={FOOTPRINTS[i % FOOTPRINTS.length] ?? FOOTPRINTS[0]}
-          order={startIndex + i}
-          tilt={TILTS[i % TILTS.length] ?? 0}
-          lift={i % 2 === 0 ? "up" : "down"}
-        />
-      ))}
-    </ul>
+    <>
+      <EngraveFilter />
+      <ul
+        className="mt-[calc(var(--u)*1.2)] flex flex-wrap items-start justify-center gap-y-[calc(var(--u)*1.6)]"
+        style={
+          {
+            "--stagger-step": `${STEP_MS}ms`,
+          } as CSSProperties
+        }
+      >
+        {technologies.map((tech, i) => (
+          <TrackStep
+            key={tech.name}
+            tech={tech}
+            footprint={FOOTPRINTS[i % FOOTPRINTS.length] ?? FOOTPRINTS[0]}
+            order={startIndex + i}
+            tilt={TILTS[i % TILTS.length] ?? 0}
+            lift={i % 2 === 0 ? "up" : "down"}
+          />
+        ))}
+      </ul>
+    </>
   );
 }

@@ -155,9 +155,9 @@
 /* transparencia del WebP no distingue el interior del exterior.                     */
 .tech-print {
   --print-size: min(clamp(5rem, calc(var(--u) * 13), 15rem), 92%);
-  --fill-deep: color-mix(in srgb, var(--tech) 12%, #000);
-  --fill-mid: color-mix(in srgb, var(--tech) 42%, #000);
-  --logo-color: color-mix(in srgb, var(--tech) 82%, #fff);
+  /* Charco del color de marca: luz en el centro, sombra hacia el borde (no casi negro) */
+  --fill-deep: color-mix(in srgb, var(--tech) 28%, #000);
+  --fill-mid: color-mix(in srgb, var(--tech) 52%, #000);
   position: relative;
   width: var(--print-size);
   aspect-ratio: 1;
@@ -170,56 +170,67 @@
   inset: -7%;
 }
 .tech-print-fill,
-.tech-print-glow,
-.tech-print-rim {
+.tech-print-shade,
+.tech-print-glow {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
-/* Cavidad: degradado oscuro del color de la tecnología, más claro tras el logo */
+/* Cavidad: color de la tecnología con variaciones suaves de luz y sombra */
 .tech-print-fill {
-  background: radial-gradient(
-    circle at var(--logo-x) var(--logo-y),
-    var(--fill-mid) 0,
-    var(--fill-deep) 62%
-  );
+  background:
+    radial-gradient(ellipse 30% 22% at 42% 36%, rgb(255 255 255 / 0.09), transparent 70%),
+    radial-gradient(
+      ellipse 33% 33% at var(--logo-x) var(--logo-y),
+      var(--fill-mid) 0,
+      color-mix(in srgb, var(--fill-mid) 55%, var(--fill-deep)) 55%,
+      var(--fill-deep) 100%
+    );
   -webkit-mask: var(--pool) center / contain no-repeat;
   mask: var(--pool) center / contain no-repeat;
 }
-/* Luz: más intensa con el cursor (opacidad) y respirando despacio (en el borde) */
-.tech-print-glow {
-  opacity: 0.85;
-  transition: opacity 0.45s var(--ease-enter);
+/* Profundidad: la tierra hace sombra sobre el borde interior (la cavidad menos la
+   misma cavidad bajada unos px = franja superior interior). El desplazamiento va en
+   longitud: la máscara mide lo mismo que su caja y un porcentaje no la movería. */
+.tech-print-shade {
+  background: rgb(14 6 3 / 0.72);
+  -webkit-mask:
+    var(--pool) center / contain no-repeat,
+    var(--pool) left 0 top calc(var(--u) * 0.55) / contain no-repeat;
+  -webkit-mask-composite: source-out;
+  mask:
+    var(--pool) center / contain no-repeat subtract,
+    var(--pool) left 0 top calc(var(--u) * 0.55) / contain no-repeat;
 }
-.tech-print-rim {
-  background: var(--tech);
+/* Luz tenue del borde interior, sin aspecto de neón; sube un poco con el cursor */
+.tech-print-glow {
+  background: color-mix(in srgb, var(--tech) 60%, transparent);
   mix-blend-mode: screen;
+  opacity: 0.32;
   -webkit-mask: var(--rim) center / contain no-repeat;
   mask: var(--rim) center / contain no-repeat;
-  animation: track-glow 3.6s ease-in-out infinite;
-  animation-delay: calc(var(--i, 0) * -0.45s);
+  transition: opacity 0.45s var(--ease-enter);
 }
+/* Logo marfil grabado: centrado en la palma y ajustado a ella (--icon-fit) */
 .tech-print-logo {
   position: absolute;
   left: var(--logo-x);
   top: var(--logo-y);
-  width: var(--logo-size);
+  width: calc(var(--logo-size) * var(--icon-fit, 0.7));
   translate: -50% -50%;
   /* El logo se mantiene derecho aunque la huella esté girada */
   rotate: calc(var(--print-rotate, 0deg) * -1);
-  color: var(--logo-color);
+  color: #efe5cc;
   overflow: visible;
 }
-.tech-print-halo {
-  color: var(--tech);
-  filter: blur(calc(var(--u) * 0.5));
-  opacity: 0.6;
+.tech-print-logo path {
+  filter: url(#tech-engrave);
 }
 .track-step:hover .tech-print {
   scale: 1.07;
 }
 .track-step:hover .tech-print-glow {
-  opacity: 1;
+  opacity: 0.55;
 }
 @media (prefers-reduced-motion: reduce) {
   .track-step:hover .tech-print {
