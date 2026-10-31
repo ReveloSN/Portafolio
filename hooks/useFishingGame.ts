@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useReducer } from "react";
-import { BAITS } from "@/data/creatures";
 import { DEFAULT_SEED } from "@/lib/fishing/config";
 import { createFishingEngine, createInitialState } from "@/lib/fishing/engine";
 import type { BaitId, Creature, GameMode, GameState } from "@/types/fishing";
@@ -10,14 +9,15 @@ export interface FishingGameApi {
   readonly state: GameState;
   readonly press: () => void;
   readonly release: () => void;
-  readonly selectBait: (bait: BaitId) => void;
+  readonly pickBait: (bait: BaitId) => void;
+  readonly attachBait: () => void;
+  readonly detachBait: () => void;
   readonly setMode: (mode: GameMode) => void;
   readonly revealAll: () => void;
   readonly reset: () => void;
 }
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
-const FIRST_BAIT: BaitId = BAITS[0]?.id ?? "worm";
 const now = () => performance.now();
 
 /** Fases que necesitan un fotograma por cuadro: la barra de fuerza y la pelea. */
@@ -30,7 +30,7 @@ const ANIMATED = new Set(["casting", "fighting"]);
 export function useFishingGame(creatures: readonly Creature[]): FishingGameApi {
   const reducer = useMemo(() => createFishingEngine(creatures), [creatures]);
   const [state, dispatch] = useReducer(reducer, undefined, () =>
-    createInitialState(DEFAULT_SEED, "challenge", FIRST_BAIT),
+    createInitialState(DEFAULT_SEED, "challenge"),
   );
   const { phase, biteAt, biteDeadline } = state;
 
@@ -71,10 +71,12 @@ export function useFishingGame(creatures: readonly Creature[]): FishingGameApi {
 
   const press = useCallback(() => dispatch({ type: "press", now: now() }), []);
   const release = useCallback(() => dispatch({ type: "release", now: now() }), []);
-  const selectBait = useCallback(
-    (bait: BaitId) => dispatch({ type: "selectBait", bait }),
+  const pickBait = useCallback(
+    (bait: BaitId) => dispatch({ type: "pickBait", bait }),
     [],
   );
+  const attachBait = useCallback(() => dispatch({ type: "attachBait" }), []);
+  const detachBait = useCallback(() => dispatch({ type: "detachBait" }), []);
   const setMode = useCallback(
     (mode: GameMode) => dispatch({ type: "setMode", mode }),
     [],
@@ -82,5 +84,15 @@ export function useFishingGame(creatures: readonly Creature[]): FishingGameApi {
   const revealAll = useCallback(() => dispatch({ type: "revealAll" }), []);
   const reset = useCallback(() => dispatch({ type: "reset" }), []);
 
-  return { state, press, release, selectBait, setMode, revealAll, reset };
+  return {
+    state,
+    press,
+    release,
+    pickBait,
+    attachBait,
+    detachBait,
+    setMode,
+    revealAll,
+    reset,
+  };
 }

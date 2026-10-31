@@ -1,6 +1,7 @@
 import { BAITS, CREATURES } from "@/data/creatures";
 import { COPY } from "@/data/copy";
 import { indexCreatures, phaseIndex } from "@/lib/fishing/creatures";
+import { isBetweenCasts } from "@/lib/fishing/engine";
 import type { ExperienceEntry, ExperienceKind } from "@/types/experience";
 import type { BaitId, Creature, CreatureId, GameState } from "@/types/fishing";
 
@@ -46,12 +47,42 @@ export function isEnraged(state: GameState): boolean {
   );
 }
 
+/** Paso de la carnada entre intentos: tomarla, engancharla o lanzar. */
+function baitStep(state: GameState): string {
+  const { status } = copy;
+  if (state.blocked === "noBait" && !state.bait) return status.noBait;
+  if (!state.bait) return status.pickBait;
+  if (!state.baitAttached) {
+    const label = baitsById.get(state.bait)?.label.toLowerCase() ?? state.bait;
+    return fill(status.baitPicked, { bait: label });
+  }
+  return status.baitAttached;
+}
+
+/** Resultado del intento anterior, si lo hubo. */
+function outcome(state: GameState): string | null {
+  const { status } = copy;
+  switch (state.phase) {
+    case "caught":
+      return fill(status.caught, { name: nameOf(state.lastCatch) });
+    case "escaped":
+      return status[state.escapeReason ?? "noBite"];
+    case "lineBroken":
+      return status.lineBroken;
+    default:
+      return null;
+  }
+}
+
 /** Frase que anuncia la fase actual (aria-live). */
 export function gameStatus(state: GameState): string {
   const { status } = copy;
+  if (isBetweenCasts(state.phase)) {
+    const result = outcome(state);
+    // Recién terminado el intento se anuncia el resultado y el siguiente paso.
+    return result && !state.bait ? `${result} ${baitStep(state)}` : baitStep(state);
+  }
   switch (state.phase) {
-    case "idle":
-      return status.idle;
     case "casting":
       return status.casting;
     case "waiting":
@@ -63,16 +94,16 @@ export function gameStatus(state: GameState): string {
       return isEnraged(state)
         ? fill(status.enraged, { name: nameOf(state.hooked) })
         : status.fight;
-    case "caught":
-      return fill(status.caught, { name: nameOf(state.lastCatch) });
-    case "escaped":
-      return status[state.escapeReason ?? "noBite"];
-    case "lineBroken":
-      return status.lineBroken;
-    case "complete":
+    default:
       return status.complete;
   }
 }
+
+/** Qué hace el botón de acción: con carnada sin enganchar, la engancha. */
+export const actionIntent = (state: GameState): "attach" | "press" =>
+  isBetweenCasts(state.phase) && state.bait !== null && !state.baitAttached
+    ? "attach"
+    : "press";
 
 /** Texto del botón de acción persistente. */
 export function actionLabel(state: GameState): string {
@@ -89,13 +120,16 @@ export function actionLabel(state: GameState): string {
     case "complete":
       return action.complete;
     default:
-      return action.cast;
+      if (!state.bait) return action.pickBait;
+      return state.baitAttached ? action.cast : action.attach;
   }
 }
 
 /** El botón sigue enfocable aunque no haga nada (aria-disabled, no disabled). */
 export const isActionIdle = (state: GameState) =>
-  state.phase === "waiting" || state.phase === "complete";
+  state.phase === "waiting" ||
+  state.phase === "complete" ||
+  (isBetweenCasts(state.phase) && !state.bait);
 
 /** Pista del diario para una criatura aún no pescada: dónde y con qué carnada. */
 export function creatureHint(creature: Creature): string {

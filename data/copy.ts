@@ -79,6 +79,8 @@ export const COPY = {
     reset: "Reiniciar",
     depth: { shore: "Orilla", mid: "Aguas medias", deep: "Abismo" },
     action: {
+      pickBait: "Toma una carnada",
+      attach: "Enganchar en la caña",
       cast: "Mantén para lanzar",
       casting: "Suelta para lanzar",
       waiting: "Esperando la picada…",
@@ -88,7 +90,11 @@ export const COPY = {
       complete: "Lago completado",
     },
     status: {
-      idle: "Elige carnada y mantén pulsado para cargar el lanzamiento.",
+      pickBait: "Toma una carnada de un balde.",
+      baitPicked:
+        "Carnada seleccionada: {bait}. Arrástrala hasta la caña o pulsa «Enganchar en la caña».",
+      baitAttached: "Carnada enganchada, ya puedes lanzar: mantén pulsado para cargar.",
+      noBait: "Falta carnada: toma una de un balde y engánchala en la caña.",
       casting: "Cargando fuerza: suelta para lanzar.",
       waiting: "La boya flota en {depth}. Espera la picada…",
       bite: "¡Algo picó! Pulsa para enganchar.",

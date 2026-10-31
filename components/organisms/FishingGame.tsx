@@ -13,7 +13,13 @@ import { LAKE_ASSETS } from "@/data/lakeAssets";
 import type { FishingGameApi } from "@/hooks/useFishingGame";
 import { useGameFeedback } from "@/hooks/useGameFeedback";
 import { experienceById } from "@/lib/collections";
-import { actionLabel, gameStatus, isActionIdle, sceneCreature } from "@/lib/fishing/view";
+import {
+  actionIntent,
+  actionLabel,
+  gameStatus,
+  isActionIdle,
+  sceneCreature,
+} from "@/lib/fishing/view";
 import { cn } from "@/lib/utils";
 
 interface FishingGameProps {
@@ -80,14 +86,16 @@ export function FishingGame({ game }: FishingGameProps) {
             baits={BAITS}
             selected={state.bait}
             locked={LINE_OUT.has(state.phase)}
-            onSelect={game.selectBait}
+            onSelect={game.pickBait}
           />
           <ActionPanel
             status={gameStatus(state)}
             actionLabel={actionLabel(state)}
             idle={isActionIdle(state)}
             urgent={state.phase === "bite"}
-            onPress={game.press}
+            onPress={() =>
+              actionIntent(state) === "attach" ? game.attachBait() : game.press()
+            }
             onRelease={game.release}
             meter={meter}
           />

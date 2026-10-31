@@ -6,7 +6,7 @@ import type { Bait, BaitId } from "@/types/fishing";
 interface BaitPickerProps {
   readonly title: string;
   readonly baits: readonly Bait[];
-  readonly selected: BaitId;
+  readonly selected: BaitId | null;
   readonly locked: boolean;
   readonly onSelect: (bait: BaitId) => void;
 }

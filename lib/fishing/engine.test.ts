@@ -17,8 +17,13 @@ const CHARGE = CAST_CHARGE_MS.challenge;
 /** Fuerza que cae en el centro de cada zona. */
 const POWER: Readonly<Record<Depth, number>> = { shore: 0.15, mid: 0.5, deep: 0.85 };
 
+/** Toma la carnada de un balde y la engancha en la caña. */
+const baitWith = (state: GameState, bait: BaitId): GameState =>
+  reducer(reducer(state, { type: "pickBait", bait }), { type: "attachBait" });
+
+/** Estado inicial con la carnada ya enganchada, listo para lanzar. */
 const start = (mode: GameMode = "challenge", bait: BaitId = "worm") =>
-  createInitialState(SEED, mode, bait);
+  baitWith(createInitialState(SEED, mode), bait);
 
 /** Lanza a la zona pedida y espera la picada (o el final de la espera). */
 function castTo(state: GameState, depth: Depth, now = 0): GameState {
@@ -41,7 +46,7 @@ function reelRelaxed(state: GameState): GameState {
 
 function catchCreature(state: GameState, id: CreatureId): GameState {
   const creature = CREATURES.find((c) => c.id === id)!;
-  const baited = reducer(state, { type: "selectBait", bait: creature.baits[0]! });
+  const baited = baitWith(state, creature.baits[0]!);
   return reelRelaxed(castTo(baited, creature.depth));
 }
 
@@ -97,7 +102,7 @@ describe("lanzamiento", () => {
       type: "release",
       now: 200,
     });
-    expect(reducer(waiting, { type: "selectBait", bait: "firefly" }).bait).toBe("worm");
+    expect(reducer(waiting, { type: "pickBait", bait: "firefly" }).bait).toBe("worm");
   });
 });
 
@@ -111,10 +116,7 @@ describe("transiciones", () => {
 
   it("donde no vive nada, termina en escaped (noBite)", () => {
     const fished = catchCreature(start("relaxed"), "ammonite");
-    const again = castTo(
-      reducer(fished, { type: "selectBait", bait: "firefly" }),
-      "shore",
-    );
+    const again = castTo(baitWith(fished, "firefly"), "shore");
     expect(again.phase).toBe("escaped");
     expect(again.escapeReason).toBe("noBite");
   });
@@ -166,7 +168,8 @@ describe("transiciones", () => {
     expect(s.phase).toBe("caught");
     expect(s.caught).toEqual(["lepidotes"]);
     expect(s.lastCatch).toBe("lepidotes");
-    expect(reducer(s, { type: "press", now: 0 }).phase).toBe("casting");
+    const rebaited = baitWith(s, "minnow");
+    expect(reducer(rebaited, { type: "press", now: 0 }).phase).toBe("casting");
   });
 
   it("las acciones fuera de fase no cambian el estado", () => {
@@ -186,7 +189,7 @@ describe("megalodón y final", () => {
     for (const id of ["lepidotes", "ammonite", "coelacanth", "ichthyosaur"] as const)
       s = catchCreature(s, id);
     expect(s.caught).toHaveLength(4);
-    const hooked = castTo(reducer(s, { type: "selectBait", bait: "firefly" }), "deep");
+    const hooked = castTo(baitWith(s, "firefly"), "deep");
     expect(hooked.hooked).toBe("megalodon");
   });
 
@@ -205,5 +208,86 @@ describe("megalodón y final", () => {
     expect(again.phase).toBe("idle");
     expect(again.caught).toEqual([]);
     expect(again.mode).toBe("relaxed");
+  });
+});
+
+describe("carnada", () => {
+  const fresh = (mode: GameMode = "challenge") => createInitialState(SEED, mode);
+
+  it("empieza sin carnada y no se puede lanzar sin engancharla", () => {
+    const idle = fresh();
+    expect(idle.bait).toBeNull();
+    const blocked = reducer(idle, { type: "press", now: 0 });
+    expect(blocked.phase).toBe("idle");
+    expect(blocked.blocked).toBe("noBait");
+
+    const picked = reducer(idle, { type: "pickBait", bait: "worm" });
+    expect(picked.bait).toBe("worm");
+    expect(picked.baitAttached).toBe(false);
+    expect(reducer(picked, { type: "press", now: 0 }).blocked).toBe("noBait");
+  });
+
+  it("enganchar solo funciona con carnada elegida y permite lanzar", () => {
+    expect(reducer(fresh(), { type: "attachBait" }).baitAttached).toBe(false);
+    const ready = baitWith(fresh(), "minnow");
+    expect(ready.baitAttached).toBe(true);
+    const casting = reducer(ready, { type: "press", now: 0 });
+    expect(casting.phase).toBe("casting");
+    expect(casting.blocked).toBeNull();
+  });
+
+  it("en idle se puede cambiar de carnada o desengancharla", () => {
+    const ready = baitWith(fresh(), "worm");
+    const changed = reducer(ready, { type: "pickBait", bait: "firefly" });
+    expect(changed.bait).toBe("firefly");
+    expect(changed.baitAttached).toBe(false);
+    const detached = reducer(ready, { type: "detachBait" });
+    expect(detached.bait).toBe("worm");
+    expect(detached.baitAttached).toBe(false);
+  });
+
+  it("modo relajado: tomar la carnada la engancha sola", () => {
+    const picked = reducer(fresh("relaxed"), { type: "pickBait", bait: "worm" });
+    expect(picked.baitAttached).toBe(true);
+  });
+
+  it("se consume al capturar, al escaparse, si nada pica y si se rompe el hilo", () => {
+    const consumed = (s: GameState) => s.bait === null && !s.baitAttached;
+
+    expect(consumed(catchCreature(fresh("relaxed"), "lepidotes"))).toBe(true);
+
+    const bite = castTo(start(), "shore");
+    const slipped = reducer(bite, {
+      type: "tick",
+      now: (bite.biteDeadline ?? 0) + 1,
+      dt: FRAME_MS,
+    });
+    expect(slipped.phase).toBe("escaped");
+    expect(consumed(slipped)).toBe(true);
+
+    const nothing = castTo(start("challenge", "minnow"), "mid");
+    const empty = castTo(
+      baitWith(catchCreature(fresh("relaxed"), "coelacanth"), "minnow"),
+      "mid",
+    );
+    expect(nothing.hooked).toBe("coelacanth");
+    expect(empty.escapeReason).toBe("noBite");
+    expect(consumed(empty)).toBe(true);
+
+    let fight = reducer(castTo(start(), "deep"), { type: "press", now: 0 });
+    for (let i = 0; i < 1000 && fight.phase === "fighting"; i++)
+      fight = reducer(fight, { type: "tick", now: 0, dt: FRAME_MS });
+    expect(fight.phase).toBe("lineBroken");
+    expect(consumed(fight)).toBe(true);
+    expect(reducer(fight, { type: "press", now: 0 }).blocked).toBe("noBait");
+  });
+
+  it("no se elige carnada con el anzuelo en el agua", () => {
+    const waiting = reducer(reducer(start(), { type: "press", now: 0 }), {
+      type: "release",
+      now: 200,
+    });
+    expect(reducer(waiting, { type: "attachBait" })).toBe(waiting);
+    expect(reducer(waiting, { type: "detachBait" })).toBe(waiting);
   });
 });

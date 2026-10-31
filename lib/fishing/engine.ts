@@ -32,6 +32,7 @@ import type {
  * Máquina de estados del lago (pura):
  * idle → casting → waiting → bite → fighting → caught | escaped | lineBroken → casting …
  * waiting → escaped (nada picó) · bite → escaped (se soltó, solo desafío) · 6 capturas → complete
+ * Antes de cada lanzamiento: tomar carnada (pickBait) y engancharla (attachBait).
  */
 
 /** Fases desde las que una pulsación empieza un lanzamiento nuevo. */
@@ -42,15 +43,16 @@ const CAN_CAST: ReadonlySet<GamePhase> = new Set([
   "lineBroken",
 ]);
 
-export function createInitialState(
-  seed: number,
-  mode: GameMode,
-  bait: BaitId,
-): GameState {
+/** Entre intentos: se puede tomar carnada, engancharla y lanzar. */
+export const isBetweenCasts = (phase: GamePhase) => CAN_CAST.has(phase);
+
+export function createInitialState(seed: number, mode: GameMode): GameState {
   return {
     phase: "idle",
     mode,
-    bait,
+    bait: null,
+    baitAttached: false,
+    blocked: null,
     seed,
     castStartedAt: null,
     power: 0,
@@ -76,8 +78,13 @@ export function createFishingEngine(creatures: readonly Creature[]) {
   const byId = indexCreatures(creatures);
   const allIds = creatures.map((creature) => creature.id);
 
+  /** Fin de un intento: la carnada se gasta y hay que elegir otra. */
+  function finish(state: GameState, phase: GamePhase): GameState {
+    return { ...state, phase, bait: null, baitAttached: false, holding: false };
+  }
+
   function launch(state: GameState, now: number): GameState {
-    if (state.castStartedAt === null) return state;
+    if (state.castStartedAt === null || state.bait === null) return state;
     const power = chargePower(now - state.castStartedAt, state.mode);
     const depth = depthFromPower(power);
     const spot = surveySpot(creatures, depth, state.bait, state.caught);
@@ -98,7 +105,7 @@ export function createFishingEngine(creatures: readonly Creature[]) {
 
   function bite(state: GameState, now: number): GameState {
     const creature = state.hooked ? byId.get(state.hooked) : undefined;
-    if (!creature) return { ...state, phase: "escaped", biteAt: null };
+    if (!creature) return finish({ ...state, biteAt: null }, "escaped");
     const patience = BITE_PATIENCE_MS - creature.difficulty * BITE_PATIENCE_DIFFICULTY_MS;
     return {
       ...state,
@@ -114,28 +121,18 @@ export function createFishingEngine(creatures: readonly Creature[]) {
       case "fighting":
         return next;
       case "lineBroken":
-        return { ...next, phase: "lineBroken", holding: false, hooked: null };
+        return finish({ ...next, hooked: null }, "lineBroken");
       case "escaped":
-        return {
-          ...next,
-          phase: "escaped",
-          holding: false,
-          hooked: null,
-          escapeReason: "fought",
-        };
+        return finish({ ...next, hooked: null, escapeReason: "fought" }, "escaped");
       case "caught": {
         const id = state.hooked;
         if (!id) return next;
         const caught = state.caught.includes(id) ? state.caught : [...state.caught, id];
         const done = caught.length >= allIds.length;
-        return {
-          ...next,
-          phase: done ? "complete" : "caught",
-          holding: false,
-          hooked: null,
-          caught,
-          lastCatch: id,
-        };
+        return finish(
+          { ...next, hooked: null, caught, lastCatch: id },
+          done ? "complete" : "caught",
+        );
       }
     }
   }
@@ -165,16 +162,13 @@ export function createFishingEngine(creatures: readonly Creature[]) {
         if (state.biteAt === null || now < state.biteAt) return state;
         return state.hooked
           ? bite(state, now)
-          : { ...state, phase: "escaped", biteAt: null };
+          : finish({ ...state, biteAt: null }, "escaped");
       case "bite":
         if (state.biteDeadline === null || now < state.biteDeadline) return state;
-        return {
-          ...state,
-          phase: "escaped",
-          hooked: null,
-          biteDeadline: null,
-          escapeReason: "slipped",
-        };
+        return finish(
+          { ...state, hooked: null, biteDeadline: null, escapeReason: "slipped" },
+          "escaped",
+        );
       case "fighting":
         return fightTick(state, dt);
       default:
@@ -184,8 +178,10 @@ export function createFishingEngine(creatures: readonly Creature[]) {
 
   function press(state: GameState, now: number): GameState {
     if (CAN_CAST.has(state.phase)) {
+      if (!state.baitAttached) return { ...state, blocked: "noBait" };
       return {
         ...state,
+        blocked: null,
         phase: "casting",
         castStartedAt: now,
         power: 0,
@@ -211,6 +207,12 @@ export function createFishingEngine(creatures: readonly Creature[]) {
     return state;
   }
 
+  /** Tomar carnada de un balde. En modo relajado queda enganchada sin más pasos. */
+  function pickBait(state: GameState, bait: BaitId): GameState {
+    if (!CAN_CAST.has(state.phase)) return state;
+    return { ...state, bait, baitAttached: state.mode === "relaxed", blocked: null };
+  }
+
   function release(state: GameState, now: number): GameState {
     if (state.phase === "casting") return launch(state, now);
     if (state.phase === "fighting") return { ...state, holding: false };
@@ -225,8 +227,14 @@ export function createFishingEngine(creatures: readonly Creature[]) {
         return release(state, action.now);
       case "tick":
         return tick(state, action.now, action.dt);
-      case "selectBait":
-        return CAN_CAST.has(state.phase) ? { ...state, bait: action.bait } : state;
+      case "pickBait":
+        return pickBait(state, action.bait);
+      case "attachBait":
+        return CAN_CAST.has(state.phase) && state.bait !== null
+          ? { ...state, baitAttached: true, blocked: null }
+          : state;
+      case "detachBait":
+        return CAN_CAST.has(state.phase) ? { ...state, baitAttached: false } : state;
       case "setMode":
         return {
           ...state,
@@ -236,17 +244,18 @@ export function createFishingEngine(creatures: readonly Creature[]) {
       case "reseed":
         return { ...state, seed: action.seed >>> 0 };
       case "revealAll":
-        return {
-          ...state,
-          phase: "complete",
-          holding: false,
-          hooked: null,
-          caught: allIds,
-          lastCatch: null,
-          castStartedAt: null,
-        };
+        return finish(
+          {
+            ...state,
+            hooked: null,
+            caught: allIds,
+            lastCatch: null,
+            castStartedAt: null,
+          },
+          "complete",
+        );
       case "reset":
-        return createInitialState(state.seed, state.mode, state.bait);
+        return createInitialState(state.seed, state.mode);
     }
   };
 }

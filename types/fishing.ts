@@ -48,6 +48,8 @@ export type GamePhase =
   | "lineBroken"
   | "complete";
 
+export type BlockReason = "noBait";
+
 /** Por qué terminó un intento sin captura. */
 export type EscapeReason = "noBite" | "locked" | "slipped" | "fought";
 
@@ -63,7 +65,12 @@ export interface FightState {
 export interface GameState {
   readonly phase: GamePhase;
   readonly mode: GameMode;
-  readonly bait: BaitId;
+  /** Carnada tomada de un balde; se consume al terminar cada intento. */
+  readonly bait: BaitId | null;
+  /** Solo con la carnada enganchada en la caña se puede lanzar. */
+  readonly baitAttached: boolean;
+  /** Por qué no pasó lo que el jugador intentó (p. ej. lanzar sin carnada). */
+  readonly blocked: BlockReason | null;
   /** Estado del generador pseudoaleatorio: avanza con cada sorteo. */
   readonly seed: number;
   readonly castStartedAt: number | null;
@@ -81,7 +88,9 @@ export interface GameState {
 }
 
 export type GameAction =
-  | { readonly type: "selectBait"; readonly bait: BaitId }
+  | { readonly type: "pickBait"; readonly bait: BaitId }
+  | { readonly type: "attachBait" }
+  | { readonly type: "detachBait" }
   | { readonly type: "setMode"; readonly mode: GameMode }
   | { readonly type: "press"; readonly now: number }
   | { readonly type: "release"; readonly now: number }
