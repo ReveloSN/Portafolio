@@ -1,39 +1,41 @@
-import { ROD_BASE, ROD_TIP } from "@/lib/fishing/scene";
+import type { CSSProperties } from "react";
+import { LAKE_ART } from "@/data/lakeAssets";
+import { ROD_ART, ROD_ART_DEG, ROD_GRIP, ROD_SCALE } from "@/lib/fishing/scene";
 import { cn } from "@/lib/utils";
 
 interface RodProps {
-  /** Fuerza del lanzamiento: la caña se echa hacia atrás al cargar. */
-  readonly power: number;
+  /** Ángulo de la caña (grados; negativo = hacia arriba). */
+  readonly angle: number;
   readonly tugging: boolean;
+  /** Recién lanzada: giro rápido hacia delante y vuelta. */
+  readonly flicking: boolean;
 }
 
-const BEND = { x: 82, y: 168 } as const;
-const ROD_PATH = `M${ROD_BASE.x} ${ROD_BASE.y} Q${ROD_BASE.x + BEND.x} ${BEND.y} ${ROD_TIP.x} ${ROD_TIP.y}`;
-const PULL_BACK_DEG = 28;
+/** Todo gira sobre la empuñadura (las manos del niño). */
+const PIVOT: CSSProperties = { transformOrigin: `${ROD_GRIP.x}px ${ROD_GRIP.y}px` };
 
-export function Rod({ power, tugging }: RodProps) {
+/** La caña pintada, rotada sobre la empuñadura; el dibujo ya viene inclinado. */
+export function Rod({ angle, tugging, flicking }: RodProps) {
+  const art = LAKE_ART.rod;
+  if (!art) return null;
   return (
     <g
-      className={cn("lake-rod", tugging && "is-tugging")}
-      style={{
-        transform: `rotate(${-power * PULL_BACK_DEG}deg)`,
-        transformOrigin: `${ROD_BASE.x}px ${ROD_BASE.y}px`,
-      }}
+      className={cn(
+        "lake-rod-motion",
+        tugging && "is-tugging",
+        flicking && "is-flicking",
+      )}
+      style={PIVOT}
     >
-      <path
-        d={ROD_PATH}
-        stroke="#8a5a2b"
-        strokeWidth="4.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d={ROD_PATH}
-        stroke="#c7954f"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        fill="none"
-      />
+      <g className="lake-rod" style={{ ...PIVOT, rotate: `${angle - ROD_ART_DEG}deg` }}>
+        <image
+          href={art.src}
+          x={ROD_GRIP.x - ROD_ART.grip.x * ROD_SCALE}
+          y={ROD_GRIP.y - ROD_ART.grip.y * ROD_SCALE}
+          width={ROD_ART.width * ROD_SCALE}
+          height={ROD_ART.height * ROD_SCALE}
+        />
+      </g>
     </g>
   );
 }

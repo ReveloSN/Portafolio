@@ -23,6 +23,7 @@ export const CREATURES: readonly Creature[] = [
     phases: [wave(0.25, 0.15, 1600)],
     unlockAfter: 0,
     experienceId: "e4",
+    art: "catch-fish-1",
   },
   {
     id: "ammonite",
@@ -34,6 +35,7 @@ export const CREATURES: readonly Creature[] = [
     phases: [wave(0.3, 0.2, 1200)],
     unlockAfter: 0,
     experienceId: "e5",
+    art: "catch-fish-2",
   },
   {
     id: "coelacanth",
@@ -45,6 +47,7 @@ export const CREATURES: readonly Creature[] = [
     phases: [bursts(0.3, 0.7, 2200, 500)],
     unlockAfter: 0,
     experienceId: "e3",
+    art: "catch-fish-3",
   },
   {
     id: "ichthyosaur",
@@ -56,6 +59,7 @@ export const CREATURES: readonly Creature[] = [
     phases: [wave(0.45, 0.3, 900)],
     unlockAfter: 0,
     experienceId: "e2",
+    art: "catch-fish-4",
   },
   {
     id: "mosasaur",
@@ -67,6 +71,7 @@ export const CREATURES: readonly Creature[] = [
     phases: [bursts(0.4, 0.85, 1800, 600)],
     unlockAfter: 0,
     experienceId: "e1",
+    art: "catch-mosasaur",
   },
   {
     id: "megalodon",
@@ -78,5 +83,6 @@ export const CREATURES: readonly Creature[] = [
     phases: [wave(0.45, 0.25, 1400), bursts(0.5, 1, 1300, 650)],
     unlockAfter: 4,
     experienceId: "e0",
+    art: "catch-megalodon",
   },
 ];

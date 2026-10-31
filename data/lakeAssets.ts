@@ -1,8 +1,11 @@
+import { CREATURES } from "@/data/creatures";
 import manifest from "@/data/lakeArtManifest.json";
+import type { CreatureId } from "@/types/fishing";
 import type {
   LakeAnchor,
   LakeArtAsset,
   LakeArtId,
+  LakeAsset,
   LakeAssets,
   LakeLayerId,
 } from "@/types/lake";
@@ -43,6 +46,7 @@ interface ManifestEntry {
   readonly width: number;
   readonly height: number;
   readonly anchor: LakeAnchor;
+  readonly crop?: LakeArtAsset["crop"];
 }
 
 const isLayer = (id: string): id is LakeLayerId =>
@@ -71,6 +75,7 @@ export const LAKE_ART: Readonly<Partial<Record<LakeArtId, LakeArtAsset>>> =
           width: entry.width,
           height: entry.height,
           anchor: entry.anchor,
+          crop: entry.crop,
           z: zOf(id, entry.src),
           decorative: true,
         },
@@ -78,23 +83,29 @@ export const LAKE_ART: Readonly<Partial<Record<LakeArtId, LakeArtAsset>>> =
     ),
   );
 
-/**
- * Arte provisional por puesto de juego (SVG o imagen). Para pasar al arte pintado basta
- * con cambiar una entrada por `{ kind: "image", src, width, height }`.
- */
+/** Imagen de una pieza del registro (las piezas generadas existen siempre). */
+function piece(id: LakeArtId): LakeAsset {
+  const art = LAKE_ART[id];
+  if (!art) throw new Error(`Falta el arte del lago: ${id}`);
+  return { src: art.src, width: art.width, height: art.height };
+}
+
+const creatureArt = Object.fromEntries(
+  CREATURES.map((creature) => [creature.id, piece(creature.art)]),
+) as Record<CreatureId, LakeAsset>;
+
+/** Arte de cada puesto del juego: criaturas, baldes, carnadas y la canoa del final. */
 export const LAKE_ASSETS: LakeAssets = {
-  canoe: { kind: "image", src: "/images/canoa.webp?v=2", width: 1254, height: 1254 },
-  creatures: {
-    lepidotes: { kind: "svg", art: "fish", tint: "#9fe6d0" },
-    ammonite: { kind: "svg", art: "fish", tint: "#ffc46e" },
-    coelacanth: { kind: "svg", art: "fish", tint: "#7fb6ff" },
-    ichthyosaur: { kind: "svg", art: "fish", tint: "#d6ff9f" },
-    mosasaur: { kind: "svg", art: "mosasaur" },
-    megalodon: { kind: "svg", art: "megalodon" },
-  },
+  canoe: { src: "/images/canoa.webp?v=2", width: 1254, height: 1254 },
+  creatures: creatureArt,
   buckets: {
-    worm: { kind: "svg", art: "bucket-worm" },
-    minnow: { kind: "svg", art: "bucket-minnow" },
-    firefly: { kind: "svg", art: "bucket-firefly" },
+    worm: piece("bucket-worm"),
+    minnow: piece("bucket-minnow"),
+    firefly: piece("bucket-firefly"),
+  },
+  baits: {
+    worm: piece("bait-worm"),
+    minnow: piece("bait-minnow"),
+    firefly: piece("bait-firefly"),
   },
 };

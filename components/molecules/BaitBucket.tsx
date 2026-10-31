@@ -1,5 +1,5 @@
+import Image from "next/image";
 import type { HTMLAttributes } from "react";
-import { LakeArt } from "@/components/worlds/lake/LakeArt";
 import type { BaitId } from "@/types/fishing";
 import type { LakeAsset } from "@/types/lake";
 
@@ -20,8 +20,6 @@ interface BaitBucketProps {
   readonly disabled: boolean;
   readonly interaction: BucketInteraction;
 }
-
-const ART_BOX = { x: 0, y: 0, w: 64, h: 72 } as const;
 
 /** Un balde de carnada: botón real con el dibujo y su nombre siempre visible. */
 export function BaitBucket({
@@ -44,13 +42,16 @@ export function BaitBucket({
       data-testid={`bucket-${bait}`}
       {...(disabled ? {} : interaction)}
     >
-      <svg
-        className="lake-bucket-art"
-        viewBox={`0 0 ${ART_BOX.w} ${ART_BOX.h}`}
+      <Image
+        src={asset.src}
+        width={asset.width}
+        height={asset.height}
+        alt=""
         aria-hidden="true"
-      >
-        <LakeArt asset={asset} box={ART_BOX} />
-      </svg>
+        draggable={false}
+        sizes="96px"
+        className="lake-bucket-art"
+      />
       <span className="lake-bucket-label">{label}</span>
     </button>
   );

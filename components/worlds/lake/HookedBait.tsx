@@ -1,25 +1,25 @@
-import { BaitArt } from "@/components/worlds/art/BaitArt";
-import { HOOK_POINT } from "@/lib/fishing/scene";
-import type { BaitId } from "@/types/fishing";
+import { BAIT_WIDTH, widthUnits } from "@/lib/fishing/scene";
+import type { LakeAsset } from "@/types/lake";
 
 interface HookedBaitProps {
-  readonly bait: BaitId;
+  readonly bait: LakeAsset;
+  /** Altura del anzuelo dentro del grupo de la boya. */
+  readonly y: number;
 }
 
-const SIZE = 34;
+const baitW = widthUnits(BAIT_WIDTH);
 
-/** La carnada colgando del anzuelo, lista para lanzar. */
-export function HookedBait({ bait }: HookedBaitProps) {
+/** La carnada pintada colgando del anzuelo, lista para lanzar. */
+export function HookedBait({ bait, y }: HookedBaitProps) {
+  const height = (baitW * bait.height) / bait.width;
   return (
-    <g
-      className="lake-hooked"
-      transform={`translate(${HOOK_POINT.x - SIZE / 2} ${HOOK_POINT.y - SIZE / 2})`}
+    <image
+      href={bait.src}
+      x={-baitW / 2}
+      y={y + height * 0.2}
+      width={baitW}
+      height={height}
       data-testid="hooked-bait"
-    >
-      <path d={`M${SIZE / 2} -8 v8`} stroke="#c9d2d6" strokeWidth="1.6" />
-      <svg width={SIZE} height={SIZE} viewBox="0 0 24 24">
-        <BaitArt bait={bait} />
-      </svg>
-    </g>
+    />
   );
 }

@@ -152,12 +152,27 @@
 }
 
 /* Escena ------------------------------------------------------------ */
-.lake-rod {
+/* Caña: la rotación (React) va en .lake-rod; los gestos (CSS) en el grupo de fuera */
+.lake-rod,
+.lake-rod-motion {
   transform-box: view-box;
-  transition: transform 0.12s linear;
 }
-.lake-rod.is-tugging {
+.lake-rod {
+  transition: rotate 0.12s linear;
+}
+.lake-rod-motion.is-tugging {
   animation: rodTug 0.22s ease-in-out infinite alternate;
+}
+/* Al lanzar: giro rápido hacia delante y vuelta al reposo */
+.lake-rod-motion.is-flicking {
+  animation: rodFlick 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) 1;
+}
+/* El niño: las tres poses están siempre (precargadas); solo se ve la activa */
+.lake-kid-pose {
+  opacity: 0;
+}
+.lake-kid-pose.is-active {
+  opacity: 1;
 }
 .lake-bobber {
   transform-box: view-box;
@@ -266,8 +281,8 @@
   border-top: 3px solid #5e3a1b;
   box-shadow: inset 0 10px 18px rgba(0, 0, 0, 0.35);
 }
-/* Sobre el muelle solo si caben tres baldes de 44 px en su tramo (16 % del ancho) */
-@container lakestage (min-width: 825px) {
+/* Sobre el muelle cuando caben tres botones de 44 px en su tramo táctil (18.5 % del ancho) */
+@container lakestage (min-width: 714px) {
   .lake-scenebox {
     padding-bottom: 0;
   }
@@ -279,9 +294,9 @@
     margin-top: 1.6em;
   }
   .lake-buckets {
-    --bucket-size: 4.6cqw;
+    --bucket-size: var(--bucket-art);
     inset: auto;
-    top: calc(var(--bucket-plank) - var(--bucket-size) * 1.125);
+    top: calc(var(--bucket-plank) - var(--bucket-size) * 0.96);
     left: var(--bucket-left);
     width: var(--bucket-width);
     height: auto;
@@ -319,7 +334,7 @@
 .lake-bucket-art {
   display: block;
   width: var(--bucket-size);
-  height: calc(var(--bucket-size) * 1.125);
+  height: calc(var(--bucket-size) * 0.96);
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.45));
   transition: filter 0.2s;
 }
@@ -393,6 +408,20 @@
   }
   to {
     transform: translateX(6px);
+  }
+}
+@keyframes rodFlick {
+  0% {
+    rotate: 0deg;
+  }
+  35% {
+    rotate: 22deg;
+  }
+  70% {
+    rotate: -5deg;
+  }
+  100% {
+    rotate: 0deg;
   }
 }
 @keyframes lanternFlicker {

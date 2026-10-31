@@ -2,16 +2,17 @@ import { Bobber, type BobberState } from "@/components/worlds/lake/Bobber";
 import { CanoeReturn } from "@/components/worlds/lake/CanoeReturn";
 import { CreatureShadow } from "@/components/worlds/lake/CreatureShadow";
 import { FishingLine } from "@/components/worlds/lake/FishingLine";
-import { HookedBait } from "@/components/worlds/lake/HookedBait";
+import { KidSprite } from "@/components/worlds/lake/KidSprite";
+import { LakeReeds } from "@/components/worlds/lake/LakeReeds";
 import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
-import { ProvisionalKid } from "@/components/worlds/lake/ProvisionalKid";
 import { Rod } from "@/components/worlds/lake/Rod";
+import { kidPose, rodAngle } from "@/lib/fishing/pose";
 import {
   BOBBER_AT,
+  dangleFrom,
   LAKE_VIEWBOX,
   PULL_JITTER,
-  DANGLE,
-  HOOK_POINT,
+  rodTip,
   SHADOW_RX,
 } from "@/lib/fishing/scene";
 import type {
@@ -48,8 +49,8 @@ const BOBBER_STATE: Partial<Readonly<Record<GamePhase, BobberState>>> = {
 };
 
 /**
- * Escena del lago por capas: fondo, caña, hilo, boya, sombra, salto, canoa y primer
- * plano. El arte llega por `assets`; la escena solo decide qué se ve en cada fase.
+ * Lo que se juega sobre las capas pintadas: juncos, niño, caña, hilo, boya, sombra, salto
+ * y canoa. El arte llega por `assets` y la geometría de lib/fishing/scene.ts.
  */
 export function LakeScene({
   phase,
@@ -62,15 +63,17 @@ export function LakeScene({
   assets,
   label,
 }: LakeSceneProps) {
-  const target = depth ? BOBBER_AT[depth] : DANGLE;
+  const angle = rodAngle(phase, power, fight, mode);
+  const tip = rodTip(angle);
+  const target = depth ? BOBBER_AT[depth] : dangleFrom(tip);
   const inWater = IN_WATER.has(phase);
-  const bobber = inWater ? target : DANGLE;
+  const bobber = inWater ? target : dangleFrom(tip);
   const fighting = phase === "fighting";
   const biting = phase === "bite";
   const jitter = fighting
     ? Math.sin(fight.elapsedMs * JITTER_SPEED) * fight.fishPull * PULL_JITTER
     : 0;
-  const tension = mode === "challenge" ? fight.tension : fight.progress;
+  const strain = mode === "challenge" ? fight.tension : fight.progress;
   const showShadow = creature !== null && (phase === "waiting" || biting);
   const leaping = creature !== null && LEAPING.has(phase) && depth !== null;
 
@@ -82,6 +85,7 @@ export function LakeScene({
       aria-label={label}
       data-phase={phase}
     >
+      <LakeReeds />
       {showShadow ? (
         <CreatureShadow
           x={target.x}
@@ -90,19 +94,20 @@ export function LakeScene({
           biting={biting}
         />
       ) : null}
-      <ProvisionalKid />
-      <Rod power={phase === "casting" ? power : 0} tugging={biting || fighting} />
+      <KidSprite pose={kidPose(phase)} />
+      <Rod angle={angle} tugging={biting || fighting} flicking={phase === "waiting"} />
       <FishingLine
-        x={inWater ? bobber.x + jitter : HOOK_POINT.x}
-        y={inWater ? bobber.y : HOOK_POINT.y}
-        tautness={!inWater || fighting ? 0.5 + tension / 2 : biting ? 0.3 : 0}
+        from={tip}
+        x={bobber.x + jitter}
+        y={bobber.y}
+        tautness={!inWater || fighting ? 0.5 + strain / 2 : biting ? 0.3 : 0}
       />
-      {attachedBait && !inWater ? <HookedBait bait={attachedBait} /> : null}
       <Bobber
         x={bobber.x}
         y={bobber.y}
         state={BOBBER_STATE[phase] ?? "dangling"}
         jitter={jitter}
+        bait={attachedBait && !inWater ? assets.baits[attachedBait] : null}
       />
       {leaping ? (
         <LeapingCreature

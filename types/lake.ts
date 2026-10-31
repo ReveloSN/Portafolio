@@ -1,25 +1,19 @@
 import type { BaitId, CreatureId } from "./fishing";
 
-/** Ilustraciones SVG provisionales disponibles en el registro de la escena. */
-export type LakeSvgArt =
-  "fish" | "mosasaur" | "megalodon" | "bucket-worm" | "bucket-minnow" | "bucket-firefly";
+/** Arte de un puesto del juego: una imagen con su tamaño real. */
+export interface LakeAsset {
+  readonly src: string;
+  readonly width: number;
+  readonly height: number;
+}
 
-/** Una capa de la escena: hoy SVG provisional, mañana una imagen pintada. */
-export type LakeAsset =
-  | { readonly kind: "svg"; readonly art: LakeSvgArt; readonly tint?: string }
-  | {
-      readonly kind: "image";
-      readonly src: string;
-      readonly width: number;
-      readonly height: number;
-    };
-
-/** Puestos del juego que aún usan arte provisional (las capas vienen de LAKE_ART). */
+/** Arte de los puestos del juego (las capas se pintan desde LAKE_ART). */
 export interface LakeAssets {
   readonly canoe: LakeAsset;
   readonly creatures: Readonly<Record<CreatureId, LakeAsset>>;
-  /** Los tres baldes de carnada del muelle. */
+  /** Los tres baldes de carnada del muelle y la carnada que sale de cada uno. */
   readonly buckets: Readonly<Record<BaitId, LakeAsset>>;
+  readonly baits: Readonly<Record<BaitId, LakeAsset>>;
 }
 
 /* ---------- Arte pintado (public/art/lake, generado por scripts/optimize-lake.ts) ---------- */
@@ -75,6 +69,8 @@ export interface LakeArtAsset {
   readonly width: number;
   readonly height: number;
   readonly anchor: LakeAnchor;
+  /** Recorte dentro del original (px del original): coloca las poses sin saltos. */
+  readonly crop?: { left: number; top: number; width: number; height: number };
   /** Profundidad: cielo 0 … primer plano 7. */
   readonly z: number;
   /** Sin significado propio: alt vacío y fuera del árbol accesible. */

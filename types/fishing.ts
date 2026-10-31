@@ -12,6 +12,8 @@ export type CreatureSize = "small" | "medium" | "large" | "huge";
 /** Fuerza con la que tira la criatura (0 a 1) en función del tiempo de pelea (ms). */
 export type PullPattern = (elapsedMs: number) => number;
 
+import type { LakePieceId } from "./lake";
+
 /** Estrategia de cada criatura: dónde vive, qué come, cómo pelea y qué revela. */
 export interface Creature {
   readonly id: CreatureId;
@@ -27,6 +29,8 @@ export interface Creature {
   readonly unlockAfter: number;
   /** Id de la entrada de experiencia que revela. */
   readonly experienceId: string;
+  /** Dibujo pintado de la criatura (registro LAKE_ART). */
+  readonly art: LakePieceId;
 }
 
 export interface Bait {

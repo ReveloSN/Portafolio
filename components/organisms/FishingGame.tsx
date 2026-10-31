@@ -11,6 +11,7 @@ import { JournalEntry } from "@/components/organisms/JournalEntry";
 import { LakeStage } from "@/components/organisms/LakeStage";
 import { BAITS, CREATURES } from "@/data/creatures";
 import { COPY } from "@/data/copy";
+import { LAKE_ASSETS } from "@/data/lakeAssets";
 import type { FishingGameApi } from "@/hooks/useFishingGame";
 import { useBaitControls } from "@/hooks/useBaitControls";
 import { useGameFeedback } from "@/hooks/useGameFeedback";
@@ -57,7 +58,7 @@ export function FishingGame({ game }: FishingGameProps) {
         canvasRef={canvasRef}
       >
         <HookZone ref={zoneRef} visible={awaitingHook} />
-        <BaitGhost ref={ghostRef} baits={BAITS} />
+        <BaitGhost ref={ghostRef} baits={BAITS} art={LAKE_ASSETS.baits} />
       </LakeStage>
       <div className="lake-panel">
         {revealed ? (

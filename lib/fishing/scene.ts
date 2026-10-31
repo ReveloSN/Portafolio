@@ -88,25 +88,85 @@ export const LAYER_PARALLAX: Readonly<Record<LakeLayerId, number>> = {
   foreground: -1.8,
 };
 
-/* ---------- Personaje, caña y carnada ---------- */
+/* ---------- Niño, caña y carnada ---------- */
+
+/** Tamaño del arte pintado en px: las medidas en px del arte se pasan a % con esto. */
+const ART = { width: 2400, height: 1116 } as const;
+
+/** Recorte de una pose dentro de su lienzo original (lo guarda el manifiesto). */
+export interface SourceCrop {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}
 
 /**
- * El niño se sienta en la punta del muelle, junto al farol, con las piernas colgando.
- * Anclaje abajo al centro (las botas); `height` en % del alto de la escena.
+ * Las tres poses del niño comparten un lienzo de 1280 px con los pies en la misma fila: cada
+ * pose se coloca según su recorte en ese lienzo y no salta al cambiar. Sentado en la punta
+ * del muelle entre el 31 % y el 37 % del ancho, con el farol detrás.
  */
-export const KID = { x: 38.5, y: 62, height: 26 } as const;
+export const KID_CANVAS = { left: 26.6, top: 33.7, scale: 0.261 } as const;
 
-/** Manos del niño: base de la caña (medidas sobre el niño provisional). */
-export const ROD_BASE_PERCENT: ScenePercent = { x: 39.6, y: 48.8 };
-/** Punta de la caña, ya sobre el agua: de ahí sale el hilo y desde ahí se lanza. */
-export const ROD_TIP_PERCENT: ScenePercent = { x: 52, y: 24 };
-export const CAST_POINT_PERCENT = ROD_TIP_PERCENT;
-/** Boya colgando de la caña y, bajo ella, el anzuelo donde se engancha la carnada. */
-export const DANGLE_PERCENT: ScenePercent = { x: 52.5, y: 37.5 };
-export const HOOK_PERCENT: ScenePercent = { x: 52.5, y: 42.5 };
+/** Caja de una pose en % de la escena. */
+export function kidPoseBox(crop: SourceCrop) {
+  const { left, top, scale } = KID_CANVAS;
+  return {
+    left: left + ((crop.left * scale) / ART.width) * PERCENT,
+    top: top + ((crop.top * scale) / ART.height) * PERCENT,
+    width: ((crop.width * scale) / ART.width) * PERCENT,
+    height: ((crop.height * scale) / ART.height) * PERCENT,
+  };
+}
 
-/** Baldes: entre el borde del follaje y el farol, apoyados en la cubierta del muelle. */
-export const BUCKETS = { left: FOLIAGE_FREE_X, right: 31, deckY: DOCK.deckY } as const;
+/** Borde izquierdo del niño (pose quieto): nada del muelle lo debe tapar. */
+export const KID_LEFT = 31;
+
+/** Empuñadura de la caña: las manos del niño en la pose quieto. */
+export const ROD_GRIP_PERCENT: ScenePercent = { x: 36, y: 46.9 };
+
+/** Caña (cana.webp): empuñadura y punta medidas en px de la imagen. */
+export const ROD_ART = {
+  width: 900,
+  height: 263,
+  grip: { x: 2, y: 241.5 },
+  tip: { x: 897, y: 9.5 },
+} as const;
+
+/** Largo de la caña de la empuñadura a la punta, en % del ancho de la escena. */
+export const ROD_LENGTH_PERCENT = 17;
+/** Ángulo de reposo (grados; negativo = hacia arriba). */
+export const ROD_REST_DEG = -35;
+/** Inclinación propia del dibujo de la caña: se descuenta al rotarla. */
+export const ROD_ART_DEG =
+  (Math.atan2(ROD_ART.tip.y - ROD_ART.grip.y, ROD_ART.tip.x - ROD_ART.grip.x) * 180) /
+  Math.PI;
+
+/** Bajo la punta cuelgan la boya y, más abajo, el anzuelo con la carnada (% del alto). */
+const DANGLE_DROP = 12;
+const HOOK_DROP = 6;
+
+/** Baldes: el dibujo cabe entre el 14 % y el 29.5 %; cada botón de 44 px ocupa un tercio
+ *  del tramo táctil 12.5-31 % (a 1280 × 575 la escena mide 718 px y 18.4 % = 3 × 44 px). */
+export const BUCKETS = {
+  hitLeft: 12.5,
+  hitRight: 31,
+  /** Ancho del dibujo de cada balde, en % del ancho de la escena. */
+  artWidth: 3.2,
+  deckY: 51.5,
+} as const;
+
+/** Juncos decorativos en el agua junto a la punta del muelle (anclaje abajo al centro). */
+export const REEDS: readonly { x: number; y: number; height: number }[] = [
+  { x: 42.5, y: 67, height: 13 },
+  { x: 46.5, y: 63.5, height: 8 },
+];
+
+/** Tamaño de la boya y del anzuelo, en % del ancho de la escena. */
+export const BOBBER_WIDTH = 1.6;
+export const HOOK_WIDTH = 0.9;
+/** Carnada colgando del anzuelo, en % del ancho de la escena. */
+export const BAIT_WIDTH = 2.4;
 
 /** Dónde cae la boya en cada zona: lejos es más arriba (más cerca del horizonte). */
 export const BOBBER_PERCENT: Readonly<Record<Depth, ScenePercent>> = {
@@ -123,10 +183,38 @@ export const CANOE_PERCENT = { x: 66, y: 92, width: 20 } as const;
 
 /* ---------- Derivados en unidades del SVG ---------- */
 
-export const ROD_BASE = toUnits(ROD_BASE_PERCENT);
-export const ROD_TIP = toUnits(ROD_TIP_PERCENT);
-export const DANGLE = toUnits(DANGLE_PERCENT);
-export const HOOK_POINT = toUnits(HOOK_PERCENT);
+export const ROD_GRIP = toUnits(ROD_GRIP_PERCENT);
+const ROD_LENGTH = (ROD_LENGTH_PERCENT / PERCENT) * LAKE_VIEWBOX.width;
+const DEG = Math.PI / 180;
+
+/** Punta de la caña para un ángulo dado: de aquí salen el sedal y la zona de enganche. */
+export function rodTip(angleDeg: number): ScenePoint {
+  return {
+    x: ROD_GRIP.x + ROD_LENGTH * Math.cos(angleDeg * DEG),
+    y: ROD_GRIP.y + ROD_LENGTH * Math.sin(angleDeg * DEG),
+  };
+}
+
+/** Escala del dibujo de la caña (unidades del SVG por px de la imagen). */
+export const ROD_SCALE =
+  ROD_LENGTH / Math.hypot(ROD_ART.tip.x - ROD_ART.grip.x, ROD_ART.tip.y - ROD_ART.grip.y);
+
+export const ROD_TIP = rodTip(ROD_REST_DEG);
+export const CAST_POINT = ROD_TIP;
+const percentDown = (point: ScenePoint, drop: number): ScenePoint => ({
+  x: point.x,
+  y: point.y + (drop / PERCENT) * LAKE_VIEWBOX.height,
+});
+/** Boya colgando bajo la punta y, más abajo, el anzuelo donde va la carnada. */
+export const dangleFrom = (tip: ScenePoint) => percentDown(tip, DANGLE_DROP);
+export const hookFrom = (tip: ScenePoint) => percentDown(tip, DANGLE_DROP + HOOK_DROP);
+/** En reposo: aquí se arrastra la carnada para engancharla. */
+export const DANGLE = dangleFrom(ROD_TIP);
+export const HOOK_POINT = hookFrom(ROD_TIP);
+
+/** Ancho en unidades del SVG a partir de un % del ancho de la escena. */
+export const widthUnits = (percent: number) => (percent / PERCENT) * LAKE_VIEWBOX.width;
+export const heightUnits = (percent: number) => (percent / PERCENT) * LAKE_VIEWBOX.height;
 
 export const BOBBER_AT: Readonly<Record<Depth, ScenePoint>> = {
   shore: toUnits(BOBBER_PERCENT.shore),

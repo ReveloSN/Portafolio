@@ -15,14 +15,15 @@ interface BaitBucketsProps {
   readonly interactionFor: (bait: BaitId) => BucketInteraction;
 }
 
-/** Posición sobre el muelle, derivada de la geometría de la escena (en %). */
+/** Tramo táctil sobre el muelle, derivado de la geometría de la escena (en %). */
 const AREA = {
-  "--bucket-left": `${BUCKETS.left}%`,
-  "--bucket-width": `${BUCKETS.right - BUCKETS.left}%`,
+  "--bucket-left": `${BUCKETS.hitLeft}%`,
+  "--bucket-width": `${BUCKETS.hitRight - BUCKETS.hitLeft}%`,
   "--bucket-plank": `${BUCKETS.deckY}%`,
+  "--bucket-art": `${BUCKETS.artWidth}cqw`,
 } as CSSProperties;
 
-/** Los tres baldes del muelle, entre el farol y el niño. */
+/** Los tres baldes del muelle, entre el follaje y el niño. */
 export function BaitBuckets({
   baits,
   assets,
