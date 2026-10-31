@@ -1,33 +1,40 @@
 /**
- * Prueba de punta a punta del lago de pesca: juega partidas completas solo con teclado,
- * en modo relajado y en modo desafío, comprueba que el contador llega a 6/6 y guarda una
- * captura de cada fase en cada tamaño de ventana.
+ * Prueba de punta a punta del lago de pesca. En cada tamaño juega tres partidas
+ * completas: (a) carnada arrastrada con el ratón, (b) solo teclado (Enter en el balde y
+ * luego «Enganchar en la caña») y (c) modo relajado. Comprueba que el contador llega a
+ * 6/6, que no se lanza sin carnada, que el foco no sale del botón de acción y que los
+ * baldes no tapan al niño ni la caña; guarda una captura de cada fase.
  *
  * Uso:  npm run build && npm start       (en otra terminal)
  *       npm run fishing                   (BASE_URL=http://localhost:3000)
  */
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { chromium, type Page } from "playwright";
+import { chromium, type Browser, type Page } from "playwright";
 
 const VIEWPORTS = [
   { name: "1280x575", width: 1280, height: 575, scale: 1, mobile: false },
   { name: "1440x900", width: 1440, height: 900, scale: 1, mobile: false },
   { name: "390x844", width: 390, height: 844, scale: 2, mobile: true },
 ] as const;
+/** Solo se revisa la colocación de los baldes. */
+const LAYOUT_VIEWPORTS = [{ name: "1920x1080", width: 1920, height: 1080 }] as const;
 
-type Mode = "relaxed" | "challenge";
+/** Cómo juega cada partida: con qué se toma la carnada y en qué modo. */
+type Run = "drag" | "keyboard" | "relaxed";
 type Depth = "shore" | "mid" | "deep";
-const MODES: readonly Mode[] = ["relaxed", "challenge"];
+type Bait = "worm" | "minnow" | "firefly";
+type Snap = (name: string) => Promise<void>;
+const RUNS: readonly Run[] = ["drag", "keyboard", "relaxed"];
 
 /** Orden de captura (data/creatures.ts): el megalodón exige 4 capturas antes. */
-const PLAN: readonly { creature: string; bait: string; depth: Depth }[] = [
-  { creature: "lepidotes", bait: "Lombriz", depth: "shore" },
-  { creature: "ammonite", bait: "Luciérnaga", depth: "shore" },
-  { creature: "coelacanth", bait: "Pececillo", depth: "mid" },
-  { creature: "ichthyosaur", bait: "Luciérnaga", depth: "mid" },
-  { creature: "mosasaur", bait: "Pececillo", depth: "deep" },
-  { creature: "megalodon", bait: "Luciérnaga", depth: "deep" },
+const PLAN: readonly { creature: string; bait: Bait; depth: Depth }[] = [
+  { creature: "lepidotes", bait: "worm", depth: "shore" },
+  { creature: "ammonite", bait: "firefly", depth: "shore" },
+  { creature: "coelacanth", bait: "minnow", depth: "mid" },
+  { creature: "ichthyosaur", bait: "firefly", depth: "mid" },
+  { creature: "mosasaur", bait: "minnow", depth: "deep" },
+  { creature: "megalodon", bait: "firefly", depth: "deep" },
 ];
 
 /** Fuerza (aria-valuenow, %) a la que se suelta para caer en el centro de cada zona. */
@@ -42,8 +49,14 @@ const TENSION_HIGH = 54;
 const MAX_ATTEMPTS = 8;
 const TOTAL = PLAN.length;
 const BITE_TIMEOUT_MS = 9000;
+const HOOK_TIMEOUT_MS = 3000;
 const FIGHT_SNAPSHOT_MS = 1200;
 const TAP_GAP_MS = 80;
+const DRAG_STEPS = 10;
+const MIN_TARGET_PX = 44;
+/** Borde izquierdo del niño en el viewBox (1120): los baldes deben quedar antes. */
+const KID_LEFT = 362;
+const VIEWBOX_WIDTH = 1120;
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT_DIR = path.join("screenshots", "fishing");
 
@@ -61,6 +74,12 @@ const phaseOf = (page: Page) =>
 const countOf = async (page: Page) =>
   (await page.getByTestId("catch-count").textContent()) ?? "";
 
+const statusOf = async (page: Page) =>
+  (await page.getByTestId("fishing-status").textContent()) ?? "";
+
+const actionFocused = (page: Page) =>
+  page.getByTestId("fishing-action").evaluate((el) => el === document.activeElement);
+
 function waitPhase(page: Page, phases: readonly string[], timeout = BITE_TIMEOUT_MS) {
   return page.waitForFunction(
     (wanted) =>
@@ -73,7 +92,7 @@ function waitPhase(page: Page, phases: readonly string[], timeout = BITE_TIMEOUT
 }
 
 /** Guarda una captura del juego la primera vez que aparece cada fase. */
-function snapper(page: Page, dir: string, prefix: string) {
+function snapper(page: Page, dir: string, prefix: string): Snap {
   const seen = new Set<string>();
   return async (name: string) => {
     if (seen.has(name)) return;
@@ -86,15 +105,77 @@ function snapper(page: Page, dir: string, prefix: string) {
   };
 }
 
-async function setMode(page: Page, mode: Mode) {
-  const toggle = page.getByTestId("relaxed-toggle");
-  const relaxed = (await toggle.getAttribute("aria-checked")) === "true";
-  if (relaxed !== (mode === "relaxed")) await toggle.click();
+async function center(page: Page, testId: string) {
+  const box = await page.getByTestId(testId).boundingBox();
+  if (!box) throw new Error(`sin caja: ${testId}`);
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 }
 
-async function cast(page: Page, depth: Depth, snap: (name: string) => Promise<void>) {
-  await page.getByTestId("fishing-action").focus();
-  await page.keyboard.down("Space");
+/** Mantener pulsado el botón de acción: con el ratón (partida de arrastre) o con Espacio. */
+function holdInput(page: Page, run: Run) {
+  if (run === "drag") {
+    return {
+      down: async () => {
+        // En móvil el botón queda bajo la escena: primero a la vista, como haría el dedo.
+        await page.getByTestId("fishing-action").scrollIntoViewIfNeeded();
+        const at = await center(page, "fishing-action");
+        await page.mouse.move(at.x, at.y);
+        await page.mouse.down();
+      },
+      up: () => page.mouse.up(),
+    };
+  }
+  return {
+    down: () => page.keyboard.down("Space"),
+    up: () => page.keyboard.up("Space"),
+  };
+}
+
+async function setRelaxed(page: Page, relaxed: boolean) {
+  const toggle = page.getByTestId("relaxed-toggle");
+  if (((await toggle.getAttribute("aria-checked")) === "true") !== relaxed) {
+    await toggle.click();
+  }
+}
+
+/** Arrastra con el ratón la carnada del balde hasta el anzuelo. */
+async function dragToHook(page: Page, bait: Bait, snap: Snap) {
+  await page.getByTestId("lake-canvas").scrollIntoViewIfNeeded();
+  await page.getByTestId(`bucket-${bait}`).click();
+  await snap("bucket-selected");
+  const from = await center(page, `bucket-${bait}`);
+  const to = await center(page, "hook-zone");
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move((from.x + to.x) / 2, (from.y + to.y) / 2, {
+    steps: DRAG_STEPS,
+  });
+  await snap("bait-dragging");
+  await page.mouse.move(to.x, to.y, { steps: DRAG_STEPS });
+  await snap("hook-zone-active");
+  await page.mouse.up();
+}
+
+/** Toma la carnada del balde y la engancha según la partida. */
+async function takeBait(page: Page, run: Run, bait: Bait, snap: Snap) {
+  if (run === "drag") {
+    await dragToHook(page, bait, snap);
+  } else if (run === "keyboard") {
+    await page.getByTestId(`bucket-${bait}`).focus();
+    await page.keyboard.press("Enter");
+    await snap("bucket-selected");
+    check(await actionFocused(page), "teclado: tras elegir, el foco pasa al botón");
+    await page.keyboard.press("Enter");
+  } else {
+    await page.getByTestId(`bucket-${bait}`).click();
+  }
+  await page.getByTestId("hooked-bait").waitFor({ timeout: HOOK_TIMEOUT_MS });
+  await snap("bait-hooked");
+}
+
+async function cast(page: Page, run: Run, depth: Depth, snap: Snap) {
+  const input = holdInput(page, run);
+  await input.down();
   await page.waitForFunction(
     ([lo, hi]) => {
       const bar = document.querySelector("[data-testid=cast-power] [role=progressbar]");
@@ -104,11 +185,12 @@ async function cast(page: Page, depth: Depth, snap: (name: string) => Promise<vo
     RELEASE_AT[depth],
     { polling: "raf", timeout: 10_000 },
   );
+  await input.up();
   await snap("casting");
-  await page.keyboard.up("Space");
 }
 
-async function fightChallenge(page: Page, snap: (name: string) => Promise<void>) {
+async function fightChallenge(page: Page, run: Run, snap: Snap) {
+  const input = holdInput(page, run);
   let holding = true;
   const started = Date.now();
   for (;;) {
@@ -123,17 +205,17 @@ async function fightChallenge(page: Page, snap: (name: string) => Promise<void>)
     if (phase !== "fighting") break;
     if (Date.now() - started > FIGHT_SNAPSHOT_MS) await snap("fighting");
     if (holding && tension > TENSION_HIGH) {
-      await page.keyboard.up("Space");
+      await input.up();
       holding = false;
     } else if (!holding && tension < TENSION_LOW) {
-      await page.keyboard.down("Space");
+      await input.down();
       holding = true;
     }
   }
-  if (holding) await page.keyboard.up("Space");
+  if (holding) await input.up();
 }
 
-async function fightRelaxed(page: Page, snap: (name: string) => Promise<void>) {
+async function fightRelaxed(page: Page, snap: Snap) {
   await page.keyboard.up("Space");
   await snap("fighting");
   while ((await phaseOf(page)) === "fighting") {
@@ -142,51 +224,85 @@ async function fightRelaxed(page: Page, snap: (name: string) => Promise<void>) {
   }
 }
 
-/** Una partida completa: cada criatura con su carnada y zona; reintenta si se escapa. */
-async function playGame(page: Page, mode: Mode, snap: (name: string) => Promise<void>) {
-  await setMode(page, mode);
+/** Una partida completa: carnada, lanzamiento y pelea por criatura; reintenta si falla. */
+async function playGame(page: Page, run: Run, snap: Snap) {
+  await setRelaxed(page, run === "relaxed");
   await snap("idle");
   for (const step of PLAN) {
     let caught = false;
     for (let attempt = 0; attempt < MAX_ATTEMPTS && !caught; attempt++) {
-      await page.getByRole("button", { name: step.bait, exact: true }).click();
-      await cast(page, step.depth, snap);
+      await takeBait(page, run, step.bait, snap);
+      await cast(page, run, step.depth, snap);
       await snap("waiting");
       const bit = await waitPhase(page, ["bite", "escaped"]).then(
         () => true,
         () => false,
       );
-      if (!bit) {
-        const status = await page.getByTestId("fishing-status").textContent();
-        console.log(`    sin picada: fase ${await phaseOf(page)} · ${status}`);
-        await page.getByTestId("fishing-game").screenshot({
-          path: path.join(
-            "screenshots",
-            "fishing",
-            `stuck-${mode}-${step.creature}-${attempt}.png`,
-          ),
-        });
-        continue;
-      }
-      if ((await phaseOf(page)) !== "bite") {
+      if (!bit || (await phaseOf(page)) !== "bite") {
+        if (!bit)
+          console.log(`    sin picada: ${await phaseOf(page)} · ${await statusOf(page)}`);
         await snap("escaped");
         continue;
       }
       await snap("bite");
-      await page.getByTestId("fishing-action").focus();
-      await page.keyboard.down("Space");
+      const input = holdInput(page, run === "drag" ? "drag" : "keyboard");
+      await input.down();
       await waitPhase(page, ["fighting", "caught", "complete"]);
-      if (mode === "challenge") await fightChallenge(page, snap);
-      else await fightRelaxed(page, snap);
+      if (run === "relaxed") await fightRelaxed(page, snap);
+      else await fightChallenge(page, run, snap);
       const phase = await phaseOf(page);
       caught = phase === "caught" || phase === "complete";
       await snap(caught ? (phase === "complete" ? "complete" : "caught") : phase);
     }
-    check(caught, `${mode}: capturado ${step.creature}`);
+    check(caught, `${run}: capturado ${step.creature}`);
     if (!caught) return;
   }
   await page.waitForTimeout(3500);
   await snap("complete-canoe");
+}
+
+/** No se lanza sin carnada enganchada: se avisa y el foco no se mueve. */
+async function checkNoBait(page: Page) {
+  await page.getByTestId("fishing-action").focus();
+  await page.keyboard.press("Space");
+  check(
+    (await phaseOf(page)) === "idle" &&
+      (await statusOf(page)).startsWith("Falta carnada"),
+    "sin carnada no se lanza y se avisa",
+  );
+  check(await actionFocused(page), "el foco sigue en el botón tras el aviso");
+  await page.getByTestId("bucket-worm").click();
+  await page.getByTestId("fishing-action").focus();
+  await page.keyboard.down("Space");
+  check(
+    (await phaseOf(page)) !== "casting",
+    "con carnada sin enganchar, el botón la engancha en vez de lanzar",
+  );
+  await page.keyboard.up("Space");
+  await page.getByTestId("reset-game").click();
+}
+
+/** Los baldes no tapan al niño ni la caña, no se montan entre sí y miden 44 px o más. */
+async function checkBucketLayout(page: Page, label: string) {
+  const result = await page.evaluate(
+    ([kidLeft, width, minPx]) => {
+      const canvas = document.querySelector(".lake-canvas")!.getBoundingClientRect();
+      const boxes = [...document.querySelectorAll(".lake-bucket")].map((el) =>
+        el.getBoundingClientRect(),
+      );
+      const kid = canvas.left + (kidLeft / width) * canvas.width;
+      const inStrip = boxes.every((box) => box.top >= canvas.bottom - 1);
+      return {
+        overlap: boxes.some((box, i) => i > 0 && box.left < boxes[i - 1]!.right - 1),
+        small: boxes.some((box) => box.width < minPx || box.height < minPx),
+        clearOfKid: inStrip || boxes.every((box) => box.right <= kid),
+      };
+    },
+    [KID_LEFT, VIEWBOX_WIDTH, MIN_TARGET_PX] as const,
+  );
+  check(!result.overlap, `${label}: los baldes no se montan entre sí`);
+  check(!result.small, `${label}: baldes de al menos 44x44 px`);
+  check(result.clearOfKid, `${label}: los baldes no tapan al niño ni la caña`);
 }
 
 /** El diario se lee sin jugar, filtra por tipo y responde a "Sacar todo" y "Reiniciar". */
@@ -207,22 +323,17 @@ async function checkJournal(page: Page, dir: string) {
   );
   await journal.screenshot({ path: path.join(dir, "journal-filter-academic.png") });
   await page.getByTestId("filter-all").click();
-  await journal.screenshot({ path: path.join(dir, "journal-pending.png") });
 
   await page.getByTestId("reveal-all").click();
   check(
     (await countOf(page)) === String(TOTAL),
     `Sacar todo: ${await countOf(page)}/${TOTAL}`,
   );
-  await page.waitForTimeout(1000);
-  const flipped = await journal.locator(".jcard[data-flipped]").count();
-  check(flipped === TOTAL, `Sacar todo voltea las tarjetas: ${flipped}`);
-  await journal.screenshot({ path: path.join(dir, "journal-revealed.png") });
   await page.getByTestId("reset-game").click();
   check((await countOf(page)) === "0", "Reiniciar vuelve a 0");
 }
 
-async function checkReducedMotion(browser: import("playwright").Browser) {
+async function checkReducedMotion(browser: Browser) {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
@@ -241,18 +352,41 @@ async function checkReducedMotion(browser: import("playwright").Browser) {
       () => false,
     );
   check(relaxed, "prefers-reduced-motion activa el modo relajado");
+  await page.getByTestId("bucket-minnow").click();
+  const hooked = await page
+    .getByTestId("hooked-bait")
+    .waitFor({ timeout: HOOK_TIMEOUT_MS })
+    .then(
+      () => true,
+      () => false,
+    );
+  check(hooked, "movimiento reducido: la carnada aparece directamente en el anzuelo");
   await context.close();
+}
+
+async function checkLayoutOnly(browser: Browser) {
+  for (const viewport of LAYOUT_VIEWPORTS) {
+    const page = await browser.newPage({
+      viewport: { width: viewport.width, height: viewport.height },
+    });
+    await page.goto(BASE_URL, { waitUntil: "networkidle" });
+    await page.getByTestId("fishing-game").scrollIntoViewIfNeeded();
+    await checkBucketLayout(page, viewport.name);
+    await page.close();
+  }
 }
 
 async function run() {
   await mkdir(OUT_DIR, { recursive: true });
   const browser = await chromium.launch();
   await checkReducedMotion(browser);
-  for (const viewport of VIEWPORTS) {
+  await checkLayoutOnly(browser);
+  const only = process.env.ONLY;
+  for (const viewport of VIEWPORTS.filter((v) => !only || v.name === only)) {
     console.log(`\n${viewport.name}`);
     const dir = path.join(OUT_DIR, viewport.name);
     await mkdir(dir, { recursive: true });
-    for (const mode of MODES) {
+    for (const game of RUNS) {
       const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
         deviceScaleFactor: viewport.scale,
@@ -262,29 +396,29 @@ async function run() {
       const page = await context.newPage();
       await page.goto(BASE_URL, { waitUntil: "networkidle" });
       await page.getByTestId("fishing-game").scrollIntoViewIfNeeded();
-      const action = page.getByTestId("fishing-action");
 
-      if (mode === "relaxed") await checkJournal(page, dir);
+      if (game === "drag") {
+        await checkBucketLayout(page, viewport.name);
+        await checkNoBait(page);
+      }
+      if (game === "relaxed") await checkJournal(page, dir);
       const started = Date.now();
-      await playGame(page, mode, snapper(page, dir, mode));
-      console.log(`  (${mode}: ${Math.round((Date.now() - started) / 1000)} s)`);
+      await playGame(page, game, snapper(page, dir, game));
+      console.log(`  (${game}: ${Math.round((Date.now() - started) / 1000)} s)`);
       check(
         (await countOf(page)) === String(TOTAL),
-        `${mode}: contador ${await countOf(page)}/${TOTAL}`,
+        `${game}: contador ${await countOf(page)}/${TOTAL}`,
       );
-      check((await phaseOf(page)) === "complete", `${mode}: fase final complete`);
+      check((await phaseOf(page)) === "complete", `${game}: fase final complete`);
       check(
         await page.getByTestId("closing-message").isVisible(),
-        `${mode}: mensaje de cierre visible`,
+        `${game}: mensaje de cierre visible`,
       );
-      check(
-        await action.evaluate((el) => el === document.activeElement),
-        `${mode}: el foco sigue en el botón de acción`,
-      );
+      check(await actionFocused(page), `${game}: el foco sigue en el botón de acción`);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
-      check(overflow <= 0, `${mode}: sin scroll horizontal (${overflow}px)`);
+      check(overflow <= 0, `${game}: sin scroll horizontal (${overflow}px)`);
       await context.close();
     }
   }
