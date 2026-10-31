@@ -56,7 +56,7 @@ const TAP_GAP_MS = 80;
 const DRAG_STEPS = 10;
 const MIN_TARGET_PX = 44;
 /** Borde izquierdo del niño en % del ancho de la escena: los baldes deben quedar antes. */
-const KID_LEFT = 35;
+const KID_LEFT = 31;
 const PERCENT = 100;
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT_DIR = path.join("screenshots", "fishing");
