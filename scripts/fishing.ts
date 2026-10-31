@@ -21,11 +21,12 @@ const VIEWPORTS = [
 const LAYOUT_VIEWPORTS = [{ name: "1920x1080", width: 1920, height: 1080 }] as const;
 
 /** Cómo juega cada partida: con qué se toma la carnada y en qué modo. */
-type Run = "drag" | "keyboard" | "relaxed";
+/** "plain": como "keyboard", con el interruptor Efectos apagado. */
+type Run = "drag" | "keyboard" | "relaxed" | "plain";
 type Depth = "shore" | "mid" | "deep";
 type Bait = "worm" | "minnow" | "firefly";
 type Snap = (name: string) => Promise<void>;
-const RUNS: readonly Run[] = ["drag", "keyboard", "relaxed"];
+const RUNS: readonly Run[] = ["drag", "keyboard", "relaxed", "plain"];
 
 /** Orden de captura (data/creatures.ts): el megalodón exige 4 capturas antes. */
 const PLAN: readonly { creature: string; bait: Bait; depth: Depth }[] = [
@@ -132,6 +133,12 @@ function holdInput(page: Page, run: Run) {
   };
 }
 
+async function setToggle(page: Page, testId: string, on: boolean) {
+  const toggle = page.getByTestId(testId);
+  if (((await toggle.getAttribute("aria-checked")) === "true") !== on)
+    await toggle.click();
+}
+
 async function setRelaxed(page: Page, relaxed: boolean) {
   const toggle = page.getByTestId("relaxed-toggle");
   if (((await toggle.getAttribute("aria-checked")) === "true") !== relaxed) {
@@ -161,7 +168,7 @@ async function dragToHook(page: Page, bait: Bait, snap: Snap) {
 async function takeBait(page: Page, run: Run, bait: Bait, snap: Snap) {
   if (run === "drag") {
     await dragToHook(page, bait, snap);
-  } else if (run === "keyboard") {
+  } else if (run === "keyboard" || run === "plain") {
     await page.getByTestId(`bucket-${bait}`).focus();
     await page.keyboard.press("Enter");
     await snap("bucket-selected");
@@ -256,6 +263,11 @@ async function fightRelaxed(page: Page, snap: Snap) {
 /** Una partida completa: carnada, lanzamiento y pelea por criatura; reintenta si falla. */
 async function playGame(page: Page, run: Run, snap: Snap) {
   await setRelaxed(page, run === "relaxed");
+  await setToggle(page, "effects-toggle", run !== "plain");
+  check(
+    (await page.getByTestId("quantum-water").count()) === (run === "plain" ? 0 : 1),
+    `${run}: efectos ${run === "plain" ? "apagados" : "encendidos"}`,
+  );
   await snap("idle");
   for (const step of PLAN) {
     let caught = false;
@@ -384,6 +396,10 @@ async function checkReducedMotion(browser: Browser) {
       () => false,
     );
   check(relaxed, "prefers-reduced-motion activa el modo relajado");
+  check(
+    (await page.getByTestId("effects-toggle").getAttribute("aria-checked")) === "false",
+    "prefers-reduced-motion apaga los efectos",
+  );
   await page.getByTestId("bucket-minnow").click();
   const hooked = await page
     .getByTestId("hooked-bait")
