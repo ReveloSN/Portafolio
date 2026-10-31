@@ -49,14 +49,15 @@ const TENSION_HIGH = 54;
 const MAX_ATTEMPTS = 8;
 const TOTAL = PLAN.length;
 const BITE_TIMEOUT_MS = 9000;
+const BITE_WAITS = 2;
 const HOOK_TIMEOUT_MS = 3000;
 const FIGHT_SNAPSHOT_MS = 1200;
 const TAP_GAP_MS = 80;
 const DRAG_STEPS = 10;
 const MIN_TARGET_PX = 44;
-/** Borde izquierdo del niño en el viewBox (1120): los baldes deben quedar antes. */
-const KID_LEFT = 362;
-const VIEWBOX_WIDTH = 1120;
+/** Borde izquierdo del niño en % del ancho de la escena: los baldes deben quedar antes. */
+const KID_LEFT = 35;
+const PERCENT = 100;
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT_DIR = path.join("screenshots", "fishing");
 
@@ -234,13 +235,16 @@ async function playGame(page: Page, run: Run, snap: Snap) {
       await takeBait(page, run, step.bait, snap);
       await cast(page, run, step.depth, snap);
       await snap("waiting");
-      const bit = await waitPhase(page, ["bite", "escaped"]).then(
-        () => true,
-        () => false,
-      );
-      if (!bit || (await phaseOf(page)) !== "bite") {
-        if (!bit)
-          console.log(`    sin picada: ${await phaseOf(page)} · ${await statusOf(page)}`);
+      // Con la máquina cargada la picada puede tardar más: se espera una segunda vez.
+      for (let wait = 0; wait < BITE_WAITS; wait++) {
+        const settled = await waitPhase(page, ["bite", "escaped"]).then(
+          () => true,
+          () => false,
+        );
+        if (settled) break;
+        console.log(`    picada lenta: ${await phaseOf(page)} · ${await statusOf(page)}`);
+      }
+      if ((await phaseOf(page)) !== "bite") {
         await snap("escaped");
         continue;
       }
@@ -298,7 +302,7 @@ async function checkBucketLayout(page: Page, label: string) {
         clearOfKid: inStrip || boxes.every((box) => box.right <= kid),
       };
     },
-    [KID_LEFT, VIEWBOX_WIDTH, MIN_TARGET_PX] as const,
+    [KID_LEFT, PERCENT, MIN_TARGET_PX] as const,
   );
   check(!result.overlap, `${label}: los baldes no se montan entre sí`);
   check(!result.small, `${label}: baldes de al menos 44x44 px`);
