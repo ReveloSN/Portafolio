@@ -35,6 +35,14 @@ data/           projects.ts, testimonials.ts, experience.ts, skills.ts, worlds.t
 public/         cv.pdf, images/
 ```
 
+## Lago de pesca (sección Experiencia)
+
+- **Arte:** los originales viven en `imagenes_webp/lago/` (no se versionan ni se tocan). `npm run optimize:lake` (`scripts/optimize-lake.ts`, sharp) genera `public/art/lake/{layers,explorer,props,creatures,breach,fx}/` y `data/lakeArtManifest.json` (tamaño, recorte y anclaje). La hoja `efectos/gotas.webp` (4 × 4) se corta en `particle-1…10` y `splash-crown-1…6`.
+- **Registro:** `data/lakeAssets.ts` expone `LAKE_ART` (`{ id, src, width, height, anchor, crop, z, decorative }`) y `LAKE_ASSETS` (puestos del juego). Orden z: cielo 0, árboles 1, agua 2, muelle 3, objetos y niño 4, criaturas 5, efectos 6, primer plano 7.
+- **Geometría:** `lib/fishing/scene.ts` es la única fuente de verdad, en % de la escena (aspecto 2400 × 1116): `HORIZON_Y` 58, `DOCK` 12-40 % (cubierta 52 %), `LANTERN` 33 %, `FOLIAGE_FREE_X` 15 %, `PLAY_WATER` 45-95 % × 62-95 %, `KID_CANVAS`/`kidPoseBox` (niño 31-37 %), `ROD_GRIP`, `rodTip(ángulo)` (de ahí salen sedal, boya, anzuelo y zona de enganche), `BUCKETS` (tramo táctil 12.5-31 %), `BOBBER_PERCENT` por zona, `waterlineAt`, `LAYER_PARALLAX`.
+- **Lógica:** motor puro en `lib/fishing/` (`engine`, `tension`, `creatures`, `pose`, `rig`, `breach`, `quantum`); hooks `useFishingGame`, `useBaitDrag`, `useBaitControls`, `useBreachSequence`, `useQuantumPhase`, `useEffectsToggle`, `useGameFeedback`. Datos en `data/creatures.ts`, `data/breach.ts`, `data/quantum.ts`.
+- **Verificación:** `npm test`, `npm run fishing` (partida completa con arrastre, teclado, relajado y sin efectos en 1280x575, 1440x900 y 390x844), `npm run lake:shots -- <etapa>` y `npm run lake:final`.
+
 ## Calidad y rendimiento
 
 - TypeScript strict, sin `any`. ESLint + Prettier. Sin textos ni números mágicos (constantes con nombre).
