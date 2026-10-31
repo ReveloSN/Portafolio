@@ -30,7 +30,7 @@ export function TrackStep({ tech, footprint, order, tilt, lift }: TrackStepProps
   };
   return (
     <li
-      className="track-step stagger-item flex basis-1/4 flex-col items-center gap-[calc(var(--u)*.4)] sm:basis-auto"
+      className="track-step stagger-item flex basis-1/4 flex-col items-center gap-[calc(var(--u)*.4)]"
       data-lift={lift}
       style={{ "--i": order } as CSSProperties}
     >
@@ -42,7 +42,7 @@ export function TrackStep({ tech, footprint, order, tilt, lift }: TrackStepProps
             src={art.src}
             width={art.width}
             height={art.height}
-            sizes="(min-width: 1024px) 180px, 140px"
+            sizes="(min-width: 1024px) 260px, 120px"
             className="relative"
           />
           <span aria-hidden="true" className="track-glow" />

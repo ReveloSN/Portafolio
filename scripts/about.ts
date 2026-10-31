@@ -183,7 +183,9 @@ async function main() {
     const m = await measure(page);
     const fits = vp.width < FIT_MIN_WIDTH || m.sectionH <= vp.height;
     const problems: string[] = [];
-    if (!fits) problems.push(`sección ${m.sectionH}px > ${vp.height}px`);
+    // El alto ya no es requisito (la sección puede crecer): solo se informa
+    if (!fits)
+      console.log(`  ${vp.name}: la sección mide ${m.sectionH}px (> ${vp.height}px)`);
     if (m.overflowX > 0) problems.push(`scroll horizontal ${m.overflowX}px`);
     if (m.header > 1) problems.push(`encabezado en ${m.header} líneas`);
     if (m.headerOverflow) problems.push("el encabezado se sale de la tarjeta");

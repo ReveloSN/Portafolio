@@ -154,33 +154,9 @@
 /* ahí; la máscara del charco (scripts/pool-masks.py) evita que salga del barro.     */
 .track-print {
   position: relative;
-  /* Más ancha que su columna: con el zigzag profundo, las huellas vecinas encajan
-     como un rastro real y el logo se lee de un vistazo */
-  width: min(clamp(4.5rem, calc(var(--u) * 11), 12rem), 128%);
+  /* Grandes: 4 por fila (4 + 3), el logo se lee de un vistazo */
+  width: min(clamp(5rem, calc(var(--u) * 13), 15rem), 92%);
   aspect-ratio: 1;
-}
-/* Pantallas bajas (laptops con escala): huellas y zigzag más contenidos para caber en 100svh */
-@media (min-width: 640px) and (min-height: 641px) {
-  .track-step[data-lift="down"] {
-    margin-top: calc(var(--u) * 3.6);
-  }
-}
-/* Alturas medias (768-820px): un punto intermedio para seguir cabiendo en 100svh */
-@media (min-height: 641px) and (max-height: 820px) {
-  .track-print {
-    width: min(clamp(4rem, calc(var(--u) * 9), 12rem), 118%);
-  }
-  .track-step[data-lift="down"] {
-    margin-top: calc(var(--u) * 2);
-  }
-}
-@media (max-height: 640px) {
-  .track-print {
-    width: clamp(3.5rem, calc(var(--u) * 6), 8.5rem);
-  }
-  .track-step[data-lift="down"] {
-    margin-top: calc(var(--u) * 0.5);
-  }
 }
 /* La ilustración trae ~9% de aire transparente por lado: se recupera sin ocupar layout */
 .track-art {
