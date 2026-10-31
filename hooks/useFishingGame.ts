@@ -62,9 +62,11 @@ export function useFishingGame(creatures: readonly Creature[]): FishingGameApi {
   useEffect(() => {
     const due = phase === "waiting" ? biteAt : phase === "bite" ? biteDeadline : null;
     if (due === null) return;
+    // setTimeout trunca los milisegundos y puede adelantarse una fracción: el tick lleva
+    // al menos la hora prevista, o el motor seguiría esperando sin otro temporizador.
     const timer = window.setTimeout(
-      () => dispatch({ type: "tick", now: now(), dt: 0 }),
-      Math.max(0, due - now()),
+      () => dispatch({ type: "tick", now: Math.max(now(), due), dt: 0 }),
+      Math.max(0, Math.ceil(due - now())),
     );
     return () => window.clearTimeout(timer);
   }, [phase, biteAt, biteDeadline]);
