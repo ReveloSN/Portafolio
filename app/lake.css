@@ -54,6 +54,8 @@
 /* El agua se mece despacio (±6 px en 14 s); ensanchada para no dejar ver el borde */
 .lake-layer[data-layer="water"] > * {
   scale: 1.01;
+  /* Capa propia: el vaivén se compone sin repintar la imagen */
+  will-change: transform;
   animation: lakeDrift 14s ease-in-out infinite alternate;
 }
 @media (min-width: 1024px) {
@@ -92,7 +94,8 @@
     rgba(255, 246, 196, 0.42),
     rgba(255, 246, 196, 0) 70%
   );
-  mix-blend-mode: screen;
+  /* Capa propia y sin modo de mezcla: el latido no repinta el agua en cada fotograma */
+  will-change: opacity;
   animation: moonPulse 6s ease-in-out infinite alternate;
 }
 .lake-dockshadow {
@@ -111,7 +114,7 @@
     rgba(255, 196, 110, 0.55),
     rgba(255, 196, 110, 0) 68%
   );
-  mix-blend-mode: screen;
+  will-change: opacity, scale;
   pointer-events: none;
   animation:
     lanternFlicker 3.1s steps(1, end) infinite,
