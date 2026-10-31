@@ -14,7 +14,8 @@
     "capture": "tsx scripts/capture.ts",
     "about": "tsx scripts/about.ts",
     "test": "vitest run",
-    "fishing": "tsx scripts/fishing.ts"
+    "fishing": "tsx scripts/fishing.ts",
+    "lake:shots": "tsx scripts/lake-shots.ts"
   },
   "dependencies": {
     "next": "16.4.3",
