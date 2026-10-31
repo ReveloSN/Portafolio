@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
+import { LakeAmbience } from "@/components/molecules/LakeAmbience";
 import { LakeLayers } from "@/components/molecules/LakeLayers";
 import type { BucketInteraction } from "@/components/molecules/BaitBucket";
 import { BaitBuckets } from "@/components/organisms/BaitBuckets";
@@ -47,7 +48,7 @@ export function LakeStage({
     <div className={cn("lake-stage", shaking && "is-shaking")}>
       <div ref={parallaxRef} className="lake-scenebox">
         <div ref={canvasRef} className="lake-canvas" data-testid="lake-canvas">
-          <LakeLayers layers={BACK_LAYERS} />
+          <LakeLayers layers={BACK_LAYERS} after={{ water: <LakeAmbience /> }} />
           <LakeScene
             phase={state.phase}
             mode={state.mode}

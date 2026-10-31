@@ -51,6 +51,11 @@
     scale(var(--cover, 1));
   transition: transform 0.6s var(--ease-enter);
 }
+/* El agua se mece despacio (±6 px en 14 s); ensanchada para no dejar ver el borde */
+.lake-layer[data-layer="water"] > * {
+  scale: 1.01;
+  animation: lakeDrift 14s ease-in-out infinite alternate;
+}
 @media (min-width: 1024px) {
   .lake-stage > .lake-scenebox {
     top: 50%;
@@ -71,6 +76,36 @@
   height: 100%;
 }
 
+/* Ambiente sobre el agua (bajo el muelle) ---------------------------- */
+.lake-ambience {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.lake-ambience > span {
+  position: absolute;
+}
+.lake-moonglow {
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 246, 196, 0.42),
+    rgba(255, 246, 196, 0) 70%
+  );
+  mix-blend-mode: screen;
+  animation: moonPulse 6s ease-in-out infinite alternate;
+}
+.lake-dockshadow {
+  background: radial-gradient(ellipse at 50% 25%, rgba(0, 10, 8, 0.55), transparent 70%);
+}
+.lake-post-ripple {
+  aspect-ratio: 4 / 1;
+  translate: -50% -50%;
+  border: 1.5px solid rgba(200, 255, 230, 0.45);
+  border-radius: 50%;
+  opacity: 0;
+  animation: postRipple 3.2s ease-out infinite;
+}
 .lake-panel {
   display: grid;
   align-content: start;
@@ -323,6 +358,32 @@
   box-shadow: 0 0 34px color-mix(in srgb, var(--c) 26%, transparent);
 }
 
+@keyframes lakeDrift {
+  from {
+    transform: translateX(-6px);
+  }
+  to {
+    transform: translateX(6px);
+  }
+}
+@keyframes moonPulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 0.85;
+  }
+}
+@keyframes postRipple {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
 @keyframes shadowPass {
   0% {
     opacity: 0;

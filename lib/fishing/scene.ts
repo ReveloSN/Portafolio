@@ -52,6 +52,30 @@ export const FOLIAGE_FREE_X = 15;
 /** Aguas de juego: donde caen la boya y nadan y saltan las criaturas. */
 export const PLAY_WATER = { left: 45, right: 95, top: 62, bottom: 95 } as const;
 
+/** Patas del muelle: centro, punto donde entran al agua y ancho (lago-muelle.webp). */
+export const DOCK_POSTS: readonly { x: number; y: number; width: number }[] = [
+  { x: 9.7, y: 75.5, width: 4 },
+  { x: 14, y: 72.4, width: 2.9 },
+  { x: 25.5, y: 73.9, width: 6 },
+  { x: 37.3, y: 72.5, width: 3 },
+];
+
+/** Sombra del muelle sobre el agua, bajo la cubierta. */
+export const DOCK_SHADOW = {
+  left: DOCK.left,
+  right: DOCK.right,
+  top: HORIZON_Y,
+  bottom: 70,
+} as const;
+
+/** Columna del reflejo de la luna sobre el agua (lago-agua.webp). */
+export const MOON_REFLECTION = {
+  x: 77.5,
+  width: 7,
+  top: HORIZON_Y,
+  bottom: 100,
+} as const;
+
 /**
  * Parallax con el ratón: desplazamiento máximo de cada capa en % de la escena. El agua y
  * el muelle quedan fijos (ahí se juega); el primer plano va en sentido contrario.
