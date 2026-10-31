@@ -9,6 +9,12 @@ export type CreatureId =
 /** Tamaño de la sombra bajo el agua y del salto al capturarla. */
 export type CreatureSize = "small" | "medium" | "large" | "huge";
 
+/** Cómo sale del agua al picar: arco corto, salto vertical o salto gigante. */
+export type BreachClass = "small" | "mid" | "giant";
+
+/** Fases visuales del salto (no frenan al motor). */
+export type BreachStage = "idle" | "bulge" | "rise" | "snap" | "fall" | "splash";
+
 /** Fuerza con la que tira la criatura (0 a 1) en función del tiempo de pelea (ms). */
 export type PullPattern = (elapsedMs: number) => number;
 
@@ -31,6 +37,7 @@ export interface Creature {
   readonly experienceId: string;
   /** Dibujo pintado de la criatura (registro LAKE_ART). */
   readonly art: LakePieceId;
+  readonly breach: BreachClass;
 }
 
 export interface Bait {

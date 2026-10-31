@@ -24,6 +24,7 @@ export const CREATURES: readonly Creature[] = [
     unlockAfter: 0,
     experienceId: "e4",
     art: "catch-fish-1",
+    breach: "small",
   },
   {
     id: "ammonite",
@@ -36,6 +37,7 @@ export const CREATURES: readonly Creature[] = [
     unlockAfter: 0,
     experienceId: "e5",
     art: "catch-fish-2",
+    breach: "small",
   },
   {
     id: "coelacanth",
@@ -48,6 +50,7 @@ export const CREATURES: readonly Creature[] = [
     unlockAfter: 0,
     experienceId: "e3",
     art: "catch-fish-3",
+    breach: "mid",
   },
   {
     id: "ichthyosaur",
@@ -60,6 +63,7 @@ export const CREATURES: readonly Creature[] = [
     unlockAfter: 0,
     experienceId: "e2",
     art: "catch-fish-4",
+    breach: "mid",
   },
   {
     id: "mosasaur",
@@ -72,6 +76,7 @@ export const CREATURES: readonly Creature[] = [
     unlockAfter: 0,
     experienceId: "e1",
     art: "catch-mosasaur",
+    breach: "giant",
   },
   {
     id: "megalodon",
@@ -84,5 +89,6 @@ export const CREATURES: readonly Creature[] = [
     unlockAfter: 4,
     experienceId: "e0",
     art: "catch-megalodon",
+    breach: "giant",
   },
 ];
