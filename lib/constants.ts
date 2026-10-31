@@ -13,7 +13,7 @@ export const HERO_LAYERS = {
 export const EYE_TRAVEL = { x: 45, y: 55 } as const;
 
 /** Luciérnagas ilustradas por sección (en móvil el CSS deja 4). */
-export const FIREFLY_COUNT = { hero: 10, about: 8, contact: 8 } as const;
+export const FIREFLY_COUNT = { hero: 10, about: 8, contact: 8, lake: 7 } as const;
 export const WORLD_PARTICLE_COUNT = 16;
 
 export const DIG_LAYERS_PER_CELL = 3;

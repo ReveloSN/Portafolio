@@ -1,6 +1,8 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
+import { LanternGlow } from "@/components/atoms/LanternGlow";
+import { Fireflies } from "@/components/molecules/Fireflies";
 import { LakeAmbience } from "@/components/molecules/LakeAmbience";
 import { LakeLayers } from "@/components/molecules/LakeLayers";
 import type { BucketInteraction } from "@/components/molecules/BaitBucket";
@@ -10,6 +12,7 @@ import { COPY } from "@/data/copy";
 import { BAITS } from "@/data/creatures";
 import { LAKE_ASSETS } from "@/data/lakeAssets";
 import { useParallax } from "@/hooks/useParallax";
+import { FIREFLY_COUNT } from "@/lib/constants";
 import { isBetweenCasts } from "@/lib/fishing/engine";
 import { cn } from "@/lib/utils";
 import type { BaitId, Creature, GameState } from "@/types/fishing";
@@ -48,7 +51,10 @@ export function LakeStage({
     <div className={cn("lake-stage", shaking && "is-shaking")}>
       <div ref={parallaxRef} className="lake-scenebox">
         <div ref={canvasRef} className="lake-canvas" data-testid="lake-canvas">
-          <LakeLayers layers={BACK_LAYERS} after={{ water: <LakeAmbience /> }} />
+          <LakeLayers
+            layers={BACK_LAYERS}
+            after={{ water: <LakeAmbience />, dock: <LanternGlow /> }}
+          />
           <LakeScene
             phase={state.phase}
             mode={state.mode}
@@ -60,6 +66,7 @@ export function LakeStage({
             assets={LAKE_ASSETS}
             label={copy.lakeLabel}
           />
+          <Fireflies count={FIREFLY_COUNT.lake} className="lake-fireflies" />
           <LakeLayers layers={FRONT_LAYERS} />
           {children}
           {state.phase === "complete" ? (

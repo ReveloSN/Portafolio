@@ -98,6 +98,35 @@
 .lake-dockshadow {
   background: radial-gradient(ellipse at 50% 25%, rgba(0, 10, 8, 0.55), transparent 70%);
 }
+/* Farol: dos ciclos de distinta duración (3.1 s y 4.7 s) dan un parpadeo irregular */
+.lake-lantern-glow {
+  position: absolute;
+  z-index: 3;
+  width: 9%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 196, 110, 0.55),
+    rgba(255, 196, 110, 0) 68%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation:
+    lanternFlicker 3.1s steps(1, end) infinite,
+    lanternBreath 4.7s ease-in-out infinite alternate;
+}
+/* Las luciérnagas vuelan sobre el agua (efectos, z 6) y bajo el primer plano */
+.lake-fireflies {
+  z-index: 6;
+}
+/* En móvil el primer plano taparía la boya y las capturas: se oculta */
+@media (max-width: 767px) {
+  .lake-layer[data-layer="foreground"] {
+    display: none;
+  }
+}
 .lake-post-ripple {
   aspect-ratio: 4 / 1;
   translate: -50% -50%;
@@ -364,6 +393,32 @@
   }
   to {
     transform: translateX(6px);
+  }
+}
+@keyframes lanternFlicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  37% {
+    opacity: 0.78;
+  }
+  41% {
+    opacity: 0.95;
+  }
+  68% {
+    opacity: 0.7;
+  }
+  73% {
+    opacity: 1;
+  }
+}
+@keyframes lanternBreath {
+  from {
+    scale: 0.92;
+  }
+  to {
+    scale: 1.08;
   }
 }
 @keyframes moonPulse {
