@@ -23,6 +23,7 @@ describe("registro del arte del lago", () => {
     }
     expect(LAKE_ART["bucket-worm"]?.z).toBe(LAKE_Z.objects);
     expect(LAKE_ART["mosasaur-open"]?.z).toBe(LAKE_Z.creatures);
-    expect(LAKE_ART["drops"]?.z).toBe(LAKE_Z.fx);
+    expect(LAKE_ART["particle-1"]?.z).toBe(LAKE_Z.fx);
+    expect(LAKE_ART["splash-crown-1"]?.z).toBe(LAKE_Z.fx);
   });
 });

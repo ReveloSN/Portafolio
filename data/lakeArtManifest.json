@@ -218,22 +218,6 @@
       "y": 0
     }
   },
-  "drops": {
-    "src": "/art/lake/fx/drops.webp",
-    "width": 400,
-    "height": 390,
-    "bytes": 54280,
-    "anchor": {
-      "x": 0.5,
-      "y": 0.5
-    },
-    "crop": {
-      "left": 63,
-      "top": 62,
-      "width": 1177,
-      "height": 1147
-    }
-  },
   "explorer-cast": {
     "src": "/art/lake/explorer/explorer-cast.webp",
     "width": 346,
@@ -373,6 +357,166 @@
       "height": 1481
     }
   },
+  "particle-1": {
+    "src": "/art/lake/fx/particle-1.webp",
+    "width": 96,
+    "height": 88,
+    "bytes": 4828,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 87,
+      "top": 111,
+      "width": 185,
+      "height": 170
+    }
+  },
+  "particle-10": {
+    "src": "/art/lake/fx/particle-10.webp",
+    "width": 96,
+    "height": 82,
+    "bytes": 4520,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 1005,
+      "top": 986,
+      "width": 235,
+      "height": 201
+    }
+  },
+  "particle-2": {
+    "src": "/art/lake/fx/particle-2.webp",
+    "width": 51,
+    "height": 96,
+    "bytes": 3360,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 403,
+      "top": 62,
+      "width": 125,
+      "height": 237
+    }
+  },
+  "particle-3": {
+    "src": "/art/lake/fx/particle-3.webp",
+    "width": 96,
+    "height": 64,
+    "bytes": 3470,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 682,
+      "top": 111,
+      "width": 212,
+      "height": 141
+    }
+  },
+  "particle-4": {
+    "src": "/art/lake/fx/particle-4.webp",
+    "width": 74,
+    "height": 96,
+    "bytes": 3244,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 86,
+      "top": 379,
+      "width": 176,
+      "height": 228
+    }
+  },
+  "particle-5": {
+    "src": "/art/lake/fx/particle-5.webp",
+    "width": 95,
+    "height": 96,
+    "bytes": 4494,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 1012,
+      "top": 394,
+      "width": 186,
+      "height": 188
+    }
+  },
+  "particle-6": {
+    "src": "/art/lake/fx/particle-6.webp",
+    "width": 91,
+    "height": 96,
+    "bytes": 3350,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 63,
+      "top": 676,
+      "width": 208,
+      "height": 220
+    }
+  },
+  "particle-7": {
+    "src": "/art/lake/fx/particle-7.webp",
+    "width": 77,
+    "height": 96,
+    "bytes": 4158,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 711,
+      "top": 685,
+      "width": 177,
+      "height": 222
+    }
+  },
+  "particle-8": {
+    "src": "/art/lake/fx/particle-8.webp",
+    "width": 96,
+    "height": 58,
+    "bytes": 3554,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 995,
+      "top": 738,
+      "width": 215,
+      "height": 131
+    }
+  },
+  "particle-9": {
+    "src": "/art/lake/fx/particle-9.webp",
+    "width": 96,
+    "height": 93,
+    "bytes": 4472,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "crop": {
+      "left": 382,
+      "top": 988,
+      "width": 207,
+      "height": 200
+    }
+  },
   "reeds": {
     "src": "/art/lake/props/reeds.webp",
     "width": 562,
@@ -432,11 +576,107 @@
       "height": 1149
     }
   },
+  "splash-crown-1": {
+    "src": "/art/lake/fx/splash-crown-1.webp",
+    "width": 200,
+    "height": 168,
+    "bytes": 16804,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "crop": {
+      "left": 994,
+      "top": 97,
+      "width": 239,
+      "height": 201
+    }
+  },
+  "splash-crown-2": {
+    "src": "/art/lake/fx/splash-crown-2.webp",
+    "width": 200,
+    "height": 149,
+    "bytes": 14730,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "crop": {
+      "left": 359,
+      "top": 421,
+      "width": 242,
+      "height": 180
+    }
+  },
+  "splash-crown-3": {
+    "src": "/art/lake/fx/splash-crown-3.webp",
+    "width": 193,
+    "height": 200,
+    "bytes": 13708,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "crop": {
+      "left": 681,
+      "top": 366,
+      "width": 236,
+      "height": 245
+    }
+  },
+  "splash-crown-4": {
+    "src": "/art/lake/fx/splash-crown-4.webp",
+    "width": 200,
+    "height": 150,
+    "bytes": 14822,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "crop": {
+      "left": 353,
+      "top": 717,
+      "width": 250,
+      "height": 187
+    }
+  },
+  "splash-crown-5": {
+    "src": "/art/lake/fx/splash-crown-5.webp",
+    "width": 180,
+    "height": 200,
+    "bytes": 14540,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "crop": {
+      "left": 63,
+      "top": 981,
+      "width": 205,
+      "height": 228
+    }
+  },
+  "splash-crown-6": {
+    "src": "/art/lake/fx/splash-crown-6.webp",
+    "width": 200,
+    "height": 166,
+    "bytes": 16104,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "crop": {
+      "left": 667,
+      "top": 985,
+      "width": 265,
+      "height": 220
+    }
+  },
   "splash-front": {
     "src": "/art/lake/fx/splash-front.webp",
-    "width": 560,
-    "height": 119,
-    "bytes": 39898,
+    "width": 800,
+    "height": 170,
+    "bytes": 66428,
     "anchor": {
       "x": 0.5,
       "y": 1

@@ -5,13 +5,14 @@
  *    mejor calidad WebP por debajo del presupuesto. Genera además una versión de 1600 px.
  *  · Piezas sueltas sobre verde #00FF00: quita el fondo con un keyer suave, recupera el
  *    color de los bordes (sin halo verde), recorta al contenido y reduce a su tamaño útil.
+ *  · La hoja de gotas (4 × 4) se corta en sus 16 celdas: partículas y coronas sueltas.
  *  · Escribe data/lakeArtManifest.json (tamaños, recorte y anclaje) y una hoja de contacto
  *    sobre fondo oscuro para revisar halos: screenshots/lake/assets/sheet.png.
  *
  * Uso:  npm run optimize:lake
  * Los originales viven en imagenes_webp/lago/ y no se modifican.
  */
-import { mkdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -117,11 +118,40 @@ const PIECES: readonly PieceJob[] = [
   piece("megalodon-open", "salto/megalodon-salto-abierta.webp", "breach", 640, BOTTOM),
   piece("megalodon-closed", "salto/megalodon-salto-cerrada.webp", "breach", 640, BOTTOM),
   piece("splash-back", "efectos/salpicadura-trasera.webp", "fx", 560, BOTTOM),
-  piece("splash-front", "efectos/salpicadura-delantera.webp", "fx", 560, BOTTOM),
-  piece("splash", "efectos/salpicadura.webp", "fx", 480, BOTTOM),
-  piece("drops", "efectos/gotas.webp", "fx", 400, CENTER),
-  piece("particle", "efectos/particula.webp", "fx", 96, CENTER),
+  piece("splash-front", "efectos/salpicadura-delantera.webp", "fx", 800, BOTTOM),
 ];
+
+/**
+ * gotas.webp es una hoja de 4 × 4 sprites de 320 px: cada celda se procesa por separado
+ * (si no, el recorte deja la hoja entera). Las gotas sueltas son las partículas; las
+ * coronas son la salpicadura pequeña del anzuelo al caer. Orden fila por fila.
+ */
+const DROP_SHEET = {
+  file: "efectos/gotas.webp",
+  folder: "fx",
+  cell: 320,
+  columns: 4,
+  ids: [
+    "particle-1",
+    "particle-2",
+    "particle-3",
+    "splash-crown-1",
+    "particle-4",
+    "splash-crown-2",
+    "splash-crown-3",
+    "particle-5",
+    "particle-6",
+    "splash-crown-4",
+    "particle-7",
+    "particle-8",
+    "splash-crown-5",
+    "particle-9",
+    "splash-crown-6",
+    "particle-10",
+  ],
+} as const;
+const CROWN_MAX_SIDE = 200;
+const PARTICLE_MAX_SIDE = 96;
 
 interface ManifestEntry {
   readonly src: string;
@@ -291,14 +321,19 @@ async function processLayer(job: LayerJob, manifest: Record<string, ManifestEntr
   return `${job.id}: ${Math.round(desktop.length / KB)} KB (+${Math.round(mobile.length / KB)} KB a ${MOBILE_WIDTH} px)`;
 }
 
-async function processPiece(job: PieceJob, manifest: Record<string, ManifestEntry>) {
-  const source = path.join(SOURCE, job.file);
-  if (!(await exists(source)))
-    return `${job.id}: FALTA ${job.file} (queda el arte provisional)`;
-  const raw = await readRaw(source);
+type PieceTarget = Pick<PieceJob, "id" | "folder" | "maxSide" | "anchor">;
+
+/** Keyer, recorte, reducción y guardado. `origin` sitúa el recorte dentro del original. */
+async function savePiece(
+  raw: Raw,
+  origin: { left: number; top: number },
+  job: PieceTarget,
+  manifest: Record<string, ManifestEntry>,
+) {
   keyOut(raw);
-  const box = contentBox(raw);
-  const trimmed = crop(raw, box);
+  const trim = contentBox(raw);
+  const box = { ...trim, left: trim.left + origin.left, top: trim.top + origin.top };
+  const trimmed = crop(raw, trim);
   const scale = Math.min(1, job.maxSide / Math.max(trimmed.width, trimmed.height));
   const width = Math.round(trimmed.width * scale);
   const height = Math.round(trimmed.height * scale);
@@ -318,11 +353,42 @@ async function processPiece(job: PieceJob, manifest: Record<string, ManifestEntr
   return `${job.id}: ${width}×${height}, ${Math.round(buffer.length / KB)} KB, borde verdoso ${(halo * 100).toFixed(1)} %${flag}`;
 }
 
+async function processPiece(job: PieceJob, manifest: Record<string, ManifestEntry>) {
+  const source = path.join(SOURCE, job.file);
+  if (!(await exists(source))) return `${job.id}: FALTA ${job.file}`;
+  return savePiece(await readRaw(source), { left: 0, top: 0 }, job, manifest);
+}
+
+/** Corta la hoja de gotas en sus celdas y procesa cada una como pieza propia. */
+async function processDropSheet(manifest: Record<string, ManifestEntry>) {
+  const sheet = await readRaw(path.join(SOURCE, DROP_SHEET.file));
+  const lines: string[] = [];
+  for (const [index, id] of DROP_SHEET.ids.entries()) {
+    const left = (index % DROP_SHEET.columns) * DROP_SHEET.cell;
+    const top = Math.floor(index / DROP_SHEET.columns) * DROP_SHEET.cell;
+    const cell = crop(sheet, {
+      left,
+      top,
+      width: DROP_SHEET.cell,
+      height: DROP_SHEET.cell,
+    });
+    const crown = id.startsWith("splash");
+    const target: PieceTarget = {
+      id,
+      folder: DROP_SHEET.folder,
+      maxSide: crown ? CROWN_MAX_SIDE : PARTICLE_MAX_SIDE,
+      anchor: crown ? BOTTOM : CENTER,
+    };
+    lines.push(await savePiece(cell, { left, top }, target, manifest));
+  }
+  return lines;
+}
+
 /** Hoja de contacto de las piezas sobre fondo oscuro, para revisar halos a ojo. */
 async function contactSheet(manifest: Record<string, ManifestEntry>) {
   const CELL = 220;
   const COLUMNS = 6;
-  const ids = PIECES.map((job) => job.id).filter((id) => manifest[id]);
+  const ids = Object.keys(manifest).filter((id) => !manifest[id]!.mobileSrc);
   const rows = Math.ceil(ids.length / COLUMNS);
   const tiles = await Promise.all(
     ids.map(async (id, index) => {
@@ -353,12 +419,15 @@ async function contactSheet(manifest: Record<string, ManifestEntry>) {
 
 async function run() {
   const folders: Folder[] = ["layers", "explorer", "props", "creatures", "breach", "fx"];
+  // Carpeta generada: se vacía para que no queden archivos de una corrida anterior.
+  await rm(OUT, { recursive: true, force: true });
   await Promise.all(
     folders.map((folder) => mkdir(path.join(OUT, folder), { recursive: true })),
   );
   const manifest: Record<string, ManifestEntry> = {};
   for (const job of LAYERS) console.log("  " + (await processLayer(job, manifest)));
   for (const job of PIECES) console.log("  " + (await processPiece(job, manifest)));
+  for (const line of await processDropSheet(manifest)) console.log("  " + line);
   const total = Object.values(manifest).reduce((sum, entry) => sum + entry.bytes, 0);
   const sorted = Object.fromEntries(
     Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)),

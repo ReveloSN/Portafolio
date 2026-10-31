@@ -52,9 +52,12 @@ export type LakePieceId =
   | "megalodon-closed"
   | "splash-back"
   | "splash-front"
-  | "splash"
-  | "drops"
-  | "particle";
+  | `splash-crown-${CrownIndex}`
+  | `particle-${ParticleIndex}`;
+
+/** Celdas de la hoja de gotas: 6 coronas de salpicadura y 10 gotas sueltas. */
+type CrownIndex = 1 | 2 | 3 | 4 | 5 | 6;
+type ParticleIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export type LakeArtId = LakeLayerId | LakePieceId;
 
