@@ -13,7 +13,8 @@
     "seams": "tsx scripts/seams.ts",
     "capture": "tsx scripts/capture.ts",
     "about": "tsx scripts/about.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "fishing": "tsx scripts/fishing.ts"
   },
   "dependencies": {
     "next": "16.4.3",
