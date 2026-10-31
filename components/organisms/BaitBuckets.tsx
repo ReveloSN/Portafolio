@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { BaitBucket, type BucketInteraction } from "@/components/molecules/BaitBucket";
-import { BUCKET_AREA, LAKE_VIEWBOX, PLANK_Y } from "@/lib/fishing/scene";
+import { BUCKETS } from "@/lib/fishing/scene";
 import { fill } from "@/lib/fishing/view";
 import type { Bait, BaitId } from "@/types/fishing";
 import type { LakeAssets } from "@/types/lake";
@@ -15,13 +15,11 @@ interface BaitBucketsProps {
   readonly interactionFor: (bait: BaitId) => BucketInteraction;
 }
 
-const percent = (value: number, total: number) => `${(value / total) * 100}%`;
-
-/** Posición sobre el muelle, derivada de la geometría de la escena. */
+/** Posición sobre el muelle, derivada de la geometría de la escena (en %). */
 const AREA = {
-  "--bucket-left": percent(BUCKET_AREA.x, LAKE_VIEWBOX.width),
-  "--bucket-width": percent(BUCKET_AREA.width, LAKE_VIEWBOX.width),
-  "--bucket-plank": percent(PLANK_Y, LAKE_VIEWBOX.height),
+  "--bucket-left": `${BUCKETS.left}%`,
+  "--bucket-width": `${BUCKETS.right - BUCKETS.left}%`,
+  "--bucket-plank": `${BUCKETS.deckY}%`,
 } as CSSProperties;
 
 /** Los tres baldes del muelle, entre el farol y el niño. */

@@ -5,6 +5,7 @@ import { FishingLine } from "@/components/worlds/lake/FishingLine";
 import { HookedBait } from "@/components/worlds/lake/HookedBait";
 import { LakeArt } from "@/components/worlds/lake/LakeArt";
 import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
+import { ProvisionalKid } from "@/components/worlds/lake/ProvisionalKid";
 import { Rod } from "@/components/worlds/lake/Rod";
 import {
   BOBBER_AT,
@@ -92,6 +93,7 @@ export function LakeScene({
           biting={biting}
         />
       ) : null}
+      <ProvisionalKid />
       <Rod power={phase === "casting" ? power : 0} tugging={biting || fighting} />
       <FishingLine
         x={inWater ? bobber.x + jitter : HOOK_POINT.x}

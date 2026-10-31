@@ -1,4 +1,15 @@
-import { DOCK_WIDTH, KID_OFFSET } from "@/lib/fishing/scene";
+import { DOCK, LANTERN, toUnits } from "@/lib/fishing/scene";
+
+/** Ancho del dibujo original del muelle; se escala a DOCK. */
+const DOCK_UNITS = 480;
+const dockStart = toUnits({ x: DOCK.left, y: DOCK.deckY });
+const dockEnd = toUnits({ x: DOCK.right, y: DOCK.deckY });
+const dock = {
+  x: dockStart.x,
+  y: dockStart.y,
+  scaleX: (dockEnd.x - dockStart.x) / DOCK_UNITS,
+};
+const lantern = toUnits(LANTERN);
 
 export function LakeDefs() {
   return (
@@ -75,7 +86,7 @@ export function LakeScenery() {
         d="M0 270 L0 236 Q28 194 56 219 Q84 193 112 222 Q140 190 168 218 Q196 210 224 231 Q252 190 280 221 Q308 182 336 217 Q364 211 392 233 Q420 194 448 227 Q476 213 504 234 Q532 188 560 216 Q588 220 616 217 Q644 197 672 222 Q700 183 728 216 Q756 212 784 217 Q812 222 840 220 Q868 218 896 235 Q924 220 952 230 Q980 207 1008 217 Q1036 221 1064 222 Q1092 202 1120 222 L1120 270Z"
         fill="#081f19"
       />
-      <rect y="262" width="1120" height="258" fill="url(#lk)" />
+      <rect y="262" width="1120" height="260" fill="url(#lk)" />
       <g stroke="#fff6d6" strokeLinecap="round" opacity=".5">
         <path d="M830 280h100" strokeWidth="3" />
         <path d="M845 296h70" strokeWidth="2.5" />
@@ -89,48 +100,26 @@ export function LakeScenery() {
         />
       </g>
 
-      <g>
+      {/* Muelle provisional, dibujado con la geometría de lib/fishing/scene.ts */}
+      <g transform={`translate(${dock.x} ${dock.y}) scale(${dock.scaleX} 1)`}>
         <g fill="#4a2f17">
-          <rect x="36" y="278" width="16" height="130" />
-          <rect x="146" y="278" width="16" height="140" />
-          <rect x="256" y="278" width="16" height="130" />
-          <rect x="366" y="278" width="16" height="136" />
-          <rect x="456" y="278" width="14" height="110" />
+          <rect x="36" y="18" width="16" height="130" />
+          <rect x="146" y="18" width="16" height="140" />
+          <rect x="256" y="18" width="16" height="130" />
+          <rect x="366" y="18" width="16" height="136" />
+          <rect x="456" y="18" width="14" height="110" />
         </g>
-
-        <rect x="0" y="260" width={DOCK_WIDTH} height="20" rx="3" fill="#8a5a2b" />
+        <rect x="0" y="0" width={DOCK_UNITS} height="20" rx="3" fill="#8a5a2b" />
         <path
-          d="M0 270h480M60 260v20M130 260v20M200 260v20M270 260v20M340 260v20M410 260v20"
+          d="M0 10h480M60 0v20M130 0v20M200 0v20M270 0v20M340 0v20M410 0v20"
           stroke="#5e3a1b"
           strokeWidth="2"
         />
-        <rect x="14" y="214" width="8" height="48" fill="#4a2f17" />
-        <circle cx="18" cy="206" r="60" fill="url(#lamp)" />
-        <rect x="10" y="196" width="16" height="20" rx="3" fill="#ffc46e" />
       </g>
-
-      {/* El niño, corrido hacia la punta del muelle: deja sitio a los baldes */}
-      <g transform={`translate(${KID_OFFSET} 0)`}>
-        <path d="M254 262 H300 V274 H262Z" fill="#14312a" />
-        <rect x="292" y="266" width="13" height="52" rx="6" fill="#14312a" />
-        <path d="M290 316h22v8h-24z" fill="#3b2412" />
-        <path d="M222 262 L226 214 Q240 202 256 214 L262 262Z" fill="#1f6b3a" />
-        <path
-          d="M248 222 L280 238"
-          stroke="#1f6b3a"
-          strokeWidth="11"
-          strokeLinecap="round"
-        />
-        <circle cx="282" cy="239" r="5.5" fill="#c98f62" />
-        <circle cx="242" cy="194" r="14" fill="#c98f62" />
-        <path d="M226 188 Q242 156 258 188Z" fill="#d9b25f" />
-        <ellipse cx="242" cy="188" rx="29" ry="6" fill="#e6c577" />
-        <path
-          d="M227 185 Q242 180 257 185"
-          stroke="#a6ff5c"
-          strokeWidth="3"
-          fill="none"
-        />
+      <g transform={`translate(${lantern.x} ${lantern.y})`}>
+        <rect x="-4" y="8" width="8" height="40" fill="#4a2f17" />
+        <circle r="60" fill="url(#lamp)" />
+        <rect x="-8" y="-10" width="16" height="20" rx="3" fill="#ffc46e" />
       </g>
     </>
   );

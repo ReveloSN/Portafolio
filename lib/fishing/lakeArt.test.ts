@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { LAKE_ART, LAKE_LAYER_ORDER, LAKE_Z } from "@/data/lakeAssets";
+import { SCENE_ASPECT } from "@/lib/fishing/scene";
 
 describe("registro del arte del lago", () => {
-  it("tiene las cinco capas, del cielo al primer plano, con el mismo aspecto", () => {
+  it("tiene las cinco capas, del cielo al primer plano, con el aspecto de la escena", () => {
     const zs = LAKE_LAYER_ORDER.map((id) => LAKE_ART[id]?.z);
     expect(zs).toEqual([0, 1, 2, 3, 7]);
-    const sky = LAKE_ART.sky!;
     for (const id of LAKE_LAYER_ORDER) {
       const layer = LAKE_ART[id]!;
-      expect(layer.width / layer.height).toBeCloseTo(sky.width / sky.height, 3);
+      expect(layer.width / layer.height).toBeCloseTo(SCENE_ASPECT, 2);
       expect(layer.mobileSrc).toMatch(/-1600\.webp$/);
     }
   });
