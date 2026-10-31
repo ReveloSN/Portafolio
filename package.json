@@ -16,7 +16,8 @@
     "test": "vitest run",
     "fishing": "tsx scripts/fishing.ts",
     "lake:shots": "tsx scripts/lake-shots.ts",
-    "optimize:lake": "tsx scripts/optimize-lake.ts"
+    "optimize:lake": "tsx scripts/optimize-lake.ts",
+    "lake:final": "tsx scripts/lake-final.ts"
   },
   "dependencies": {
     "next": "16.4.3",
