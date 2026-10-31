@@ -65,6 +65,7 @@ export const COPY = {
     captures: "Capturas",
     relaxed: "Modo relajado",
     sound: "Sonido",
+    effects: "Efectos",
     buckets: { group: "Baldes de carnada", bucket: "Tomar carnada: {bait}" },
     power: "Fuerza del lanzamiento",
     tension: "Tensión del hilo",

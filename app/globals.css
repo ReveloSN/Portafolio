@@ -9,6 +9,7 @@
 @import "./flip.css";
 @import "./about.css";
 @import "./lake.css";
+@import "./quantum.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));

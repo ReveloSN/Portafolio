@@ -35,6 +35,8 @@ interface LakeSceneProps {
   readonly creature: Creature | null;
   /** Carnada enganchada en el anzuelo (se ve colgando hasta lanzar). */
   readonly attachedBait: BaitId | null;
+  /** Sin efectos, la criatura se insinúa con una sombra simple bajo la boya. */
+  readonly simpleShadow: boolean;
   readonly assets: LakeAssets;
   readonly label: string;
 }
@@ -60,6 +62,7 @@ export function LakeScene({
   fight,
   creature,
   attachedBait,
+  simpleShadow,
   assets,
   label,
 }: LakeSceneProps) {
@@ -74,7 +77,8 @@ export function LakeScene({
     ? Math.sin(fight.elapsedMs * JITTER_SPEED) * fight.fishPull * PULL_JITTER
     : 0;
   const strain = mode === "challenge" ? fight.tension : fight.progress;
-  const showShadow = creature !== null && (phase === "waiting" || biting);
+  const showShadow =
+    simpleShadow && creature !== null && (phase === "waiting" || biting);
   const leaping = creature !== null && LEAPING.has(phase) && depth !== null;
 
   return (

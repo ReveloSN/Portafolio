@@ -14,6 +14,7 @@ import { COPY } from "@/data/copy";
 import { LAKE_ASSETS } from "@/data/lakeAssets";
 import type { FishingGameApi } from "@/hooks/useFishingGame";
 import { useBaitControls } from "@/hooks/useBaitControls";
+import { useEffectsToggle } from "@/hooks/useEffectsToggle";
 import { useGameFeedback } from "@/hooks/useGameFeedback";
 import { isBetweenCasts } from "@/lib/fishing/engine";
 import { experienceById } from "@/lib/collections";
@@ -28,6 +29,7 @@ export function FishingGame({ game }: FishingGameProps) {
   const { experience: copy } = COPY;
   const { state } = game;
   const feedback = useGameFeedback(state.phase);
+  const effects = useEffectsToggle();
   const canvasRef = useRef<HTMLDivElement>(null);
   const zoneRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
@@ -54,6 +56,7 @@ export function FishingGame({ game }: FishingGameProps) {
         state={state}
         creature={creature}
         shaking={feedback.shaking}
+        effects={effects.enabled}
         interactionFor={bait.interactionFor}
         canvasRef={canvasRef}
       >
@@ -80,10 +83,26 @@ export function FishingGame({ game }: FishingGameProps) {
           labels={copy}
           count={state.caught.length}
           total={CREATURES.length}
-          relaxed={state.mode === "relaxed"}
-          soundOn={feedback.soundOn}
-          onRelaxedChange={(next) => game.setMode(next ? "relaxed" : "challenge")}
-          onToggleSound={feedback.toggleSound}
+          toggles={[
+            {
+              label: copy.relaxed,
+              checked: state.mode === "relaxed",
+              onChange: (next) => game.setMode(next ? "relaxed" : "challenge"),
+              testId: "relaxed-toggle",
+            },
+            {
+              label: copy.sound,
+              checked: feedback.soundOn,
+              onChange: feedback.toggleSound,
+              testId: "sound-toggle",
+            },
+            {
+              label: copy.effects,
+              checked: effects.enabled,
+              onChange: effects.setEnabled,
+              testId: "effects-toggle",
+            },
+          ]}
           onRevealAll={game.revealAll}
           onReset={game.reset}
         />

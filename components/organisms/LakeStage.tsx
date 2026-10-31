@@ -8,6 +8,7 @@ import { LakeLayers } from "@/components/molecules/LakeLayers";
 import type { BucketInteraction } from "@/components/molecules/BaitBucket";
 import { BaitBuckets } from "@/components/organisms/BaitBuckets";
 import { LakeScene } from "@/components/organisms/LakeScene";
+import { QuantumWater } from "@/components/organisms/QuantumWater";
 import { COPY } from "@/data/copy";
 import { BAITS } from "@/data/creatures";
 import { LAKE_ASSETS } from "@/data/lakeAssets";
@@ -21,6 +22,8 @@ interface LakeStageProps {
   readonly state: GameState;
   readonly creature: Creature | null;
   readonly shaking: boolean;
+  /** Interruptor "Efectos": el lago cuántico. */
+  readonly effects: boolean;
   readonly interactionFor: (bait: BaitId) => BucketInteraction;
   /** Capa del tamaño exacto de la escena (coordenadas del arrastre). */
   readonly canvasRef?: Ref<HTMLDivElement>;
@@ -41,6 +44,7 @@ export function LakeStage({
   state,
   creature,
   shaking,
+  effects,
   interactionFor,
   canvasRef,
   children,
@@ -63,8 +67,15 @@ export function LakeStage({
             fight={state.fight}
             creature={creature}
             attachedBait={state.baitAttached ? state.bait : null}
+            simpleShadow={!effects}
             assets={LAKE_ASSETS}
             label={copy.lakeLabel}
+          />
+          <QuantumWater
+            phase={state.phase}
+            depth={state.depth}
+            creature={creature}
+            enabled={effects}
           />
           <Fireflies count={FIREFLY_COUNT.lake} className="lake-fireflies" />
           <LakeLayers layers={FRONT_LAYERS} />

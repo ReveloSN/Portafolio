@@ -1,0 +1,192 @@
+/* ------------------------------------------------------------------ */
+/* Lago cuántico (interruptor "Efectos"): partículas, interferencia y   */
+/* la criatura en superposición. Solo transform, opacity y filter.      */
+/* ------------------------------------------------------------------ */
+.q-water {
+  position: absolute;
+  inset: 0;
+  /* Objetos (z 4): sobre el agua y bajo el juego y el primer plano */
+  z-index: 4;
+  pointer-events: none;
+}
+.q-particles,
+.q-ripples {
+  position: absolute;
+  inset: 0;
+}
+
+/* Partículas flotantes ---------------------------------------------- */
+.q-particle {
+  position: absolute;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: qFloat ease-in-out infinite alternate;
+}
+.q-particle[data-hue="teal"] {
+  background: radial-gradient(circle, #c4fff5 0, rgba(110, 240, 224, 0) 70%);
+}
+.q-particle[data-hue="lime"] {
+  background: radial-gradient(circle, #ecffd2 0, rgba(166, 255, 92, 0) 70%);
+}
+.q-particle[data-hue="amber"] {
+  background: radial-gradient(circle, #fff0d2 0, rgba(255, 196, 110, 0) 70%);
+}
+/* Fuera de pantalla no se anima nada */
+.q-particles[data-offscreen] .q-particle {
+  animation-play-state: paused;
+}
+/* En móvil quedan cinco */
+@media (max-width: 767px) {
+  .q-particle:nth-child(n + 6) {
+    display: none;
+  }
+}
+
+/* Interferencia: anillos turquesa y lima desde el anzuelo ----------- */
+.q-ring {
+  position: absolute;
+  width: 9%;
+  aspect-ratio: 4 / 1;
+  translate: -50% -50%;
+  border: 1.5px solid rgba(110, 240, 224, 0.8);
+  border-radius: 50%;
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: qRing 2.1s ease-out infinite;
+}
+.q-ring[data-hue="lime"] {
+  border-color: rgba(166, 255, 92, 0.7);
+}
+/* Impacto de un salto: una onda única y más ancha */
+.q-ripples[data-burst] .q-ring {
+  width: 14%;
+  animation: qRing 0.9s ease-out 1 both;
+}
+
+/* La criatura en superposición, recortada en la línea de agua ------- */
+.q-shadow {
+  position: absolute;
+  inset: auto 0 0;
+  overflow: hidden;
+}
+.q-copy {
+  position: absolute;
+  top: 8%;
+  height: auto;
+  translate: -50% 0;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  /* Turquesa: gris, sepia y giro de tono (el color propio del pez no se cuela) */
+  filter: blur(3px) grayscale(1) sepia(1) hue-rotate(130deg) saturate(4) brightness(1.25);
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.3s,
+    filter 0.3s;
+}
+/* Esperando: tres copias, cada una con su trayectoria y su parpadeo */
+.q-shadow[data-mode="superposition"] .q-copy[data-copy="0"] {
+  animation:
+    qDriftA 3.4s ease-in-out infinite alternate,
+    qFlicker 1.7s steps(2, jump-none) infinite;
+}
+.q-shadow[data-mode="superposition"] .q-copy[data-copy="1"] {
+  animation:
+    qDriftB 4.1s ease-in-out infinite alternate,
+    qFlicker 2.3s steps(2, jump-none) infinite;
+}
+.q-shadow[data-mode="superposition"] .q-copy[data-copy="2"] {
+  animation:
+    qDriftC 2.9s ease-in-out infinite alternate,
+    qFlicker 1.9s steps(2, jump-none) infinite;
+}
+/* Picada: las copias se juntan en una en 300 ms */
+.q-shadow[data-mode="collapse"] .q-copy {
+  opacity: 0.5;
+  transform: none;
+}
+/* Pelea: una sola criatura nítida, con un destello al aparecer */
+.q-shadow[data-mode="focused"] .q-copy {
+  opacity: 0;
+}
+.q-shadow[data-mode="focused"] .q-copy[data-copy="0"] {
+  opacity: 0.9;
+  mix-blend-mode: normal;
+  filter: drop-shadow(0 0 6px rgba(110, 240, 224, 0.9));
+  animation: qFlash 0.6s ease-out 1;
+}
+/* Captura o escape: se deshace en partículas */
+.q-shadow[data-mode="dissolve"] .q-copy {
+  animation: qDissolve 0.9s ease-out forwards;
+}
+
+@keyframes qFloat {
+  from {
+    opacity: 0.3;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0.9;
+    transform: translate(6px, -14px);
+  }
+}
+@keyframes qRing {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+@keyframes qDriftA {
+  from {
+    transform: translate(-30%, 0);
+  }
+  to {
+    transform: translate(25%, 30%);
+  }
+}
+@keyframes qDriftB {
+  from {
+    transform: translate(22%, 45%);
+  }
+  to {
+    transform: translate(-35%, 10%);
+  }
+}
+@keyframes qDriftC {
+  from {
+    transform: translate(-12%, 60%);
+  }
+  to {
+    transform: translate(38%, 5%);
+  }
+}
+@keyframes qFlicker {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+@keyframes qFlash {
+  0% {
+    opacity: 1;
+    filter: blur(0) brightness(2.4);
+  }
+  100% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 6px rgba(110, 240, 224, 0.9));
+  }
+}
+@keyframes qDissolve {
+  to {
+    opacity: 0;
+    transform: scale(1.35);
+    filter: blur(10px) brightness(1.6);
+  }
+}
