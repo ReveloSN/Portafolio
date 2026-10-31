@@ -8,11 +8,9 @@ import {
   HOOK_WIDTH,
   widthUnits,
 } from "@/lib/fishing/scene";
+import type { BobberState } from "@/lib/fishing/rig";
 import { cn } from "@/lib/utils";
 import type { LakeAsset } from "@/types/lake";
-
-/** Colgando de la caña, flotando a la espera, hundida por la picada o en plena pelea. */
-export type BobberState = "dangling" | "floating" | "biting" | "fighting";
 
 interface BobberProps {
   readonly x: number;

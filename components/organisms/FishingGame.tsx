@@ -57,6 +57,7 @@ export function FishingGame({ game }: FishingGameProps) {
         creature={creature}
         shaking={feedback.shaking}
         effects={effects.enabled}
+        onCue={feedback.cue}
         interactionFor={bait.interactionFor}
         canvasRef={canvasRef}
       >

@@ -1,22 +1,18 @@
-import { Bobber, type BobberState } from "@/components/worlds/lake/Bobber";
+import { Bobber } from "@/components/worlds/lake/Bobber";
 import { CanoeReturn } from "@/components/worlds/lake/CanoeReturn";
 import { CreatureShadow } from "@/components/worlds/lake/CreatureShadow";
 import { FishingLine } from "@/components/worlds/lake/FishingLine";
+import { HookedBait } from "@/components/worlds/lake/HookedBait";
 import { KidSprite } from "@/components/worlds/lake/KidSprite";
 import { LakeReeds } from "@/components/worlds/lake/LakeReeds";
 import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
 import { Rod } from "@/components/worlds/lake/Rod";
-import { kidPose, rodAngle } from "@/lib/fishing/pose";
-import {
-  BOBBER_AT,
-  dangleFrom,
-  LAKE_VIEWBOX,
-  PULL_JITTER,
-  rodTip,
-  SHADOW_RX,
-} from "@/lib/fishing/scene";
+import { kidPose } from "@/lib/fishing/pose";
+import { rigLayout } from "@/lib/fishing/rig";
+import { BOBBER_AT, LAKE_VIEWBOX, SHADOW_RX } from "@/lib/fishing/scene";
 import type {
   BaitId,
+  BreachStage,
   Creature,
   Depth,
   FightState,
@@ -33,53 +29,34 @@ interface LakeSceneProps {
   readonly fight: FightState;
   /** La que pica o pelea, o la recién capturada. */
   readonly creature: Creature | null;
-  /** Carnada enganchada en el anzuelo (se ve colgando hasta lanzar). */
-  readonly attachedBait: BaitId | null;
+  /** Carnada en el anzuelo: cuelga de la caña y, al saltar la criatura, en el aire. */
+  readonly bait: BaitId | null;
+  /** Fase visual del salto (la boya se oculta mientras dura). */
+  readonly breach: BreachStage;
   /** Sin efectos, la criatura se insinúa con una sombra simple bajo la boya. */
   readonly simpleShadow: boolean;
   readonly assets: LakeAssets;
   readonly label: string;
 }
 
-const IN_WATER: ReadonlySet<GamePhase> = new Set(["waiting", "bite", "fighting"]);
 const LEAPING: ReadonlySet<GamePhase> = new Set(["caught", "complete"]);
-const JITTER_SPEED = 0.05;
-const BOBBER_STATE: Partial<Readonly<Record<GamePhase, BobberState>>> = {
-  waiting: "floating",
-  bite: "biting",
-  fighting: "fighting",
-};
 
 /**
- * Lo que se juega sobre las capas pintadas: juncos, niño, caña, hilo, boya, sombra, salto
- * y canoa. El arte llega por `assets` y la geometría de lib/fishing/scene.ts.
+ * Lo que se juega sobre las capas pintadas: juncos, niño, caña, sedal, boya, cebo, sombra,
+ * salto final y canoa. La posición de cada parte la decide rigLayout().
  */
-export function LakeScene({
-  phase,
-  mode,
-  depth,
-  power,
-  fight,
-  creature,
-  attachedBait,
-  simpleShadow,
-  assets,
-  label,
-}: LakeSceneProps) {
-  const angle = rodAngle(phase, power, fight, mode);
-  const tip = rodTip(angle);
-  const target = depth ? BOBBER_AT[depth] : dangleFrom(tip);
-  const inWater = IN_WATER.has(phase);
-  const bobber = inWater ? target : dangleFrom(tip);
-  const fighting = phase === "fighting";
+export function LakeScene(props: LakeSceneProps) {
+  const { phase, depth, creature, bait, breach, simpleShadow, assets, label } = props;
+  const rig = rigLayout({ ...props, breach });
+  const target = depth ? BOBBER_AT[depth] : null;
   const biting = phase === "bite";
-  const jitter = fighting
-    ? Math.sin(fight.elapsedMs * JITTER_SPEED) * fight.fishPull * PULL_JITTER
-    : 0;
-  const strain = mode === "challenge" ? fight.tension : fight.progress;
   const showShadow =
-    simpleShadow && creature !== null && (phase === "waiting" || biting);
-  const leaping = creature !== null && LEAPING.has(phase) && depth !== null;
+    simpleShadow &&
+    creature !== null &&
+    target !== null &&
+    (phase === "waiting" || biting);
+  const leaping = creature !== null && LEAPING.has(phase) && target !== null;
+  const baitArt = bait ? assets.baits[bait] : null;
 
   return (
     <svg
@@ -99,20 +76,31 @@ export function LakeScene({
         />
       ) : null}
       <KidSprite pose={kidPose(phase)} />
-      <Rod angle={angle} tugging={biting || fighting} flicking={phase === "waiting"} />
+      <Rod
+        angle={rig.angle}
+        tugging={biting || phase === "fighting"}
+        flicking={phase === "waiting"}
+      />
       <FishingLine
-        from={tip}
-        x={bobber.x + jitter}
-        y={bobber.y}
-        tautness={!inWater || fighting ? 0.5 + strain / 2 : biting ? 0.3 : 0}
+        from={rig.tip}
+        x={rig.line.end.x}
+        y={rig.line.end.y}
+        tautness={rig.line.tautness}
       />
-      <Bobber
-        x={bobber.x}
-        y={bobber.y}
-        state={BOBBER_STATE[phase] ?? "dangling"}
-        jitter={jitter}
-        bait={attachedBait && !inWater ? assets.baits[attachedBait] : null}
-      />
+      {rig.bobber ? (
+        <Bobber
+          x={rig.bobber.point.x}
+          y={rig.bobber.point.y}
+          state={rig.bobber.state}
+          jitter={rig.jitter}
+          bait={rig.bobber.state === "dangling" ? baitArt : null}
+        />
+      ) : null}
+      {rig.baitInAir && baitArt ? (
+        <g transform={`translate(${rig.baitInAir.x} ${rig.baitInAir.y})`}>
+          <HookedBait bait={baitArt} y={0} />
+        </g>
+      ) : null}
       {leaping ? (
         <LeapingCreature
           key={creature.id}

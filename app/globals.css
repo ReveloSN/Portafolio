@@ -10,6 +10,7 @@
 @import "./about.css";
 @import "./lake.css";
 @import "./quantum.css";
+@import "./breach.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));

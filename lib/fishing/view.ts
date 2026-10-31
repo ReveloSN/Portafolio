@@ -88,7 +88,7 @@ export function gameStatus(state: GameState): string {
     case "waiting":
       return fill(status.waiting, { depth: copy.depth[state.depth ?? "shore"] });
     case "bite":
-      return status.bite;
+      return sceneCreature(state)?.breach === "giant" ? status.biteGiant : status.bite;
     case "fighting":
       if (state.mode === "relaxed") return status.fightRelaxed;
       return isEnraged(state)

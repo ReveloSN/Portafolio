@@ -21,6 +21,16 @@ export const FEEDBACK: Partial<Readonly<Record<GamePhase, PhaseFeedback>>> = {
   },
 };
 
+/** Avisos del salto: el rugido de un gigante al subir y el chapoteo al caer. */
+export type FeedbackCue = "splash" | "roar";
+
+export const CUES: Readonly<
+  Record<FeedbackCue, Pick<PhaseFeedback, "vibrate" | "tones">>
+> = {
+  splash: { vibrate: [40, 30, 80], tones: [180, 120, 90] },
+  roar: { vibrate: [], tones: [98, 82, 65] },
+};
+
 const TONE_SECONDS = 0.12;
 const TONE_GAIN = 0.08;
 const SILENT_GAIN = 0.0001;

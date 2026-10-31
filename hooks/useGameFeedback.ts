@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FEEDBACK, playTones } from "@/lib/fishing/feedback";
+import { CUES, FEEDBACK, playTones, type FeedbackCue } from "@/lib/fishing/feedback";
 import type { GamePhase } from "@/types/fishing";
 
 export interface GameFeedback {
@@ -9,6 +9,8 @@ export interface GameFeedback {
   readonly shaking: boolean;
   readonly soundOn: boolean;
   readonly toggleSound: () => void;
+  /** Vibración y sonido de un aviso suelto (salto de una criatura). */
+  readonly cue: (name: FeedbackCue) => void;
 }
 
 /** Sacudida, vibración y sonido opcional (silenciado por defecto) al cambiar de fase. */
@@ -40,6 +42,12 @@ export function useGameFeedback(phase: GamePhase): GameFeedback {
     setSoundOn(sound.current);
   }, []);
 
+  const cue = useCallback((name: FeedbackCue) => {
+    const { vibrate, tones } = CUES[name];
+    if (vibrate.length > 0) navigator.vibrate?.([...vibrate]);
+    if (sound.current && audio.current) playTones(audio.current, tones);
+  }, []);
+
   // La sacudida es una animación CSS de una vuelta: basta con la clase durante la fase.
-  return { shaking: FEEDBACK[phase]?.shake ?? false, soundOn, toggleSound };
+  return { shaking: FEEDBACK[phase]?.shake ?? false, soundOn, toggleSound, cue };
 }
