@@ -7,3 +7,9 @@ export interface ArtEntry {
   readonly alt: string;
   readonly decorative: boolean;
 }
+
+/** Huella del camino de tecnologías y la máscara de su charco (hueco y agua). */
+export interface TrackArt {
+  readonly art: ArtEntry;
+  readonly pool: string;
+}

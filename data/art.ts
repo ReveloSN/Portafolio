@@ -1,4 +1,4 @@
-import type { ArtEntry } from "@/types/art";
+import type { ArtEntry, TrackArt } from "@/types/art";
 
 const decorative = (src: string, width: number, height: number): ArtEntry => ({
   src,
@@ -21,8 +21,8 @@ export const ART = {
   vineHanging1: decorative("/art/foliage/vine-hanging-1.webp", 800, 1200),
   vineHanging2: decorative("/art/foliage/vine-hanging-2.webp", 800, 1200),
   dinoTail: decorative("/art/creatures/dino-tail.webp", 2612, 1200),
-  footprint1: decorative("/art/tracks/footprint-1.webp", 512, 512),
-  footprint2: decorative("/art/tracks/footprint-2.webp", 512, 512),
+  footprint1: decorative("/art/tracks/footprint-1.webp", 1488, 1488),
+  footprint2: decorative("/art/tracks/footprint-2.webp", 1488, 1488),
   bone1: decorative("/art/bones/bone-1.webp", 1800, 1200),
   bone2: decorative("/art/bones/bone-2.webp", 1800, 1200),
   boneSmall: decorative("/art/bones/bone-small.webp", 512, 441),
@@ -36,8 +36,14 @@ export const ART = {
 
 export type ArtKey = keyof typeof ART;
 
-/** Huellas alternas del camino de tecnologías. */
-export const FOOTPRINTS = [ART.footprint1, ART.footprint2] as const;
+/**
+ * Huellas alternas del camino de tecnologías. `pool` es la máscara del charco
+ * (hueco y agua), generada con scripts/pool-masks.py a partir de la ilustración.
+ */
+export const FOOTPRINTS: readonly [TrackArt, ...TrackArt[]] = [
+  { art: ART.footprint1, pool: "/art/tracks/footprint-1-pool.webp" },
+  { art: ART.footprint2, pool: "/art/tracks/footprint-2-pool.webp" },
+];
 
 /** Las 6 luciérnagas rebanadas del sprite (scripts/slice-fireflies.py). */
 export const FIREFLY_SPRITES = [

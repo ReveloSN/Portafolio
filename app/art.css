@@ -149,46 +149,73 @@
   }
 }
 
-/* Huellas de tecnologías: el charco toma el color de la marca y su logotipo brilla.  */
-/* La imagen de la huella hace de máscara: el color nunca se sale del barro.          */
-.track-tint,
-.track-glow {
+/* Huellas de tecnologías: el logotipo brilla dentro de la huella con su color.      */
+/* La ilustración tiene un hueco y agua translúcida: el color va DETRÁS y se ve por  */
+/* ahí; la máscara del charco (scripts/pool-masks.py) evita que salga del barro.     */
+.track-print {
+  position: relative;
+  width: clamp(4rem, calc(var(--u) * 7), 8.5rem);
+  aspect-ratio: 1;
+}
+/* Pantallas bajas (laptops con escala): huellas y zigzag más contenidos para caber en 100svh */
+@media (max-height: 640px) {
+  .track-print {
+    width: clamp(3.5rem, calc(var(--u) * 6), 8.5rem);
+  }
+  .track-step[data-lift="down"] {
+    margin-top: calc(var(--u) * 0.5);
+  }
+}
+/* La ilustración trae ~9% de aire transparente por lado: se recupera sin ocupar layout */
+.track-art {
+  position: absolute;
+  inset: -7%;
+}
+.track-pool,
+.track-glow,
+.track-glow::before {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  -webkit-mask: var(--print) center / contain no-repeat;
-  mask: var(--print) center / contain no-repeat;
 }
-/* Tiñe el agua (centro de la huella) sin tocar el barro del borde */
-.track-tint {
+.track-pool,
+.track-glow::before {
+  -webkit-mask: var(--pool) center / contain no-repeat;
+  mask: var(--pool) center / contain no-repeat;
+}
+/* Charco profundo del color de la marca, más claro en el centro */
+.track-pool {
   background: radial-gradient(
-    ellipse 30% 26% at 51% 62%,
-    var(--tech) 0,
-    var(--tech) 55%,
-    transparent 100%
+    circle at 50% 58%,
+    color-mix(in srgb, var(--tech) 40%, #000) 0,
+    color-mix(in srgb, var(--tech) 22%, #000) 50%,
+    color-mix(in srgb, var(--tech) 10%, #000) 100%
   );
-  mix-blend-mode: color;
 }
-/* Resplandor del charco, que respira despacio */
+/* Resplandor que ilumina el borde interior del barro: el charco difuminado, en screen */
 .track-glow {
-  background: radial-gradient(
-    ellipse 22% 19% at 51% 63%,
-    color-mix(in srgb, var(--tech) 60%, transparent) 0,
-    transparent 100%
-  );
   mix-blend-mode: screen;
+  filter: blur(calc(var(--u) * 0.2));
   animation: track-glow 3.6s ease-in-out infinite;
   animation-delay: calc(var(--i, 0) * -0.45s);
 }
-/* El logo es luz dentro del agua: pequeño, en el centro del charco y fundido con
-   su textura (screen), con un resplandor corto que no se sale del barro */
+.track-glow::before {
+  content: "";
+  /* Solo el contorno del charco: el centro queda oscuro y el borde de barro se enciende */
+  background: radial-gradient(
+    circle at 50% 58%,
+    transparent 0,
+    transparent 30%,
+    color-mix(in srgb, var(--tech) 55%, transparent) 100%
+  );
+}
 .track-icon {
   position: absolute;
-  left: 51%;
-  top: 63%;
-  width: 30%;
+  left: 50%;
+  top: 57%;
+  width: 34%;
   translate: -50% -50%;
-  color: color-mix(in srgb, var(--tech) 45%, #fff);
-  mix-blend-mode: screen;
-  filter: drop-shadow(0 0 calc(var(--u) * 0.18) var(--tech));
+  color: color-mix(in srgb, var(--tech) 80%, #fff);
+  filter: drop-shadow(0 0 calc(var(--u) * 0.3) var(--tech))
+    drop-shadow(0 0 calc(var(--u) * 0.8) color-mix(in srgb, var(--tech) 45%, transparent));
 }
