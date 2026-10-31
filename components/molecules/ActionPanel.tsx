@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
+import { useId, type ReactNode, type Ref } from "react";
 import { Button } from "@/components/atoms/Button";
 import { useHoldInput } from "@/hooks/useHoldInput";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,8 @@ interface ActionPanelProps {
   readonly onRelease: () => void;
   /** Barra de fuerza o de pelea, según la fase. */
   readonly meter: ReactNode;
+  /** Para devolverle el foco tras elegir o enganchar la carnada. */
+  readonly actionRef?: Ref<HTMLButtonElement>;
 }
 
 /**
@@ -29,6 +31,7 @@ export function ActionPanel({
   onPress,
   onRelease,
   meter,
+  actionRef,
 }: ActionPanelProps) {
   const statusId = useId();
   const hold = useHoldInput({ onPress, onRelease });
@@ -45,6 +48,7 @@ export function ActionPanel({
       <div className="min-h-[3.2rem]">{meter}</div>
       <Button
         {...hold}
+        ref={actionRef}
         aria-disabled={idle || undefined}
         aria-describedby={statusId}
         data-testid="fishing-action"

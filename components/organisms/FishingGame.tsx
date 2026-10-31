@@ -13,17 +13,11 @@ import { LakeStage } from "@/components/organisms/LakeStage";
 import { BAITS, CREATURES } from "@/data/creatures";
 import { COPY } from "@/data/copy";
 import type { FishingGameApi } from "@/hooks/useFishingGame";
-import { useBaitDrag } from "@/hooks/useBaitDrag";
+import { useBaitControls } from "@/hooks/useBaitControls";
 import { useGameFeedback } from "@/hooks/useGameFeedback";
 import { isBetweenCasts } from "@/lib/fishing/engine";
 import { experienceById } from "@/lib/collections";
-import {
-  actionIntent,
-  actionLabel,
-  gameStatus,
-  isActionIdle,
-  sceneCreature,
-} from "@/lib/fishing/view";
+import { actionLabel, gameStatus, isActionIdle, sceneCreature } from "@/lib/fishing/view";
 
 interface FishingGameProps {
   readonly game: FishingGameApi;
@@ -40,14 +34,8 @@ export function FishingGame({ game }: FishingGameProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const zoneRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
-  const drag = useBaitDrag({
-    canvasRef,
-    zoneRef,
-    ghostRef,
-    dragEnabled: state.mode === "challenge",
-    onPick: game.pickBait,
-    onAttach: game.attachBait,
-  });
+  const actionRef = useRef<HTMLButtonElement>(null);
+  const bait = useBaitControls(game, { canvasRef, zoneRef, ghostRef, actionRef });
   const awaitingHook =
     isBetweenCasts(state.phase) && state.bait !== null && !state.baitAttached;
   const creature = sceneCreature(state);
@@ -69,7 +57,7 @@ export function FishingGame({ game }: FishingGameProps) {
         state={state}
         creature={creature}
         shaking={feedback.shaking}
-        interactionFor={drag.interactionFor}
+        interactionFor={bait.interactionFor}
         canvasRef={canvasRef}
       >
         <HookZone ref={zoneRef} visible={awaitingHook} />
@@ -94,11 +82,10 @@ export function FishingGame({ game }: FishingGameProps) {
             actionLabel={actionLabel(state)}
             idle={isActionIdle(state)}
             urgent={state.phase === "bite"}
-            onPress={() =>
-              actionIntent(state) === "attach" ? game.attachBait() : game.press()
-            }
+            onPress={bait.onAction}
             onRelease={game.release}
             meter={meter}
+            actionRef={actionRef}
           />
         </div>
         <GameToolbar

@@ -26,8 +26,11 @@ interface BaitDragOptions {
   readonly ghostRef: RefObject<HTMLElement | null>;
   /** Sin arrastre (modo relajado): basta con tomar la carnada. */
   readonly dragEnabled: boolean;
-  readonly onPick: (bait: BaitId) => void;
+  /** Se toma una carnada: con el puntero o con Enter/Espacio sobre el balde. */
+  readonly onPick: (bait: BaitId, via: "pointer" | "keyboard") => void;
   readonly onAttach: () => void;
+  /** Termina un clic con el puntero (el navegador ya movió el foco al balde). */
+  readonly onPointerClick?: () => void;
 }
 
 interface DragSession {
@@ -125,7 +128,7 @@ export function useBaitDrag(options: BaitDragOptions) {
       onPointerDown: (event: PointerEvent<HTMLButtonElement>) => {
         if (event.button !== PRIMARY_BUTTON) return;
         const { canvasRef, zoneRef, ghostRef, dragEnabled, onPick } = latest.current;
-        onPick(bait);
+        onPick(bait, "pointer");
         const canvas = canvasRef.current?.getBoundingClientRect();
         const zone = zoneRef.current?.getBoundingClientRect();
         if (!dragEnabled || !canvas || !zone) return;
@@ -161,7 +164,8 @@ export function useBaitDrag(options: BaitDragOptions) {
       onPointerCancel: () => end(false),
       // Enter o Espacio sobre el balde: se elige sin arrastre.
       onClick: (event) => {
-        if (event.detail === KEYBOARD_CLICK) latest.current.onPick(bait);
+        if (event.detail === KEYBOARD_CLICK) latest.current.onPick(bait, "keyboard");
+        else latest.current.onPointerClick?.();
       },
     }),
     [end, render],

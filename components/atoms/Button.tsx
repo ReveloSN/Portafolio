@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode, Ref } from "react";
 import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "lime" | "ghost" | "dark";
@@ -31,6 +31,7 @@ type LinkProps = CommonProps &
 type NativeProps = CommonProps &
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
     readonly href?: undefined;
+    readonly ref?: Ref<HTMLButtonElement>;
   };
 
 export type ButtonProps = LinkProps | NativeProps;
