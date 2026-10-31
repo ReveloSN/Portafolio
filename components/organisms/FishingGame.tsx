@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { HookZone } from "@/components/atoms/HookZone";
 import { BaitGhost } from "@/components/molecules/BaitGhost";
 import { ActionPanel } from "@/components/molecules/ActionPanel";
-import { BaitPicker } from "@/components/molecules/BaitPicker";
 import { CastPowerBar } from "@/components/molecules/CastPowerBar";
 import { FightHud } from "@/components/molecules/FightHud";
 import { GameToolbar } from "@/components/molecules/GameToolbar";
@@ -22,9 +21,6 @@ import { actionLabel, gameStatus, isActionIdle, sceneCreature } from "@/lib/fish
 interface FishingGameProps {
   readonly game: FishingGameApi;
 }
-
-/** Fases en las que la carnada ya está en el agua y no se puede cambiar. */
-const LINE_OUT = new Set(["casting", "waiting", "bite", "fighting"]);
 
 /** El lago jugable: escena, revelado de la captura, controles y atajos. */
 export function FishingGame({ game }: FishingGameProps) {
@@ -69,25 +65,16 @@ export function FishingGame({ game }: FishingGameProps) {
             <JournalEntry entry={revealed} revealed />
           </div>
         ) : null}
-        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:gap-6 lg:grid-cols-1 lg:gap-4">
-          <BaitPicker
-            title={copy.baitTitle}
-            baits={BAITS}
-            selected={state.bait}
-            locked={LINE_OUT.has(state.phase)}
-            onSelect={game.pickBait}
-          />
-          <ActionPanel
-            status={gameStatus(state)}
-            actionLabel={actionLabel(state)}
-            idle={isActionIdle(state)}
-            urgent={state.phase === "bite"}
-            onPress={bait.onAction}
-            onRelease={game.release}
-            meter={meter}
-            actionRef={actionRef}
-          />
-        </div>
+        <ActionPanel
+          status={gameStatus(state)}
+          actionLabel={actionLabel(state)}
+          idle={isActionIdle(state)}
+          urgent={state.phase === "bite"}
+          onPress={bait.onAction}
+          onRelease={game.release}
+          meter={meter}
+          actionRef={actionRef}
+        />
         <GameToolbar
           labels={copy}
           count={state.caught.length}
