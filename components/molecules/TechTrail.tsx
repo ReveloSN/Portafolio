@@ -21,7 +21,7 @@ const STEP_MS = 120;
 export function TechTrail({ technologies, startIndex }: TechTrailProps) {
   return (
     <ul
-      className="mt-[calc(var(--u)*.8)] flex flex-wrap items-start justify-center gap-y-[calc(var(--u)*1)] sm:grid sm:grid-cols-[repeat(var(--trail-cols),minmax(0,1fr))] sm:gap-x-[calc(var(--u)*.6)]"
+      className="mt-[calc(var(--u)*.8)] flex flex-wrap items-start justify-center gap-y-[calc(var(--u)*1)] sm:grid sm:grid-cols-[repeat(var(--trail-cols),minmax(0,1fr))] sm:gap-x-[calc(var(--u)*.2)]"
       style={
         {
           "--stagger-step": `${STEP_MS}ms`,

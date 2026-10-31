@@ -52,7 +52,7 @@ export function About({ profile }: AboutProps) {
     >
       <div className="mx-auto grid w-full max-w-[min(var(--content-max),calc(var(--u)*92))] items-center gap-[clamp(1.75rem,calc(var(--u)*4.5),5rem)] lg:grid-cols-[auto_minmax(0,1fr)]">
         <AboutCard profile={profile} />
-        <RevealGroup className="mx-auto w-full max-w-[calc(var(--u)*64)] lg:mx-0">
+        <RevealGroup className="mx-auto w-full max-w-[calc(var(--u)*68)] lg:mx-0">
           <p className="font-display text-glow text-fluid-xs font-medium tracking-[.4em]">
             {about.eyebrow}
           </p>
