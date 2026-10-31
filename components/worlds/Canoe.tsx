@@ -15,6 +15,8 @@ const RIPPLE =
 /** Ancho de la canoa: 238 unidades del diseño, escaladas con el stage (mínimo legible 7.5rem). */
 const CANOE_SIZE = "max(7.5rem, calc(238 * var(--sf, 1px)))";
 const FADE = "linear-gradient(to top, #000 0, transparent 55%)";
+/** Subir "v" al reemplazar el archivo para que ningún navegador muestre la versión anterior. */
+const CANOE_SRC = "/images/canoa.webp?v=2";
 
 export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
   const { canoe } = HERO_LAYERS;
@@ -45,7 +47,7 @@ export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
         <div className="bob2 relative">
           {withReflection ? (
             <Image
-              src="/images/canoa.webp"
+              src={CANOE_SRC}
               alt=""
               width={1254}
               height={1254}
@@ -55,7 +57,7 @@ export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
             />
           ) : null}
           <Illustration
-            src="/images/canoa.webp"
+            src={CANOE_SRC}
             alt={alt}
             testId={testId}
             width={1254}
