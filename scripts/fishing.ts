@@ -11,6 +11,7 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { chromium, type Browser, type Page } from "playwright";
+import { CAST_CHARGE_MS } from "@/lib/fishing/config";
 
 const VIEWPORTS = [
   { name: "1280x575", width: 1280, height: 575, scale: 1, mobile: false },
@@ -182,35 +183,29 @@ async function takeBait(page: Page, run: Run, bait: Bait, snap: Snap) {
 }
 
 /**
- * Carga el lanzamiento y suelta en la zona pedida. Se suelta desde la propia página, en el
- * mismo fotograma en que la barra entra en la zona: con la máquina cargada, soltar desde
- * Playwright llega tarde y la boya cae en otra profundidad.
+ * Carga el lanzamiento y suelta en la zona pedida. Pulsa y suelta dentro de la página y
+ * calcula la fuerza con el mismo reloj que el motor (vaivén de CAST_CHARGE_MS): si el
+ * render va lento, la barra pintada llega tarde, pero la fuerza real no.
  */
 async function cast(page: Page, run: Run, depth: Depth, snap: Snap) {
-  const input = holdInput(page, run);
-  await input.down();
+  const charge = CAST_CHARGE_MS[run === "relaxed" ? "relaxed" : "challenge"];
   // Sin funciones con nombre dentro: tsx les añade un ayudante que la página no tiene.
   await page.evaluate(
-    async ([lo, hi, kind]) => {
+    async ([lo, hi, chargeMs]) => {
+      const action = document.querySelector("[data-testid=fishing-action]");
+      action?.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+      const start = performance.now();
       for (;;) {
         await new Promise((resolve) => requestAnimationFrame(resolve));
-        const bar = document.querySelector("[data-testid=cast-power] [role=progressbar]");
-        const value = Number(bar?.getAttribute("aria-valuenow"));
-        if (value < lo || value > hi) continue;
-        document
-          .querySelector("[data-testid=fishing-action]")
-          ?.dispatchEvent(
-            kind === "mouse"
-              ? new PointerEvent("pointerup", { bubbles: true, isPrimary: true })
-              : new KeyboardEvent("keyup", { key: " ", bubbles: true }),
-          );
+        const cycle = ((performance.now() - start) / chargeMs) % 2;
+        const power = (cycle <= 1 ? cycle : 2 - cycle) * 100;
+        if (power < lo || power > hi) continue;
+        action?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
         return;
       }
     },
-    [...RELEASE_AT[depth], run === "drag" ? "mouse" : "key"] as const,
+    [...RELEASE_AT[depth], charge] as const,
   );
-  // Ya soltado en la página: esto solo limpia el estado del teclado o del ratón.
-  await input.up();
   await snap("casting");
 }
 
@@ -285,6 +280,7 @@ async function playGame(page: Page, run: Run, snap: Snap) {
         console.log(`    picada lenta: ${await phaseOf(page)} · ${await statusOf(page)}`);
       }
       if ((await phaseOf(page)) !== "bite") {
+        console.log(`    intento ${attempt + 1}: ${await statusOf(page)}`);
         await snap("escaped");
         continue;
       }
@@ -296,6 +292,8 @@ async function playGame(page: Page, run: Run, snap: Snap) {
       else await fightChallenge(page, run, snap);
       const phase = await phaseOf(page);
       caught = phase === "caught" || phase === "complete";
+      if (!caught)
+        console.log(`    intento ${attempt + 1}: ${phase} · ${await statusOf(page)}`);
       await snap(caught ? (phase === "complete" ? "complete" : "caught") : phase);
     }
     check(caught, `${run}: capturado ${step.creature}`);
