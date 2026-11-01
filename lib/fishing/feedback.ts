@@ -13,7 +13,6 @@ export const FEEDBACK: Partial<Readonly<Record<GamePhase, PhaseFeedback>>> = {
   bite: { shake: true, vibrate: [90], tones: [660, 880] },
   caught: { shake: false, vibrate: [40, 30, 40], tones: [523, 659, 784] },
   escaped: { shake: false, vibrate: [], tones: [330, 262] },
-  lineBroken: { shake: true, vibrate: [70, 40, 120], tones: [196, 147] },
   complete: {
     shake: false,
     vibrate: [60, 40, 60, 40, 120],

@@ -13,9 +13,6 @@ export type BreachClass = "small" | "mid" | "giant";
 /** Fases visuales del salto (no frenan al motor). */
 export type BreachStage = "idle" | "bulge" | "rise" | "snap" | "fall" | "splash";
 
-/** Fuerza con la que tira la criatura (0 a 1) en función del tiempo de pelea (ms). */
-export type PullPattern = (elapsedMs: number) => number;
-
 /** Anillo de cada criatura: aciertos que pide, velocidad de la aguja (grados/s) y zona. */
 export interface RingTuning {
   readonly hits: number;
@@ -23,35 +20,16 @@ export interface RingTuning {
   readonly zoneDeg: number;
 }
 
-/**
- * Minijuego del anillo. La aguja está en `angleAt` grados en el instante `since` (ms) y
- * gira a `speed` grados por segundo; la zona va de `zoneStart` a `zoneStart + zoneDeg`.
- */
-export interface RingState {
-  readonly needed: number;
-  readonly hits: number;
-  readonly misses: number;
-  readonly zoneStart: number;
-  readonly zoneDeg: number;
-  readonly speed: number;
-  readonly angleAt: number;
-  readonly since: number;
-  /** Resultado de la última pulsación, para anunciarlo. */
-  readonly last: "hit" | "miss" | null;
-}
-
 import type { LakePieceId } from "./lake";
 
-/** Estrategia de cada criatura: dónde vive, qué come, cómo pelea y qué revela. */
+/** Cada criatura: dónde vive, cómo pelea en el anillo y qué revela. */
 export interface Creature {
   readonly id: CreatureId;
   readonly name: string;
   readonly depth: Depth;
-  /** 0 (dócil) a 1 (feroz): escala sus tirones y el tiempo que tarda en soltarse. */
+  /** 0 (dócil) a 1 (feroz): cuanto más feroz, antes se suelta si no se engancha. */
   readonly difficulty: number;
   readonly size: CreatureSize;
-  /** Una fase por tramo de progreso: el megalodón cambia de patrón a mitad de pelea. */
-  readonly phases: readonly PullPattern[];
   /** Su anillo: aciertos que pide, velocidad de la aguja y ancho de la zona. */
   readonly ring: RingTuning;
   /** Capturas previas necesarias para que aparezca. */
@@ -73,19 +51,26 @@ export type GamePhase =
   | "fighting"
   | "caught"
   | "escaped"
-  | "lineBroken"
   | "complete";
 
 /** Por qué terminó un intento sin captura. */
-export type EscapeReason = "noBite" | "locked" | "slipped" | "fought";
+export type EscapeReason = "noBite" | "locked" | "slipped" | "missed";
 
-export interface FightState {
-  readonly tension: number;
-  readonly progress: number;
-  readonly fishPull: number;
-  /** Tiempo seguido con la tensión en rojo (ms). */
-  readonly overTensionMs: number;
-  readonly elapsedMs: number;
+/**
+ * Minijuego del anillo. La aguja está en `angleAt` grados en el instante `since` (ms) y
+ * gira a `speed` grados por segundo; la zona va de `zoneStart` a `zoneStart + zoneDeg`.
+ */
+export interface RingState {
+  readonly needed: number;
+  readonly hits: number;
+  readonly misses: number;
+  readonly zoneStart: number;
+  readonly zoneDeg: number;
+  readonly speed: number;
+  readonly angleAt: number;
+  readonly since: number;
+  /** Resultado de la última pulsación, para anunciarlo. */
+  readonly last: "hit" | "miss" | null;
 }
 
 export interface GameState {
@@ -93,15 +78,14 @@ export interface GameState {
   readonly mode: GameMode;
   /** Estado del generador pseudoaleatorio: avanza con cada sorteo. */
   readonly seed: number;
-  readonly castStartedAt: number | null;
-  readonly power: number;
   readonly depth: Depth | null;
+  /** La boya en vuelo cae al agua en este instante. */
+  readonly landsAt: number | null;
   readonly hooked: CreatureId | null;
   readonly biteAt: number | null;
   /** Solo en modo desafío: cuándo se suelta la criatura si no se confirma la picada. */
   readonly biteDeadline: number | null;
-  readonly holding: boolean;
-  readonly fight: FightState;
+  readonly ring: RingState | null;
   readonly caught: readonly CreatureId[];
   readonly lastCatch: CreatureId | null;
   readonly escapeReason: EscapeReason | null;
@@ -109,9 +93,9 @@ export interface GameState {
 
 export type GameAction =
   | { readonly type: "setMode"; readonly mode: GameMode }
+  | { readonly type: "cast"; readonly depth: Depth; readonly now: number }
   | { readonly type: "press"; readonly now: number }
-  | { readonly type: "release"; readonly now: number }
-  | { readonly type: "tick"; readonly now: number; readonly dt: number }
+  | { readonly type: "tick"; readonly now: number }
   | { readonly type: "reseed"; readonly seed: number }
   | { readonly type: "revealAll" }
   | { readonly type: "reset" };

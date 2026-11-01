@@ -1,45 +1,42 @@
 import { describe, expect, it } from "vitest";
 import { CREATURES } from "@/data/creatures";
-import { CAST_CHARGE_MS, WAIT_MIN_MS, WAIT_SPREAD_MS } from "@/lib/fishing/config";
-import {
-  chargePower,
-  createFishingEngine,
-  createInitialState,
-} from "@/lib/fishing/engine";
-import { depthFromPower, surveySpot } from "@/lib/fishing/creatures";
+import { CAST_FLIGHT_MS, WAIT_MIN_MS, WAIT_SPREAD_MS } from "@/lib/fishing/config";
+import { createFishingEngine, createInitialState } from "@/lib/fishing/engine";
+import { surveySpot } from "@/lib/fishing/creatures";
 import { nextRandom } from "@/lib/fishing/random";
-import type { Depth, GameMode, GameState } from "@/types/fishing";
+import type { Depth, GameMode, GameState, RingState } from "@/types/fishing";
 
 const reducer = createFishingEngine(CREATURES);
 const SEED = 42;
-const FRAME_MS = 16;
-const CHARGE = CAST_CHARGE_MS.challenge;
-/** Fuerza que cae en el centro de cada zona. */
-const POWER: Readonly<Record<Depth, number>> = { shore: 0.15, mid: 0.5, deep: 0.85 };
+const T0 = 100;
+const MS_PER_S = 1000;
 
 const start = (mode: GameMode = "challenge") => createInitialState(SEED, mode);
 
-/** Lanza a la zona pedida y espera la picada (o el final de la espera). */
-function castTo(state: GameState, depth: Depth, now = 0): GameState {
-  const pressed = reducer(state, { type: "press", now });
-  const charge = CAST_CHARGE_MS[state.mode];
-  const released = reducer(pressed, {
-    type: "release",
-    now: now + POWER[depth] * charge,
-  });
-  const biteAt = released.biteAt ?? 0;
-  return reducer(released, { type: "tick", now: biteAt, dt: FRAME_MS });
+/** Elige el punto, deja volar la boya y espera la picada (o el final de la espera). */
+function castTo(state: GameState, depth: Depth, now = T0): GameState {
+  const casting = reducer(state, { type: "cast", depth, now });
+  const landed = reducer(casting, { type: "tick", now: casting.landsAt ?? now });
+  return reducer(landed, { type: "tick", now: landed.biteAt ?? now });
 }
 
-/** Pelea en modo relajado a base de pulsaciones. */
-function reelRelaxed(state: GameState): GameState {
-  let s = reducer(state, { type: "press", now: 0 });
-  while (s.phase === "fighting") s = reducer(s, { type: "press", now: 0 });
+/** Instante en que la aguja pasa por el centro de la zona (o justo enfrente). */
+function needleAt(ring: RingState, offsetDeg = 0): number {
+  const target = ring.zoneStart + ring.zoneDeg / 2 + offsetDeg;
+  const travel = (((target - ring.angleAt) % 360) + 360) % 360;
+  return ring.since + (travel / ring.speed) * MS_PER_S;
+}
+
+/** Engancha y acierta cada ronda del anillo. */
+function land(state: GameState): GameState {
+  let s = reducer(state, { type: "press", now: T0 });
+  while (s.phase === "fighting" && s.ring) {
+    s = reducer(s, { type: "press", now: needleAt(s.ring) });
+  }
   return s;
 }
 
-/** Pesca en modo relajado lo que pique en la zona. */
-const fishAt = (state: GameState, depth: Depth) => reelRelaxed(castTo(state, depth));
+const fishAt = (state: GameState, depth: Depth) => land(castTo(state, depth));
 
 describe("generador con semilla", () => {
   it("misma semilla, misma secuencia; siempre entre 0 y 1", () => {
@@ -55,39 +52,32 @@ describe("generador con semilla", () => {
 });
 
 describe("lanzamiento", () => {
-  it("la fuerza va de 0 a 1 y regresa", () => {
-    expect(chargePower(0, "challenge")).toBe(0);
-    expect(chargePower(CHARGE, "challenge")).toBe(1);
-    expect(chargePower(CHARGE * 1.5, "challenge")).toBeCloseTo(0.5);
-  });
-
-  it("la fuerza define la profundidad", () => {
-    expect(depthFromPower(0.2)).toBe("shore");
-    expect(depthFromPower(0.34)).toBe("mid");
-    expect(depthFromPower(0.67)).toBe("deep");
-  });
-
-  it("idle → casting → waiting con espera de 1.5 a 4 s y una criatura de esa zona", () => {
-    const casting = reducer(start(), { type: "press", now: 100 });
+  it("elegir un punto: casting → waiting con espera de 1.5 a 4 s y una criatura de ahí", () => {
+    const casting = reducer(start(), { type: "cast", depth: "shore", now: T0 });
     expect(casting.phase).toBe("casting");
-    const waiting = reducer(casting, {
-      type: "release",
-      now: 100 + POWER.shore * CHARGE,
-    });
+    expect(casting.depth).toBe("shore");
+    expect(["lepidotes", "ammonite"]).toContain(casting.hooked);
+    expect(reducer(casting, { type: "tick", now: T0 + 1 }).phase).toBe("casting");
+    const waiting = reducer(casting, { type: "tick", now: T0 + CAST_FLIGHT_MS });
     expect(waiting.phase).toBe("waiting");
-    expect(waiting.depth).toBe("shore");
-    expect(["lepidotes", "ammonite"]).toContain(waiting.hooked);
-    const wait = (waiting.biteAt ?? 0) - (100 + POWER.shore * CHARGE);
+    const wait = (waiting.biteAt ?? 0) - (T0 + CAST_FLIGHT_MS);
     expect(wait).toBeGreaterThanOrEqual(WAIT_MIN_MS);
     expect(wait).toBeLessThanOrEqual(WAIT_MIN_MS + WAIT_SPREAD_MS);
+  });
+
+  it("no se lanza en plena espera ni en plena pelea", () => {
+    const waiting = reducer(start(), { type: "cast", depth: "mid", now: T0 });
+    expect(reducer(waiting, { type: "cast", depth: "deep", now: T0 })).toBe(waiting);
   });
 });
 
 describe("transiciones", () => {
-  it("waiting → bite → fighting", () => {
+  it("waiting → bite → fighting con el anillo de la criatura", () => {
     const bite = castTo(start(), "shore");
     expect(bite.phase).toBe("bite");
-    expect(reducer(bite, { type: "press", now: 0 }).phase).toBe("fighting");
+    const fighting = reducer(bite, { type: "press", now: T0 });
+    expect(fighting.phase).toBe("fighting");
+    expect(fighting.ring?.needed).toBe(1);
   });
 
   it("cuando la zona ya no tiene nada, termina en escaped (noBite)", () => {
@@ -100,53 +90,34 @@ describe("transiciones", () => {
 
   it("desafío: la picada sin confirmar se suelta; relajado: espera para siempre", () => {
     const bite = castTo(start("challenge"), "shore");
-    const late = reducer(bite, {
-      type: "tick",
-      now: (bite.biteDeadline ?? 0) + 1,
-      dt: FRAME_MS,
-    });
+    const late = reducer(bite, { type: "tick", now: (bite.biteDeadline ?? 0) + 1 });
     expect(late.phase).toBe("escaped");
     expect(late.escapeReason).toBe("slipped");
     const calm = castTo(start("relaxed"), "shore");
     expect(calm.biteDeadline).toBeNull();
-    expect(reducer(calm, { type: "tick", now: 1e9, dt: FRAME_MS }).phase).toBe("bite");
+    expect(reducer(calm, { type: "tick", now: 1e9 }).phase).toBe("bite");
   });
 
-  it("pelea: mantener pulsado rompe el hilo; soltar deja escapar", () => {
-    let held = reducer(castTo(start(), "deep"), { type: "press", now: 0 });
-    for (let i = 0; i < 1000 && held.phase === "fighting"; i++)
-      held = reducer(held, { type: "tick", now: 0, dt: FRAME_MS });
-    expect(held.phase).toBe("lineBroken");
-
-    let slack = reducer(reducer(castTo(start(), "shore"), { type: "press", now: 0 }), {
-      type: "release",
-      now: 0,
-    });
-    for (let i = 0; i < 2000 && slack.phase === "fighting"; i++)
-      slack = reducer(slack, { type: "tick", now: 0, dt: FRAME_MS });
-    expect(slack.phase).toBe("escaped");
-    expect(slack.escapeReason).toBe("fought");
+  it("dos fallos en el anillo: se escapa", () => {
+    let s = reducer(castTo(start(), "deep"), { type: "press", now: T0 });
+    for (let miss = 0; miss < 2 && s.ring; miss++)
+      s = reducer(s, { type: "press", now: needleAt(s.ring, 180) });
+    expect(s.phase).toBe("escaped");
+    expect(s.escapeReason).toBe("missed");
+    expect(s.ring).toBeNull();
   });
 
-  it("pelea: dosificar la tensión captura y se puede volver a lanzar", () => {
-    let s = reducer(castTo(start(), "shore"), { type: "press", now: 0 });
-    for (let i = 0; i < 5000 && s.phase === "fighting"; i++) {
-      const action = s.fight.tension < 0.5 ? "press" : "release";
-      s = reducer(reducer(s, { type: action, now: 0 }), {
-        type: "tick",
-        now: 0,
-        dt: FRAME_MS,
-      });
-    }
+  it("acertar captura y se puede volver a lanzar", () => {
+    const s = fishAt(start(), "shore");
     expect(s.phase).toBe("caught");
     expect(s.caught).toHaveLength(1);
-    expect(reducer(s, { type: "press", now: 0 }).phase).toBe("casting");
+    expect(reducer(s, { type: "cast", depth: "mid", now: T0 }).phase).toBe("casting");
   });
 
   it("las acciones fuera de fase no cambian el estado", () => {
     const idle = start();
-    expect(reducer(idle, { type: "release", now: 0 })).toBe(idle);
-    expect(reducer(idle, { type: "tick", now: 0, dt: FRAME_MS })).toBe(idle);
+    expect(reducer(idle, { type: "press", now: T0 })).toBe(idle);
+    expect(reducer(idle, { type: "tick", now: T0 })).toBe(idle);
   });
 });
 
@@ -164,7 +135,7 @@ describe("megalodón y final", () => {
   });
 
   it("dos lanzamientos por zona completan el lago", () => {
-    let s = start("relaxed");
+    let s = start("challenge");
     for (const depth of ["shore", "shore", "mid", "mid", "deep", "deep"] as const)
       s = fishAt(s, depth);
     expect(s.phase).toBe("complete");

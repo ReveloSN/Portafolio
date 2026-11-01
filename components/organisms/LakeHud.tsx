@@ -1,4 +1,4 @@
-import type { ReactNode, Ref } from "react";
+import type { Ref } from "react";
 import { CatchMarks } from "@/components/molecules/CatchMarks";
 import { HudStatus } from "@/components/molecules/HudStatus";
 import {
@@ -13,8 +13,6 @@ interface LakeHudProps {
   readonly idle: boolean;
   readonly urgent: boolean;
   readonly onPress: () => void;
-  readonly onRelease: () => void;
-  readonly meter?: ReactNode;
   readonly actionRef?: Ref<HTMLButtonElement>;
   readonly count: number;
   readonly total: number;
@@ -44,8 +42,6 @@ export function LakeHud(props: LakeHudProps) {
         idle={props.idle}
         urgent={props.urgent}
         onPress={props.onPress}
-        onRelease={props.onRelease}
-        meter={props.meter}
         actionRef={props.actionRef}
       />
       <CatchMarks label={labels.captures} count={count} total={total} />

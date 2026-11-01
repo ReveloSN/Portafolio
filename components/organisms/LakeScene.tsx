@@ -10,22 +10,12 @@ import { Rod } from "@/components/worlds/lake/Rod";
 import { kidPose } from "@/lib/fishing/pose";
 import { rigLayout } from "@/lib/fishing/rig";
 import { BOBBER_AT, LAKE_VIEWBOX, SHADOW_RX } from "@/lib/fishing/scene";
-import type {
-  BreachStage,
-  Creature,
-  Depth,
-  FightState,
-  GameMode,
-  GamePhase,
-} from "@/types/fishing";
+import type { BreachStage, Creature, Depth, GamePhase } from "@/types/fishing";
 import type { LakeAssets } from "@/types/lake";
 
 interface LakeSceneProps {
   readonly phase: GamePhase;
-  readonly mode: GameMode;
   readonly depth: Depth | null;
-  readonly power: number;
-  readonly fight: FightState;
   /** La que pica o pelea, o la recién capturada. */
   readonly creature: Creature | null;
   /** Fase visual del salto (la boya se oculta mientras dura). */
@@ -44,7 +34,7 @@ const LEAPING: ReadonlySet<GamePhase> = new Set(["caught", "complete"]);
  */
 export function LakeScene(props: LakeSceneProps) {
   const { phase, depth, creature, breach, simpleShadow, assets, label } = props;
-  const rig = rigLayout({ ...props, breach });
+  const rig = rigLayout({ phase, depth, breach });
   const target = depth ? BOBBER_AT[depth] : null;
   const biting = phase === "bite";
   const showShadow =
@@ -75,7 +65,7 @@ export function LakeScene(props: LakeSceneProps) {
       <Rod
         angle={rig.angle}
         tugging={biting || phase === "fighting"}
-        flicking={phase === "waiting"}
+        flicking={phase === "casting"}
       />
       <FishingLine
         from={rig.tip}
@@ -84,12 +74,7 @@ export function LakeScene(props: LakeSceneProps) {
         tautness={rig.line.tautness}
       />
       {rig.bobber ? (
-        <Bobber
-          x={rig.bobber.point.x}
-          y={rig.bobber.point.y}
-          state={rig.bobber.state}
-          jitter={rig.jitter}
-        />
+        <Bobber x={rig.bobber.point.x} y={rig.bobber.point.y} state={rig.bobber.state} />
       ) : null}
       {rig.hookInAir ? (
         <HangingHook hook={assets.hook} x={rig.hookInAir.x} y={rig.hookInAir.y} />

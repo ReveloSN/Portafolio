@@ -143,9 +143,9 @@
 .lake-rod-motion.is-tugging {
   animation: rodTug 0.22s ease-in-out infinite alternate;
 }
-/* Al lanzar: giro rápido hacia delante y vuelta al reposo */
+/* Al lanzar: atrás, latigazo hacia delante y vuelta al reposo mientras vuela la boya */
 .lake-rod-motion.is-flicking {
-  animation: rodFlick 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) 1;
+  animation: rodFlick 0.75s cubic-bezier(0.2, 0.8, 0.3, 1) 1;
 }
 /* El niño: las tres poses están siempre (precargadas); solo se ve la activa */
 .lake-kid-pose {
@@ -255,11 +255,14 @@
   0% {
     rotate: 0deg;
   }
-  35% {
-    rotate: 22deg;
+  30% {
+    rotate: -24deg;
   }
-  70% {
-    rotate: -5deg;
+  55% {
+    rotate: 20deg;
+  }
+  80% {
+    rotate: -4deg;
   }
   100% {
     rotate: 0deg;

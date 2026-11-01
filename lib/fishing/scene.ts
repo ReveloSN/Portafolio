@@ -246,6 +246,3 @@ export const SHADOW_RX: Readonly<Record<CreatureSize, number>> = {
   large: 70,
   huge: 110,
 };
-
-/** Desplazamiento máximo (unidades del SVG) de la boya cuando el pez tira. */
-export const PULL_JITTER = 14;

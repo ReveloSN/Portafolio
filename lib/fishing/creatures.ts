@@ -1,40 +1,6 @@
-import { DEPTH_THRESHOLDS } from "@/lib/fishing/config";
-import type { Creature, CreatureId, Depth, PullPattern } from "@/types/fishing";
-
-const FULL_TURN = Math.PI * 2;
-
-/* ---------- Patrones de tirón (Strategy): cada criatura combina uno por fase ---------- */
-
-/** Tirón ondulante: sube y baja con un periodo fijo. */
-export const wave =
-  (base: number, amplitude: number, periodMs: number): PullPattern =>
-  (elapsedMs) =>
-    base + amplitude * Math.sin((FULL_TURN * elapsedMs) / periodMs);
-
-/** Tirón a sacudidas: un pico de `lengthMs` cada `everyMs`. */
-export const bursts =
-  (base: number, peak: number, everyMs: number, lengthMs: number): PullPattern =>
-  (elapsedMs) =>
-    elapsedMs % everyMs < lengthMs ? peak : base;
-
-/** Fase activa según el progreso: con 2 fases, la segunda empieza a mitad de pelea. */
-export function pullAt(creature: Creature, elapsedMs: number, progress: number): number {
-  const { phases } = creature;
-  const index = Math.min(phases.length - 1, Math.floor(progress * phases.length));
-  const pattern = phases[Math.max(0, index)];
-  return pattern ? pattern(elapsedMs) : 0;
-}
-
-export const phaseIndex = (creature: Creature, progress: number) =>
-  Math.min(creature.phases.length - 1, Math.floor(progress * creature.phases.length));
+import type { Creature, CreatureId, Depth } from "@/types/fishing";
 
 /* ---------- Reglas de aparición ---------- */
-
-export function depthFromPower(power: number): Depth {
-  if (power < DEPTH_THRESHOLDS.mid) return "shore";
-  if (power < DEPTH_THRESHOLDS.deep) return "mid";
-  return "deep";
-}
 
 export const isUnlocked = (creature: Creature, captures: number) =>
   captures >= creature.unlockAfter;

@@ -1,26 +1,16 @@
 import {
   BITE_PATIENCE_DIFFICULTY_MS,
   BITE_PATIENCE_MS,
-  CAST_CHARGE_MS,
-  MAX_STEP_MS,
+  CAST_FLIGHT_MS,
   WAIT_MIN_MS,
   WAIT_SPREAD_MS,
 } from "@/lib/fishing/config";
-import {
-  depthFromPower,
-  indexCreatures,
-  pullAt,
-  surveySpot,
-} from "@/lib/fishing/creatures";
+import { indexCreatures, surveySpot } from "@/lib/fishing/creatures";
+import { RING_FIGHT, type FightStrategy } from "@/lib/fishing/fight";
 import { nextRandom, pick } from "@/lib/fishing/random";
-import {
-  INITIAL_FIGHT,
-  relaxedTap,
-  stepFight,
-  type FightStep,
-} from "@/lib/fishing/tension";
 import type {
   Creature,
+  Depth,
   GameAction,
   GameMode,
   GamePhase,
@@ -29,19 +19,14 @@ import type {
 
 /**
  * Máquina de estados del lago (pura):
- * idle → casting → waiting → bite → fighting → caught | escaped | lineBroken → casting …
+ * idle → (elegir punto) casting → waiting → bite → fighting → caught | escaped → casting …
  * waiting → escaped (nada picó) · bite → escaped (se soltó, solo desafío) · 6 capturas → complete
  */
 
-/** Fases desde las que una pulsación empieza un lanzamiento nuevo. */
-const CAN_CAST: ReadonlySet<GamePhase> = new Set([
-  "idle",
-  "caught",
-  "escaped",
-  "lineBroken",
-]);
+/** Fases desde las que se puede elegir un punto de pesca y lanzar. */
+const CAN_CAST: ReadonlySet<GamePhase> = new Set(["idle", "caught", "escaped"]);
 
-/** Entre intentos: se puede tomar carnada, engancharla y lanzar. */
+/** Entre intentos: los puntos de pesca están disponibles. */
 export const isBetweenCasts = (phase: GamePhase) => CAN_CAST.has(phase);
 
 export function createInitialState(seed: number, mode: GameMode): GameState {
@@ -49,51 +34,49 @@ export function createInitialState(seed: number, mode: GameMode): GameState {
     phase: "idle",
     mode,
     seed,
-    castStartedAt: null,
-    power: 0,
     depth: null,
+    landsAt: null,
     hooked: null,
     biteAt: null,
     biteDeadline: null,
-    holding: false,
-    fight: INITIAL_FIGHT,
+    ring: null,
     caught: [],
     lastCatch: null,
     escapeReason: null,
   };
 }
 
-/** Fuerza del lanzamiento: sube de 0 a 1 y vuelve (vaivén) mientras se mantiene pulsado. */
-export function chargePower(elapsedMs: number, mode: GameMode): number {
-  const cycle = (Math.max(0, elapsedMs) / CAST_CHARGE_MS[mode]) % 2;
-  return cycle <= 1 ? cycle : 2 - cycle;
-}
-
-export function createFishingEngine(creatures: readonly Creature[]) {
+export function createFishingEngine(
+  creatures: readonly Creature[],
+  fight: FightStrategy = RING_FIGHT,
+) {
   const byId = indexCreatures(creatures);
   const allIds = creatures.map((creature) => creature.id);
 
-  /** Fin de un intento: se suelta el carrete. */
+  /** Fin de un intento. */
   function finish(state: GameState, phase: GamePhase): GameState {
-    return { ...state, phase, holding: false };
+    return { ...state, phase, ring: null };
   }
 
-  function launch(state: GameState, now: number): GameState {
-    if (state.castStartedAt === null) return state;
-    const power = chargePower(now - state.castStartedAt, state.mode);
-    const depth = depthFromPower(power);
+  /** Elegir un punto: la boya vuela hacia él y ahí se decide quién picará. */
+  function cast(state: GameState, depth: Depth, now: number): GameState {
+    if (!CAN_CAST.has(state.phase)) return state;
     const spot = surveySpot(creatures, depth, state.caught);
     const choice = nextRandom(state.seed);
     const wait = nextRandom(choice.seed);
     const hooked = pick(spot.candidates, choice.value);
+    const landsAt = now + CAST_FLIGHT_MS;
     return {
       ...state,
-      phase: "waiting",
+      phase: "casting",
       seed: wait.seed,
-      power,
       depth,
+      landsAt,
       hooked: hooked?.id ?? null,
-      biteAt: now + WAIT_MIN_MS + wait.value * WAIT_SPREAD_MS,
+      biteAt: landsAt + WAIT_MIN_MS + wait.value * WAIT_SPREAD_MS,
+      biteDeadline: null,
+      ring: null,
+      lastCatch: null,
       escapeReason: hooked ? null : spot.locked ? "locked" : "noBite",
     };
   }
@@ -110,49 +93,44 @@ export function createFishingEngine(creatures: readonly Creature[]) {
     };
   }
 
-  function settle(state: GameState, step: FightStep): GameState {
-    const next = { ...state, fight: step.fight };
-    switch (step.outcome) {
-      case "fighting":
-        return next;
-      case "lineBroken":
-        return finish({ ...next, hooked: null }, "lineBroken");
-      case "escaped":
-        return finish({ ...next, hooked: null, escapeReason: "fought" }, "escaped");
-      case "caught": {
-        const id = state.hooked;
-        if (!id) return next;
-        const caught = state.caught.includes(id) ? state.caught : [...state.caught, id];
-        const done = caught.length >= allIds.length;
-        return finish(
-          { ...next, hooked: null, caught, lastCatch: id },
-          done ? "complete" : "caught",
-        );
-      }
-    }
-  }
-
-  function fightTick(state: GameState, dt: number): GameState {
+  /** Enganchar: empieza el minijuego de la criatura. */
+  function hook(state: GameState, now: number): GameState {
     const creature = state.hooked ? byId.get(state.hooked) : undefined;
     if (!creature) return state;
-    const dtMs = Math.min(MAX_STEP_MS, Math.max(0, dt));
-    const elapsed = state.fight.elapsedMs + dtMs;
-    const step = stepFight(state.fight, {
-      holding: state.holding,
-      mode: state.mode,
-      fishPull: pullAt(creature, elapsed, state.fight.progress),
-      difficulty: creature.difficulty,
-      dtMs,
-    });
-    return settle(state, step);
+    const started = fight.start(creature, state.mode, state.seed, now);
+    return {
+      ...state,
+      phase: "fighting",
+      biteDeadline: null,
+      ring: started.ring,
+      seed: started.seed,
+    };
   }
 
-  function tick(state: GameState, now: number, dt: number): GameState {
+  function strike(state: GameState, now: number): GameState {
+    if (!state.ring) return state;
+    const step = fight.press(state.ring, state.mode, state.seed, now);
+    const next = { ...state, ring: step.ring, seed: step.seed };
+    if (step.outcome === "escaped") {
+      return finish({ ...next, hooked: null, escapeReason: "missed" }, "escaped");
+    }
+    if (step.outcome !== "caught") return next;
+    const id = state.hooked;
+    if (!id) return next;
+    const caught = state.caught.includes(id) ? state.caught : [...state.caught, id];
+    const done = caught.length >= allIds.length;
+    return finish(
+      { ...next, hooked: null, caught, lastCatch: id },
+      done ? "complete" : "caught",
+    );
+  }
+
+  function tick(state: GameState, now: number): GameState {
     switch (state.phase) {
       case "casting":
-        return state.castStartedAt === null
-          ? state
-          : { ...state, power: chargePower(now - state.castStartedAt, state.mode) };
+        return state.landsAt !== null && now >= state.landsAt
+          ? { ...state, phase: "waiting", landsAt: null }
+          : state;
       case "waiting":
         if (state.biteAt === null || now < state.biteAt) return state;
         return state.hooked
@@ -164,56 +142,25 @@ export function createFishingEngine(creatures: readonly Creature[]) {
           { ...state, hooked: null, biteDeadline: null, escapeReason: "slipped" },
           "escaped",
         );
-      case "fighting":
-        return fightTick(state, dt);
       default:
         return state;
     }
   }
 
   function press(state: GameState, now: number): GameState {
-    if (CAN_CAST.has(state.phase)) {
-      return {
-        ...state,
-        phase: "casting",
-        castStartedAt: now,
-        power: 0,
-        depth: null,
-        escapeReason: null,
-        lastCatch: null,
-        fight: INITIAL_FIGHT,
-      };
-    }
-    if (state.phase === "bite") {
-      return {
-        ...state,
-        phase: "fighting",
-        biteDeadline: null,
-        holding: true,
-        fight: INITIAL_FIGHT,
-      };
-    }
-    if (state.phase === "fighting") {
-      const held = { ...state, holding: true };
-      return state.mode === "relaxed" ? settle(held, relaxedTap(state.fight)) : held;
-    }
-    return state;
-  }
-
-  function release(state: GameState, now: number): GameState {
-    if (state.phase === "casting") return launch(state, now);
-    if (state.phase === "fighting") return { ...state, holding: false };
+    if (state.phase === "bite") return hook(state, now);
+    if (state.phase === "fighting") return strike(state, now);
     return state;
   }
 
   return function fishingReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
+      case "cast":
+        return cast(state, action.depth, action.now);
       case "press":
         return press(state, action.now);
-      case "release":
-        return release(state, action.now);
       case "tick":
-        return tick(state, action.now, action.dt);
+        return tick(state, action.now);
       case "setMode":
         return {
           ...state,
@@ -224,13 +171,7 @@ export function createFishingEngine(creatures: readonly Creature[]) {
         return { ...state, seed: action.seed >>> 0 };
       case "revealAll":
         return finish(
-          {
-            ...state,
-            hooked: null,
-            caught: allIds,
-            lastCatch: null,
-            castStartedAt: null,
-          },
+          { ...state, hooked: null, caught: allIds, lastCatch: null, landsAt: null },
           "complete",
         );
       case "reset":

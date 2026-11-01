@@ -5,27 +5,17 @@ import {
   BOBBER_AT,
   dangleFrom,
   heightUnits,
-  PULL_JITTER,
   rodTip,
   type ScenePoint,
 } from "@/lib/fishing/scene";
-import type {
-  BreachStage,
-  Depth,
-  FightState,
-  GameMode,
-  GamePhase,
-} from "@/types/fishing";
+import type { BreachStage, Depth, GamePhase } from "@/types/fishing";
 
 /** Colgando de la caña, flotando a la espera, hundida por la picada o en plena pelea. */
 export type BobberState = "dangling" | "floating" | "biting" | "fighting";
 
 export interface RigInput {
   readonly phase: GamePhase;
-  readonly mode: GameMode;
   readonly depth: Depth | null;
-  readonly power: number;
-  readonly fight: FightState;
   readonly breach: BreachStage;
 }
 
@@ -38,26 +28,35 @@ export interface Rig {
   readonly line: { readonly end: ScenePoint; readonly tautness: number };
   /** El anzuelo colgando en el aire, hasta que la criatura lo muerde. */
   readonly hookInAir: ScenePoint | null;
-  readonly jitter: number;
 }
 
-const IN_WATER: ReadonlySet<GamePhase> = new Set(["waiting", "bite", "fighting"]);
+/** Al lanzar, la boya ya va hacia su punto (la transición CSS dibuja el vuelo). */
+const IN_WATER: ReadonlySet<GamePhase> = new Set([
+  "casting",
+  "waiting",
+  "bite",
+  "fighting",
+]);
 const BOBBER_STATE: Partial<Readonly<Record<GamePhase, BobberState>>> = {
+  casting: "floating",
   waiting: "floating",
   bite: "biting",
   fighting: "fighting",
 };
-const JITTER_SPEED = 0.05;
+const TAUTNESS: Partial<Readonly<Record<GamePhase, number>>> = {
+  bite: 0.3,
+  fighting: 1,
+};
+const SLACK_DANGLING = 0.5;
 const TAUT = 1;
-const BITE_TAUTNESS = 0.3;
 
 /** Caña, sedal, boya y anzuelo según la fase del juego y la del salto. */
-export function rigLayout({ phase, mode, depth, power, fight, breach }: RigInput): Rig {
-  const angle = rodAngle(phase, power, fight, mode);
+export function rigLayout({ phase, depth, breach }: RigInput): Rig {
+  const angle = rodAngle(phase);
   const tip = rodTip(angle);
   const target = depth ? BOBBER_AT[depth] : dangleFrom(tip);
 
-  if (phase === "bite" && breach !== "idle") {
+  if (breach !== "idle" && (phase === "bite" || phase === "fighting")) {
     const hookInAir = isHookInAir(breach)
       ? { x: target.x, y: target.y - heightUnits(HOOK_AIR_LIFT) }
       : null;
@@ -67,25 +66,16 @@ export function rigLayout({ phase, mode, depth, power, fight, breach }: RigInput
       bobber: null,
       line: { end: hookInAir ?? target, tautness: TAUT },
       hookInAir,
-      jitter: 0,
     };
   }
 
   const inWater = IN_WATER.has(phase);
-  const fighting = phase === "fighting";
   const point = inWater ? target : dangleFrom(tip);
-  const jitter = fighting
-    ? Math.sin(fight.elapsedMs * JITTER_SPEED) * fight.fishPull * PULL_JITTER
-    : 0;
-  const strain = mode === "challenge" ? fight.tension : fight.progress;
-  const tautness =
-    !inWater || fighting ? 0.5 + strain / 2 : phase === "bite" ? BITE_TAUTNESS : 0;
   return {
     angle,
     tip,
     bobber: { point, state: BOBBER_STATE[phase] ?? "dangling" },
-    line: { end: { x: point.x + jitter, y: point.y }, tautness },
+    line: { end: point, tautness: inWater ? (TAUTNESS[phase] ?? 0) : SLACK_DANGLING },
     hookInAir: null,
-    jitter,
   };
 }

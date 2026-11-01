@@ -1,9 +1,9 @@
 import { CREATURES } from "@/data/creatures";
 import { COPY } from "@/data/copy";
-import { indexCreatures, phaseIndex } from "@/lib/fishing/creatures";
+import { indexCreatures } from "@/lib/fishing/creatures";
 import { isBetweenCasts } from "@/lib/fishing/engine";
 import type { ExperienceEntry, ExperienceKind } from "@/types/experience";
-import type { Creature, CreatureId, GameState } from "@/types/fishing";
+import type { Creature, CreatureId, GameState, RingState } from "@/types/fishing";
 
 const { experience: copy } = COPY;
 
@@ -35,15 +35,9 @@ const nameOf = (id: CreatureId | null) =>
 export const sceneCreature = (state: GameState): Creature | null =>
   creaturesById.get(state.hooked ?? state.lastCatch ?? ("" as CreatureId)) ?? null;
 
-export function isEnraged(state: GameState): boolean {
-  const creature = sceneCreature(state);
-  return (
-    state.phase === "fighting" &&
-    creature !== null &&
-    creature.phases.length > 1 &&
-    phaseIndex(creature, state.fight.progress) > 0
-  );
-}
+/** Aciertos del anillo, para leer y para ver: "1 de 3". */
+export const ringScore = (ring: RingState) =>
+  fill(copy.ring.score, { hits: String(ring.hits), needed: String(ring.needed) });
 
 /** Resultado del intento anterior, si lo hubo. */
 function outcome(state: GameState): string | null {
@@ -53,11 +47,20 @@ function outcome(state: GameState): string | null {
       return fill(status.caught, { name: nameOf(state.lastCatch) });
     case "escaped":
       return status[state.escapeReason ?? "noBite"];
-    case "lineBroken":
-      return status.lineBroken;
     default:
       return null;
   }
+}
+
+/** Qué dice el anillo tras cada pulsación (aria-live). */
+function fightStatus(state: GameState, ring: RingState): string {
+  const { ring: text } = copy;
+  const score = ringScore(ring);
+  if (ring.last === "hit") return fill(text.hit, { score });
+  if (ring.last === "miss") {
+    return state.mode === "relaxed" ? text.missRelaxed : fill(text.miss, { score });
+  }
+  return state.mode === "relaxed" ? text.startRelaxed : fill(text.start, { score });
 }
 
 /** Frase que anuncia la fase actual (aria-live). */
@@ -68,24 +71,22 @@ export function gameStatus(state: GameState): string {
     // Recién terminado el intento se anuncia el resultado y el siguiente paso.
     return result ? `${result} ${status.idle}` : status.idle;
   }
+  const depth = copy.depth[state.depth ?? "shore"];
   switch (state.phase) {
     case "casting":
-      return status.casting;
+      return fill(status.casting, { depth });
     case "waiting":
-      return fill(status.waiting, { depth: copy.depth[state.depth ?? "shore"] });
+      return fill(status.waiting, { depth });
     case "bite":
       return sceneCreature(state)?.breach === "giant" ? status.biteGiant : status.bite;
     case "fighting":
-      if (state.mode === "relaxed") return status.fightRelaxed;
-      return isEnraged(state)
-        ? fill(status.enraged, { name: nameOf(state.hooked) })
-        : status.fight;
+      return state.ring ? fightStatus(state, state.ring) : status.bite;
     default:
       return status.complete;
   }
 }
 
-/** Texto del botón de acción persistente. */
+/** Texto de la ficha de acción persistente. */
 export function actionLabel(state: GameState): string {
   const { action } = copy;
   switch (state.phase) {
@@ -96,17 +97,17 @@ export function actionLabel(state: GameState): string {
     case "bite":
       return action.bite;
     case "fighting":
-      return state.mode === "relaxed" ? action.reelRelaxed : action.reel;
+      return action.strike;
     case "complete":
       return action.complete;
     default:
-      return action.cast;
+      return action.choose;
   }
 }
 
-/** El botón sigue enfocable aunque no haga nada (aria-disabled, no disabled). */
+/** La ficha sigue enfocable aunque no haga nada (aria-disabled, no disabled). */
 export const isActionIdle = (state: GameState) =>
-  state.phase === "waiting" || state.phase === "complete";
+  state.phase === "casting" || state.phase === "waiting" || state.phase === "complete";
 
 /** Pista del diario para una criatura aún no pescada: dónde vive. */
 export const creatureHint = (creature: Creature): string => copy.depth[creature.depth];

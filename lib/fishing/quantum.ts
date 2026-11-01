@@ -14,7 +14,6 @@ const MODE_BY_PHASE: Partial<Readonly<Record<GamePhase, QuantumMode>>> = {
   fighting: "focused",
   caught: "dissolve",
   escaped: "dissolve",
-  lineBroken: "dissolve",
 };
 
 export const quantumMode = (phase: GamePhase): QuantumMode =>

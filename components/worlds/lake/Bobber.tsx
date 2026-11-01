@@ -14,8 +14,6 @@ interface BobberProps {
   readonly x: number;
   readonly y: number;
   readonly state: BobberState;
-  /** Desplazamiento del tirón del pez (unidades del viewBox). */
-  readonly jitter: number;
 }
 
 const bobberW = widthUnits(BOBBER_WIDTH);
@@ -24,7 +22,7 @@ const hookW = widthUnits(HOOK_WIDTH);
 const HOOK_DY = HOOK_POINT.y - DANGLE.y;
 
 /** Boya pintada con sus ondas y la señal de picada; colgando de la caña, lleva el anzuelo. */
-export function Bobber({ x, y, state, jitter }: BobberProps) {
+export function Bobber({ x, y, state }: BobberProps) {
   const bobber = LAKE_ART.bobber;
   const hook = LAKE_ART.hook;
   const inWater = state !== "dangling";
@@ -45,7 +43,6 @@ export function Bobber({ x, y, state, jitter }: BobberProps) {
           state === "floating" && "is-floating",
           biting && "is-biting",
         )}
-        style={{ transform: `translate(${jitter}px, ${Math.abs(jitter) / 2}px)` }}
       >
         {!inWater && hook ? (
           <>

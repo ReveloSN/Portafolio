@@ -56,9 +56,6 @@
   line-height: 1.35;
   text-wrap: pretty;
 }
-.lake-hud-meter {
-  grid-column: 1 / -1;
-}
 
 /* Ficha de acción: madera oscura con filo ámbar ---------------------- */
 .lake-token {

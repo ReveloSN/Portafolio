@@ -1,9 +1,9 @@
-import { bursts, wave } from "@/lib/fishing/creatures";
 import type { Creature } from "@/types/fishing";
 
 /**
  * Habitantes del lago. Del más dócil al más feroz; cada uno revela una entrada de
- * `experience.ts` (el más grande guarda la más reciente).
+ * `experience.ts` (el más grande guarda la más reciente). `ring` ajusta su anillo:
+ * aciertos que pide, velocidad de la aguja (grados por segundo) y ancho de la zona.
  */
 export const CREATURES: readonly Creature[] = [
   {
@@ -12,7 +12,6 @@ export const CREATURES: readonly Creature[] = [
     depth: "shore",
     difficulty: 0.15,
     size: "small",
-    phases: [wave(0.25, 0.15, 1600)],
     ring: { hits: 1, speed: 150, zoneDeg: 72 },
     unlockAfter: 0,
     experienceId: "e4",
@@ -25,7 +24,6 @@ export const CREATURES: readonly Creature[] = [
     depth: "shore",
     difficulty: 0.25,
     size: "small",
-    phases: [wave(0.3, 0.2, 1200)],
     ring: { hits: 1, speed: 165, zoneDeg: 66 },
     unlockAfter: 0,
     experienceId: "e5",
@@ -38,7 +36,6 @@ export const CREATURES: readonly Creature[] = [
     depth: "mid",
     difficulty: 0.4,
     size: "medium",
-    phases: [bursts(0.3, 0.7, 2200, 500)],
     ring: { hits: 1, speed: 185, zoneDeg: 60 },
     unlockAfter: 0,
     experienceId: "e3",
@@ -51,7 +48,6 @@ export const CREATURES: readonly Creature[] = [
     depth: "mid",
     difficulty: 0.5,
     size: "large",
-    phases: [wave(0.45, 0.3, 900)],
     ring: { hits: 1, speed: 200, zoneDeg: 56 },
     unlockAfter: 0,
     experienceId: "e2",
@@ -64,7 +60,6 @@ export const CREATURES: readonly Creature[] = [
     depth: "deep",
     difficulty: 0.65,
     size: "large",
-    phases: [bursts(0.4, 0.85, 1800, 600)],
     ring: { hits: 2, speed: 215, zoneDeg: 52 },
     unlockAfter: 0,
     experienceId: "e1",
@@ -77,7 +72,6 @@ export const CREATURES: readonly Creature[] = [
     depth: "deep",
     difficulty: 0.8,
     size: "huge",
-    phases: [wave(0.45, 0.25, 1400), bursts(0.5, 1, 1300, 650)],
     ring: { hits: 3, speed: 235, zoneDeg: 48 },
     unlockAfter: 4,
     experienceId: "e0",

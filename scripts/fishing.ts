@@ -1,9 +1,10 @@
 /**
  * Prueba de punta a punta del lago de pesca. En cada tamaño juega cuatro partidas
  * completas: con el puntero, solo con teclado, en modo relajado y sin efectos. Comprueba
- * que el contador llega a 6/6, que el foco no sale de la ficha de acción, que la interfaz
- * cabe en la escena sin cortar el muelle ni el agua, que el menú de ajustes se abre y se
- * cierra con teclado y que no hay scroll horizontal; guarda una captura de cada fase.
+ * que el contador llega a 6/6, que el foco vuelve a la ficha tras elegir un punto, que la
+ * interfaz cabe en la escena sin cortar el muelle ni el agua, que el menú de ajustes se
+ * abre y se cierra con teclado, que dos fallos en el anillo dejan escapar a la criatura y
+ * que no hay scroll horizontal; guarda una captura de cada fase.
  *
  * Uso:  npm run build && npm start       (en otra terminal)
  *       npm run fishing                   (BASE_URL=http://localhost:3000, SHOTS=carpeta)
@@ -11,7 +12,7 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { chromium, type Browser, type Page } from "playwright";
-import { CAST_CHARGE_MS } from "@/lib/fishing/config";
+import { phaseOf, playRing, waitPhase } from "./lake-bot";
 
 const VIEWPORTS = [
   { name: "1280x575", width: 1280, height: 575, scale: 1, mobile: false },
@@ -28,6 +29,8 @@ type Run = "pointer" | "keyboard" | "relaxed" | "plain";
 type Depth = "shore" | "mid" | "deep";
 type Snap = (name: string) => Promise<void>;
 const RUNS: readonly Run[] = ["pointer", "keyboard", "relaxed", "plain"];
+/** Orden de los puntos en el DOM (y con Tab). */
+const SPOTS: readonly Depth[] = ["shore", "mid", "deep"];
 
 /** Orden de captura (data/creatures.ts): el megalodón exige 4 capturas antes. */
 const PLAN: readonly { creature: string; depth: Depth }[] = [
@@ -39,21 +42,17 @@ const PLAN: readonly { creature: string; depth: Depth }[] = [
   { creature: "megalodon", depth: "deep" },
 ];
 
-/** Fuerza (aria-valuenow, %) a la que se suelta para caer en el centro de cada zona. */
-const RELEASE_AT: Readonly<Record<Depth, readonly [number, number]>> = {
-  shore: [8, 26],
-  mid: [42, 58],
-  deep: [76, 92],
+/** Fallos a propósito antes de acertar: en relajado no cuestan nada; en desafío, uno. */
+const DELIBERATE_MISSES: Readonly<Record<Run, number>> = {
+  pointer: 0,
+  keyboard: 1,
+  relaxed: 3,
+  plain: 0,
 };
-/** El jugador automático mantiene la tensión entre estos dos valores (%). */
-const TENSION_LOW = 44;
-const TENSION_HIGH = 54;
 const MAX_ATTEMPTS = 8;
 const TOTAL = PLAN.length;
-const BITE_TIMEOUT_MS = 9000;
 const BITE_WAITS = 2;
-const FIGHT_SNAPSHOT_MS = 1200;
-const TAP_GAP_MS = 80;
+const RING_TIMEOUT_MS = 5000;
 const MIN_TARGET_PX = 44;
 /** Tabulaciones dentro del menú: más que sus controles, para comprobar que el foco no sale. */
 const MENU_TABS = 8;
@@ -66,30 +65,19 @@ function check(ok: boolean, message: string) {
   if (!ok) failures.push(message);
 }
 
-const phaseOf = (page: Page) =>
-  page.evaluate(
-    () => document.querySelector<SVGElement>(".lakesvg")?.dataset.phase ?? "",
-  );
-
 const countOf = async (page: Page) =>
   (await page.getByTestId("catch-count").textContent()) ?? "";
 
 const statusOf = async (page: Page) =>
   (await page.getByTestId("fishing-status").textContent()) ?? "";
 
-const actionFocused = (page: Page) =>
-  page.getByTestId("fishing-action").evaluate((el) => el === document.activeElement);
+const focusedTestId = (page: Page) =>
+  page.evaluate(() => document.activeElement?.getAttribute("data-testid") ?? "");
 
-function waitPhase(page: Page, phases: readonly string[], timeout = BITE_TIMEOUT_MS) {
-  return page.waitForFunction(
-    (wanted) =>
-      wanted.includes(
-        document.querySelector<SVGElement>(".lakesvg")?.dataset.phase ?? "",
-      ),
-    phases,
-    { timeout, polling: 30 },
-  );
-}
+const actionFocused = async (page: Page) =>
+  (await focusedTestId(page)) === "fishing-action";
+
+const noSnap: Snap = async () => {};
 
 /** Guarda una captura del juego la primera vez que aparece cada fase. */
 function snapper(page: Page, dir: string, prefix: string): Snap {
@@ -102,32 +90,6 @@ function snapper(page: Page, dir: string, prefix: string): Snap {
       `${prefix}-${String(seen.size).padStart(2, "0")}-${name}.png`,
     );
     await page.getByTestId("fishing-game").screenshot({ path: file });
-  };
-}
-
-async function center(page: Page, testId: string) {
-  const box = await page.getByTestId(testId).boundingBox();
-  if (!box) throw new Error(`sin caja: ${testId}`);
-  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-}
-
-/** Mantener pulsada la ficha de acción: con el puntero o con Espacio. */
-function holdInput(page: Page, run: Run) {
-  if (run === "pointer") {
-    return {
-      down: async () => {
-        // En móvil la ficha queda bajo la escena: primero a la vista, como haría el dedo.
-        await page.getByTestId("fishing-action").scrollIntoViewIfNeeded();
-        const at = await center(page, "fishing-action");
-        await page.mouse.move(at.x, at.y);
-        await page.mouse.down();
-      },
-      up: () => page.mouse.up(),
-    };
-  }
-  return {
-    down: () => page.keyboard.down("Space"),
-    up: () => page.keyboard.up("Space"),
   };
 }
 
@@ -147,113 +109,94 @@ async function menuAction(page: Page, testId: string) {
 }
 
 /**
- * Carga el lanzamiento y suelta en la zona pedida. Pulsa y suelta dentro de la página y
- * calcula la fuerza con el mismo reloj que el motor (vaivén de CAST_CHARGE_MS): si el
- * render va lento, la barra pintada llega tarde, pero la fuerza real no.
+ * Elige el punto de pesca. Con puntero: un clic en el burbujeo. Con teclado: la ficha lleva
+ * el foco al primer punto, Tab hasta el pedido y Enter; el foco vuelve a la ficha.
  */
-async function cast(page: Page, run: Run, depth: Depth, snap: Snap) {
-  const charge = CAST_CHARGE_MS[run === "relaxed" ? "relaxed" : "challenge"];
-  // Sin funciones con nombre dentro: tsx les añade un ayudante que la página no tiene.
-  await page.evaluate(
-    async ([lo, hi, chargeMs]) => {
-      const action = document.querySelector("[data-testid=fishing-action]");
-      action?.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
-      const start = performance.now();
-      for (;;) {
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-        const cycle = ((performance.now() - start) / chargeMs) % 2;
-        const power = (cycle <= 1 ? cycle : 2 - cycle) * 100;
-        if (power < lo || power > hi) continue;
-        action?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
-        return;
-      }
-    },
-    [...RELEASE_AT[depth], charge] as const,
-  );
-  await snap("casting");
-}
-
-/**
- * Pelea en modo desafío: el jugador automático vive en la página y decide en cada fotograma
- * (recoger por debajo de TENSION_LOW, aflojar por encima de TENSION_HIGH). Desde Node
- * llegaba tarde con la máquina cargada y rompía el hilo.
- */
-async function fightChallenge(page: Page, run: Run, snap: Snap) {
-  // Sin funciones con nombre dentro: tsx les añade un ayudante que la página no tiene.
-  const fight = page.evaluate(
-    async ([low, high]) => {
-      let holding = true;
-      for (;;) {
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-        const phase = document.querySelector<SVGElement>(".lakesvg")?.dataset.phase;
-        if (phase !== "fighting") return;
-        const meter = document.querySelector("[data-testid=tension-meter]");
-        const tension = Number(meter?.getAttribute("aria-valuenow") ?? 0);
-        const action = document.querySelector("[data-testid=fishing-action]");
-        if (holding && tension > high) {
-          action?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
-          holding = false;
-        } else if (!holding && tension < low) {
-          action?.dispatchEvent(
-            new KeyboardEvent("keydown", { key: " ", bubbles: true }),
-          );
-          holding = true;
-        }
-      }
-    },
-    [TENSION_LOW, TENSION_HIGH] as const,
-  );
-  await page.waitForTimeout(FIGHT_SNAPSHOT_MS);
-  if ((await phaseOf(page)) === "fighting") await snap("fighting");
-  await fight;
-  // Ya soltado en la página: esto solo limpia el estado del teclado o del ratón.
-  await holdInput(page, run).up();
-}
-
-async function fightRelaxed(page: Page, snap: Snap) {
-  await page.keyboard.up("Space");
-  await snap("fighting");
-  while ((await phaseOf(page)) === "fighting") {
-    await page.keyboard.press("Space");
-    await page.waitForTimeout(TAP_GAP_MS);
+async function pickSpot(page: Page, run: Run, depth: Depth) {
+  if (run === "pointer") {
+    await page.getByTestId(`spot-${depth}`).click();
+    return;
   }
+  await page.getByTestId("fishing-action").focus();
+  await page.keyboard.press("Space");
+  for (let tab = 0; tab < SPOTS.indexOf(depth); tab++) await page.keyboard.press("Tab");
+  const focused = await focusedTestId(page);
+  check(focused === `spot-${depth}`, `${run}: Tab llega al punto ${depth}`);
+  await page.keyboard.press("Enter");
+  check(await actionFocused(page), `${run}: tras lanzar, el foco vuelve a la ficha`);
 }
 
-/** Una partida completa: lanzamiento y pelea por criatura; reintenta si falla. */
+/** Enganchar en la picada: Espacio en la ficha o una pulsación con el puntero. */
+async function hook(page: Page, run: Run) {
+  if (run !== "pointer") {
+    await page.keyboard.press("Space");
+    return;
+  }
+  const box = await page.getByTestId("fishing-action").boundingBox();
+  if (!box) throw new Error("sin ficha");
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.up();
+}
+
+/** El anillo: el jugador automático acierta (tras `misses` fallos a propósito). */
+async function fightRing(page: Page, run: Run, snap: Snap, misses: number) {
+  await page.getByTestId("fight-ring").waitFor({ timeout: RING_TIMEOUT_MS });
+  await snap("ring");
+  await playRing(page, run === "pointer", misses);
+}
+
+/** Lanza y espera la picada; con la máquina cargada se espera una segunda vez. */
+async function castAndWait(page: Page, run: Run, depth: Depth, snap: Snap) {
+  await pickSpot(page, run, depth);
+  await snap("casting");
+  await waitPhase(page, ["waiting", "escaped", "bite"]);
+  await snap("waiting");
+  for (let wait = 0; wait < BITE_WAITS; wait++) {
+    const settled = await waitPhase(page, ["bite", "escaped"]).then(
+      () => true,
+      () => false,
+    );
+    if (settled) break;
+    console.log(`    picada lenta: ${await phaseOf(page)} · ${await statusOf(page)}`);
+  }
+  return (await phaseOf(page)) === "bite";
+}
+
+/** Una partida completa: punto, picada y anillo por criatura; reintenta si falla. */
 async function playGame(page: Page, run: Run, snap: Snap) {
   await setToggle(page, "relaxed-toggle", run === "relaxed");
   await setToggle(page, "effects-toggle", run !== "plain");
-  await page.getByTestId("fishing-action").focus();
   check(
     (await page.getByTestId("quantum-water").count()) === (run === "plain" ? 0 : 1),
     `${run}: efectos ${run === "plain" ? "apagados" : "encendidos"}`,
   );
   await snap("idle");
-  for (const step of PLAN) {
+  for (const [index, step] of PLAN.entries()) {
     let caught = false;
     for (let attempt = 0; attempt < MAX_ATTEMPTS && !caught; attempt++) {
-      await cast(page, run, step.depth, snap);
-      await snap("waiting");
-      // Con la máquina cargada la picada puede tardar más: se espera una segunda vez.
-      for (let wait = 0; wait < BITE_WAITS; wait++) {
-        const settled = await waitPhase(page, ["bite", "escaped"]).then(
-          () => true,
-          () => false,
-        );
-        if (settled) break;
-        console.log(`    picada lenta: ${await phaseOf(page)} · ${await statusOf(page)}`);
-      }
-      if ((await phaseOf(page)) !== "bite") {
+      if (!(await castAndWait(page, run, step.depth, snap))) {
         console.log(`    intento ${attempt + 1}: ${await statusOf(page)}`);
         await snap("escaped");
         continue;
       }
       await snap("bite");
-      const input = holdInput(page, run === "pointer" ? "pointer" : "keyboard");
-      await input.down();
-      await waitPhase(page, ["fighting", "caught", "complete"]);
-      if (run === "relaxed") await fightRelaxed(page, snap);
-      else await fightChallenge(page, run, snap);
+      const biteSeen = Date.now();
+      await hook(page, run);
+      const hookMs = Date.now() - biteSeen;
+      const hooked = await waitPhase(page, ["fighting"]).then(
+        () => true,
+        () => false,
+      );
+      if (!hooked) {
+        console.log(
+          `    intento ${attempt + 1}: sin enganchar en ${hookMs} ms · ${await phaseOf(page)} · ${await statusOf(page)}`,
+        );
+        continue;
+      }
+      // Los fallos a propósito, solo con la primera criatura y en el primer intento.
+      const misses = index === 0 && attempt === 0 ? DELIBERATE_MISSES[run] : 0;
+      await fightRing(page, run, snap, misses);
       const phase = await phaseOf(page);
       caught = phase === "caught" || phase === "complete";
       if (!caught)
@@ -265,6 +208,23 @@ async function playGame(page: Page, run: Run, snap: Snap) {
   }
   await page.waitForTimeout(3500);
   await snap("complete-canoe");
+}
+
+/** Desafío: dos fallos seguidos en el anillo y la criatura se escapa. */
+async function checkRingEscape(page: Page, label: string) {
+  await setToggle(page, "relaxed-toggle", false);
+  if (!(await castAndWait(page, "keyboard", "shore", noSnap))) {
+    check(false, `${label}: no picó nada para probar el escape`);
+    return;
+  }
+  await hook(page, "keyboard");
+  await waitPhase(page, ["fighting"]);
+  await fightRing(page, "keyboard", noSnap, 2);
+  check(
+    (await phaseOf(page)) === "escaped" && (await statusOf(page)).includes("fallaste"),
+    `${label}: dos fallos en el anillo y se escapa`,
+  );
+  await menuAction(page, "reset-game");
 }
 
 /**
@@ -283,7 +243,9 @@ async function checkHudLayout(page: Page, label: string) {
         ".lake-marks",
         ".lake-hud-status",
       ].map((selector) => document.querySelector(selector)!.getBoundingClientRect());
-      const parts = [gear!, token!, ...rest];
+      const spots = [...document.querySelectorAll(".lake-spot")].map((el) =>
+        el.getBoundingClientRect(),
+      );
       return {
         grounded:
           Math.abs(canvas!.bottom - frame!.bottom) <= 1 &&
@@ -291,21 +253,35 @@ async function checkHudLayout(page: Page, label: string) {
           canvas!.width >= frame!.width - 1,
         fits:
           window.innerWidth < overScene ||
-          parts.every(
+          [gear!, token!, ...rest].every(
             (box) =>
               box.left >= frame!.left - 1 &&
               box.right <= frame!.right + 1 &&
               box.top >= frame!.top - 1 &&
               box.bottom <= frame!.bottom + 1,
           ),
-        small: [gear!, token!].some((box) => box.width < minPx || box.height < minPx),
+        spotsInside:
+          spots.length === 3 &&
+          spots.every(
+            (box) =>
+              box.left >= frame!.left &&
+              box.right <= frame!.right &&
+              box.top >= frame!.top &&
+              box.bottom <= frame!.bottom,
+          ),
+        spotsApart: spots.every((box, i) => i === 0 || box.left >= spots[i - 1]!.right),
+        small: [gear!, token!, ...spots].some(
+          (box) => box.width < minPx || box.height < minPx,
+        ),
       };
     },
     [HUD_OVER_SCENE_PX, MIN_TARGET_PX] as const,
   );
   check(result.grounded, `${label}: la escena apoya abajo y no corta muelle ni agua`);
   check(result.fits, `${label}: la interfaz cabe dentro de la escena`);
-  check(!result.small, `${label}: engranaje y ficha de al menos 44x44 px`);
+  check(result.spotsInside, `${label}: los tres puntos de pesca se ven en la escena`);
+  check(result.spotsApart, `${label}: los puntos de pesca no se montan`);
+  check(!result.small, `${label}: engranaje, ficha y puntos de al menos 44x44 px`);
 }
 
 /** El menú de ajustes se abre con Enter, atrapa el foco y se cierra con Escape. */
@@ -359,6 +335,7 @@ async function checkJournal(page: Page, dir: string) {
   check((await countOf(page)) === "0", "Reiniciar vuelve a 0");
 }
 
+/** Movimiento reducido: modo relajado, sin efectos y el anillo se llena en vez de girar. */
 async function checkReducedMotion(browser: Browser) {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
@@ -383,6 +360,16 @@ async function checkReducedMotion(browser: Browser) {
     (await page.getByTestId("effects-toggle").getAttribute("aria-checked")) === "false",
     "prefers-reduced-motion apaga los efectos",
   );
+  await page.keyboard.press("Escape");
+  if (await castAndWait(page, "pointer", "shore", noSnap)) {
+    await hook(page, "pointer");
+    await page.getByTestId("fight-ring").waitFor({ timeout: RING_TIMEOUT_MS });
+    check(
+      (await page.locator(".lake-ring-fill").count()) === 1 &&
+        (await page.locator(".lake-ring-needle").count()) === 0,
+      "movimiento reducido: el anillo se llena en vez de girar la aguja",
+    );
+  } else check(false, "movimiento reducido: no picó nada");
   await context.close();
 }
 
@@ -408,7 +395,7 @@ async function run() {
     console.log(`\n${viewport.name}`);
     const dir = path.join(OUT_DIR, viewport.name);
     await mkdir(dir, { recursive: true });
-    for (const game of RUNS) {
+    for (const game of RUNS.filter((r) => !process.env.RUN || r === process.env.RUN)) {
       const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
         deviceScaleFactor: viewport.scale,
@@ -424,6 +411,7 @@ async function run() {
         await checkMenuKeyboard(page, viewport.name);
       }
       if (game === "relaxed") await checkJournal(page, dir);
+      if (game === "plain") await checkRingEscape(page, viewport.name);
       const started = Date.now();
       await playGame(page, game, snapper(page, dir, game));
       console.log(`  (${game}: ${Math.round((Date.now() - started) / 1000)} s)`);

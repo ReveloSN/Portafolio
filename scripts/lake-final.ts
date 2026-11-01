@@ -1,16 +1,16 @@
 /**
- * Capturas finales del lago en 1280x575, 1440x900 y 390x844: escena en reposo, baldes y
- * niño, carnada enganchada, espera con las sombras en superposición, picada, salto del pez,
- * del mosasaurio y del megalodón (en el mordisco), pelea y captura.
+ * Capturas finales del lago en 1280x575, 1440x900 y 390x844: escena en reposo, puntos de
+ * pesca, menú de ajustes, espera, picada, saltos del pez, de un mediano, del mosasaurio y
+ * del megalodón, anillo, captura, final y diario.
  *
  * Uso:  npm run build && npm start       (en otra terminal)
- *       npm run lake:final               (BASE_URL=http://localhost:3000)
- *       → screenshots/lake/final/<tamaño>-NN-<estado>.png
+ *       npm run lake:final -- [carpeta]  (BASE_URL=http://localhost:3000)
+ *       → <carpeta>/<tamaño>-NN-<estado>.png   (por defecto screenshots/lake/final)
  */
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { chromium, type Page } from "playwright";
-import { CAST_CHARGE_MS } from "@/lib/fishing/config";
+import { playRing, waitPhase } from "./lake-bot";
 
 const VIEWPORTS = [
   { name: "1280x575", width: 1280, height: 575, scale: 1, mobile: false },
@@ -20,55 +20,43 @@ const VIEWPORTS = [
 
 type Depth = "shore" | "mid" | "deep";
 /** Partida en modo relajado: qué se fotografía en cada captura. */
-const PLAN: readonly { bait: string; depth: Depth; shots: readonly string[] }[] = [
-  {
-    bait: "worm",
-    depth: "shore",
-    shots: ["hooked", "waiting", "bite", "fight", "caught"],
-  },
-  { bait: "firefly", depth: "shore", shots: ["breach-fish"] },
-  { bait: "minnow", depth: "mid", shots: ["breach-mid"] },
-  { bait: "firefly", depth: "mid", shots: [] },
-  { bait: "minnow", depth: "deep", shots: ["breach-mosasaur"] },
-  { bait: "firefly", depth: "deep", shots: ["breach-megalodon"] },
+const PLAN: readonly { depth: Depth; shots: readonly string[] }[] = [
+  { depth: "shore", shots: ["waiting", "bite", "breach-fish", "ring", "caught"] },
+  { depth: "shore", shots: [] },
+  { depth: "mid", shots: ["breach-mid"] },
+  { depth: "mid", shots: [] },
+  { depth: "deep", shots: ["breach-mosasaur"] },
+  { depth: "deep", shots: ["breach-megalodon"] },
 ];
-const ZONE: Readonly<Record<Depth, readonly [number, number]>> = {
-  shore: [8, 26],
-  mid: [42, 58],
-  deep: [76, 92],
+/** El pez salta en 900 ms (basta con la subida); los grandes se fotografían al morder. */
+const BREACH_STAGE: Readonly<Record<string, string>> = {
+  "breach-fish":
+    "[data-testid=breach][data-stage=rise], [data-testid=breach][data-stage=snap]",
+  "breach-mid": "[data-testid=breach][data-stage=snap]",
+  "breach-mosasaur": "[data-testid=breach][data-stage=snap]",
+  "breach-megalodon": "[data-testid=breach][data-stage=snap]",
 };
-const WAITING_SHOT_MS = 900;
+const SETTLE_MS = 900;
 const BITE_TIMEOUT_MS = 12_000;
-const TAP_GAP_MS = 80;
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 
-const phaseOf = (page: Page) =>
-  page.evaluate(
-    () => document.querySelector<SVGElement>(".lakesvg")?.dataset.phase ?? "",
-  );
-
-async function castTo(page: Page, depth: Depth) {
-  // Sin funciones con nombre dentro: tsx les añade un ayudante que la página no tiene.
-  await page.evaluate(
-    async ([lo, hi, chargeMs]) => {
-      const action = document.querySelector("[data-testid=fishing-action]");
-      action?.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
-      const start = performance.now();
-      for (;;) {
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-        const cycle = ((performance.now() - start) / chargeMs) % 2;
-        const power = (cycle <= 1 ? cycle : 2 - cycle) * 100;
-        if (power < lo || power > hi) continue;
-        action?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
-        return;
-      }
-    },
-    [...ZONE[depth], CAST_CHARGE_MS.relaxed] as const,
-  );
+/** Espera la fase del salto pedida y la fotografía; avisa si pasó antes de llegar. */
+async function shootBreach(page: Page, name: string, shoot: () => Promise<void>) {
+  const seen = await page
+    .waitForSelector(BREACH_STAGE[name] ?? "[data-testid=breach]", {
+      state: "attached",
+      timeout: BITE_TIMEOUT_MS,
+    })
+    .then(
+      () => true,
+      () => false,
+    );
+  if (seen) await shoot();
+  else console.log(`  el salto (${name}) pasó antes de la captura`);
 }
 
 async function run() {
-  const dir = path.join("screenshots", "lake", "final");
+  const dir = process.argv[2] ?? path.join("screenshots", "lake", "final");
   await mkdir(dir, { recursive: true });
   const browser = await chromium.launch();
   for (const viewport of VIEWPORTS) {
@@ -87,46 +75,24 @@ async function run() {
       const file = `${viewport.name}-${String(count).padStart(2, "0")}-${name}.png`;
       await game.screenshot({ path: path.join(dir, file) });
     };
-    await page.waitForTimeout(WAITING_SHOT_MS);
+    await page.waitForTimeout(SETTLE_MS);
     await shot("rest");
+    await page.getByTestId("spot-mid").focus();
+    await shot("spots");
+    await page.getByTestId("settings-button").click();
+    await shot("settings");
     await page.getByTestId("relaxed-toggle").click();
-    await page
-      .getByTestId("bait-buckets")
-      .screenshot({ path: path.join(dir, `${viewport.name}-buckets.png`) });
+    await page.keyboard.press("Escape");
+
     for (const step of PLAN) {
       const wants = new Set(step.shots);
-      await page.getByTestId(`bucket-${step.bait}`).click();
-      await page.getByTestId("hooked-bait").waitFor();
-      if (wants.has("hooked")) await shot("bait-hooked");
-      await castTo(page, step.depth);
-      await page.waitForTimeout(WAITING_SHOT_MS);
-      if (wants.has("waiting")) await shot("waiting-superposition");
-      await page.waitForFunction(
-        () => document.querySelector<SVGElement>(".lakesvg")?.dataset.phase === "bite",
-        null,
-        { timeout: BITE_TIMEOUT_MS, polling: 30 },
-      );
-      // El salto empieza con la picada: se fotografía primero (el de un pez dura 900 ms).
+      await page.getByTestId(`spot-${step.depth}`).click();
+      await waitPhase(page, ["waiting"], BITE_TIMEOUT_MS);
+      await page.waitForTimeout(SETTLE_MS);
+      if (wants.has("waiting")) await shot("waiting");
+      await waitPhase(page, ["bite"], BITE_TIMEOUT_MS);
       const breach = [...wants].find((name) => name.startsWith("breach"));
-      if (breach) {
-        const seen = await page
-          .waitForSelector(
-            // El pez salta en 900 ms (basta con la subida); los grandes, en el mordisco.
-            breach === "breach-fish"
-              ? "[data-testid=breach][data-stage=rise], [data-testid=breach][data-stage=snap]"
-              : "[data-testid=breach][data-stage=snap]",
-            { state: "attached", timeout: BITE_TIMEOUT_MS },
-          )
-          .then(
-            () => true,
-            () => false,
-          );
-        if (seen) await shot(breach);
-        else
-          console.log(
-            `  ${viewport.name}: el salto (${breach}) pasó antes de la captura`,
-          );
-      }
+      if (breach) await shootBreach(page, breach, () => shot(breach));
       if (wants.has("bite")) {
         await page.waitForSelector("[data-testid=breach]", {
           state: "detached",
@@ -136,16 +102,25 @@ async function run() {
       }
       await page.getByTestId("fishing-action").focus();
       await page.keyboard.press("Space");
-      if (wants.has("fight")) await shot("fight");
-      while ((await phaseOf(page)) === "fighting") {
-        await page.keyboard.press("Space");
-        await page.waitForTimeout(TAP_GAP_MS);
+      await page.getByTestId("fight-ring").waitFor();
+      if (wants.has("ring")) {
+        await page.waitForTimeout(SETTLE_MS);
+        await shot("ring");
       }
+      await playRing(page, false);
       if (wants.has("caught")) await shot("caught");
     }
-    await page.waitForTimeout(WAITING_SHOT_MS);
+    await page.waitForTimeout(SETTLE_MS);
     await shot("complete");
-    console.log(`  ${viewport.name}: ${count} capturas`);
+    const journal = page.getByTestId("experience-journal");
+    await journal.scrollIntoViewIfNeeded();
+    await journal.screenshot({
+      path: path.join(
+        dir,
+        `${viewport.name}-${String(count + 1).padStart(2, "0")}-journal.png`,
+      ),
+    });
+    console.log(`  ${viewport.name}: ${count + 1} capturas`);
     await page.close();
   }
   await browser.close();

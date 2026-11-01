@@ -1,8 +1,8 @@
 "use client";
 
-import { useId, type ReactNode, type Ref } from "react";
+import { useId, type Ref } from "react";
 import { TokenButton } from "@/components/atoms/TokenButton";
-import { useHoldInput } from "@/hooks/useHoldInput";
+import { usePressInput } from "@/hooks/usePressInput";
 
 interface HudStatusProps {
   readonly status: string;
@@ -11,9 +11,6 @@ interface HudStatusProps {
   readonly idle: boolean;
   readonly urgent: boolean;
   readonly onPress: () => void;
-  readonly onRelease: () => void;
-  /** Indicador de la fase (si lo hay), sobre la línea de estado. */
-  readonly meter?: ReactNode;
   readonly actionRef?: Ref<HTMLButtonElement>;
 }
 
@@ -27,20 +24,17 @@ export function HudStatus({
   idle,
   urgent,
   onPress,
-  onRelease,
-  meter,
   actionRef,
 }: HudStatusProps) {
   const statusId = useId();
-  const hold = useHoldInput({ onPress, onRelease });
+  const press = usePressInput(onPress);
   return (
     <div className="lake-hud-status">
-      {meter ? <div className="lake-hud-meter">{meter}</div> : null}
       <p id={statusId} aria-live="polite" data-testid="fishing-status">
         {status}
       </p>
       <TokenButton
-        {...hold}
+        {...press}
         ref={actionRef}
         urgent={urgent}
         aria-disabled={idle || undefined}
