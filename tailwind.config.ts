@@ -35,8 +35,6 @@ const config: Config = {
         display: ["var(--font-outfit)", "system-ui", "sans-serif"],
         sans: ["var(--font-figtree)", "system-ui", "sans-serif"],
         mono: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
-        journal: ["var(--font-fell)", "Georgia", "serif"],
-        hand: ["var(--font-caveat)", "cursive"],
       },
       fontSize: {
         "fluid-xs": "var(--fs-xs)",

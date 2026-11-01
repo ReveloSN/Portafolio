@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import {
-  Caveat,
-  Figtree,
-  IM_Fell_English,
-  JetBrains_Mono,
-  Outfit,
-} from "next/font/google";
+import { Figtree, IM_Fell_English, JetBrains_Mono, Outfit } from "next/font/google";
 import { COPY } from "@/data/copy";
 import "./globals.css";
 
@@ -26,17 +20,12 @@ const jetbrains = JetBrains_Mono({
   weight: ["500"],
 });
 
-/** Diario del lago: serif de grabado antiguo y letra a mano para las marcas. */
+/** Bitácora de experiencia: serif de grabado antiguo. */
 const fell = IM_Fell_English({
   variable: "--font-fell",
   subsets: ["latin"],
   weight: "400",
   style: ["normal", "italic"],
-});
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["500"],
 });
 
 export const metadata: Metadata = {
@@ -49,7 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html
       lang="es"
-      className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable} ${fell.variable} ${caveat.variable}`}
+      className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable} ${fell.variable}`}
     >
       <body>{children}</body>
     </html>

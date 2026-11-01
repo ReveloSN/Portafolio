@@ -8,13 +8,7 @@
 @import "./art.css";
 @import "./flip.css";
 @import "./about.css";
-@import "./lake.css";
-@import "./lake-hud.css";
-@import "./lake-play.css";
-@import "./journal.css";
 @import "./experience.css";
-@import "./quantum.css";
-@import "./breach.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));
@@ -87,16 +81,7 @@
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;
   --ink: #07160f;
-  --glowA: rgba(166, 255, 92, 0.55);
-  --glowB: rgba(166, 255, 92, 0.16);
-  /* Lago: papel envejecido y tinta; el ámbar y la lima solo en lo jugable y la luna */
-  --lake-paper: #e9dcbc;
-  --lake-paper-dim: rgba(233, 220, 188, 0.62);
-  --lake-ink: rgba(14, 12, 9, 0.66);
-  --lake-rule: rgba(233, 220, 188, 0.24);
-  --lake-amber: #e7a94b;
-  --lake-lime: #b9e36a;
-  /* Diario: tinta sobre papel envejecido */
+  /* Bitácora de experiencia: tinta sobre papel envejecido */
   --journal-paper: #e6d6b2;
   --journal-ink: #2b2117;
   --journal-faded: #6b5f4e;
