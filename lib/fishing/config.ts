@@ -50,5 +50,20 @@ export const RELAXED = { tapProgress: 0.25, reelPerSecond: 0.4 } as const;
 /** Paso máximo de simulación (ms): una pestaña en segundo plano no salta la pelea. */
 export const MAX_STEP_MS = 50;
 
+/** Minijuego del anillo (ángulos en grados). El ajuste de cada criatura va en sus datos. */
+export const RING = {
+  /** La zona nace al menos este ángulo por delante de la aguja: siempre se la ve llegar. */
+  leadDeg: 100,
+  /** Tras cada acierto la zona se achica y la aguja acelera. */
+  shrink: 0.8,
+  speedUp: 1.15,
+  minZoneDeg: 26,
+  /** Fallos con los que se escapa en desafío. */
+  maxMisses: 2,
+  /** Modo relajado: zona el doble de ancha y aguja a la mitad; fallar no cuesta nada. */
+  relaxedZoneFactor: 2,
+  relaxedSpeedFactor: 0.5,
+} as const;
+
 /** Semilla por defecto: el primer render es idéntico en servidor y cliente. */
 export const DEFAULT_SEED = 0x5eed;

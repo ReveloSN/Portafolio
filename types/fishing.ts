@@ -16,6 +16,30 @@ export type BreachStage = "idle" | "bulge" | "rise" | "snap" | "fall" | "splash"
 /** Fuerza con la que tira la criatura (0 a 1) en función del tiempo de pelea (ms). */
 export type PullPattern = (elapsedMs: number) => number;
 
+/** Anillo de cada criatura: aciertos que pide, velocidad de la aguja (grados/s) y zona. */
+export interface RingTuning {
+  readonly hits: number;
+  readonly speed: number;
+  readonly zoneDeg: number;
+}
+
+/**
+ * Minijuego del anillo. La aguja está en `angleAt` grados en el instante `since` (ms) y
+ * gira a `speed` grados por segundo; la zona va de `zoneStart` a `zoneStart + zoneDeg`.
+ */
+export interface RingState {
+  readonly needed: number;
+  readonly hits: number;
+  readonly misses: number;
+  readonly zoneStart: number;
+  readonly zoneDeg: number;
+  readonly speed: number;
+  readonly angleAt: number;
+  readonly since: number;
+  /** Resultado de la última pulsación, para anunciarlo. */
+  readonly last: "hit" | "miss" | null;
+}
+
 import type { LakePieceId } from "./lake";
 
 /** Estrategia de cada criatura: dónde vive, qué come, cómo pelea y qué revela. */
@@ -28,6 +52,8 @@ export interface Creature {
   readonly size: CreatureSize;
   /** Una fase por tramo de progreso: el megalodón cambia de patrón a mitad de pelea. */
   readonly phases: readonly PullPattern[];
+  /** Su anillo: aciertos que pide, velocidad de la aguja y ancho de la zona. */
+  readonly ring: RingTuning;
   /** Capturas previas necesarias para que aparezca. */
   readonly unlockAfter: number;
   /** Id de la entrada de experiencia que revela. */
