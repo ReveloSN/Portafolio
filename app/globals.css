@@ -10,6 +10,7 @@
 @import "./about.css";
 @import "./lake.css";
 @import "./lake-hud.css";
+@import "./journal.css";
 @import "./quantum.css";
 @import "./breach.css";
 
@@ -93,6 +94,12 @@
   --lake-rule: rgba(233, 220, 188, 0.24);
   --lake-amber: #e7a94b;
   --lake-lime: #b9e36a;
+  /* Diario: tinta sobre papel envejecido */
+  --journal-paper: #e6d6b2;
+  --journal-ink: #2b2117;
+  --journal-faded: #6b5f4e;
+  --journal-moss: #3f5f2c;
+  --journal-rust: #8b4a1f;
 }
 
 /* Pantallas bajas (laptops con escala, móviles en horizontal) */

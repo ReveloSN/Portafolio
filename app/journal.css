@@ -1,0 +1,176 @@
+/* ------------------------------------------------------------------ */
+/* Diario de capturas: una hoja de papel envejecido bajo el lago.       */
+/* Serif de grabado, tinta oscura y marcas a mano; lo pendiente en gris. */
+/* ------------------------------------------------------------------ */
+.journal-sheet {
+  position: relative;
+  margin-top: max(2.5rem, calc(var(--u) * 4.5));
+  padding: max(1.5rem, calc(var(--u) * 3.2)) max(1.1rem, calc(var(--u) * 3.6));
+  border-radius: 3px;
+  color: var(--journal-ink);
+  font-family: var(--font-fell), Georgia, serif;
+  /* Papel: manchas suaves y bordes tostados, sin imágenes */
+  background:
+    radial-gradient(ellipse 60% 40% at 18% 12%, rgba(150, 110, 60, 0.12), transparent),
+    radial-gradient(ellipse 50% 35% at 85% 80%, rgba(150, 110, 60, 0.14), transparent),
+    var(--journal-paper);
+  box-shadow:
+    inset 0 0 70px rgba(110, 72, 30, 0.35),
+    0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.journal-heading {
+  font-size: var(--fs-2xl);
+  line-height: 1.1;
+  text-align: center;
+}
+.journal-intro {
+  max-width: 38rem;
+  margin: 0.5rem auto 0;
+  color: var(--journal-faded);
+  font-style: italic;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* Filtros: pestañas de tinta -------------------------------------- */
+.journal-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: max(1.1rem, calc(var(--u) * 1.8));
+}
+.journal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  border: 1px solid rgba(43, 33, 23, 0.35);
+  border-radius: 3px;
+  color: var(--journal-ink);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+.journal-chip:hover {
+  background: rgba(43, 33, 23, 0.07);
+}
+.journal-chip[aria-pressed="true"] {
+  border-color: var(--journal-ink);
+  color: var(--journal-paper);
+  background: var(--journal-ink);
+}
+.journal-chip:focus-visible {
+  outline: 2px solid var(--journal-rust);
+  outline-offset: 2px;
+}
+
+/* Entradas: renglones separados por una línea de tinta ------------- */
+.journal-list {
+  display: grid;
+  margin-top: max(1.25rem, calc(var(--u) * 2.2));
+  border-top: 1px solid rgba(43, 33, 23, 0.3);
+}
+@media (min-width: 768px) {
+  .journal-list {
+    grid-template-columns: 1fr 1fr;
+    column-gap: max(1.5rem, calc(var(--u) * 3.6));
+  }
+}
+.journal-list > li {
+  min-width: 0;
+  border-bottom: 1px solid rgba(43, 33, 23, 0.18);
+}
+.journal-entry {
+  padding: 1.1rem 0 1.25rem;
+  color: var(--journal-faded);
+}
+.journal-entry[data-caught] {
+  color: var(--journal-ink);
+}
+.journal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  font-size: var(--fs-sm);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+.journal-kind {
+  color: var(--kind);
+}
+.journal-entry:not([data-caught]) .journal-kind {
+  color: inherit;
+}
+.journal-title {
+  margin-top: 0.3rem;
+  font-size: var(--fs-lg);
+  line-height: 1.2;
+}
+.journal-org {
+  font-style: italic;
+}
+/* Marca a mano: letra manuscrita en tinta de color, un poco ladeada */
+.journal-hand {
+  margin-top: 0.6rem;
+  font-family: var(--font-caveat), cursive;
+  font-size: var(--fs-lg);
+  line-height: 1.15;
+}
+.journal-stamp {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--kind);
+  transform: rotate(-1.5deg);
+  transform-origin: left center;
+  animation: inkIn 0.6s var(--ease-enter) both;
+}
+.journal-badge {
+  display: inline-flex;
+  width: 3.25rem;
+  margin-left: auto;
+  opacity: 0.85;
+}
+.journal-hidden {
+  margin-top: 0.2rem;
+  font-size: var(--fs-sm);
+  font-style: italic;
+}
+.journal-label {
+  margin-top: 0.75rem;
+  font-size: var(--fs-sm);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+}
+.journal-achievements {
+  margin-top: 0.3rem;
+  padding-left: 1.1rem;
+  list-style: "– ";
+  line-height: 1.5;
+}
+.journal-achievements > li + li {
+  margin-top: 0.25rem;
+}
+
+@keyframes inkIn {
+  from {
+    opacity: 0;
+    transform: rotate(-1.5deg) scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1.5deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-stamp {
+    animation: none;
+  }
+}

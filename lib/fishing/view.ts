@@ -8,8 +8,8 @@ import type { Creature, CreatureId, GameState } from "@/types/fishing";
 const { experience: copy } = COPY;
 
 export const KIND_COLOR: Readonly<Record<ExperienceKind, string>> = {
-  academic: "var(--glow)",
-  work: "#ffc46e",
+  academic: "var(--journal-moss)",
+  work: "var(--journal-rust)",
 };
 
 export const KIND_LABEL: Readonly<Record<ExperienceKind, string>> = {

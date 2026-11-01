@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/* Lago de pesca (Experiencia): marco, escena y diario que se voltea     */
+/* Lago de pesca (Experiencia): marco, escena y diario                  */
 /* Solo se animan transform y opacity.                                  */
 /* ------------------------------------------------------------------ */
 /* El marco: aspecto del arte y como mucho la pantalla menos la barra. Si el alto queda
@@ -243,40 +243,6 @@
   animation: revealIn 0.5s 0.4s both;
 }
 
-/* Diario: cada tarjeta tiene dos caras apiladas en la misma celda ----- */
-.jcard {
-  display: flex;
-  width: 100%;
-  perspective: 1400px;
-}
-.jcard-inner {
-  display: grid;
-  width: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.8s var(--ease-enter);
-}
-.jcard[data-flipped] .jcard-inner {
-  transform: rotateY(180deg);
-}
-.jcard-face {
-  grid-area: 1 / 1;
-  min-width: 0;
-  padding: max(1rem, calc(var(--u) * 1.6)) max(1.1rem, calc(var(--u) * 1.9));
-  border-radius: 18px;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  background: #0a1c26;
-}
-.jcard-front {
-  border: 1px dashed rgba(238, 246, 224, 0.28);
-}
-.jcard-back {
-  transform: rotateY(180deg);
-  border: 1px solid var(--c);
-  background: color-mix(in srgb, var(--c) 9%, #0a1c26);
-  box-shadow: 0 0 34px color-mix(in srgb, var(--c) 26%, transparent);
-}
-
 @keyframes lakeDrift {
   from {
     transform: translateX(-6px);
@@ -382,20 +348,5 @@
   }
   .lake-viewport.is-shaking > .lake-canvas {
     animation: none;
-  }
-  .jcard-inner,
-  .jcard[data-flipped] .jcard-inner {
-    transform: none;
-    animation: none;
-  }
-  .jcard-back {
-    transform: none;
-    opacity: 0;
-  }
-  .jcard[data-flipped] .jcard-back {
-    opacity: 1;
-  }
-  .jcard[data-flipped] .jcard-front {
-    opacity: 0;
   }
 }

@@ -333,7 +333,7 @@ async function checkMenuKeyboard(page: Page, label: string) {
 /** El diario se lee sin jugar, filtra por tipo y responde a "Sacar todo" y "Reiniciar". */
 async function checkJournal(page: Page, dir: string) {
   const journal = page.getByTestId("experience-journal");
-  const entries = journal.locator(".jcard");
+  const entries = journal.locator(".journal-entry");
   check(
     (await entries.count()) === TOTAL,
     `diario visible sin jugar: ${await entries.count()} entradas`,

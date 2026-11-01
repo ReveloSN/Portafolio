@@ -24,7 +24,7 @@ const OPTIONS: readonly JournalFilterOption[] = [
   { value: "work", label: copy.work, icon: "briefcase", color: KIND_COLOR.work },
 ];
 
-/** Diario de experiencia: siempre visible y legible sin jugar, filtrable por tipo. */
+/** Diario de experiencia en una hoja de papel: legible sin jugar y filtrable por tipo. */
 export function ExperienceJournal({ entries, isRevealed }: ExperienceJournalProps) {
   const [filter, setFilter] = useState<JournalFilterValue>("all");
   const visible = useMemo(
@@ -33,22 +33,18 @@ export function ExperienceJournal({ entries, isRevealed }: ExperienceJournalProp
   );
 
   return (
-    <div className="mt-14" data-testid="experience-journal">
-      <h3 className="font-display text-fluid-2xl mb-2 text-center font-extrabold">
-        {copy.journal.title}
-      </h3>
-      <p className="mb-fluid-3 mx-auto max-w-[calc(var(--u)*40)] text-center opacity-75">
-        {copy.journal.intro}
-      </p>
+    <div className="journal-sheet" data-testid="experience-journal">
+      <h3 className="journal-heading">{copy.journal.title}</h3>
+      <p className="journal-intro">{copy.journal.intro}</p>
       <JournalFilter
         label={copy.filterLabel}
         options={OPTIONS}
         value={filter}
         onChange={setFilter}
       />
-      <ul className="gap-fluid-3 mt-fluid-3 grid md:grid-cols-2">
+      <ul className="journal-list">
         {visible.map((entry) => (
-          <li key={entry.id} className="flex min-w-0">
+          <li key={entry.id}>
             <JournalEntry entry={entry} revealed={isRevealed(entry)} />
           </li>
         ))}

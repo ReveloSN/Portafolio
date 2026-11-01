@@ -113,7 +113,7 @@ export const COPY = {
     journal: {
       title: "Diario de capturas",
       intro:
-        "Del más reciente al más antiguo. Puedes leerlo sin jugar: cada captura voltea su tarjeta y revela los logros.",
+        "Del más reciente al más antiguo. Puedes leerlo sin jugar: cada captura aviva la tinta de su entrada y revela los logros.",
       caught: "Capturada",
       pending: "Por pescar",
       hint: "Pista",
