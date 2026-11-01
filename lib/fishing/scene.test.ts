@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { LAKE_ART } from "@/data/lakeAssets";
 import {
   BOBBER_PERCENT,
-  BUCKETS,
   DOCK,
   HOOK_POINT,
   HORIZON_Y,
@@ -30,11 +29,6 @@ describe("geometría del lago", () => {
     expect(BOBBER_PERCENT.mid.y).toBeGreaterThan(BOBBER_PERCENT.deep.y);
   });
 
-  it("los baldes van en el muelle y terminan antes que el niño", () => {
-    expect(BUCKETS.hitLeft).toBeGreaterThanOrEqual(DOCK.left);
-    expect(BUCKETS.hitRight).toBeLessThanOrEqual(KID_LEFT);
-  });
-
   it("las tres poses del niño comparten pies y borde derecho (no saltan)", () => {
     const boxes = (["explorer-idle", "explorer-cast", "explorer-reel"] as const).map(
       (id) => kidPoseBox(LAKE_ART[id]!.crop!),
@@ -46,10 +40,11 @@ describe("geometría del lago", () => {
     expect(boxes[0]!.left).toBeCloseTo(KID_LEFT, 0);
   });
 
-  it("el farol queda detrás del niño y la caña llega sobre el agua", () => {
+  it("el niño se sienta en la punta, el farol a su espalda, y la caña llega al agua", () => {
     const idle = kidPoseBox(LAKE_ART["explorer-idle"]!.crop!);
-    expect(LANTERN.x).toBeGreaterThan(idle.left);
-    expect(LANTERN.x).toBeLessThan(idle.left + idle.width);
+    expect(LANTERN.x).toBeLessThan(idle.left);
+    expect(idle.left).toBeLessThan(DOCK.right);
+    expect(idle.left + idle.width).toBeGreaterThan(DOCK.right);
     expect(ROD_TIP.x).toBeGreaterThan(toUnits({ x: DOCK.right, y: 0 }).x);
     expect(HOOK_POINT.y).toBeLessThan(toUnits({ x: 0, y: HORIZON_Y }).y);
   });

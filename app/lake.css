@@ -147,6 +147,13 @@
 .lake-rod-motion.is-flicking {
   animation: rodFlick 0.75s cubic-bezier(0.2, 0.8, 0.3, 1) 1;
 }
+/* El niño entra en la noche: ~25 % más oscuro, menos saturado y con el filo ámbar del
+   farol que tiene a la espalda (a la izquierda). Sin tocar la imagen. */
+[data-testid="lake-kid"] {
+  filter: brightness(0.75) saturate(0.72)
+    drop-shadow(-1.5px -0.5px 0.5px rgba(231, 169, 75, 0.7))
+    drop-shadow(-3px 0 4px rgba(231, 169, 75, 0.25));
+}
 /* El niño: las tres poses están siempre (precargadas); solo se ve la activa */
 .lake-kid-pose {
   opacity: 0;

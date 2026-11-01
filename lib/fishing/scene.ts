@@ -88,7 +88,7 @@ export const LAYER_PARALLAX: Readonly<Record<LakeLayerId, number>> = {
   foreground: -1.8,
 };
 
-/* ---------- Niño, caña y carnada ---------- */
+/* ---------- Niño y caña ---------- */
 
 /** Tamaño del arte pintado en px: las medidas en px del arte se pasan a % con esto. */
 const ART = { width: 2400, height: 1116 } as const;
@@ -104,9 +104,10 @@ export interface SourceCrop {
 /**
  * Las tres poses del niño comparten un lienzo de 1280 px con los pies en la misma fila: cada
  * pose se coloca según su recorte en ese lienzo y no salta al cambiar. Sentado en la punta
- * del muelle entre el 31 % y el 37 % del ancho, con el farol detrás.
+ * del muelle entre el 35 % y el 43 % del ancho, con las piernas sobre el agua y el farol a
+ * su espalda (no detrás de la cabeza, donde parecía un halo).
  */
-export const KID_CANVAS = { left: 26.6, top: 33.7, scale: 0.261 } as const;
+export const KID_CANVAS = { left: 28.9, top: 27.8, scale: 0.352 } as const;
 
 /** Caja de una pose en % de la escena. */
 export function kidPoseBox(crop: SourceCrop) {
@@ -119,11 +120,11 @@ export function kidPoseBox(crop: SourceCrop) {
   };
 }
 
-/** Borde izquierdo del niño (pose quieto): nada del muelle lo debe tapar. */
-export const KID_LEFT = 31;
+/** Borde izquierdo del niño (pose quieto): el farol queda antes. */
+export const KID_LEFT = 34.8;
 
 /** Empuñadura de la caña: las manos del niño en la pose quieto. */
-export const ROD_GRIP_PERCENT: ScenePercent = { x: 36, y: 46.9 };
+export const ROD_GRIP_PERCENT: ScenePercent = { x: 41.6, y: 45.6 };
 
 /** Caña (cana.webp): empuñadura y punta medidas en px de la imagen. */
 export const ROD_ART = {
@@ -134,7 +135,7 @@ export const ROD_ART = {
 } as const;
 
 /** Largo de la caña de la empuñadura a la punta, en % del ancho de la escena. */
-export const ROD_LENGTH_PERCENT = 17;
+export const ROD_LENGTH_PERCENT = 23;
 /** Ángulo de reposo (grados; negativo = hacia arriba). */
 export const ROD_REST_DEG = -35;
 /** Inclinación propia del dibujo de la caña: se descuenta al rotarla. */
@@ -146,16 +147,6 @@ export const ROD_ART_DEG =
 const DANGLE_DROP = 12;
 const HOOK_DROP = 6;
 
-/** Baldes: el dibujo cabe entre el 14 % y el 29.5 %; cada botón de 44 px ocupa un tercio
- *  del tramo táctil 12.5-31 % (a 1280 × 575 la escena mide 718 px y 18.4 % = 3 × 44 px). */
-export const BUCKETS = {
-  hitLeft: 12.5,
-  hitRight: 31,
-  /** Ancho del dibujo de cada balde, en % del ancho de la escena. */
-  artWidth: 3.2,
-  deckY: 51.5,
-} as const;
-
 /** Juncos decorativos en el agua junto a la punta del muelle (anclaje abajo al centro). */
 export const REEDS: readonly { x: number; y: number; height: number }[] = [
   { x: 42.5, y: 67, height: 13 },
@@ -165,8 +156,6 @@ export const REEDS: readonly { x: number; y: number; height: number }[] = [
 /** Tamaño de la boya y del anzuelo, en % del ancho de la escena. */
 export const BOBBER_WIDTH = 1.6;
 export const HOOK_WIDTH = 0.9;
-/** Carnada colgando del anzuelo, en % del ancho de la escena. */
-export const BAIT_WIDTH = 2.4;
 
 /** Dónde cae la boya en cada zona: lejos es más arriba (más cerca del horizonte). */
 export const BOBBER_PERCENT: Readonly<Record<Depth, ScenePercent>> = {
