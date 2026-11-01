@@ -7,6 +7,8 @@ import { approach, boxCenter, hasSettled, isLit, type Point } from "@/lib/abyss/
 import { listen } from "@/lib/dom";
 
 const CARD = ".dive-card";
+/** Capa de la linterna: recibe --lx / --ly (solo ella y sus hijos recalculan estilo). */
+const LIGHT = ".dive-lantern";
 const TOUCH_EVENTS = ["touchstart", "touchmove", "touchend", "touchcancel"] as const;
 /** Sin tarjeta activa (superficie), la linterna descansa aquí (fracción del escenario). */
 const REST = { x: 0.5, y: 0.55 } as const;
@@ -21,7 +23,8 @@ interface PointerLightRefs {
 /**
  * Linterna de buceo: sigue al ratón con inercia (lerp en requestAnimationFrame), al dedo
  * mientras toca y, si no, a la tarjeta enfocada o a la activa. Escribe --lx y --ly en la
- * sección y data-lit en las tarjetas que alcanza el haz; nada pasa por el estado de React.
+ * capa de la linterna y data-lit en las tarjetas que alcanza el haz; nada pasa por el
+ * estado de React.
  * Con prefers-reduced-motion no hay inercia y se queda en la tarjeta activa.
  */
 export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) {
@@ -29,6 +32,7 @@ export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) 
     const root = dive.current;
     const scene = stage.current;
     if (!root || !scene) return;
+    const beam = scene.querySelector<HTMLElement>(LIGHT) ?? scene;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let pointer: Point | null = null;
     let focused: HTMLElement | null = null;
@@ -64,8 +68,8 @@ export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) 
       const factor = reduced.matches ? 1 : LANTERN.lerp;
       const next = light ? approach(light, target, factor) : target;
       light = next;
-      root.style.setProperty("--lx", `${(next.x - stageBox.left).toFixed(1)}px`);
-      root.style.setProperty("--ly", `${(next.y - stageBox.top).toFixed(1)}px`);
+      beam.style.setProperty("--lx", `${(next.x - stageBox.left).toFixed(1)}px`);
+      beam.style.setProperty("--ly", `${(next.y - stageBox.top).toFixed(1)}px`);
       items.forEach((card, i) => {
         const box = boxes[i];
         card.toggleAttribute("data-lit", box ? isLit(next, box, radius) : false);

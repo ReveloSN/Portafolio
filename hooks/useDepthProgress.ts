@@ -24,12 +24,14 @@ function markActive(list: HTMLElement | null, active: number) {
 
 /**
  * Avance de la inmersión con el scroll: un único listener pasivo y requestAnimationFrame.
- * Publica en la sección --depth (0 a 1), --surface (salida de la primera pantalla) y
- * --active, más data-zone y data-inview para el CSS. Sin re-render por frame: devuelve
- * una ref que lee la linterna.
+ * Publica en el escenario --depth (0 a 1), --surface (salida de la primera pantalla) y
+ * --active (solo ahí: cambiar una variable recalcula el estilo de todo lo que cuelga del
+ * elemento), y en la sección data-zone y data-inview para el CSS. Sin re-render por
+ * frame: devuelve una ref que lee la linterna.
  */
 export function useDepthProgress(
   diveRef: RefObject<HTMLElement | null>,
+  stageRef: RefObject<HTMLElement | null>,
   listRef: RefObject<HTMLElement | null>,
   count: number,
 ) {
@@ -37,19 +39,24 @@ export function useDepthProgress(
 
   useEffect(() => {
     const dive = diveRef.current;
-    if (!dive) return;
+    const stage = stageRef.current;
+    if (!dive || !stage) return;
     let frame = 0;
+    /** Última placa marcada: al cambiar la lista (filtros) se vuelve a marcar. */
+    let marked = Number.NaN;
 
     const update = () => {
       frame = 0;
       const box = dive.getBoundingClientRect();
       const { depth, surface } = diveProgress(box.top, box.height, window.innerHeight);
       const active = activeIndexAt(depth, count, DIVE_LAYOUT);
-      dive.style.setProperty("--depth", depth.toFixed(PRECISION));
-      dive.style.setProperty("--surface", surface.toFixed(PRECISION));
-      dive.style.setProperty("--active", String(active));
-      dive.dataset.zone = zoneAt(depth, ABYSS_ZONES);
-      markActive(listRef.current, active);
+      stage.style.setProperty("--depth", depth.toFixed(PRECISION));
+      stage.style.setProperty("--surface", surface.toFixed(PRECISION));
+      stage.style.setProperty("--active", String(active));
+      const zone = zoneAt(depth, ABYSS_ZONES);
+      if (dive.dataset.zone !== zone) dive.dataset.zone = zone;
+      if (active !== marked) markActive(listRef.current, active);
+      marked = active;
       state.current = { depth, surface, active };
     };
     const schedule = () => {
@@ -69,7 +76,7 @@ export function useDepthProgress(
       window.removeEventListener("resize", schedule);
       observer.disconnect();
     };
-  }, [diveRef, listRef, count]);
+  }, [diveRef, stageRef, listRef, count]);
 
   return state;
 }
