@@ -38,8 +38,8 @@ npm run format     # Prettier
 ```
 app/         layout, page (compone las secciones) y mundos/[slug]
 components/  atoms · molecules · organisms · templates · worlds
-hooks/       useParallax, useCarousel, useFishing, useDigSite, useContactForm, useInView
-lib/         validadores, reducers (pesca y excavación), constantes y utilidades puras
+hooks/       useParallax, useCarousel, useDigSite, useContactForm, useInView
+lib/         validadores, reducer de la excavación, filtro de la experiencia, constantes y utilidades puras
 data/        contenido tipado
 types/       tipos del dominio
 ```
