@@ -12,43 +12,42 @@
  * Uso:  npm run optimize:lake
  * Los originales viven en imagenes_webp/lago/ y no se modifican.
  */
-import { mkdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import sharp from "sharp";
+import {
+  BOTTOM,
+  CENTER,
+  HALO_TOLERANCE,
+  KB,
+  TOP,
+  cleanAlpha,
+  contactSheet,
+  contentBox,
+  crop,
+  encode,
+  exists,
+  haloRatio,
+  keyOut,
+  readRaw,
+  toPublic,
+  type Anchor,
+  type Raw,
+} from "./lib/art";
 
 const SOURCE = path.join("imagenes_webp", "lago");
 const OUT = path.join("public", "art", "lake");
 const MANIFEST = path.join("data", "lakeArtManifest.json");
 const SHEET = path.join("screenshots", "lake", "assets", "sheet.png");
 
-const KB = 1024;
 const LAYER_BUDGET = 300 * KB;
 const LAYER_MOBILE_BUDGET = 160 * KB;
 const PIECE_BUDGET = 150 * KB;
 const SCENE_BUDGET = 2.5 * KB * KB;
 const MOBILE_WIDTH = 1600;
-const QUALITIES = [82, 76, 70, 64, 58, 52, 46, 40] as const;
-/** Alfa por debajo de este valor es ruido: se descarta. */
-const ALPHA_FLOOR = 8;
 /** Los árboles terminan en el horizonte: debajo de esta fracción de la altura no hay nada. */
 const TREES_HORIZON = 0.59;
-/** Color del fondo verde medido en las esquinas de las piezas. */
-const KEY = { r: 16, g: 243, b: 14 } as const;
-/** Exceso de verde (g − max(r, b)): por debajo es opaco, por encima es fondo. */
-const SPILL_OPAQUE = 50;
-const SPILL_CLEAR = 140;
-const TRIM_PADDING = 2;
-/** Exceso de verde (sobre max(r, b)) propio del fondo de la llave, y fracción tolerada. */
-const HALO_MARGIN = 70;
-const HALO_TOLERANCE = 0.02;
-const OPAQUE = 250;
 
 type Folder = "layers" | "explorer" | "props" | "creatures" | "breach" | "fx";
-
-interface Anchor {
-  readonly x: number;
-  readonly y: number;
-}
 
 interface LayerJob {
   readonly id: string;
@@ -66,10 +65,6 @@ interface PieceJob {
   /** Punto de la pieza que se coloca sobre su posición en la escena (0 a 1). */
   readonly anchor: Anchor;
 }
-
-const BOTTOM: Anchor = { x: 0.5, y: 1 };
-const CENTER: Anchor = { x: 0.5, y: 0.5 };
-const TOP: Anchor = { x: 0.5, y: 0 };
 
 const LAYERS: readonly LayerJob[] = [
   { id: "sky", file: "capas/lago-cielo.webp", quality: 60 },
@@ -158,143 +153,6 @@ interface ManifestEntry {
   readonly crop?: { left: number; top: number; width: number; height: number };
 }
 
-interface Raw {
-  readonly data: Buffer;
-  readonly width: number;
-  readonly height: number;
-}
-
-const toPublic = (file: string) =>
-  "/" +
-  file
-    .split(path.sep)
-    .join("/")
-    .replace(/^public\//, "");
-
-async function exists(file: string) {
-  try {
-    return (await stat(file)).size > 0;
-  } catch {
-    return false;
-  }
-}
-
-async function readRaw(input: string | Buffer): Promise<Raw> {
-  const { data, info } = await sharp(input)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  return { data, width: info.width, height: info.height };
-}
-
-/** Prueba calidades de mayor a menor y se queda con la primera que cabe. */
-async function encode(raw: Raw, budget: number, resizeWidth?: number, fixed?: number) {
-  const ladder = fixed ? [fixed] : QUALITIES;
-  let best: Buffer | null = null;
-  for (const quality of ladder) {
-    let image = sharp(raw.data, {
-      raw: { width: raw.width, height: raw.height, channels: 4 },
-    });
-    if (resizeWidth) image = image.resize({ width: resizeWidth });
-    best = await image
-      .webp({ quality, alphaQuality: 90, effort: 6, smartSubsample: true })
-      .toBuffer();
-    if (best.length <= budget) break;
-  }
-  return best!;
-}
-
-/** Alfa por debajo del umbral a cero y, en lo transparente, color negro (comprime mejor). */
-function cleanAlpha(raw: Raw, cutBelow?: number) {
-  const { data, width, height } = raw;
-  const cutRow = cutBelow === undefined ? height : Math.floor(height * cutBelow);
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const i = (y * width + x) * 4;
-      if (y >= cutRow || data[i + 3]! < ALPHA_FLOOR) data.fill(0, i, i + 4);
-    }
-  }
-}
-
-/**
- * Keyer: el exceso de verde decide el alfa; en los bordes se descuenta el verde del fondo
- * (descontaminación) y se limita el verde al promedio de rojo y azul (despill). Limitarlo
- * al máximo dejaba filos cian en los peces, donde el azul domina.
- */
-function keyOut(raw: Raw) {
-  const { data } = raw;
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i]!;
-    const g = data[i + 1]!;
-    const b = data[i + 2]!;
-    const spill = g - Math.max(r, b);
-    const t = (spill - SPILL_OPAQUE) / (SPILL_CLEAR - SPILL_OPAQUE);
-    const alpha = 1 - Math.min(1, Math.max(0, t));
-    if (alpha * 255 < ALPHA_FLOOR) {
-      data.fill(0, i, i + 4);
-      continue;
-    }
-    if (alpha < 1) {
-      const unmix = (c: number, k: number) =>
-        Math.min(255, Math.max(0, Math.round((c - (1 - alpha) * k) / alpha)));
-      data[i] = unmix(r, KEY.r);
-      data[i + 1] = unmix(g, KEY.g);
-      data[i + 2] = unmix(b, KEY.b);
-    }
-    const limit = Math.round((data[i]! + data[i + 2]!) / 2);
-    if (alpha < 1 && data[i + 1]! > limit) data[i + 1] = limit;
-    data[i + 3] = Math.round(alpha * 255);
-  }
-}
-
-function contentBox(raw: Raw) {
-  const { data, width, height } = raw;
-  let left = width;
-  let top = height;
-  let right = -1;
-  let bottom = -1;
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      if (data[(y * width + x) * 4 + 3]! < ALPHA_FLOOR) continue;
-      left = Math.min(left, x);
-      right = Math.max(right, x);
-      top = Math.min(top, y);
-      bottom = Math.max(bottom, y);
-    }
-  }
-  left = Math.max(0, left - TRIM_PADDING);
-  top = Math.max(0, top - TRIM_PADDING);
-  right = Math.min(width - 1, right + TRIM_PADDING);
-  bottom = Math.min(height - 1, bottom + TRIM_PADDING);
-  return { left, top, width: right - left + 1, height: bottom - top + 1 };
-}
-
-function crop(raw: Raw, box: ReturnType<typeof contentBox>): Raw {
-  const out = Buffer.alloc(box.width * box.height * 4);
-  for (let y = 0; y < box.height; y++) {
-    const from = ((box.top + y) * raw.width + box.left) * 4;
-    raw.data.copy(out, y * box.width * 4, from, from + box.width * 4);
-  }
-  return { data: out, width: box.width, height: box.height };
-}
-
-/**
- * Fracción de píxeles de borde (alfa parcial) con un verde tan saturado como el del fondo
- * de la llave. Los verdes del propio arte (peces, follaje) no llegan a ese exceso.
- */
-async function haloRatio(buffer: Buffer) {
-  const { data } = await readRaw(buffer);
-  let edge = 0;
-  let green = 0;
-  for (let i = 0; i < data.length; i += 4) {
-    const a = data[i + 3]!;
-    if (a < ALPHA_FLOOR || a > OPAQUE) continue;
-    edge++;
-    if (data[i + 1]! - Math.max(data[i]!, data[i + 2]!) > HALO_MARGIN) green++;
-  }
-  return edge === 0 ? 0 : green / edge;
-}
-
 async function processLayer(job: LayerJob, manifest: Record<string, ManifestEntry>) {
   const raw = await readRaw(path.join(SOURCE, job.file));
   cleanAlpha(raw, job.cutBelow);
@@ -378,39 +236,6 @@ async function processDropSheet(manifest: Record<string, ManifestEntry>) {
   return lines;
 }
 
-/** Hoja de contacto de las piezas sobre fondo oscuro, para revisar halos a ojo. */
-async function contactSheet(manifest: Record<string, ManifestEntry>) {
-  const CELL = 220;
-  const COLUMNS = 6;
-  const ids = Object.keys(manifest).filter((id) => !manifest[id]!.mobileSrc);
-  const rows = Math.ceil(ids.length / COLUMNS);
-  const tiles = await Promise.all(
-    ids.map(async (id, index) => {
-      const entry = manifest[id]!;
-      const input = await sharp(path.join("public", entry.src))
-        .resize(CELL - 20, CELL - 20, { fit: "inside" })
-        .toBuffer();
-      return {
-        input,
-        left: (index % COLUMNS) * CELL + 10,
-        top: Math.floor(index / COLUMNS) * CELL + 10,
-      };
-    }),
-  );
-  await mkdir(path.dirname(SHEET), { recursive: true });
-  await sharp({
-    create: {
-      width: COLUMNS * CELL,
-      height: rows * CELL,
-      channels: 4,
-      background: "#0b1418",
-    },
-  })
-    .composite(tiles)
-    .png()
-    .toFile(SHEET);
-}
-
 async function run() {
   const folders: Folder[] = ["layers", "explorer", "props", "creatures", "breach", "fx"];
   // Carpeta generada: se vacía para que no queden archivos de una corrida anterior.
@@ -427,7 +252,11 @@ async function run() {
     Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)),
   );
   await writeFile(MANIFEST, JSON.stringify(sorted, null, 2) + "\n");
-  await contactSheet(manifest);
+  const pieces = Object.values(manifest).filter((entry) => !entry.mobileSrc);
+  await contactSheet(
+    pieces.map((entry) => entry.src),
+    SHEET,
+  );
   const verdict =
     total <= SCENE_BUDGET ? "dentro del presupuesto" : "SOBRE EL PRESUPUESTO";
   console.log(`\nPeso total: ${(total / KB / KB).toFixed(2)} MB (${verdict} de 2.5 MB)`);
