@@ -5,7 +5,6 @@ import { FishingLine } from "@/components/worlds/lake/FishingLine";
 import { HangingHook } from "@/components/worlds/lake/HangingHook";
 import { KidSprite } from "@/components/worlds/lake/KidSprite";
 import { LakeReeds } from "@/components/worlds/lake/LakeReeds";
-import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
 import { Rod } from "@/components/worlds/lake/Rod";
 import { kidPose } from "@/lib/fishing/pose";
 import { rigLayout } from "@/lib/fishing/rig";
@@ -26,11 +25,9 @@ interface LakeSceneProps {
   readonly label: string;
 }
 
-const LEAPING: ReadonlySet<GamePhase> = new Set(["caught", "complete"]);
-
 /**
- * Lo que se juega sobre las capas pintadas: juncos, niño, caña, sedal, boya, anzuelo, sombra,
- * salto final y canoa. La posición de cada parte la decide rigLayout().
+ * Lo que se juega sobre las capas pintadas: juncos, niño, caña, sedal, boya, anzuelo, sombra
+ * y canoa. La posición de cada parte la decide rigLayout(); el salto va en BreachLayer.
  */
 export function LakeScene(props: LakeSceneProps) {
   const { phase, depth, creature, breach, simpleShadow, assets, label } = props;
@@ -42,7 +39,6 @@ export function LakeScene(props: LakeSceneProps) {
     creature !== null &&
     target !== null &&
     (phase === "waiting" || biting);
-  const leaping = creature !== null && LEAPING.has(phase) && target !== null;
 
   return (
     <svg
@@ -78,15 +74,6 @@ export function LakeScene(props: LakeSceneProps) {
       ) : null}
       {rig.hookInAir ? (
         <HangingHook hook={assets.hook} x={rig.hookInAir.x} y={rig.hookInAir.y} />
-      ) : null}
-      {leaping ? (
-        <LeapingCreature
-          key={creature.id}
-          x={target.x}
-          y={target.y}
-          size={creature.size}
-          asset={assets.creatures[creature.id]}
-        />
       ) : null}
       {phase === "complete" ? <CanoeReturn asset={assets.canoe} /> : null}
     </svg>

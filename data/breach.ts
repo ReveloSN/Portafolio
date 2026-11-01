@@ -23,9 +23,9 @@ export interface BreachTimeline {
 }
 
 export const BREACH: Readonly<Record<BreachClass, BreachTimeline>> = {
-  /** Peces: arco corto de ~900 ms con el dibujo de perfil. */
+  /** Peces: arco corto de ~1000 ms con el dibujo de perfil. */
   small: {
-    stages: { bulge: 200, rise: 250, snap: 150, fall: 200, splash: 100 },
+    stages: { bulge: 300, rise: 250, snap: 150, fall: 200, splash: 100 },
     peak: 8,
     width: 6,
     rotate: { rise: -40, snap: 0, fall: 40 },
@@ -42,7 +42,7 @@ export const BREACH: Readonly<Record<BreachClass, BreachTimeline>> = {
     rotate: { rise: -80, snap: -75, fall: -105 },
     arc: 0,
     droplets: 16,
-    shakePx: 3,
+    shakePx: 0,
     sprite: "profile",
   },
   /**

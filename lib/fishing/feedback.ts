@@ -10,7 +10,7 @@ export interface PhaseFeedback {
 }
 
 export const FEEDBACK: Partial<Readonly<Record<GamePhase, PhaseFeedback>>> = {
-  bite: { shake: true, vibrate: [90], tones: [660, 880] },
+  bite: { shake: false, vibrate: [90], tones: [660, 880] },
   caught: { shake: false, vibrate: [40, 30, 40], tones: [523, 659, 784] },
   escaped: { shake: false, vibrate: [], tones: [330, 262] },
   complete: {

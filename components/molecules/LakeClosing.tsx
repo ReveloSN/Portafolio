@@ -7,7 +7,7 @@ interface LakeClosingProps {
 export function LakeClosing({ title, text }: LakeClosingProps) {
   return (
     <div className="lake-closing" data-testid="closing-message">
-      <p className="font-display text-fluid-xl font-extrabold">{title}</p>
+      <p className="font-journal text-fluid-2xl">{title}</p>
       <p className="text-fluid-sm mt-1 opacity-85">{text}</p>
     </div>
   );

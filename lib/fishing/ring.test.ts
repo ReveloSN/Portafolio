@@ -97,6 +97,17 @@ describe("aciertos por criatura", () => {
   });
 });
 
+describe("espera de la aguja", () => {
+  it("quieta hasta que arranca; pulsar antes no cuenta", () => {
+    const startsAt = T0 + 1500;
+    const { ring, seed } = startRing(tuning("mosasaur"), "challenge", SEED, startsAt);
+    expect(needleAngle(ring, T0)).toBe(0);
+    const early = pressRing(ring, "challenge", seed, T0 + 100);
+    expect(early.outcome).toBe("early");
+    expect(early.ring).toBe(ring);
+  });
+});
+
 describe("fallos", () => {
   it("un fallo cuesta una ronda y al segundo se escapa", () => {
     const start = startRing(tuning("mosasaur"), "challenge", SEED, T0);

@@ -24,8 +24,8 @@ const IDLE: BreachSequence = {
 };
 
 /**
- * Fases visuales del salto: bulge, rise, snap, fall, splash. Empieza al entrar en la picada
- * y sigue hasta el final aunque se enganche antes (el motor no espera a la animación).
+ * Fases visuales del salto: bulge, rise, snap, fall, splash. Empieza al enganchar y la
+ * aguja del anillo arranca al caer (el motor ya cuenta con esa espera).
  * Avisa con `onCue` del rugido al subir un gigante y del chapoteo al caer.
  */
 export function useBreachSequence(
@@ -42,7 +42,7 @@ export function useBreachSequence(
   });
 
   useEffect(() => {
-    const entering = phase === "bite" && previous.current !== "bite";
+    const entering = phase === "fighting" && previous.current !== "fighting";
     previous.current = phase;
     if (!entering || !creature) return;
     timers.current.forEach((timer) => window.clearTimeout(timer));

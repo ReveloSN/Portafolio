@@ -220,14 +220,6 @@ export const CANOE_BOX = {
   size: canoeSize,
 } as const;
 
-/** Caja (ancho × alto, unidades del SVG) donde se dibuja cada criatura al saltar. */
-export const CREATURE_BOX: Readonly<Record<CreatureSize, { w: number; h: number }>> = {
-  small: { w: 110, h: 58 },
-  medium: { w: 170, h: 90 },
-  large: { w: 380, h: 136 },
-  huge: { w: 500, h: 226 },
-};
-
 /** Radio horizontal (unidades del SVG) de la sombra que nada bajo la boya. */
 export const SHADOW_RX: Readonly<Record<CreatureSize, number>> = {
   small: 26,

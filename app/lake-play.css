@@ -78,10 +78,9 @@
 .lake-ring {
   position: absolute;
   z-index: 9;
-  width: max(7.5rem, 13cqw);
+  width: max(5.5rem, 13cqw);
   translate: -50% -78%;
   pointer-events: none;
-  animation: revealIn 0.25s ease-out both;
 }
 .lake-ring svg {
   display: block;
@@ -160,8 +159,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .lake-spot::before,
-  .lake-spot-bubbles > i,
-  .lake-ring {
+  .lake-spot-bubbles > i {
     animation: none;
   }
   .lake-spot-bubbles > i {

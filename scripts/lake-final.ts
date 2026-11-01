@@ -1,7 +1,7 @@
 /**
  * Capturas finales del lago en 1280x575, 1440x900 y 390x844: escena en reposo, puntos de
  * pesca, menú de ajustes, espera, picada, saltos del pez, de un mediano, del mosasaurio y
- * del megalodón, anillo, captura, final y diario.
+ * del megalodón (al enganchar), anillo, captura, final y diario.
  *
  * Uso:  npm run build && npm start       (en otra terminal)
  *       npm run lake:final -- [carpeta]  (BASE_URL=http://localhost:3000)
@@ -91,20 +91,18 @@ async function run() {
       await page.waitForTimeout(SETTLE_MS);
       if (wants.has("waiting")) await shot("waiting");
       await waitPhase(page, ["bite"], BITE_TIMEOUT_MS);
+      if (wants.has("bite")) await shot("bite");
+      // Al enganchar la criatura salta; la aguja arranca cuando vuelve a caer.
+      await page.getByTestId("fishing-action").focus();
+      await page.keyboard.press("Space");
       const breach = [...wants].find((name) => name.startsWith("breach"));
       if (breach) await shootBreach(page, breach, () => shot(breach));
-      if (wants.has("bite")) {
+      await page.getByTestId("fight-ring").waitFor();
+      if (wants.has("ring")) {
         await page.waitForSelector("[data-testid=breach]", {
           state: "detached",
           timeout: BITE_TIMEOUT_MS,
         });
-        await shot("bite");
-      }
-      await page.getByTestId("fishing-action").focus();
-      await page.keyboard.press("Space");
-      await page.getByTestId("fight-ring").waitFor();
-      if (wants.has("ring")) {
-        await page.waitForTimeout(SETTLE_MS);
         await shot("ring");
       }
       await playRing(page, false);

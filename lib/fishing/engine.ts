@@ -5,6 +5,7 @@ import {
   WAIT_MIN_MS,
   WAIT_SPREAD_MS,
 } from "@/lib/fishing/config";
+import { ringLeadMs } from "@/lib/fishing/breach";
 import { indexCreatures, surveySpot } from "@/lib/fishing/creatures";
 import { RING_FIGHT, type FightStrategy } from "@/lib/fishing/fight";
 import { nextRandom, pick } from "@/lib/fishing/random";
@@ -46,9 +47,14 @@ export function createInitialState(seed: number, mode: GameMode): GameState {
   };
 }
 
+/**
+ * `fight`: reglas de la pelea (el anillo). `leadMs`: cuánto espera la aguja tras enganchar
+ * (la criatura salta y cae primero); las pruebas pueden pasar 0.
+ */
 export function createFishingEngine(
   creatures: readonly Creature[],
   fight: FightStrategy = RING_FIGHT,
+  leadMs: (creature: Creature) => number = ringLeadMs,
 ) {
   const byId = indexCreatures(creatures);
   const allIds = creatures.map((creature) => creature.id);
@@ -93,11 +99,11 @@ export function createFishingEngine(
     };
   }
 
-  /** Enganchar: empieza el minijuego de la criatura. */
+  /** Enganchar: la criatura salta y, al caer, empieza su anillo. */
   function hook(state: GameState, now: number): GameState {
     const creature = state.hooked ? byId.get(state.hooked) : undefined;
     if (!creature) return state;
-    const started = fight.start(creature, state.mode, state.seed, now);
+    const started = fight.start(creature, state.mode, state.seed, now + leadMs(creature));
     return {
       ...state,
       phase: "fighting",

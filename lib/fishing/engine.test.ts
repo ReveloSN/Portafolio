@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CREATURES } from "@/data/creatures";
 import { CAST_FLIGHT_MS, WAIT_MIN_MS, WAIT_SPREAD_MS } from "@/lib/fishing/config";
 import { createFishingEngine, createInitialState } from "@/lib/fishing/engine";
+import { ringLeadMs } from "@/lib/fishing/breach";
 import { surveySpot } from "@/lib/fishing/creatures";
 import { nextRandom } from "@/lib/fishing/random";
 import type { Depth, GameMode, GameState, RingState } from "@/types/fishing";
@@ -78,6 +79,15 @@ describe("transiciones", () => {
     const fighting = reducer(bite, { type: "press", now: T0 });
     expect(fighting.phase).toBe("fighting");
     expect(fighting.ring?.needed).toBe(1);
+  });
+
+  it("al enganchar la aguja espera a que la criatura salte y caiga", () => {
+    const bite = castTo(start(), "deep");
+    const fighting = reducer(bite, { type: "press", now: T0 });
+    const creature = CREATURES.find((item) => item.id === fighting.hooked)!;
+    expect(fighting.ring?.since).toBe(T0 + ringLeadMs(creature));
+    const early = reducer(fighting, { type: "press", now: T0 + 1 });
+    expect(early.ring).toBe(fighting.ring);
   });
 
   it("cuando la zona ya no tiene nada, termina en escaped (noBite)", () => {

@@ -209,17 +209,6 @@
   opacity: 0.7;
   animation: none;
 }
-.lake-leap {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-}
-.lake-leap.is-big {
-  animation: leapBig 3.4s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
-}
-.lake-leap.is-small {
-  animation: leapSm 2.8s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
-}
 .lake-canoe {
   transform-box: view-box;
   animation: canoeIn 3.2s cubic-bezier(0.2, 0.7, 0.3, 1) both;
@@ -350,11 +339,6 @@
   .lake-shadow {
     opacity: 0.55;
     animation: none;
-  }
-  .lake-leap {
-    opacity: 1;
-    animation: none !important;
-    transform: translateY(-30px);
   }
   .lake-viewport.is-shaking > .lake-canvas {
     animation: none;

@@ -1,6 +1,6 @@
-import type { BreachTimeline } from "@/data/breach";
+import { BREACH, type BreachTimeline } from "@/data/breach";
 import { nextRandom } from "@/lib/fishing/random";
-import type { BreachStage } from "@/types/fishing";
+import type { BreachStage, Creature } from "@/types/fishing";
 
 export interface TimedStep {
   readonly stage: BreachStage;
@@ -31,6 +31,16 @@ export function breachSteps(
 
 export const breachDuration = (timeline: BreachTimeline) =>
   ORDER.reduce((total, stage) => total + timeline.stages[stage], 0);
+
+/** Lo que tarda la criatura en volver a caer al agua: ahí arranca la aguja del anillo. */
+export const breachLeadMs = (timeline: BreachTimeline) =>
+  timeline.stages.bulge +
+  timeline.stages.rise +
+  timeline.stages.snap +
+  timeline.stages.fall;
+
+/** Espera de la aguja para cada criatura: su salto completo hasta la caída. */
+export const ringLeadMs = (creature: Creature) => breachLeadMs(BREACH[creature.breach]);
 
 /** El anzuelo cuelga en el aire hasta el mordisco. */
 export const isHookInAir = (stage: BreachStage) => stage === "bulge" || stage === "rise";
