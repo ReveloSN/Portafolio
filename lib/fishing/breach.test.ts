@@ -3,7 +3,7 @@ import { BREACH } from "@/data/breach";
 import {
   breachDuration,
   breachSteps,
-  isBaitInAir,
+  isHookInAir,
   makeDroplets,
 } from "@/lib/fishing/breach";
 
@@ -34,10 +34,10 @@ describe("salto de las criaturas", () => {
     expect(steps.map((step) => step.stage)).toEqual(["snap", "idle"]);
   });
 
-  it("el cebo cuelga en el aire hasta el mordisco", () => {
-    expect(isBaitInAir("bulge")).toBe(true);
-    expect(isBaitInAir("rise")).toBe(true);
-    expect(isBaitInAir("snap")).toBe(false);
+  it("el anzuelo cuelga en el aire hasta el mordisco", () => {
+    expect(isHookInAir("bulge")).toBe(true);
+    expect(isHookInAir("rise")).toBe(true);
+    expect(isHookInAir("snap")).toBe(false);
   });
 
   it("las gotas son fijas por semilla, de 12 a 20, y suben antes de caer", () => {

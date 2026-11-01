@@ -2,7 +2,7 @@ import { Bobber } from "@/components/worlds/lake/Bobber";
 import { CanoeReturn } from "@/components/worlds/lake/CanoeReturn";
 import { CreatureShadow } from "@/components/worlds/lake/CreatureShadow";
 import { FishingLine } from "@/components/worlds/lake/FishingLine";
-import { HookedBait } from "@/components/worlds/lake/HookedBait";
+import { HangingHook } from "@/components/worlds/lake/HangingHook";
 import { KidSprite } from "@/components/worlds/lake/KidSprite";
 import { LakeReeds } from "@/components/worlds/lake/LakeReeds";
 import { LeapingCreature } from "@/components/worlds/lake/LeapingCreature";
@@ -11,7 +11,6 @@ import { kidPose } from "@/lib/fishing/pose";
 import { rigLayout } from "@/lib/fishing/rig";
 import { BOBBER_AT, LAKE_VIEWBOX, SHADOW_RX } from "@/lib/fishing/scene";
 import type {
-  BaitId,
   BreachStage,
   Creature,
   Depth,
@@ -29,8 +28,6 @@ interface LakeSceneProps {
   readonly fight: FightState;
   /** La que pica o pelea, o la recién capturada. */
   readonly creature: Creature | null;
-  /** Carnada en el anzuelo: cuelga de la caña y, al saltar la criatura, en el aire. */
-  readonly bait: BaitId | null;
   /** Fase visual del salto (la boya se oculta mientras dura). */
   readonly breach: BreachStage;
   /** Sin efectos, la criatura se insinúa con una sombra simple bajo la boya. */
@@ -42,11 +39,11 @@ interface LakeSceneProps {
 const LEAPING: ReadonlySet<GamePhase> = new Set(["caught", "complete"]);
 
 /**
- * Lo que se juega sobre las capas pintadas: juncos, niño, caña, sedal, boya, cebo, sombra,
+ * Lo que se juega sobre las capas pintadas: juncos, niño, caña, sedal, boya, anzuelo, sombra,
  * salto final y canoa. La posición de cada parte la decide rigLayout().
  */
 export function LakeScene(props: LakeSceneProps) {
-  const { phase, depth, creature, bait, breach, simpleShadow, assets, label } = props;
+  const { phase, depth, creature, breach, simpleShadow, assets, label } = props;
   const rig = rigLayout({ ...props, breach });
   const target = depth ? BOBBER_AT[depth] : null;
   const biting = phase === "bite";
@@ -56,7 +53,6 @@ export function LakeScene(props: LakeSceneProps) {
     target !== null &&
     (phase === "waiting" || biting);
   const leaping = creature !== null && LEAPING.has(phase) && target !== null;
-  const baitArt = bait ? assets.baits[bait] : null;
 
   return (
     <svg
@@ -93,13 +89,10 @@ export function LakeScene(props: LakeSceneProps) {
           y={rig.bobber.point.y}
           state={rig.bobber.state}
           jitter={rig.jitter}
-          bait={rig.bobber.state === "dangling" ? baitArt : null}
         />
       ) : null}
-      {rig.baitInAir && baitArt ? (
-        <g transform={`translate(${rig.baitInAir.x} ${rig.baitInAir.y})`}>
-          <HookedBait bait={baitArt} y={0} />
-        </g>
+      {rig.hookInAir ? (
+        <HangingHook hook={assets.hook} x={rig.hookInAir.x} y={rig.hookInAir.y} />
       ) : null}
       {leaping ? (
         <LeapingCreature

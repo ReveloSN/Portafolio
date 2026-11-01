@@ -94,18 +94,9 @@ const creatureArt = Object.fromEntries(
   CREATURES.map((creature) => [creature.id, piece(creature.art)]),
 ) as Record<CreatureId, LakeAsset>;
 
-/** Arte de cada puesto del juego: criaturas, baldes, carnadas y la canoa del final. */
+/** Arte de cada puesto del juego: criaturas, anzuelo y la canoa del final. */
 export const LAKE_ASSETS: LakeAssets = {
   canoe: { src: "/images/canoa.webp?v=2", width: 1254, height: 1254 },
   creatures: creatureArt,
-  buckets: {
-    worm: piece("bucket-worm"),
-    minnow: piece("bucket-minnow"),
-    firefly: piece("bucket-firefly"),
-  },
-  baits: {
-    worm: piece("bait-worm"),
-    minnow: piece("bait-minnow"),
-    firefly: piece("bait-firefly"),
-  },
+  hook: piece("hook"),
 };

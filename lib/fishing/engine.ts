@@ -20,7 +20,6 @@ import {
   type FightStep,
 } from "@/lib/fishing/tension";
 import type {
-  BaitId,
   Creature,
   GameAction,
   GameMode,
@@ -32,7 +31,6 @@ import type {
  * Máquina de estados del lago (pura):
  * idle → casting → waiting → bite → fighting → caught | escaped | lineBroken → casting …
  * waiting → escaped (nada picó) · bite → escaped (se soltó, solo desafío) · 6 capturas → complete
- * Antes de cada lanzamiento: tomar carnada (pickBait) y engancharla (attachBait).
  */
 
 /** Fases desde las que una pulsación empieza un lanzamiento nuevo. */
@@ -50,9 +48,6 @@ export function createInitialState(seed: number, mode: GameMode): GameState {
   return {
     phase: "idle",
     mode,
-    bait: null,
-    baitAttached: false,
-    blocked: null,
     seed,
     castStartedAt: null,
     power: 0,
@@ -78,16 +73,16 @@ export function createFishingEngine(creatures: readonly Creature[]) {
   const byId = indexCreatures(creatures);
   const allIds = creatures.map((creature) => creature.id);
 
-  /** Fin de un intento: la carnada se gasta y hay que elegir otra. */
+  /** Fin de un intento: se suelta el carrete. */
   function finish(state: GameState, phase: GamePhase): GameState {
-    return { ...state, phase, bait: null, baitAttached: false, holding: false };
+    return { ...state, phase, holding: false };
   }
 
   function launch(state: GameState, now: number): GameState {
-    if (state.castStartedAt === null || state.bait === null) return state;
+    if (state.castStartedAt === null) return state;
     const power = chargePower(now - state.castStartedAt, state.mode);
     const depth = depthFromPower(power);
-    const spot = surveySpot(creatures, depth, state.bait, state.caught);
+    const spot = surveySpot(creatures, depth, state.caught);
     const choice = nextRandom(state.seed);
     const wait = nextRandom(choice.seed);
     const hooked = pick(spot.candidates, choice.value);
@@ -178,10 +173,8 @@ export function createFishingEngine(creatures: readonly Creature[]) {
 
   function press(state: GameState, now: number): GameState {
     if (CAN_CAST.has(state.phase)) {
-      if (!state.baitAttached) return { ...state, blocked: "noBait" };
       return {
         ...state,
-        blocked: null,
         phase: "casting",
         castStartedAt: now,
         power: 0,
@@ -207,12 +200,6 @@ export function createFishingEngine(creatures: readonly Creature[]) {
     return state;
   }
 
-  /** Tomar carnada de un balde. En modo relajado queda enganchada sin más pasos. */
-  function pickBait(state: GameState, bait: BaitId): GameState {
-    if (!CAN_CAST.has(state.phase)) return state;
-    return { ...state, bait, baitAttached: state.mode === "relaxed", blocked: null };
-  }
-
   function release(state: GameState, now: number): GameState {
     if (state.phase === "casting") return launch(state, now);
     if (state.phase === "fighting") return { ...state, holding: false };
@@ -227,14 +214,6 @@ export function createFishingEngine(creatures: readonly Creature[]) {
         return release(state, action.now);
       case "tick":
         return tick(state, action.now, action.dt);
-      case "pickBait":
-        return pickBait(state, action.bait);
-      case "attachBait":
-        return CAN_CAST.has(state.phase) && state.bait !== null
-          ? { ...state, baitAttached: true, blocked: null }
-          : state;
-      case "detachBait":
-        return CAN_CAST.has(state.phase) ? { ...state, baitAttached: false } : state;
       case "setMode":
         return {
           ...state,

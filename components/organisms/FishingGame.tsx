@@ -1,22 +1,16 @@
 "use client";
 
-import { useRef } from "react";
-import { HookZone } from "@/components/atoms/HookZone";
-import { BaitGhost } from "@/components/molecules/BaitGhost";
 import { ActionPanel } from "@/components/molecules/ActionPanel";
 import { CastPowerBar } from "@/components/molecules/CastPowerBar";
 import { FightHud } from "@/components/molecules/FightHud";
 import { GameToolbar } from "@/components/molecules/GameToolbar";
 import { JournalEntry } from "@/components/organisms/JournalEntry";
 import { LakeStage } from "@/components/organisms/LakeStage";
-import { BAITS, CREATURES } from "@/data/creatures";
+import { CREATURES } from "@/data/creatures";
 import { COPY } from "@/data/copy";
-import { LAKE_ASSETS } from "@/data/lakeAssets";
 import type { FishingGameApi } from "@/hooks/useFishingGame";
-import { useBaitControls } from "@/hooks/useBaitControls";
 import { useEffectsToggle } from "@/hooks/useEffectsToggle";
 import { useGameFeedback } from "@/hooks/useGameFeedback";
-import { isBetweenCasts } from "@/lib/fishing/engine";
 import { experienceById } from "@/lib/collections";
 import { actionLabel, gameStatus, isActionIdle, sceneCreature } from "@/lib/fishing/view";
 
@@ -30,13 +24,6 @@ export function FishingGame({ game }: FishingGameProps) {
   const { state } = game;
   const feedback = useGameFeedback(state.phase);
   const effects = useEffectsToggle();
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const zoneRef = useRef<HTMLDivElement>(null);
-  const ghostRef = useRef<HTMLDivElement>(null);
-  const actionRef = useRef<HTMLButtonElement>(null);
-  const bait = useBaitControls(game, { canvasRef, zoneRef, ghostRef, actionRef });
-  const awaitingHook =
-    isBetweenCasts(state.phase) && state.bait !== null && !state.baitAttached;
   const creature = sceneCreature(state);
   const revealed =
     state.phase === "caught" && creature
@@ -58,12 +45,7 @@ export function FishingGame({ game }: FishingGameProps) {
         shaking={feedback.shaking}
         effects={effects.enabled}
         onCue={feedback.cue}
-        interactionFor={bait.interactionFor}
-        canvasRef={canvasRef}
-      >
-        <HookZone ref={zoneRef} visible={awaitingHook} />
-        <BaitGhost ref={ghostRef} baits={BAITS} art={LAKE_ASSETS.baits} />
-      </LakeStage>
+      />
       <div className="lake-panel">
         {revealed ? (
           <div key={revealed.id} className="lake-reveal" data-testid="catch-reveal">
@@ -75,10 +57,9 @@ export function FishingGame({ game }: FishingGameProps) {
           actionLabel={actionLabel(state)}
           idle={isActionIdle(state)}
           urgent={state.phase === "bite"}
-          onPress={bait.onAction}
+          onPress={game.press}
           onRelease={game.release}
           meter={meter}
-          actionRef={actionRef}
         />
         <GameToolbar
           labels={copy}

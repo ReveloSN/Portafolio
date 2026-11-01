@@ -1,5 +1,5 @@
-import { BAIT_AIR_LIFT } from "@/data/breach";
-import { isBaitInAir } from "@/lib/fishing/breach";
+import { HOOK_AIR_LIFT } from "@/data/breach";
+import { isHookInAir } from "@/lib/fishing/breach";
 import { rodAngle } from "@/lib/fishing/pose";
 import {
   BOBBER_AT,
@@ -36,8 +36,8 @@ export interface Rig {
   /** La boya no se ve mientras la criatura salta. */
   readonly bobber: { readonly point: ScenePoint; readonly state: BobberState } | null;
   readonly line: { readonly end: ScenePoint; readonly tautness: number };
-  /** El cebo colgando en el aire, hasta que la criatura lo muerde. */
-  readonly baitInAir: ScenePoint | null;
+  /** El anzuelo colgando en el aire, hasta que la criatura lo muerde. */
+  readonly hookInAir: ScenePoint | null;
   readonly jitter: number;
 }
 
@@ -51,22 +51,22 @@ const JITTER_SPEED = 0.05;
 const TAUT = 1;
 const BITE_TAUTNESS = 0.3;
 
-/** Caña, sedal, boya y cebo según la fase del juego y la del salto. */
+/** Caña, sedal, boya y anzuelo según la fase del juego y la del salto. */
 export function rigLayout({ phase, mode, depth, power, fight, breach }: RigInput): Rig {
   const angle = rodAngle(phase, power, fight, mode);
   const tip = rodTip(angle);
   const target = depth ? BOBBER_AT[depth] : dangleFrom(tip);
 
   if (phase === "bite" && breach !== "idle") {
-    const baitInAir = isBaitInAir(breach)
-      ? { x: target.x, y: target.y - heightUnits(BAIT_AIR_LIFT) }
+    const hookInAir = isHookInAir(breach)
+      ? { x: target.x, y: target.y - heightUnits(HOOK_AIR_LIFT) }
       : null;
     return {
       angle,
       tip,
       bobber: null,
-      line: { end: baitInAir ?? target, tautness: TAUT },
-      baitInAir,
+      line: { end: hookInAir ?? target, tautness: TAUT },
+      hookInAir,
       jitter: 0,
     };
   }
@@ -85,7 +85,7 @@ export function rigLayout({ phase, mode, depth, power, fight, breach }: RigInput
     tip,
     bobber: { point, state: BOBBER_STATE[phase] ?? "dangling" },
     line: { end: { x: point.x + jitter, y: point.y }, tautness },
-    baitInAir: null,
+    hookInAir: null,
     jitter,
   };
 }

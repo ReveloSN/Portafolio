@@ -47,7 +47,7 @@ export const BREACH: Readonly<Record<BreachClass, BreachTimeline>> = {
   },
   /**
    * Gigantes: salto vertical de ~2400 ms hasta el ~70 % de la altura de la escena
-   * (35 % sobre el agua del abismo); se tragan el cebo al subir y muerden arriba.
+   * (35 % sobre el agua del abismo); se tragan el anzuelo al subir y muerden arriba.
    */
   giant: {
     stages: { bulge: 300, rise: 700, snap: 400, fall: 600, splash: 400 },
@@ -76,5 +76,5 @@ export const BREACH_SPRITES: Partial<
   megalodon: { open: "megalodon-open", closed: "megalodon-closed" },
 };
 
-/** El cebo cuelga a esta altura sobre el agua mientras la criatura sube (% de la escena). */
-export const BAIT_AIR_LIFT = 8;
+/** El anzuelo cuelga a esta altura sobre el agua mientras la criatura sube (% de la escena). */
+export const HOOK_AIR_LIFT = 8;

@@ -54,7 +54,7 @@ export const COPY = {
     eyebrow: "EL LAGO DE LAS CAPTURAS",
     title: "Experiencia académica y laboral",
     intro:
-      "Cada capítulo de mi camino vive bajo el agua. Elige carnada, carga el lanzamiento y pelea con lo que pique. Y ojo: en el abismo hay algo mucho más grande.",
+      "Cada capítulo de mi camino vive bajo el agua. Carga el lanzamiento y pelea con lo que pique. Y ojo: en el abismo hay algo mucho más grande.",
     academic: "Académica",
     work: "Laboral",
     all: "Todo",
@@ -66,7 +66,6 @@ export const COPY = {
     relaxed: "Modo relajado",
     sound: "Sonido",
     effects: "Efectos",
-    buckets: { group: "Baldes de carnada", bucket: "Tomar carnada: {bait}" },
     power: "Fuerza del lanzamiento",
     tension: "Tensión del hilo",
     tensionZone: {
@@ -80,8 +79,6 @@ export const COPY = {
     reset: "Reiniciar",
     depth: { shore: "Orilla", mid: "Aguas medias", deep: "Abismo" },
     action: {
-      pickBait: "Toma una carnada",
-      attach: "Enganchar en la caña",
       cast: "Mantén para lanzar",
       casting: "Suelta para lanzar",
       waiting: "Esperando la picada…",
@@ -91,11 +88,7 @@ export const COPY = {
       complete: "Lago completado",
     },
     status: {
-      pickBait: "Toma una carnada de un balde.",
-      baitPicked:
-        "Carnada seleccionada: {bait}. Arrástrala hasta la caña o pulsa «Enganchar en la caña».",
-      baitAttached: "Carnada enganchada, ya puedes lanzar: mantén pulsado para cargar.",
-      noBait: "Falta carnada: toma una de un balde y engánchala en la caña.",
+      idle: "Mantén pulsado para cargar el lanzamiento.",
       casting: "Cargando fuerza: suelta para lanzar.",
       waiting: "La boya flota en {depth}. Espera la picada…",
       bite: "¡Picó! Pulsa para enganchar.",
@@ -104,7 +97,7 @@ export const COPY = {
       fightRelaxed: "Recoge el hilo: pulsa o mantén pulsado.",
       enraged: "¡{name} se enfurece! Tira más fuerte que nunca.",
       caught: "¡Capturaste: {name}! Se reveló una entrada del diario.",
-      noBite: "Nada picó aquí. Prueba otra carnada u otra profundidad.",
+      noBite: "Nada picó aquí: ya no queda nada en esta zona. Prueba otra profundidad.",
       locked:
         "Algo enorme ronda el abismo, pero aún no se deja ver. Vuelve con 4 capturas.",
       slipped: "Tardaste en enganchar: se soltó. Lanza otra vez.",

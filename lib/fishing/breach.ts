@@ -32,8 +32,8 @@ export function breachSteps(
 export const breachDuration = (timeline: BreachTimeline) =>
   ORDER.reduce((total, stage) => total + timeline.stages[stage], 0);
 
-/** El cebo cuelga en el aire hasta el mordisco. */
-export const isBaitInAir = (stage: BreachStage) => stage === "bulge" || stage === "rise";
+/** El anzuelo cuelga en el aire hasta el mordisco. */
+export const isHookInAir = (stage: BreachStage) => stage === "bulge" || stage === "rise";
 
 export interface Droplet {
   /** Desplazamientos en % del ancho (x) y del alto (subida y caída) de la escena. */

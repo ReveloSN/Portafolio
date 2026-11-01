@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import { HookedBait } from "@/components/worlds/lake/HookedBait";
 import { LAKE_ART } from "@/data/lakeAssets";
 import {
   BOBBER_WIDTH,
@@ -10,7 +9,6 @@ import {
 } from "@/lib/fishing/scene";
 import type { BobberState } from "@/lib/fishing/rig";
 import { cn } from "@/lib/utils";
-import type { LakeAsset } from "@/types/lake";
 
 interface BobberProps {
   readonly x: number;
@@ -18,8 +16,6 @@ interface BobberProps {
   readonly state: BobberState;
   /** Desplazamiento del tirón del pez (unidades del viewBox). */
   readonly jitter: number;
-  /** Carnada enganchada: cuelga del anzuelo mientras la boya cuelga de la caña. */
-  readonly bait: LakeAsset | null;
 }
 
 const bobberW = widthUnits(BOBBER_WIDTH);
@@ -27,8 +23,8 @@ const hookW = widthUnits(HOOK_WIDTH);
 /** El anzuelo cuelga a esta distancia bajo la boya. */
 const HOOK_DY = HOOK_POINT.y - DANGLE.y;
 
-/** Boya pintada con sus ondas y la señal de picada; colgando, lleva anzuelo y carnada. */
-export function Bobber({ x, y, state, jitter, bait }: BobberProps) {
+/** Boya pintada con sus ondas y la señal de picada; colgando de la caña, lleva el anzuelo. */
+export function Bobber({ x, y, state, jitter }: BobberProps) {
   const bobber = LAKE_ART.bobber;
   const hook = LAKE_ART.hook;
   const inWater = state !== "dangling";
@@ -61,7 +57,6 @@ export function Bobber({ x, y, state, jitter, bait }: BobberProps) {
               width={hookW}
               height={(hookW * hook.height) / hook.width}
             />
-            {bait ? <HookedBait bait={bait} y={HOOK_DY} /> : null}
           </>
         ) : null}
         {bobber ? (

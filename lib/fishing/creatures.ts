@@ -1,5 +1,5 @@
 import { DEPTH_THRESHOLDS } from "@/lib/fishing/config";
-import type { BaitId, Creature, CreatureId, Depth, PullPattern } from "@/types/fishing";
+import type { Creature, CreatureId, Depth, PullPattern } from "@/types/fishing";
 
 const FULL_TURN = Math.PI * 2;
 
@@ -39,11 +39,10 @@ export function depthFromPower(power: number): Depth {
 export const isUnlocked = (creature: Creature, captures: number) =>
   captures >= creature.unlockAfter;
 
-const livesAt = (creature: Creature, depth: Depth, bait: BaitId) =>
-  creature.depth === depth && creature.baits.includes(bait);
+const livesAt = (creature: Creature, depth: Depth) => creature.depth === depth;
 
 export interface SpotResult {
-  /** Criaturas que pueden picar en este lugar con esta carnada. */
+  /** Criaturas que pueden picar en este lugar. */
   readonly candidates: readonly Creature[];
   /** Hay una criatura aquí que aún no se deja ver (le faltan capturas). */
   readonly locked: boolean;
@@ -52,11 +51,10 @@ export interface SpotResult {
 export function surveySpot(
   creatures: readonly Creature[],
   depth: Depth,
-  bait: BaitId,
   caught: readonly CreatureId[],
 ): SpotResult {
   const pending = creatures.filter(
-    (creature) => !caught.includes(creature.id) && livesAt(creature, depth, bait),
+    (creature) => !caught.includes(creature.id) && livesAt(creature, depth),
   );
   const candidates = pending.filter((creature) => isUnlocked(creature, caught.length));
   return { candidates, locked: candidates.length < pending.length };

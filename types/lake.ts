@@ -1,4 +1,4 @@
-import type { BaitId, CreatureId } from "./fishing";
+import type { CreatureId } from "./fishing";
 
 /** Arte de un puesto del juego: una imagen con su tamaño real. */
 export interface LakeAsset {
@@ -11,9 +11,8 @@ export interface LakeAsset {
 export interface LakeAssets {
   readonly canoe: LakeAsset;
   readonly creatures: Readonly<Record<CreatureId, LakeAsset>>;
-  /** Los tres baldes de carnada del muelle y la carnada que sale de cada uno. */
-  readonly buckets: Readonly<Record<BaitId, LakeAsset>>;
-  readonly baits: Readonly<Record<BaitId, LakeAsset>>;
+  /** El anzuelo que cuelga en el aire durante el salto. */
+  readonly hook: LakeAsset;
 }
 
 /* ---------- Arte pintado (public/art/lake, generado por scripts/optimize-lake.ts) ---------- */

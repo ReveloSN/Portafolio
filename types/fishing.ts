@@ -1,8 +1,6 @@
 /** Zona del lago donde cae el anzuelo, según la fuerza del lanzamiento. */
 export type Depth = "shore" | "mid" | "deep";
 
-export type BaitId = "worm" | "minnow" | "firefly";
-
 export type CreatureId =
   "lepidotes" | "ammonite" | "coelacanth" | "ichthyosaur" | "mosasaur" | "megalodon";
 
@@ -25,7 +23,6 @@ export interface Creature {
   readonly id: CreatureId;
   readonly name: string;
   readonly depth: Depth;
-  readonly baits: readonly BaitId[];
   /** 0 (dócil) a 1 (feroz): escala sus tirones y el tiempo que tarda en soltarse. */
   readonly difficulty: number;
   readonly size: CreatureSize;
@@ -40,12 +37,6 @@ export interface Creature {
   readonly breach: BreachClass;
 }
 
-export interface Bait {
-  readonly id: BaitId;
-  readonly label: string;
-  readonly hint: string;
-}
-
 export type GameMode = "relaxed" | "challenge";
 
 export type GamePhase =
@@ -58,8 +49,6 @@ export type GamePhase =
   | "escaped"
   | "lineBroken"
   | "complete";
-
-export type BlockReason = "noBait";
 
 /** Por qué terminó un intento sin captura. */
 export type EscapeReason = "noBite" | "locked" | "slipped" | "fought";
@@ -76,12 +65,6 @@ export interface FightState {
 export interface GameState {
   readonly phase: GamePhase;
   readonly mode: GameMode;
-  /** Carnada tomada de un balde; se consume al terminar cada intento. */
-  readonly bait: BaitId | null;
-  /** Solo con la carnada enganchada en la caña se puede lanzar. */
-  readonly baitAttached: boolean;
-  /** Por qué no pasó lo que el jugador intentó (p. ej. lanzar sin carnada). */
-  readonly blocked: BlockReason | null;
   /** Estado del generador pseudoaleatorio: avanza con cada sorteo. */
   readonly seed: number;
   readonly castStartedAt: number | null;
@@ -99,9 +82,6 @@ export interface GameState {
 }
 
 export type GameAction =
-  | { readonly type: "pickBait"; readonly bait: BaitId }
-  | { readonly type: "attachBait" }
-  | { readonly type: "detachBait" }
   | { readonly type: "setMode"; readonly mode: GameMode }
   | { readonly type: "press"; readonly now: number }
   | { readonly type: "release"; readonly now: number }

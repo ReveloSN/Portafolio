@@ -26,17 +26,17 @@ describe("aparejo", () => {
     expect(rig.line.end).toEqual(BOBBER_AT.mid);
   });
 
-  it("al saltar, el cebo cuelga sobre el agua con el sedal tenso y sin boya", () => {
+  it("al saltar, el anzuelo cuelga sobre el agua con el sedal tenso y sin boya", () => {
     const rig = rigLayout({ ...base, phase: "bite", depth: "deep", breach: "rise" });
     expect(rig.bobber).toBeNull();
-    expect(rig.baitInAir?.x).toBe(BOBBER_AT.deep.x);
-    expect(rig.baitInAir!.y).toBeLessThan(BOBBER_AT.deep.y);
+    expect(rig.hookInAir?.x).toBe(BOBBER_AT.deep.x);
+    expect(rig.hookInAir!.y).toBeLessThan(BOBBER_AT.deep.y);
     expect(rig.line.tautness).toBe(1);
   });
 
-  it("desde el mordisco el cebo desaparece", () => {
+  it("desde el mordisco el anzuelo desaparece", () => {
     const rig = rigLayout({ ...base, phase: "bite", depth: "deep", breach: "snap" });
-    expect(rig.baitInAir).toBeNull();
+    expect(rig.hookInAir).toBeNull();
     expect(rig.line.end).toEqual(BOBBER_AT.deep);
   });
 });
