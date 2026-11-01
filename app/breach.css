@@ -112,7 +112,7 @@
 
 /* Sacudida al caer un mediano o un gigante: solo en escritorio */
 @media (hover: hover) and (pointer: fine) and (min-width: 768px) {
-  .lake-stage.is-breach-shaking {
+  .lake-viewport.is-breach-shaking > .lake-canvas {
     animation: breachShake 0.25s ease-in-out 1;
   }
 }

@@ -66,6 +66,7 @@ export const COPY = {
     relaxed: "Modo relajado",
     sound: "Sonido",
     effects: "Efectos",
+    settings: "Ajustes del juego",
     power: "Fuerza del lanzamiento",
     tension: "Tensión del hilo",
     tensionZone: {

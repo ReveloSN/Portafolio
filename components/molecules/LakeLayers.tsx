@@ -11,8 +11,8 @@ interface LakeLayersProps {
   readonly after?: Partial<Record<LakeLayerId, ReactNode>>;
 }
 
-/** La escena ocupa ~70 % del ancho en escritorio y todo el ancho en pantallas pequeñas. */
-const SIZES = "(min-width: 1024px) 70vw, 100vw";
+/** La escena ocupa todo el ancho de la sección. */
+const SIZES = "100vw";
 const MOBILE = { width: 1600, maxViewport: 1024 } as const;
 const PERCENT = 100;
 

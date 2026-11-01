@@ -51,7 +51,7 @@ export function Experience() {
           intro={copy.intro}
         />
       </div>
-      <div className="mt-fluid-4 mx-auto max-w-[min(var(--content-max),calc(var(--u)*104))]">
+      <div className="mt-fluid-4">
         <FishingGame game={game} />
       </div>
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*77.8))]">

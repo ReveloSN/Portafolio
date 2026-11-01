@@ -33,9 +33,9 @@ const BACK_LAYERS = ["sky", "trees", "water", "dock"] as const;
 const FRONT_LAYERS = ["foreground"] as const;
 
 /**
- * La escena por capas: arte pintado detrás, el SVG del juego en medio y el primer plano
- * delante; encima, los baldes y el mensaje final. Todo se coloca en porcentajes de la
- * escena, así coincide en cualquier tamaño. El ratón mueve las capas (parallax).
+ * La escena por capas dentro de un marco que la recorta por arriba (el muelle y el agua de
+ * juego nunca se cortan): arte pintado detrás, el SVG del juego en medio, el primer plano
+ * delante y la gradación encima. El ratón mueve las capas (parallax).
  */
 export function LakeStage({ state, creature, shaking, effects, onCue }: LakeStageProps) {
   const { experience: copy } = COPY;
@@ -44,43 +44,42 @@ export function LakeStage({ state, creature, shaking, effects, onCue }: LakeStag
   const shakePx = breach.stage === "splash" ? (breach.timeline?.shakePx ?? 0) : 0;
   return (
     <div
+      ref={parallaxRef}
       className={cn(
-        "lake-stage",
+        "lake-viewport",
         shaking && "is-shaking",
         shakePx > 0 && "is-breach-shaking",
       )}
       style={{ "--shake-px": `${shakePx}px` } as CSSProperties}
     >
-      <div ref={parallaxRef} className="lake-scenebox">
-        <div className="lake-canvas" data-testid="lake-canvas">
-          <LakeLayers
-            layers={BACK_LAYERS}
-            after={{ water: <LakeAmbience />, dock: <LanternGlow /> }}
-          />
-          <LakeScene
-            phase={state.phase}
-            mode={state.mode}
-            depth={state.depth}
-            power={state.power}
-            fight={state.fight}
-            creature={creature}
-            breach={breach.stage}
-            simpleShadow={!effects}
-            assets={LAKE_ASSETS}
-            label={copy.lakeLabel}
-          />
-          <QuantumWater
-            phase={state.phase}
-            depth={state.depth}
-            creature={creature}
-            enabled={effects}
-          />
-          <BreachLayer sequence={breach} depth={state.depth} />
-          <Fireflies count={FIREFLY_COUNT.lake} className="lake-fireflies" />
-          <LakeLayers layers={FRONT_LAYERS} />
-          {state.phase === "complete" ? <LakeClosing {...copy.closing} /> : null}
-        </div>
+      <div className="lake-canvas" data-testid="lake-canvas">
+        <LakeLayers
+          layers={BACK_LAYERS}
+          after={{ water: <LakeAmbience />, dock: <LanternGlow /> }}
+        />
+        <LakeScene
+          phase={state.phase}
+          mode={state.mode}
+          depth={state.depth}
+          power={state.power}
+          fight={state.fight}
+          creature={creature}
+          breach={breach.stage}
+          simpleShadow={!effects}
+          assets={LAKE_ASSETS}
+          label={copy.lakeLabel}
+        />
+        <QuantumWater
+          phase={state.phase}
+          depth={state.depth}
+          creature={creature}
+          enabled={effects}
+        />
+        <BreachLayer sequence={breach} depth={state.depth} />
+        <Fireflies count={FIREFLY_COUNT.lake} className="lake-fireflies" />
+        <LakeLayers layers={FRONT_LAYERS} />
       </div>
+      {state.phase === "complete" ? <LakeClosing {...copy.closing} /> : null}
     </div>
   );
 }

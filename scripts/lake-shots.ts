@@ -1,6 +1,6 @@
 /**
- * Capturas del lago de pesca para comparar etapas: el juego completo y la escena sola, en
- * los tres tamaños de referencia, con una carnada elegida y otra enganchada.
+ * Capturas del lago de pesca para comparar etapas, en los tres tamaños de referencia: la
+ * escena en reposo, el menú de ajustes abierto, la pantalla entera y el diario.
  *
  * Uso:  npm run build && npm start               (en otra terminal)
  *       npm run lake:shots -- <etapa>             (BASE_URL=http://localhost:3000)
@@ -19,9 +19,24 @@ const VIEWPORTS = [
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const SETTLE_MS = 900;
 
-async function shoot(page: Page, file: string) {
+async function shoot(page: Page, file: string, testId = "fishing-game") {
   await page.waitForTimeout(SETTLE_MS);
-  await page.getByTestId("fishing-game").screenshot({ path: file });
+  await page.getByTestId(testId).screenshot({ path: file });
+}
+
+/** Deja el juego justo bajo la barra de navegación, como lo vería quien llega a la sección. */
+async function frameGame(page: Page) {
+  await page.evaluate(() => {
+    const game = document.querySelector('[data-testid="fishing-game"]');
+    const nav = getComputedStyle(document.documentElement).getPropertyValue("--nav-h");
+    const navPx =
+      parseFloat(nav) * parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if (game)
+      window.scrollTo({
+        top: game.getBoundingClientRect().top + window.scrollY - navPx,
+        behavior: "instant",
+      });
+  });
 }
 
 async function run() {
@@ -37,14 +52,18 @@ async function run() {
       hasTouch: viewport.mobile,
     });
     await page.goto(BASE_URL, { waitUntil: "networkidle" });
-    const game = page.getByTestId("fishing-game");
-    await game.scrollIntoViewIfNeeded();
-    await shoot(page, path.join(dir, `${viewport.name}-1-idle.png`));
-    await page.getByTestId("bucket-firefly").click();
-    await shoot(page, path.join(dir, `${viewport.name}-2-bait-picked.png`));
-    await page.getByTestId("fishing-action").click();
-    await shoot(page, path.join(dir, `${viewport.name}-3-bait-hooked.png`));
-    await page.screenshot({ path: path.join(dir, `${viewport.name}-4-viewport.png`) });
+    await frameGame(page);
+    await shoot(page, path.join(dir, `${viewport.name}-1-rest.png`));
+    await page.screenshot({ path: path.join(dir, `${viewport.name}-2-viewport.png`) });
+    await page.getByTestId("settings-button").click();
+    await shoot(page, path.join(dir, `${viewport.name}-3-settings.png`));
+    await page.keyboard.press("Escape");
+    await page.getByTestId("experience-journal").scrollIntoViewIfNeeded();
+    await shoot(
+      page,
+      path.join(dir, `${viewport.name}-4-journal.png`),
+      "experience-journal",
+    );
     console.log(`  ${viewport.name}: listo`);
     await page.close();
   }
