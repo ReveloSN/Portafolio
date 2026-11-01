@@ -8,7 +8,8 @@
 @import "./art.css";
 @import "./flip.css";
 @import "./about.css";
-@import "./experience.css";
+@import "./abyss.css";
+@import "./dive.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));
@@ -81,12 +82,12 @@
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;
   --ink: #07160f;
-  /* Bitácora de experiencia: tinta sobre papel envejecido */
-  --journal-paper: #e6d6b2;
-  --journal-ink: #2b2117;
-  --journal-faded: #6b5f4e;
-  --journal-moss: #3f5f2c;
-  --journal-rust: #8b4a1f;
+  /* Inmersión de experiencia: placas luminosas sobre el agua oscura */
+  --abyss-ink: #f3f1e8;
+  --abyss-muted: #a9c6c4;
+  --abyss-lime: #b8f27c;
+  --abyss-amber: #ffc46b;
+  --abyss-plate: rgba(6, 15, 21, 0.9);
 }
 
 /* Pantallas bajas (laptops con escala, móviles en horizontal) */

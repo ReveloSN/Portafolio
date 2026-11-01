@@ -1,0 +1,134 @@
+"use client";
+
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Button } from "@/components/atoms/Button";
+import { Icon } from "@/components/atoms/Icon";
+import { DepthMeter } from "@/components/molecules/DepthMeter";
+import { DiveCard } from "@/components/molecules/DiveCard";
+import { DiveControls } from "@/components/molecules/DiveControls";
+import { RevealGroup } from "@/components/molecules/RevealGroup";
+import type { TimelineFilterOption } from "@/components/molecules/TimelineFilter";
+import { DIVE_LAYOUT, LANTERN, ZONE_FADE } from "@/data/abyss";
+import { COPY } from "@/data/copy";
+import { useDepthProgress } from "@/hooks/useDepthProgress";
+import { usePointerLight } from "@/hooks/usePointerLight";
+import { placeEntries } from "@/lib/abyss/depth";
+import {
+  countLabel,
+  filterExperience,
+  KIND_COLOR,
+  type ExperienceFilter,
+} from "@/lib/experience";
+import type { ExperienceEntry, ExperienceKind } from "@/types/experience";
+
+interface ExperienceDiveProps {
+  /** Ya ordenadas de la más reciente a la más antigua. */
+  readonly entries: readonly ExperienceEntry[];
+  readonly heading: ReactNode;
+  /** Escenario decorativo (fondos, lago, criaturas, linterna), renderizado en el servidor. */
+  readonly scenery: ReactNode;
+}
+
+const { experience: copy } = COPY;
+
+const KIND_LABEL: Readonly<Record<ExperienceKind, string>> = {
+  academic: copy.academic,
+  work: copy.work,
+};
+
+const OPTIONS: readonly TimelineFilterOption[] = [
+  { value: "all", label: copy.all },
+  { value: "academic", label: copy.academic, icon: "cap", color: KIND_COLOR.academic },
+  { value: "work", label: copy.work, icon: "briefcase", color: KIND_COLOR.work },
+];
+
+/** Medidas de la inmersión para el CSS: una sola fuente (data/abyss.ts). */
+const DIVE_STYLE = {
+  "--surface-h": `${DIVE_LAYOUT.surface}svh`,
+  "--slot-h": `${DIVE_LAYOUT.slot}svh`,
+  "--end-h": `${DIVE_LAYOUT.end}svh`,
+  "--zone-fade": ZONE_FADE,
+  "--beam-u": LANTERN.radiusU,
+  "--dark-base": LANTERN.baseDark,
+  "--dark-depth": LANTERN.depthDark,
+} as CSSProperties;
+
+/**
+ * Inmersión al abismo: un escenario fijo (sticky) y, encima, en flujo normal, el título,
+ * los controles y una placa por experiencia que pasa con el scroll natural. Filtrar
+ * recalcula las profundidades y anuncia el número de resultados.
+ */
+export function ExperienceDive({ entries, heading, scenery }: ExperienceDiveProps) {
+  const [filter, setFilter] = useState<ExperienceFilter>("all");
+  const [lightsOn, setLightsOn] = useState(false);
+  const placed = placeEntries(filterExperience(entries, filter));
+  const dive = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLOListElement>(null);
+  const top = useRef<HTMLDivElement>(null);
+  const depth = useDepthProgress(dive, stage, list, placed.length);
+  usePointerLight({ dive, stage, list, depth });
+
+  const backToSurface = () => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    dive.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    top.current?.focus({ preventScroll: true });
+  };
+
+  return (
+    <div
+      ref={dive}
+      className="dive"
+      data-lights={lightsOn ? "on" : "off"}
+      data-testid="experience-dive"
+      style={DIVE_STYLE}
+    >
+      <div ref={stage} className="dive-stage" aria-hidden="true">
+        {scenery}
+        <DepthMeter placed={placed} surfaceLabel={copy.surface} />
+      </div>
+      <div className="dive-content">
+        <div className="dive-controls-dock">
+          <DiveControls
+            filterLabel={copy.filterLabel}
+            options={OPTIONS}
+            filter={filter}
+            onFilter={setFilter}
+            lightsLabel={copy.lights}
+            lightsOn={lightsOn}
+            onToggleLights={() => setLightsOn((on) => !on)}
+          />
+        </div>
+        <div ref={top} className="dive-surface" tabIndex={-1}>
+          {heading}
+        </div>
+        <p className="sr-only" aria-live="polite">
+          {countLabel(copy.showing, placed.length, entries.length)}
+        </p>
+        <ol ref={list} className="dive-list" data-testid="dive-list">
+          {placed.map((item) => (
+            <RevealGroup as="li" key={item.entry.id} className="dive-slot">
+              <DiveCard
+                placed={item}
+                kindLabel={KIND_LABEL[item.entry.kind]}
+                color={KIND_COLOR[item.entry.kind]}
+                achievementsLabel={copy.achievements}
+              />
+            </RevealGroup>
+          ))}
+        </ol>
+        <div className="dive-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={backToSurface}
+            data-testid="back-to-surface"
+          >
+            <Icon name="arrowUp" />
+            {copy.backToSurface}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

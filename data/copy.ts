@@ -51,19 +51,19 @@ export const COPY = {
     ratingLabel: "de 5 estrellas",
   },
   experience: {
-    eyebrow: "LA BITÁCORA DEL LAGO",
+    eyebrow: "INMERSIÓN AL ABISMO",
     title: "Experiencia académica y laboral",
     intro:
-      "Lo que he estudiado y dónde he trabajado, del capítulo más reciente al más antiguo. Filtra para ver solo lo académico o lo laboral.",
+      "Baja siguiendo el sedal: cada placa es un capítulo, del más reciente al más antiguo. Ilumínala con la linterna, o enciende las luces, para leer sus logros.",
     academic: "Académica",
     work: "Laboral",
     all: "Todo",
-    filterLabel: "Filtrar la bitácora por tipo de experiencia",
-    timeline: {
-      title: "Bitácora",
-      achievements: "Logros",
-      showing: "Mostrando {shown} de {total} entradas",
-    },
+    filterLabel: "Filtrar la inmersión por tipo de experiencia",
+    achievements: "Logros",
+    showing: "Mostrando {shown} de {total} experiencias",
+    surface: "0 m",
+    lights: "Encender luces",
+    backToSurface: "Volver a la superficie",
   },
   contact: {
     eyebrow: "EL NIDO",

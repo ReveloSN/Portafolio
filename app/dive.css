@@ -1,0 +1,338 @@
+/* ------------------------------------------------------------------ */
+/* Inmersión: contenido en flujo normal sobre el escenario fijo.        */
+/* Pantalla inicial + un tramo por placa + final (alturas en data).     */
+/* ------------------------------------------------------------------ */
+
+/* La sección no lleva relleno: el escenario ocupa todo el ancho y alto */
+.experience {
+  padding: 0;
+}
+.dive {
+  position: relative;
+}
+.dive-content {
+  position: relative;
+  z-index: 1;
+  margin-top: -100svh;
+  padding-inline: var(--space-gutter);
+}
+
+/* Pantalla inicial: el título sobre el cielo, a la derecha de la caña */
+.dive-surface {
+  height: var(--surface-h);
+  padding-top: calc(var(--nav-h) + max(4.5rem, calc(var(--u) * 7)));
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.65);
+  outline: none;
+}
+.dive-surface > header {
+  max-width: min(36rem, 40vw);
+  margin-left: 55%;
+}
+@media (max-aspect-ratio: 1/1) {
+  .dive-surface {
+    padding-top: calc(var(--nav-h) + 4.25rem);
+    text-align: center;
+  }
+  .dive-surface > header {
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+  .dive-surface > header p {
+    margin-inline: auto;
+  }
+}
+
+/* Controles: siempre a mano bajo la barra de navegación, sin ocupar alto */
+.dive-controls-dock {
+  position: sticky;
+  top: calc(var(--nav-h) + 0.6rem);
+  z-index: 4;
+  height: 0;
+}
+.dive-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(4, 12, 17, 0.86);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.8);
+}
+@media (max-width: 767px) {
+  .dive-controls {
+    left: 0;
+    border-radius: 1.4rem;
+  }
+}
+.timeline-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.timeline-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  color: var(--abyss-ink);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+.timeline-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.timeline-chip[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--abyss-lime);
+}
+.dive-lights {
+  min-height: 2.75rem;
+}
+/* Pantallas estrechas: el interruptor queda solo con el icono (el nombre sigue ahí) */
+@media (max-width: 479px) {
+  .dive-lights {
+    min-width: 2.75rem;
+    padding-inline: 0.8rem;
+  }
+  .dive-lights-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (max-width: 420px) {
+  .timeline-chip {
+    padding: 0 0.75rem;
+  }
+}
+
+/* Placas ------------------------------------------------------------------ */
+.dive-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dive-slot {
+  display: grid;
+  min-height: var(--slot-h);
+  align-items: center;
+}
+.dive-card {
+  position: relative;
+  width: min(calc(100% - 1.5rem), calc(var(--u) * 34));
+  padding: max(1.1rem, calc(var(--u) * 2)) max(1.1rem, calc(var(--u) * 2.3));
+  border: 1px solid rgba(255, 196, 107, 0.3);
+  border-radius: 10px;
+  color: var(--abyss-ink);
+  background: linear-gradient(160deg, rgba(14, 32, 40, 0.92), var(--abyss-plate));
+  box-shadow:
+    0 24px 60px -24px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 236, 200, 0.08);
+  scroll-margin-block: calc(var(--nav-h) + 4rem);
+  transition:
+    border-color 0.5s var(--ease-enter),
+    box-shadow 0.5s var(--ease-enter);
+}
+@media (min-width: 768px) {
+  /* Escritorio: alternan a izquierda y derecha del hilo, con un tramo hasta él */
+  .dive-slot {
+    grid-template-columns: 1fr calc(var(--u) * 9) 1fr;
+  }
+  .dive-card {
+    grid-column: 1;
+    justify-self: end;
+    width: min(100%, calc(var(--u) * 34));
+  }
+  .dive-slot:nth-child(even) .dive-card {
+    grid-column: 3;
+    justify-self: start;
+  }
+  .dive-card::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: calc(var(--u) * 4.5);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 196, 107, 0.5), transparent);
+  }
+  .dive-slot:nth-child(even) .dive-card::before {
+    right: 100%;
+    left: auto;
+    background: linear-gradient(-90deg, rgba(255, 196, 107, 0.5), transparent);
+  }
+}
+.dive-card:focus-visible {
+  outline: 2px solid var(--abyss-lime);
+  outline-offset: 4px;
+}
+.dive-card[data-lit],
+.dive-card:focus-visible,
+.dive-slot[data-active] .dive-card,
+.dive[data-lights="on"] .dive-card {
+  border-color: rgba(255, 196, 107, 0.75);
+  box-shadow:
+    0 24px 60px -24px rgba(0, 0, 0, 0.9),
+    0 0 48px -10px rgba(255, 196, 107, 0.35),
+    inset 0 1px 0 rgba(255, 236, 200, 0.14);
+}
+.dive-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 1rem;
+  color: #ffd99c;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.03em;
+}
+.dive-card-kind {
+  color: var(--kind);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.dive-card-depth {
+  margin-left: auto;
+  color: var(--abyss-muted);
+  font-variant-numeric: tabular-nums;
+}
+.dive-card-title {
+  margin-top: 0.55rem;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1.15;
+}
+.dive-card-org {
+  margin-top: 0.2rem;
+  color: var(--abyss-muted);
+  font-size: var(--fs-md);
+}
+.dive-card-label {
+  margin-top: 1rem;
+  color: var(--abyss-amber);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.dive-card-achievements {
+  margin-top: 0.35rem;
+  padding-left: 1.1rem;
+  list-style: disc;
+  line-height: 1.55;
+}
+.dive-card-achievements > li + li {
+  margin-top: 0.25rem;
+}
+/* Los logros se encienden al iluminar, enfocar o activar la placa */
+.dive-card-label,
+.dive-card-achievements {
+  opacity: 0.14;
+  transform: translateY(0.35em);
+  transition:
+    opacity 0.5s var(--ease-enter),
+    transform 0.5s var(--ease-enter);
+}
+:is(
+    .dive-card[data-lit],
+    .dive-card:focus-within,
+    .dive-slot[data-active] .dive-card,
+    .dive[data-lights="on"] .dive-card
+  )
+  :is(.dive-card-label, .dive-card-achievements) {
+  opacity: 1;
+  transform: none;
+}
+
+/* Final: volver arriba y fundido con la sección siguiente */
+.dive-end {
+  display: grid;
+  min-height: var(--end-h);
+  place-items: center;
+  margin-inline: calc(var(--space-gutter) * -1);
+  background: linear-gradient(transparent 35%, var(--seam-experience-end));
+}
+
+/* Sin JS o con movimiento reducido: una lista vertical sobre agua oscura -- */
+@media (scripting: none), (prefers-reduced-motion: reduce) {
+  .dive-stage {
+    display: none;
+  }
+  .dive-content {
+    margin-top: 0;
+    padding-block: var(--space-section) 0;
+  }
+  .dive-surface {
+    height: auto;
+    padding-top: 0;
+    text-align: center;
+    text-shadow: none;
+  }
+  .dive-surface > header {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+  .dive-surface > header p {
+    margin-inline: auto;
+  }
+  .dive-controls-dock {
+    position: static;
+    height: auto;
+    margin-top: var(--space-4);
+  }
+  .dive-controls {
+    position: static;
+    width: fit-content;
+    margin-inline: auto;
+  }
+  .dive-list {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+  .dive-slot {
+    min-height: 0;
+  }
+  .dive-slot .dive-card,
+  .dive-slot:nth-child(even) .dive-card {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+  .dive-card::before {
+    display: none;
+  }
+  .dive .stagger-item,
+  .dive-card-label,
+  .dive-card-achievements {
+    opacity: 1;
+    transform: none;
+    translate: none;
+  }
+  .dive-end {
+    min-height: 0;
+    padding-block: var(--space-6);
+  }
+}
+/* Sin JS los filtros y el interruptor no harían nada: la lista ya se ve entera */
+@media (scripting: none) {
+  .dive-controls-dock,
+  .dive-end {
+    display: none;
+  }
+}
