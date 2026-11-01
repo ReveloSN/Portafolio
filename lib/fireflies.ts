@@ -1,3 +1,5 @@
+import { seeded } from "@/lib/seeded";
+
 /** Datos de vuelo de una luciérnaga; deterministas para que servidor y cliente coincidan. */
 export interface FireflyFlight {
   readonly x: number;
@@ -12,12 +14,6 @@ export interface FireflyFlight {
 
 const PATHS = 3;
 const SPRITES = 6;
-
-/** Pseudoaleatorio fijo a partir del índice (sin Math.random: evita errores de hidratación). */
-function seeded(index: number, salt: number): number {
-  const value = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
-  return value - Math.floor(value);
-}
 
 export function makeFlights(count: number): readonly FireflyFlight[] {
   return Array.from({ length: count }, (_, i) => ({
