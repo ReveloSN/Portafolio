@@ -1,20 +1,3 @@
-import type { CreatureId } from "./fishing";
-
-/** Arte de un puesto del juego: una imagen con su tamaño real. */
-export interface LakeAsset {
-  readonly src: string;
-  readonly width: number;
-  readonly height: number;
-}
-
-/** Arte de los puestos del juego (las capas se pintan desde LAKE_ART). */
-export interface LakeAssets {
-  readonly canoe: LakeAsset;
-  readonly creatures: Readonly<Record<CreatureId, LakeAsset>>;
-  /** El anzuelo que cuelga en el aire durante el salto. */
-  readonly hook: LakeAsset;
-}
-
 /* ---------- Arte pintado (public/art/lake, generado por scripts/optimize-lake.ts) ---------- */
 
 export type LakeLayerId = "sky" | "trees" | "water" | "dock" | "foreground";

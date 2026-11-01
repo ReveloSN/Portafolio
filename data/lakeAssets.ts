@@ -1,14 +1,5 @@
-import { CREATURES } from "@/data/creatures";
 import manifest from "@/data/lakeArtManifest.json";
-import type { CreatureId } from "@/types/fishing";
-import type {
-  LakeAnchor,
-  LakeArtAsset,
-  LakeArtId,
-  LakeAsset,
-  LakeAssets,
-  LakeLayerId,
-} from "@/types/lake";
+import type { LakeAnchor, LakeArtAsset, LakeArtId, LakeLayerId } from "@/types/lake";
 
 /** Orden de pintado de la escena. */
 export const LAKE_Z = {
@@ -60,8 +51,8 @@ function zOf(id: string, src: string): number {
 
 /**
  * Registro de todo el arte pintado del lago. Tamaños y anclajes salen del manifiesto que
- * escribe scripts/optimize-lake.ts; lo que falte en el original no aparece aquí y la
- * escena sigue usando su arte provisional.
+ * escribe scripts/optimize-lake.ts. La sección Experiencia usa las cinco capas como fondo;
+ * las demás piezas (niño, caña, criaturas, salpicaduras) quedan registradas por si vuelven.
  */
 export const LAKE_ART: Readonly<Partial<Record<LakeArtId, LakeArtAsset>>> =
   Object.fromEntries(
@@ -82,21 +73,3 @@ export const LAKE_ART: Readonly<Partial<Record<LakeArtId, LakeArtAsset>>> =
       ],
     ),
   );
-
-/** Imagen de una pieza del registro (las piezas generadas existen siempre). */
-function piece(id: LakeArtId): LakeAsset {
-  const art = LAKE_ART[id];
-  if (!art) throw new Error(`Falta el arte del lago: ${id}`);
-  return { src: art.src, width: art.width, height: art.height };
-}
-
-const creatureArt = Object.fromEntries(
-  CREATURES.map((creature) => [creature.id, piece(creature.art)]),
-) as Record<CreatureId, LakeAsset>;
-
-/** Arte de cada puesto del juego: criaturas, anzuelo y la canoa del final. */
-export const LAKE_ASSETS: LakeAssets = {
-  canoe: { src: "/images/canoa.webp?v=2", width: 1254, height: 1254 },
-  creatures: creatureArt,
-  hook: piece("hook"),
-};

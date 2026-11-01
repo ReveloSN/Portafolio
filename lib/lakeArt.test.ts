@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { LAKE_ART, LAKE_LAYER_ORDER, LAKE_Z } from "@/data/lakeAssets";
-import { SCENE_ASPECT } from "@/lib/fishing/scene";
+
+/** Las capas pintadas miden 2400 × 1116. */
+const SCENE_ASPECT = 2400 / 1116;
 
 describe("registro del arte del lago", () => {
   it("tiene las cinco capas, del cielo al primer plano, con el aspecto de la escena", () => {
