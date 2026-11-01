@@ -51,14 +51,19 @@ export const COPY = {
     ratingLabel: "de 5 estrellas",
   },
   experience: {
-    eyebrow: "EL LAGO DE LAS CAPTURAS",
+    eyebrow: "LA BITÁCORA DEL LAGO",
     title: "Experiencia académica y laboral",
     intro:
-      "Cada capítulo de mi camino vive bajo el agua. Carga el lanzamiento y pelea con lo que pique. Y ojo: en el abismo hay algo mucho más grande.",
+      "Lo que he estudiado y dónde he trabajado, del capítulo más reciente al más antiguo. Filtra para ver solo lo académico o lo laboral.",
     academic: "Académica",
     work: "Laboral",
     all: "Todo",
-    filterLabel: "Filtrar el diario por tipo de experiencia",
+    filterLabel: "Filtrar la bitácora por tipo de experiencia",
+    timeline: {
+      title: "Bitácora",
+      achievements: "Logros",
+      showing: "Mostrando {shown} de {total} entradas",
+    },
     lakeLabel:
       "Un muelle junto a un lago al atardecer: el explorador pesca desde la orilla",
     gameLabel: "Juego de pesca",

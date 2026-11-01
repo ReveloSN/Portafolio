@@ -17,7 +17,8 @@
     "fishing": "tsx scripts/fishing.ts",
     "lake:shots": "tsx scripts/lake-shots.ts",
     "optimize:lake": "tsx scripts/optimize-lake.ts",
-    "lake:final": "tsx scripts/lake-final.ts"
+    "lake:final": "tsx scripts/lake-final.ts",
+    "experience:shots": "tsx scripts/experience-shots.ts"
   },
   "dependencies": {
     "next": "16.4.3",
