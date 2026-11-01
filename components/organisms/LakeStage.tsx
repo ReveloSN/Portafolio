@@ -6,6 +6,7 @@ import { Fireflies } from "@/components/molecules/Fireflies";
 import { LakeAmbience } from "@/components/molecules/LakeAmbience";
 import { LakeClosing } from "@/components/molecules/LakeClosing";
 import { LakeLayers } from "@/components/molecules/LakeLayers";
+import { SceneGrade } from "@/components/molecules/SceneGrade";
 import { BreachLayer } from "@/components/organisms/BreachLayer";
 import { LakeScene } from "@/components/organisms/LakeScene";
 import { QuantumWater } from "@/components/organisms/QuantumWater";
@@ -78,6 +79,7 @@ export function LakeStage({ state, creature, shaking, effects, onCue }: LakeStag
         <BreachLayer sequence={breach} depth={state.depth} />
         <Fireflies count={FIREFLY_COUNT.lake} className="lake-fireflies" />
         <LakeLayers layers={FRONT_LAYERS} />
+        <SceneGrade />
       </div>
       {state.phase === "complete" ? <LakeClosing {...copy.closing} /> : null}
     </div>

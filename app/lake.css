@@ -48,6 +48,8 @@
       calc(var(--my, 0) * var(--depth, 0%) * 0.5)
     )
     scale(var(--cover, 1));
+  /* Gradación: el arte algo apagado; el color vivo queda para la luna y lo jugable */
+  filter: saturate(0.8);
   transition: transform 0.6s var(--ease-enter);
 }
 /* El agua se mece despacio (±6 px en 14 s); ensanchada para no dejar ver el borde */
