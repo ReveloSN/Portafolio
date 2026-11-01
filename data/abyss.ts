@@ -27,7 +27,7 @@ export const ABYSS_ZONES: readonly AbyssZone[] = [
     id: "surface",
     from: 0,
     to: 0.3,
-    water: ["#0e4d55", "#08303b"],
+    water: ["#0a3633", "#072a31"],
     fog: "#1f6d72",
     darkness: 0.25,
   },

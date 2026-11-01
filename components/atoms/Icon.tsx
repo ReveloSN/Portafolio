@@ -18,7 +18,8 @@ export type IconName =
   | "burger"
   | "arrowUp"
   | "arrowDown"
-  | "shovel";
+  | "shovel"
+  | "lantern";
 
 interface IconSpec {
   readonly paths: ReactNode;
@@ -104,6 +105,9 @@ const ICONS: Readonly<Record<IconName, IconSpec>> = {
   arrowUp: { paths: <path d="M12 20V5M5 12l7-7 7 7" /> },
   arrowDown: { viewBox: "0 0 18 26", paths: <path d="M9 2v20M2 15l7 8 7-8" /> },
   shovel: { paths: <path d="M14 3l7 7-3 3-7-7zM11 6L3 21l15-8" /> },
+  lantern: {
+    paths: <path d="M9 3h6M10 3v3M14 3v3M7 6h10l-1 13H8zM10 10v5M14 10v5M9 21h6" />,
+  },
 };
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {

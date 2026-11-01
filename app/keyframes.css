@@ -351,3 +351,92 @@
     transform: scale(1.05);
   }
 }
+
+/* Inmersión al abismo: cruces lentos, vaivén, nieve marina y linterna */
+@keyframes creature-drift {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(100vw, 0, 0);
+  }
+}
+/* El megalodón cruza en el primer 45 % del ciclo y espera fuera de escena */
+@keyframes creature-pass {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  45%,
+  100% {
+    transform: translate3d(100vw, 0, 0);
+  }
+}
+@keyframes creature-sway {
+  from {
+    transform: translate3d(0, -0.6rem, 0) rotate(-1deg);
+  }
+  to {
+    transform: translate3d(0, 0.6rem, 0) rotate(1deg);
+  }
+}
+@keyframes creature-pulse {
+  from {
+    transform: translate3d(0, 0.8rem, 0) scale(1, 0.94);
+  }
+  to {
+    transform: translate3d(0, -1.2rem, 0) scale(1, 1.04);
+  }
+}
+@keyframes mote-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(1.5rem, -32svh, 0);
+  }
+}
+/* Temblor de 2 px mientras el megalodón pasa por el centro (mismo ciclo que su pasada) */
+@keyframes abyss-quake {
+  0%,
+  16%,
+  28%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  18% {
+    transform: translate3d(2px, 1px, 0);
+  }
+  20% {
+    transform: translate3d(-2px, -1px, 0);
+  }
+  22% {
+    transform: translate3d(1px, 2px, 0);
+  }
+  24% {
+    transform: translate3d(-1px, -2px, 0);
+  }
+  26% {
+    transform: translate3d(1px, 0, 0);
+  }
+}
+@keyframes lantern-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 0.93;
+  }
+  44% {
+    opacity: 0.99;
+  }
+  71% {
+    opacity: 0.95;
+  }
+}
