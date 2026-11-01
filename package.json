@@ -15,7 +15,8 @@
     "about": "tsx scripts/about.ts",
     "test": "vitest run",
     "optimize:lake": "tsx scripts/optimize-lake.ts",
-    "experience:shots": "tsx scripts/experience-shots.ts"
+    "experience:shots": "tsx scripts/experience-shots.ts",
+    "optimize:abyss": "tsx scripts/optimize-abyss.ts"
   },
   "dependencies": {
     "next": "16.4.3",
