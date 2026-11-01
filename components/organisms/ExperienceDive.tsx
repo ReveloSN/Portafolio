@@ -1,18 +1,17 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { DepthMeter } from "@/components/molecules/DepthMeter";
-import { DiveCard } from "@/components/molecules/DiveCard";
 import { DiveControls } from "@/components/molecules/DiveControls";
-import { RevealGroup } from "@/components/molecules/RevealGroup";
+import { DiveList } from "@/components/molecules/DiveList";
 import type { TimelineFilterOption } from "@/components/molecules/TimelineFilter";
-import { DIVE_LAYOUT, LANTERN, ZONE_FADE } from "@/data/abyss";
 import { COPY } from "@/data/copy";
 import { useDepthProgress } from "@/hooks/useDepthProgress";
 import { usePointerLight } from "@/hooks/usePointerLight";
 import { placeEntries } from "@/lib/abyss/depth";
+import { DIVE_STYLE } from "@/lib/abyss/style";
 import {
   countLabel,
   filterExperience,
@@ -41,17 +40,6 @@ const OPTIONS: readonly TimelineFilterOption[] = [
   { value: "academic", label: copy.academic, icon: "cap", color: KIND_COLOR.academic },
   { value: "work", label: copy.work, icon: "briefcase", color: KIND_COLOR.work },
 ];
-
-/** Medidas de la inmersión para el CSS: una sola fuente (data/abyss.ts). */
-const DIVE_STYLE = {
-  "--surface-h": `${DIVE_LAYOUT.surface}svh`,
-  "--slot-h": `${DIVE_LAYOUT.slot}svh`,
-  "--end-h": `${DIVE_LAYOUT.end}svh`,
-  "--zone-fade": ZONE_FADE,
-  "--beam-u": LANTERN.radiusU,
-  "--dark-base": LANTERN.baseDark,
-  "--dark-depth": LANTERN.depthDark,
-} as CSSProperties;
 
 /**
  * Inmersión al abismo: un escenario fijo (sticky) y, encima, en flujo normal, el título,
@@ -105,18 +93,13 @@ export function ExperienceDive({ entries, heading, scenery }: ExperienceDiveProp
         <p className="sr-only" aria-live="polite">
           {countLabel(copy.showing, placed.length, entries.length)}
         </p>
-        <ol ref={list} className="dive-list" data-testid="dive-list">
-          {placed.map((item) => (
-            <RevealGroup as="li" key={item.entry.id} className="dive-slot">
-              <DiveCard
-                placed={item}
-                kindLabel={KIND_LABEL[item.entry.kind]}
-                color={KIND_COLOR[item.entry.kind]}
-                achievementsLabel={copy.achievements}
-              />
-            </RevealGroup>
-          ))}
-        </ol>
+        <DiveList
+          ref={list}
+          placed={placed}
+          kindLabels={KIND_LABEL}
+          kindColors={KIND_COLOR}
+          achievementsLabel={copy.achievements}
+        />
         <div className="dive-end">
           <Button
             variant="ghost"
