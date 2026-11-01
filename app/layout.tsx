@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Figtree, IM_Fell_English, JetBrains_Mono, Outfit } from "next/font/google";
+import { Figtree, JetBrains_Mono, Outfit } from "next/font/google";
 import { COPY } from "@/data/copy";
 import "./globals.css";
 
@@ -20,14 +20,6 @@ const jetbrains = JetBrains_Mono({
   weight: ["500"],
 });
 
-/** Bitácora de experiencia: serif de grabado antiguo. */
-const fell = IM_Fell_English({
-  variable: "--font-fell",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-});
-
 export const metadata: Metadata = {
   title: COPY.site.title,
   description:
@@ -38,7 +30,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html
       lang="es"
-      className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable} ${fell.variable}`}
+      className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable}`}
     >
       <body>{children}</body>
     </html>
