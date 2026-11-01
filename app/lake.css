@@ -179,25 +179,17 @@
   transform-origin: 50% 100%;
   animation: alertPop 0.35s ease-in-out infinite alternate;
 }
-.lake-ripple,
-.lake-splash {
+.lake-ripple {
   fill: none;
   opacity: 0;
   transform-box: fill-box;
   transform-origin: 50% 50%;
-}
-.lake-ripple {
   stroke: #bff6f0;
   stroke-width: 2;
   animation: rgo 2.4s ease-out 0.8s infinite;
 }
 .lake-ripple-late {
   animation-delay: 2s;
-}
-.lake-splash {
-  stroke: #fff;
-  stroke-width: 3;
-  animation: rgo 1.1s ease-out 3;
 }
 .lake-shadow {
   opacity: 0;

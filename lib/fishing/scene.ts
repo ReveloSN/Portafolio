@@ -29,12 +29,6 @@ export const toUnits = (point: ScenePercent): ScenePoint => ({
   y: (point.y / PERCENT) * LAKE_VIEWBOX.height,
 });
 
-/** Posición en porcentaje para capas HTML colocadas encima de la escena. */
-export const toScenePercent = (point: ScenePoint) => ({
-  left: `${(point.x / LAKE_VIEWBOX.width) * PERCENT}%`,
-  top: `${(point.y / LAKE_VIEWBOX.height) * PERCENT}%`,
-});
-
 /* ---------- Medidas sobre las capas pintadas ---------- */
 
 /** Línea del horizonte: ahí terminan los árboles y empieza el agua (lago-agua.webp). */
@@ -189,7 +183,6 @@ export const ROD_SCALE =
   ROD_LENGTH / Math.hypot(ROD_ART.tip.x - ROD_ART.grip.x, ROD_ART.tip.y - ROD_ART.grip.y);
 
 export const ROD_TIP = rodTip(ROD_REST_DEG);
-export const CAST_POINT = ROD_TIP;
 const percentDown = (point: ScenePoint, drop: number): ScenePoint => ({
   x: point.x,
   y: point.y + (drop / PERCENT) * LAKE_VIEWBOX.height,
