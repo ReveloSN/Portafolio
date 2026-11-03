@@ -1,10 +1,9 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { PortalPhase } from "@/types/portal";
 
+/** Solo la acción: así los enlaces no se vuelven a pintar en cada fase del velo. */
 export interface PortalApi {
-  readonly phase: PortalPhase;
   /** Cruza el portal hacia otra ruta interna. */
   readonly navigate: (href: string) => void;
 }

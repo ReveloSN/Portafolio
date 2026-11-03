@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import { MAIN_CONTENT_ID } from "@/data/navigation";
 import { PORTAL_DEFAULT_SKIN, PORTAL_FALLBACK_MS, PORTAL_TIMING } from "@/data/portal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { listen } from "@/lib/dom";
@@ -11,11 +12,14 @@ import type { PortalSkin, PortalSkinKey } from "@/types/portal";
 
 type SkinTimings = Readonly<Record<PortalSkinKey, Pick<PortalSkin, "enterMs">>>;
 
-const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+/** Lleva el foco al contenido de la página nueva: el enlace pulsado ya no existe. */
+const focusMain = () =>
+  document.getElementById(MAIN_CONTENT_ID)?.focus({ preventScroll: true });
 
 /**
  * Orquesta el portal: cierra el velo, cambia de ruta a oscuras, espera a que la
- * ruta nueva esté montada y lo abre. Las fases se encadenan con temporizadores
+ * ruta nueva esté montada y lo abre. El scroll (arriba o al ancla) lo hace Next al
+ * montar la ruta, aunque llegue tarde y el velo ya se haya abierto por el respaldo. Las fases se encadenan con temporizadores
  * (no con `animationend`) para que nunca quede atascado si una animación no corre.
  * Con movimiento reducido no hay velo: se navega directo.
  */
@@ -26,10 +30,13 @@ export function usePortalController(skins: SkinTimings) {
   const [state, dispatch] = useReducer(portalReducer, pathname, initialPortalState);
   const { phase, href, entrance, skin } = state;
   const enterMs = skins[skin].enterMs;
+  /** Ruta a la que se está yendo; se limpia al llegar, sea cual sea la fase. */
+  const pendingRoute = useRef<string | null>(null);
 
   const navigate = useCallback(
     (target: string) => {
       if (reducedMotion) {
+        pendingRoute.current = routeOf(target);
         router.push(target);
         return;
       }
@@ -56,7 +63,8 @@ export function usePortalController(skins: SkinTimings) {
 
   useEffect(() => {
     if (phase !== "covered" || !href) return;
-    router.push(href, { scroll: false });
+    pendingRoute.current = routeOf(href);
+    router.push(href);
     const fallback = window.setTimeout(
       () => dispatch({ type: "arrived" }),
       PORTAL_FALLBACK_MS,
@@ -65,10 +73,11 @@ export function usePortalController(skins: SkinTimings) {
   }, [phase, href, router]);
 
   useEffect(() => {
-    if (phase !== "covered" || !href || routeOf(href) !== pathname) return;
-    toTop();
+    if (pendingRoute.current !== pathname) return;
+    pendingRoute.current = null;
+    focusMain();
     dispatch({ type: "arrived" });
-  }, [phase, href, pathname]);
+  }, [pathname]);
 
   useEffect(() => {
     if (phase !== "opening") return;
@@ -77,6 +86,6 @@ export function usePortalController(skins: SkinTimings) {
     });
   }, [phase]);
 
-  const api = useMemo<PortalApi>(() => ({ phase, navigate }), [phase, navigate]);
+  const api = useMemo<PortalApi>(() => ({ navigate }), [navigate]);
   return { state, api };
 }
