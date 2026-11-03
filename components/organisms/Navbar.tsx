@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
+import { useMobileMenu } from "@/hooks/useMobileMenu";
 import type { NavLink } from "@/types/navigation";
 import type { Profile } from "@/types/profile";
 
@@ -17,12 +17,14 @@ const LINK_STYLE =
   "relative py-2 no-underline opacity-80 transition hover:text-glow hover:opacity-100 after:absolute after:bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-glow after:transition-all after:duration-300 hover:after:w-full";
 
 export function Navbar({ profile, links }: NavbarProps) {
-  const [open, setOpen] = useState(false);
+  const { open, toggle, close, toggleRef, onBlur } = useMobileMenu();
   const { nav } = COPY;
-  const close = () => setOpen(false);
 
   return (
-    <header className="-mb-nav sticky top-0 z-60 border-b border-white/10 bg-[rgba(5,16,11,.58)] backdrop-blur-[14px]">
+    <header
+      onBlur={onBlur}
+      className="-mb-nav sticky top-0 z-60 border-b border-white/10 bg-[rgba(5,16,11,.58)] backdrop-blur-[14px]"
+    >
       <div className="h-nav px-gutter mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*100.0))] items-center justify-between gap-4">
         <a
           href={`#${SECTION_IDS.home}`}
@@ -52,11 +54,12 @@ export function Navbar({ profile, links }: NavbarProps) {
         </nav>
 
         <button
+          ref={toggleRef}
           type="button"
           aria-label={nav.toggleMenu}
           aria-expanded={open}
           aria-controls="menu-movil"
-          onClick={() => setOpen((value) => !value)}
+          onClick={toggle}
           className="text-leaf inline-flex size-11 cursor-pointer items-center justify-center rounded-xl border border-white/25 bg-white/6 min-[1041px]:hidden"
         >
           <Icon name="burger" size={22} strokeWidth={2.4} />
