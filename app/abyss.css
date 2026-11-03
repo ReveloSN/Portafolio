@@ -138,13 +138,15 @@
   position: absolute;
   left: 0;
   width: calc(var(--u) * var(--size));
-  /* Visible solo en su zona; a lo lejos se funde con el agua (niebla) */
+  /* Visible solo en su zona (--from y --to ya incluyen el borde de la primera y la última):
+     entra y sale con un fundido dentro de ella, justo cuando se anima, y a lo lejos se
+     funde con el agua (niebla) */
   opacity: calc(
     clamp(
         0,
         min(
-          calc((var(--depth) - var(--from) + var(--zone-fade)) / var(--zone-fade)),
-          calc((var(--to) + var(--zone-fade) - var(--depth)) / var(--zone-fade))
+          calc((var(--depth) - var(--from)) / var(--zone-fade)),
+          calc((var(--to) - var(--depth)) / var(--zone-fade))
         ),
         1
       ) *

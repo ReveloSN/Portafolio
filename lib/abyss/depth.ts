@@ -64,5 +64,17 @@ export function zoneAt(depth: number, zones: readonly AbyssZone[]): AbyssZoneId 
   return zone?.id ?? "surface";
 }
 
+/**
+ * Tramo de --depth en el que las criaturas de una zona se ven: de su inicio a su final,
+ * con el fundido de entrada y de salida dentro de la zona (así solo se ven mientras se
+ * animan). La primera zona ya está visible al empezar y la última sigue hasta el final.
+ */
+export function creatureWindow(zone: AbyssZone, fade: number) {
+  return {
+    from: zone.from <= 0 ? -fade : zone.from,
+    to: zone.to >= 1 ? 1 + fade : zone.to,
+  };
+}
+
 /** "−60 m", con signo menos tipográfico. */
 export const formatDepth = (meters: number) => `−${meters} m`;
