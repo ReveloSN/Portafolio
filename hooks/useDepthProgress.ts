@@ -3,12 +3,19 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { ABYSS_ZONES, DIVE_LAYOUT } from "@/data/abyss";
 import { activeIndexAt, diveProgress, zoneAt } from "@/lib/abyss/depth";
+import type { FrameLoop } from "@/lib/abyss/frame";
 
 export interface DepthState {
   readonly depth: number;
   readonly surface: number;
   /** Índice de la tarjeta activa; -1 en la superficie. */
   readonly active: number;
+}
+
+interface DepthRefs {
+  readonly dive: RefObject<HTMLElement | null>;
+  readonly stage: RefObject<HTMLElement | null>;
+  readonly list: RefObject<HTMLElement | null>;
 }
 
 /** Decimales de las variables CSS: suficiente para un movimiento suave. */
@@ -23,60 +30,79 @@ function markActive(list: HTMLElement | null, active: number) {
 }
 
 /**
- * Avance de la inmersión con el scroll: un único listener pasivo y requestAnimationFrame.
- * Publica en el escenario --depth (0 a 1), --surface (salida de la primera pantalla) y
- * --active (solo ahí: cambiar una variable recalcula el estilo de todo lo que cuelga del
- * elemento), y en la sección data-zone y data-inview para el CSS. Sin re-render por
- * frame: devuelve una ref que lee la linterna.
+ * Avance de la inmersión con el scroll: el único listener de scroll de la sección (pasivo)
+ * pide un frame al bucle compartido. Publica en el escenario --depth (0 a 1) y --surface
+ * (salida de la primera pantalla), y en la sección data-zone y data-inview para el CSS;
+ * solo escribe lo que cambió, y fuera de pantalla no hace nada. Sin re-render por frame:
+ * devuelve una ref que lee la linterna.
  */
 export function useDepthProgress(
-  diveRef: RefObject<HTMLElement | null>,
-  stageRef: RefObject<HTMLElement | null>,
-  listRef: RefObject<HTMLElement | null>,
+  frame: FrameLoop,
+  { dive, stage, list }: DepthRefs,
   count: number,
+  enabled: boolean,
 ) {
   const state = useRef<DepthState>({ depth: 0, surface: 0, active: -1 });
 
   useEffect(() => {
-    const dive = diveRef.current;
-    const stage = stageRef.current;
-    if (!dive || !stage) return;
-    let frame = 0;
-    /** Última placa marcada: al cambiar la lista (filtros) se vuelve a marcar. */
-    let marked = Number.NaN;
+    const root = dive.current;
+    const scene = stage.current;
+    if (!enabled || !root || !scene) return;
+    let inView = false;
+    let top = 0;
+    let height = 0;
+    let viewport = 0;
+    /** Lo último escrito: al cambiar la lista (filtros) se vuelve a marcar la placa. */
+    let written = { depth: "", surface: "", zone: "" };
+    let marked = { active: Number.NaN, first: null as Element | null };
 
-    const update = () => {
-      frame = 0;
-      const box = dive.getBoundingClientRect();
-      const { depth, surface } = diveProgress(box.top, box.height, window.innerHeight);
+    const measure = () => {
+      const box = root.getBoundingClientRect();
+      top = box.top;
+      height = box.height;
+      viewport = window.innerHeight;
+    };
+    const apply = () => {
+      const { depth, surface } = diveProgress(top, height, viewport);
       const active = activeIndexAt(depth, count, DIVE_LAYOUT);
-      stage.style.setProperty("--depth", depth.toFixed(PRECISION));
-      stage.style.setProperty("--surface", surface.toFixed(PRECISION));
-      stage.style.setProperty("--active", String(active));
+      const depthText = depth.toFixed(PRECISION);
+      const surfaceText = surface.toFixed(PRECISION);
+      if (depthText !== written.depth) scene.style.setProperty("--depth", depthText);
+      if (surfaceText !== written.surface)
+        scene.style.setProperty("--surface", surfaceText);
       const zone = zoneAt(depth, ABYSS_ZONES);
-      if (dive.dataset.zone !== zone) dive.dataset.zone = zone;
-      if (active !== marked) markActive(listRef.current, active);
-      marked = active;
+      if (zone !== written.zone) root.dataset.zone = zone;
+      written = { depth: depthText, surface: surfaceText, zone };
+      const first = list.current?.firstElementChild ?? null;
+      if (active !== marked.active || first !== marked.first) {
+        markActive(list.current, active);
+        marked = { active, first };
+      }
       state.current = { depth, surface, active };
+      return false;
     };
     const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (inView) frame.request();
     };
 
-    update();
+    const remove = frame.add({ measure, apply });
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     const observer = new IntersectionObserver(([entry]) => {
-      dive.toggleAttribute("data-inview", Boolean(entry?.isIntersecting));
+      inView = Boolean(entry?.isIntersecting);
+      root.toggleAttribute("data-inview", inView);
+      // Al salir también se actualiza una vez, para dejar --depth en 0 o 1
+      frame.request();
     });
-    observer.observe(dive);
+    observer.observe(root);
+    frame.request();
     return () => {
-      cancelAnimationFrame(frame);
+      remove();
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       observer.disconnect();
     };
-  }, [diveRef, stageRef, listRef, count]);
+  }, [frame, dive, stage, list, count, enabled]);
 
   return state;
 }

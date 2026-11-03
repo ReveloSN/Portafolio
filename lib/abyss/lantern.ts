@@ -15,6 +15,20 @@ export interface Box {
 /** Por debajo de esta distancia (px) la linterna ya llegó: se deja de animar. */
 const SETTLE_PX = 0.5;
 
+/** Duración de un frame a 60 Hz: la inercia se define por frame a ese ritmo. */
+const FRAME_MS = 1000 / 60;
+/** Tras una pausa larga (pestaña en segundo plano) no se da un salto mayor que esto. */
+const MAX_STEP_MS = 100;
+
+/**
+ * Fracción del camino que se avanza en `elapsedMs`, equivalente a `perFrame` por cada
+ * frame a 60 Hz: la linterna sigue igual de suave en pantallas de 120 o 144 Hz.
+ */
+export function inertiaFactor(perFrame: number, elapsedMs: number): number {
+  const frames = Math.min(Math.max(elapsedMs, 0), MAX_STEP_MS) / FRAME_MS;
+  return 1 - Math.pow(1 - perFrame, frames);
+}
+
 /** Un paso de inercia: avanza una fracción `factor` de lo que falta (1 = sin inercia). */
 export function approach(current: Point, target: Point, factor: number): Point {
   return {

@@ -3,7 +3,15 @@
 import { useEffect, type RefObject } from "react";
 import { LANTERN } from "@/data/abyss";
 import type { DepthState } from "@/hooks/useDepthProgress";
-import { approach, boxCenter, hasSettled, isLit, type Point } from "@/lib/abyss/lantern";
+import type { FrameLoop } from "@/lib/abyss/frame";
+import {
+  approach,
+  boxCenter,
+  hasSettled,
+  inertiaFactor,
+  isLit,
+  type Point,
+} from "@/lib/abyss/lantern";
 import { listen } from "@/lib/dom";
 
 const CARD = ".dive-card";
@@ -12,6 +20,8 @@ const LIGHT = ".dive-lantern";
 const TOUCH_EVENTS = ["touchstart", "touchmove", "touchend", "touchcancel"] as const;
 /** Sin tarjeta activa (superficie), la linterna descansa aquí (fracción del escenario). */
 const REST = { x: 0.5, y: 0.55 } as const;
+/** Duración de un frame a 60 Hz, para el primer paso tras un reposo. */
+const FIRST_STEP_MS = 1000 / 60;
 
 interface PointerLightRefs {
   readonly dive: RefObject<HTMLElement | null>;
@@ -21,52 +31,61 @@ interface PointerLightRefs {
 }
 
 /**
- * Linterna de buceo: sigue al ratón con inercia (lerp en requestAnimationFrame), al dedo
- * mientras toca y, si no, a la tarjeta enfocada o a la activa. Escribe --lx y --ly en la
- * capa de la linterna y data-lit en las tarjetas que alcanza el haz; nada pasa por el
- * estado de React.
- * Con prefers-reduced-motion no hay inercia y se queda en la tarjeta activa.
+ * Linterna de buceo: sigue al ratón con inercia (independiente de la frecuencia de la
+ * pantalla), al dedo mientras toca y, si no, a la tarjeta enfocada o a la activa. Escribe
+ * --lx y --ly en la capa de la linterna y data-lit en las tarjetas que alcanza el haz;
+ * nada pasa por el estado de React. Comparte el bucle de frames de la sección: lee las
+ * cajas en la fase de lectura y escribe después, sin escuchar el scroll por su cuenta.
+ * Con `enabled` en false (movimiento reducido) no hace nada.
  */
-export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) {
+export function usePointerLight(
+  frame: FrameLoop,
+  { dive, stage, list, depth }: PointerLightRefs,
+  enabled: boolean,
+) {
   useEffect(() => {
     const root = dive.current;
     const scene = stage.current;
-    if (!root || !scene) return;
+    if (!enabled || !root || !scene) return;
     const beam = scene.querySelector<HTMLElement>(LIGHT) ?? scene;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let pointer: Point | null = null;
     let focused: HTMLElement | null = null;
     let light: Point | null = null;
     let radius = 0;
-    let frame = 0;
+    let last: number | null = null;
     let inView = false;
+    // Medidas de la fase de lectura
+    let items: HTMLElement[] = [];
+    let stageBox: DOMRect | null = null;
+    let boxes: DOMRect[] = [];
 
-    const cards = () =>
-      Array.from(list.current?.querySelectorAll<HTMLElement>(CARD) ?? []);
-    const measure = () => {
+    const measureRadius = () => {
       radius = parseFloat(getComputedStyle(scene).getPropertyValue("--beam-r")) || 0;
     };
 
-    /** Objetivo en coordenadas de la ventana. */
-    const goal = (stageBox: DOMRect, boxes: readonly DOMRect[]): Point => {
-      if (focused) return boxCenter(focused.getBoundingClientRect());
-      if (pointer && !reduced.matches) return pointer;
-      const active = boxes[depth.current?.active ?? -1];
-      if (active) return boxCenter(active);
-      return {
-        x: stageBox.left + stageBox.width * REST.x,
-        y: stageBox.top + stageBox.height * REST.y,
-      };
+    const measure = () => {
+      items = Array.from(list.current?.querySelectorAll<HTMLElement>(CARD) ?? []);
+      stageBox = scene.getBoundingClientRect();
+      boxes = items.map((card) => card.getBoundingClientRect());
     };
 
-    const tick = () => {
-      frame = 0;
-      const items = cards();
-      const stageBox = scene.getBoundingClientRect();
-      const boxes = items.map((card) => card.getBoundingClientRect());
-      const target = goal(stageBox, boxes);
-      const factor = reduced.matches ? 1 : LANTERN.lerp;
-      const next = light ? approach(light, target, factor) : target;
+    /** Objetivo en coordenadas de la ventana. */
+    const goal = (box: DOMRect): Point => {
+      const onFocus = boxes[focused ? items.indexOf(focused) : -1];
+      if (onFocus) return boxCenter(onFocus);
+      if (pointer) return pointer;
+      const active = boxes[depth.current?.active ?? -1];
+      if (active) return boxCenter(active);
+      return { x: box.left + box.width * REST.x, y: box.top + box.height * REST.y };
+    };
+
+    const apply = (now: number) => {
+      if (!stageBox) return false;
+      const target = goal(stageBox);
+      const elapsed = last === null ? FIRST_STEP_MS : now - last;
+      const next = light
+        ? approach(light, target, inertiaFactor(LANTERN.lerp, elapsed))
+        : target;
       light = next;
       beam.style.setProperty("--lx", `${(next.x - stageBox.left).toFixed(1)}px`);
       beam.style.setProperty("--ly", `${(next.y - stageBox.top).toFixed(1)}px`);
@@ -74,10 +93,12 @@ export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) 
         const box = boxes[i];
         card.toggleAttribute("data-lit", box ? isLit(next, box, radius) : false);
       });
-      if (!hasSettled(next, target)) frame = requestAnimationFrame(tick);
+      const moving = !hasSettled(next, target);
+      last = moving ? now : null;
+      return moving;
     };
     const kick = () => {
-      if (!frame && inView) frame = requestAnimationFrame(tick);
+      if (inView) frame.request();
     };
 
     const onMouse = (event: PointerEvent) => {
@@ -99,10 +120,7 @@ export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) 
       const card = (event.target as HTMLElement).closest<HTMLElement>(CARD);
       focused = card;
       if (card?.matches(":focus-visible")) {
-        card.scrollIntoView({
-          block: "center",
-          behavior: reduced.matches ? "auto" : "smooth",
-        });
+        card.scrollIntoView({ block: "center", behavior: "smooth" });
       }
       kick();
     };
@@ -112,11 +130,12 @@ export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) 
       kick();
     };
     const onResize = () => {
-      measure();
+      measureRadius();
       kick();
     };
 
-    measure();
+    measureRadius();
+    const remove = frame.add({ measure, apply });
     const observer = new IntersectionObserver(([entry]) => {
       inView = Boolean(entry?.isIntersecting);
       kick();
@@ -129,13 +148,12 @@ export function usePointerLight({ dive, stage, list, depth }: PointerLightRefs) 
       ...TOUCH_EVENTS.map((type) => listen(root, type, onTouch, passive)),
       listen(root, "focusin", onFocus),
       listen(root, "focusout", onBlur),
-      listen(window, "scroll", kick, passive),
       listen(window, "resize", onResize),
     ];
     return () => {
-      cancelAnimationFrame(frame);
+      remove();
       observer.disconnect();
-      off.forEach((remove) => remove());
+      off.forEach((stop) => stop());
     };
-  }, [dive, stage, list, depth]);
+  }, [frame, dive, stage, list, depth, enabled]);
 }

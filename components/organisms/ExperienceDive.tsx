@@ -8,8 +8,7 @@ import { DiveControls } from "@/components/molecules/DiveControls";
 import { DiveList } from "@/components/molecules/DiveList";
 import type { TimelineFilterOption } from "@/components/molecules/TimelineFilter";
 import { COPY } from "@/data/copy";
-import { useDepthProgress } from "@/hooks/useDepthProgress";
-import { usePointerLight } from "@/hooks/usePointerLight";
+import { useDiveMotion } from "@/hooks/useDiveMotion";
 import { placeEntries } from "@/lib/abyss/depth";
 import { DIVE_STYLE } from "@/lib/abyss/style";
 import {
@@ -54,8 +53,7 @@ export function ExperienceDive({ entries, heading, scenery }: ExperienceDiveProp
   const stage = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
   const top = useRef<HTMLDivElement>(null);
-  const depth = useDepthProgress(dive, stage, list, placed.length);
-  usePointerLight({ dive, stage, list, depth });
+  useDiveMotion({ dive, stage, list }, placed.length);
 
   const backToSurface = () => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
