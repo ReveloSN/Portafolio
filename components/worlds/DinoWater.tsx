@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { HERO_LAYERS } from "@/lib/constants";
 import { layerShift } from "@/lib/parallax";
-import { DINO_IMAGE } from "./GiantDino";
+import { DINO_IMAGE, DINO_SIZES } from "./GiantDino";
 
 /** Centro horizontal de cada pata dentro de la imagen (porcentaje del ancho). */
 const FEET = [26, 37, 45, 59] as const;
@@ -22,11 +22,11 @@ export function DinoWater() {
       <span className="dino-shadow" />
       <div className="dino-reflection">
         <Image
-          src="/images/dino-full-1200.webp"
+          src={DINO_IMAGE.src}
           alt=""
-          width={1200}
-          height={Math.round((1200 * DINO_IMAGE.height) / DINO_IMAGE.width)}
-          sizes="56vw"
+          width={DINO_IMAGE.width}
+          height={DINO_IMAGE.height}
+          sizes={DINO_SIZES}
         />
       </div>
       {FEET.flatMap((x) =>

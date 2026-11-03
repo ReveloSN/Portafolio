@@ -33,15 +33,15 @@
   mask-image: linear-gradient(to bottom, #000 84%, transparent 97%);
 }
 
-/* Ajuste de color al atardecer: solo sobre los píxeles del dinosaurio */
+/* Ajuste de color al atardecer: solo sobre los píxeles del dinosaurio
+   (la máscara es una silueta pequeña del mismo dino; solo importa su alfa) */
 .dino-tint {
   position: absolute;
   inset: 0;
   background: linear-gradient(160deg, rgba(255, 196, 110, 0.45), rgba(24, 92, 52, 0.4));
   mix-blend-mode: soft-light;
   mask-image:
-    url("/images/dino-full-1200.webp"),
-    linear-gradient(to bottom, #000 84%, transparent 97%);
+    url("/images/dino-mask.webp"), linear-gradient(to bottom, #000 84%, transparent 97%);
   mask-size: 100% 100%;
   mask-composite: intersect;
 }
