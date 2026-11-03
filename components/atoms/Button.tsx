@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode, Ref } from "react";
+import { PortalLink } from "@/components/atoms/PortalLink";
 import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "lime" | "ghost" | "dark";
@@ -49,9 +49,9 @@ export function Button(props: ButtonProps) {
     >;
     if (isInternalRoute(href)) {
       return (
-        <Link href={href} className={classes} {...anchorProps}>
+        <PortalLink href={href} className={classes} {...anchorProps}>
           {children}
-        </Link>
+        </PortalLink>
       );
     }
     return (

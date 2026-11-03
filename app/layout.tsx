@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Figtree, JetBrains_Mono, Outfit } from "next/font/google";
+import { PortalProvider } from "@/components/templates/PortalProvider";
 import { COPY } from "@/data/copy";
 import "./globals.css";
 
@@ -30,9 +31,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html
       lang="es"
+      data-scroll-behavior="smooth"
       className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <PortalProvider>{children}</PortalProvider>
+      </body>
     </html>
   );
 }
