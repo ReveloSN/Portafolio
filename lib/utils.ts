@@ -18,3 +18,13 @@ export function hexToRgba(hex: string, alpha: number): string {
 export function pad2(n: number): string {
   return String(n).padStart(2, "0");
 }
+
+type TemplateValues = Readonly<Record<string, string | number>>;
+
+/** Sustituye cada `{clave}` por su valor como texto literal; las claves desconocidas se dejan intactas. */
+export function interpolate(template: string, values: TemplateValues): string {
+  return template.replace(/\{(\w+)\}/g, (match, key: string) => {
+    const value = values[key];
+    return value === undefined ? match : String(value);
+  });
+}

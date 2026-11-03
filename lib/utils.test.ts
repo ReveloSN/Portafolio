@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cn, hexToRgba, pad2 } from "./utils";
+import { cn, hexToRgba, interpolate, pad2 } from "./utils";
 
 describe("cn", () => {
   it("une las clases verdaderas con un espacio", () => {
@@ -41,5 +41,19 @@ describe("pad2", () => {
 
   it("no recorta números de más de dos dígitos", () => {
     expect(pad2(123)).toBe("123");
+  });
+});
+
+describe("interpolate", () => {
+  it("sustituye las claves por su valor", () => {
+    expect(interpolate("{a}-{b}", { a: 1, b: "x" })).toBe("1-x");
+  });
+
+  it("deja intactas las claves desconocidas", () => {
+    expect(interpolate("{a}-{c}", { a: 1 })).toBe("1-{c}");
+  });
+
+  it("trata el valor como texto literal", () => {
+    expect(interpolate("hola {n}", { n: "$& $1" })).toBe("hola $& $1");
   });
 });

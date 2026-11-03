@@ -1,3 +1,4 @@
+import { interpolate } from "./utils";
 import type { ContactEgg, ContactFormValues } from "@/types/contact";
 
 /** Textos con marcadores `{name}` y `{email}` para el asunto y la firma del correo. */
@@ -12,7 +13,7 @@ const LINE_BREAK = "\r\n";
 const oneLine = (text: string) => text.replace(/\s+/g, " ").trim();
 
 function fill(template: string, name: string, email: string): string {
-  return template.replace("{name}", () => name).replace("{email}", () => email);
+  return interpolate(template, { name, email });
 }
 
 /** Codifica una parte de la URL; la arroba del destinatario se deja legible. */

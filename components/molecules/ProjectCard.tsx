@@ -2,12 +2,16 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
+import { interpolate } from "@/lib/utils";
 import type { Project } from "@/types/project";
 
 export interface ProjectCardLabels {
   readonly github: string;
   readonly demo: string;
   readonly enterWorld: string;
+  /** Plantilla con `{name}`: da a cada enlace repetido un nombre único. */
+  readonly forProject: string;
+  readonly newTab: string;
 }
 
 interface ProjectCardProps {
@@ -28,6 +32,7 @@ export function ProjectCard({
   thumbnail,
   labels,
 }: ProjectCardProps) {
+  const owner = interpolate(labels.forProject, { name: project.name });
   return (
     <article className="group hover:border-glow/50 gap-fluid-3 flex flex-col rounded-[30px] border border-white/12 bg-white/4 p-4 pb-7 transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-24px_rgba(166,255,92,.45)]">
       {/* La escena se ve completa: el arco toma la proporción del dibujo (390x460) */}
@@ -62,6 +67,10 @@ export function ProjectCard({
           >
             <Icon name="github" />
             {labels.github}
+            <span className="sr-only">
+              {" "}
+              {owner} {labels.newTab}
+            </span>
           </Button>
           <Button
             size="sm"
@@ -71,9 +80,14 @@ export function ProjectCard({
           >
             <Icon name="vercel" size={14} />
             {labels.demo}
+            <span className="sr-only">
+              {" "}
+              {owner} {labels.newTab}
+            </span>
           </Button>
           <Button variant="ghost" size="sm" href={`/mundos/${project.slug}`}>
             {labels.enterWorld} <span aria-hidden="true">→</span>
+            <span className="sr-only"> {owner}</span>
           </Button>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import { interpolate } from "./utils";
+
 export type CarouselOffset = -1 | 0 | 1;
 
 /** Lleva cualquier índice (también negativo o mayor que `count`) al rango [0, count). */
@@ -19,5 +21,5 @@ export function carouselOffset(
 
 /** Nombre accesible de un punto: sustituye `{n}` (posición, desde 1) y `{total}` en la plantilla. */
 export function carouselDotLabel(template: string, index: number, total: number): string {
-  return template.replace("{n}", String(index + 1)).replace("{total}", String(total));
+  return interpolate(template, { n: index + 1, total });
 }

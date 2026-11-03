@@ -41,6 +41,8 @@ export const COPY = {
     github: "GitHub",
     demo: "Demo en vivo",
     enterWorld: "Entrar al mundo",
+    forProject: "de {name}",
+    newTab: "(se abre en una pestaña nueva)",
   },
   testimonials: {
     eyebrow: "CUADERNO DE CAMPO",
