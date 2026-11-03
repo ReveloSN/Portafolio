@@ -17,6 +17,8 @@ const CANOE_SIZE = "max(7.5rem, calc(238 * var(--sf, 1px)))";
 const FADE = "linear-gradient(to top, #000 0, transparent 55%)";
 /** Subir "v" al reemplazar el archivo para que ningún navegador muestre la versión anterior. */
 const CANOE_SRC = "/images/canoa.webp?v=2";
+/** Ancho servido de la canoa y de su reflejo: nunca pasa de ~250px en pantalla. */
+const CANOE_SIZES = "250px";
 
 export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
   const { canoe } = HERO_LAYERS;
@@ -51,6 +53,7 @@ export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
               alt=""
               width={1254}
               height={1254}
+              sizes={CANOE_SIZES}
               aria-hidden="true"
               className="absolute top-[99%] left-0 w-full -scale-y-100 opacity-30 blur-[1.5px]"
               style={{ maskImage: FADE, WebkitMaskImage: FADE }}
@@ -62,7 +65,7 @@ export function Canoe({ alt, withReflection = false, testId }: CanoeProps) {
             testId={testId}
             width={1254}
             height={1254}
-            sizes="250px"
+            sizes={CANOE_SIZES}
           />
         </div>
       </div>
