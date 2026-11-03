@@ -88,7 +88,7 @@ export function ExperienceDive({ entries, heading, scenery }: ExperienceDiveProp
         <div ref={top} className="dive-surface" tabIndex={-1}>
           {heading}
         </div>
-        <p className="sr-only" aria-live="polite">
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
           {countLabel(copy.showing, placed.length, entries.length)}
         </p>
         <DiveList
