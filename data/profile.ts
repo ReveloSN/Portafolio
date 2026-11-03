@@ -8,6 +8,13 @@ export const PROFILE: Profile = {
   tagline: "[Tu frase corta: qué haces y qué te mueve a construir.]",
   year: 2026,
   cvUrl: "/cv.pdf",
+  // Foto personal: al guardar el archivo en public/images/, descomenta y ajusta las medidas.
+  // photo: {
+  //   src: "/images/foto.webp",
+  //   width: 800,
+  //   height: 1000,
+  //   alt: "[Describe tu foto: quién eres y qué se ve.]",
+  // },
   aboutText:
     "[Escribe aquí entre 3 y 5 líneas, en primera persona: quién eres, qué estudias, qué te apasiona y qué sabes hacer. Que se pueda leer en 20 segundos y sin errores de ortografía.]",
   funFact: {

@@ -44,6 +44,14 @@ export interface CardBackMeta {
   readonly year?: number;
 }
 
+/** Foto personal (archivo en `public/images/`). Si falta, se dibuja la silueta. */
+export interface ProfilePhoto {
+  readonly src: string;
+  readonly width: number;
+  readonly height: number;
+  readonly alt: string;
+}
+
 export interface Profile {
   readonly firstName: string;
   readonly lastName: string;
@@ -52,6 +60,7 @@ export interface Profile {
   readonly tagline: string;
   readonly year: number;
   readonly cvUrl: string;
+  readonly photo?: ProfilePhoto;
   readonly aboutText: string;
   readonly funFact: FunFact;
   readonly backMeta?: CardBackMeta;

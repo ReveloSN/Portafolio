@@ -27,7 +27,7 @@ grep -rn "tu-usuario\|tu@correo\|000 0000\|570000000000\|proyecto-[0-9]\|vercel.
 
 ## `data/copy.ts`
 
-- [ ] `hero.photoAlt` (`"Aquí va tu foto"`): texto alternativo de la foto real.
+- [ ] `hero.photoAlt` (`"Aquí va tu foto"`): texto alternativo de la silueta; con la foto real, el `alt` sale de `profile.photo.alt`.
 - [ ] `about.photoPlaceholder` (`"[TU FOTO AQUÍ]"`): etiqueta que muestra la credencial frontal (`ExplorerCardFront`) mientras no hay foto. Quitarla o cambiarla cuando exista la foto.
 - [ ] `contact.emailPlaceholder` (`"tu@correo.com"`): ejemplo del campo de correo del formulario. Puede quedarse genérico.
 - [ ] `site.title` (`"Portafolio | Expedición"`): ajustar si quieres incluir tu nombre.
@@ -99,7 +99,7 @@ Seis habilidades de ejemplo: React Native, Kotlin, Python, Godot, Tailwind CSS y
 ## `public/`
 
 - [ ] `public/cv.pdf` (615 bytes, es un marcador "CV de ejemplo"): reemplázalo por tu CV con el mismo nombre. Lo usan el Hero y la barra de navegación.
-- [ ] Foto personal: hoy `components/molecules/Avatar.tsx` dibuja una silueta SVG (lo usan el Hero y `TestimonialCard`), y `ExplorerCardFront` dibuja su propio SVG. Está pendiente añadir un slot de foto en `public/images/` (por ejemplo `public/images/foto.webp`) y cambiar esos componentes para usarla. Hasta entonces, se verá la silueta.
+- [ ] Foto personal: guarda el archivo como `public/images/foto.webp` (recomendado: vertical 4:5, p. ej. 800x1000, WebP) y descomenta el campo `photo` de `data/profile.ts` con su `src`, `width`, `height` y `alt` (descripción real de la foto). Con `photo` definido, el Hero y el frente de la credencial de explorador (`ExplorerCardFront`) la muestran con `next/image`; sin él, se ve la silueta. Los avatares de los testimonios siguen siendo siluetas. Después quita `about.photoPlaceholder` y `hero.photoAlt` de `data/copy.ts` si ya no los necesitas.
 - [ ] Capturas de los proyectos: no hay archivos todavía. Cuando estén, guárdalas en `public/images/` y actualiza `project.screenshots` y `WorldGallery` (ver `data/projects.ts`).
 - [ ] Arte del tema (`public/images/*`, `public/art/*`): no son datos personales; no hay que reemplazarlo. Se regenera con los scripts de `scripts/` a partir de los originales (`imagenes_webp/`, no versionados).
 

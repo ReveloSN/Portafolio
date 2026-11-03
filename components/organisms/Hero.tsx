@@ -18,6 +18,8 @@ interface HeroProps {
   readonly profile: Profile;
 }
 
+/** Ancho máximo del avatar del Hero (4.7 u, con u <= 1.15rem). */
+const AVATAR_SIZES = "88px";
 /** Distancia de la canoa al borde inferior, en coordenadas del diseño. */
 const CANOE_PLACEMENT = { "--b": 64 } as StageVars;
 /** El final del Hero se funde con el color de inicio de Sobre mí. */
@@ -87,6 +89,8 @@ export function Hero({ profile }: HeroProps) {
                 figure="#6a8f77"
                 className="h-full w-full"
                 figureWidth="68%"
+                photo={profile.photo}
+                photoSizes={AVATAR_SIZES}
               />
             </div>
             <div className="text-left">

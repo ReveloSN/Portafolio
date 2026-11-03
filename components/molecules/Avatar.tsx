@@ -1,4 +1,6 @@
+import { PhotoImage } from "@/components/atoms/PhotoImage";
 import { cn } from "@/lib/utils";
+import type { ProfilePhoto } from "@/types/profile";
 
 interface AvatarProps {
   readonly label?: string;
@@ -6,16 +8,32 @@ interface AvatarProps {
   readonly figure: string;
   readonly className?: string;
   readonly figureWidth?: string;
+  /** Foto real: reemplaza la silueta y usa su propio texto alternativo. */
+  readonly photo?: ProfilePhoto;
+  /** Ancho con el que se pinta la foto (atributo `sizes`). */
+  readonly photoSizes?: string;
 }
 
-/** Silueta provisional. Se reemplaza por la foto real en `public/images`. */
+/** Silueta provisional; si hay `photo` (datos del perfil) se muestra la foto real. */
 export function Avatar({
   label,
   background,
   figure,
   className,
   figureWidth = "70%",
+  photo,
+  photoSizes,
 }: AvatarProps) {
+  if (photo && photoSizes) {
+    return (
+      <div
+        className={cn("overflow-hidden rounded-full", className)}
+        style={{ background }}
+      >
+        <PhotoImage photo={photo} sizes={photoSizes} />
+      </div>
+    );
+  }
   return (
     <div
       className={cn(
