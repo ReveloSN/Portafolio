@@ -296,7 +296,7 @@
   .dive-controls-dock {
     position: static;
     height: auto;
-    margin-top: var(--space-4);
+    margin-block: var(--space-4);
   }
   .dive-controls {
     position: static;
