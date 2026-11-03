@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
 export type PortalPhase = "idle" | "closing" | "covered" | "opening";
 
 /** Arte de los bordes del velo (registro en `components/worlds/portalSkins.tsx`). */
-export type PortalSkinKey = "vines";
+export type PortalSkinKey = "vines" | "jaws";
 
 export interface PortalState {
   readonly phase: PortalPhase;

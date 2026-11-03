@@ -45,7 +45,9 @@ describe("memoria de la intro", () => {
 describe("INTRO_BOOT_SCRIPT", () => {
   function run(store: IntroStore | "throws") {
     const attrs = new Map<string, string>();
-    const doc = { documentElement: { setAttribute: (k: string, v: string) => void attrs.set(k, v) } };
+    const doc = {
+      documentElement: { setAttribute: (k: string, v: string) => void attrs.set(k, v) },
+    };
     const storage =
       store === "throws"
         ? {
