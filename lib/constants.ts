@@ -26,7 +26,6 @@ export const CAROUSEL_DEPTH_PX = 170;
 export const CAROUSEL_ROTATION_DEG = 24;
 export const CAROUSEL_SIDE_SCALE = 0.84;
 export const CAROUSEL_SIDE_OPACITY = 0.5;
-export const CAROUSEL_AUTOPLAY_MS = 7000;
 
 /** Tarjeta que gira: demora del hover (evita parpadeo al cruzar el borde) y duración del giro. */
 export const FLIP_HOVER_DELAY_MS = 80;

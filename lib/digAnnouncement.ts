@@ -1,6 +1,7 @@
 import type { DigState } from "@/types/dig";
 import { DIG_LAYERS_PER_CELL } from "./constants";
 import { countFound } from "./digReducer";
+import { interpolate } from "./utils";
 
 export interface DigAnnouncementCopy {
   readonly layer: string;
@@ -9,16 +10,6 @@ export interface DigAnnouncementCopy {
   readonly cover: string;
   readonly layerOne: string;
   readonly layerMany: string;
-}
-
-type TemplateValues = Readonly<Record<string, string | number>>;
-
-/** Sustituye `{clave}` por su valor; las claves desconocidas se dejan intactas. */
-export function fillTemplate(template: string, values: TemplateValues): string {
-  return template.replace(/\{(\w+)\}/g, (match, key: string) => {
-    const value = values[key];
-    return value === undefined ? match : String(value);
-  });
 }
 
 /**
@@ -37,16 +28,16 @@ export function buildDigAnnouncement(
     case null:
       return "";
     case "cover":
-      return fillTemplate(copy.cover, { found, total });
+      return interpolate(copy.cover, { found, total });
     case "digAll":
-      return fillTemplate(copy.all, { found, total });
+      return interpolate(copy.all, { found, total });
     case "dig": {
       if (state.lastDug === null) return "";
       const name = names[state.lastDug] ?? "";
       const left = DIG_LAYERS_PER_CELL - (state.layers[state.lastDug] ?? 0);
-      if (left <= 0) return fillTemplate(copy.fossil, { name, found, total });
+      if (left <= 0) return interpolate(copy.fossil, { name, found, total });
       const unit = left === 1 ? copy.layerOne : copy.layerMany;
-      return fillTemplate(copy.layer, { name, left, unit });
+      return interpolate(copy.layer, { name, left, unit });
     }
   }
 }

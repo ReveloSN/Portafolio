@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DIG_LAYERS_PER_CELL } from "./constants";
-import { buildDigAnnouncement, fillTemplate } from "./digAnnouncement";
+import { buildDigAnnouncement } from "./digAnnouncement";
 import { createDigReducer, createInitialDigState } from "./digReducer";
 
 const NAMES = ["Alfa", "Beta"] as const;
@@ -14,12 +14,6 @@ const COPY = {
 } as const;
 
 const reduce = createDigReducer(NAMES.length);
-
-describe("fillTemplate", () => {
-  it("sustituye claves y deja las desconocidas", () => {
-    expect(fillTemplate("{a}-{b}-{c}", { a: 1, b: "x" })).toBe("1-x-{c}");
-  });
-});
 
 describe("buildDigAnnouncement", () => {
   it("no anuncia nada antes de la primera acción", () => {
