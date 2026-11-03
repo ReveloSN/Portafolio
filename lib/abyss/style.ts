@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { DIVE_LAYOUT, LANTERN, ZONE_FADE } from "@/data/abyss";
+import { CARD_DIM_OPACITY, DIVE_LAYOUT, LANTERN, ZONE_FADE } from "@/data/abyss";
 
 /**
  * Medidas de la inmersión como variables CSS de la sección: alturas de cada tramo,
@@ -13,4 +13,5 @@ export const DIVE_STYLE = {
   "--beam-u": LANTERN.radiusU,
   "--dark-base": LANTERN.baseDark,
   "--dark-depth": LANTERN.depthDark,
+  "--card-dim": CARD_DIM_OPACITY,
 } as CSSProperties;

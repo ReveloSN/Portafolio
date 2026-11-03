@@ -241,9 +241,11 @@
   margin-top: 0.25rem;
 }
 /* Los logros se encienden al iluminar, enfocar o activar la placa */
+/* Apagados se siguen leyendo (--card-dim, de data/abyss.ts, cumple 4.5:1): la luz los
+   realza, no los revela */
 .dive-card-label,
 .dive-card-achievements {
-  opacity: 0.14;
+  opacity: var(--card-dim, 0.68);
   transform: translateY(0.35em);
   transition:
     opacity 0.5s var(--ease-enter),

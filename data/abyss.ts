@@ -191,6 +191,13 @@ export const PARTICLE_LAYERS: readonly ParticleLayerSpec[] = [
   { id: "near", count: 10, size: [0.7, 1.5], rise: 30, parallax: 70, opacity: 0.55 },
 ];
 
+/**
+ * Opacidad de los logros de una placa que la luz todavía no alcanza. Se lee sin luz: con
+ * 0.68 el texto (#f3f1e8) y la etiqueta (#ffc46b) pasan WCAG AA (4.5:1) sobre la placa,
+ * incluso sobre el agua más clara; lib/abyss/contrast.test.ts lo comprueba.
+ */
+export const CARD_DIM_OPACITY = 0.68;
+
 /** Linterna de buceo: radio del haz, inercia y oscuridad (0.12 + depth × 0.78). */
 export const LANTERN = {
   radiusU: 16,
