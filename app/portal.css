@@ -1,0 +1,182 @@
+/* ------------------------------------------------------------------ */
+/* Portal: velo de dos mitades que se cierra, cubre la carga y se abre  */
+/* revelando la luz. Solo transform y opacity.                          */
+/* ------------------------------------------------------------------ */
+.portal-veil {
+  --portal-ink: #030a06;
+  --portal-ease-in: cubic-bezier(0.7, 0, 0.84, 0.32);
+  --portal-ease-out: cubic-bezier(0.6, 0, 0.2, 1);
+  /* Recorrido de cada mitad: su alto más el borde de hojas que cuelga. */
+  --portal-away: -140%;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.portal-half {
+  position: absolute;
+  inset-inline: 0;
+  height: 50.5%;
+  background: var(--portal-ink);
+  will-change: transform;
+}
+.portal-half-top {
+  top: 0;
+  background: linear-gradient(to bottom, #010402, var(--portal-ink));
+}
+.portal-half-bottom {
+  bottom: 0;
+  background: linear-gradient(to top, #010402, var(--portal-ink));
+}
+
+.portal-edge {
+  position: absolute;
+  inset-inline: -2%;
+  height: clamp(56px, 12svh, 140px);
+  color: var(--portal-ink);
+}
+.portal-edge svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.portal-half-top .portal-edge {
+  top: calc(100% - 1px);
+}
+.portal-half-bottom .portal-edge {
+  bottom: calc(100% - 1px);
+  transform: scaleY(-1);
+}
+
+/* Luz de la juntura: un punto que late a oscuras y estalla al abrir. */
+.portal-light {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  margin: -75vmax 0 0 -75vmax;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(240, 255, 205, 0.95) 0,
+    rgba(196, 255, 128, 0.6) 4%,
+    rgba(166, 255, 92, 0.2) 14%,
+    rgba(166, 255, 92, 0) 40%
+  );
+  opacity: 0;
+  transform: scale(0.08);
+  will-change: transform, opacity;
+}
+
+/* Cierre */
+.portal-veil[data-phase="closing"] .portal-half-top {
+  animation: portal-top-in var(--portal-close) var(--portal-ease-in) both;
+}
+.portal-veil[data-phase="closing"] .portal-half-bottom {
+  animation: portal-bottom-in var(--portal-close) var(--portal-ease-in) both;
+}
+.portal-veil[data-phase="closing"] .portal-light {
+  animation: portal-light-gather var(--portal-close) ease-in both;
+}
+
+/* A oscuras: la luz late mientras carga la ruta nueva */
+.portal-veil[data-phase="covered"] .portal-light {
+  opacity: 0.7;
+  animation: portal-light-wait 1.4s ease-in-out infinite alternate;
+}
+
+/* Apertura (también la entrada al sitio) */
+.portal-veil[data-phase="opening"] .portal-half-top {
+  animation: portal-top-out var(--portal-open) var(--portal-ease-out) both;
+}
+.portal-veil[data-phase="opening"] .portal-half-bottom {
+  animation: portal-bottom-out var(--portal-open) var(--portal-ease-out) both;
+}
+.portal-veil[data-phase="opening"] .portal-light {
+  animation: portal-light-burst var(--portal-open) ease-out both;
+}
+
+@keyframes portal-top-in {
+  from {
+    transform: translateY(var(--portal-away));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes portal-bottom-in {
+  from {
+    transform: translateY(calc(var(--portal-away) * -1));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes portal-top-out {
+  0%,
+  22% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(var(--portal-away));
+  }
+}
+@keyframes portal-bottom-out {
+  0%,
+  22% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(var(--portal-away) * -1));
+  }
+}
+@keyframes portal-light-gather {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(0.08);
+  }
+}
+@keyframes portal-light-wait {
+  from {
+    opacity: 0.55;
+    transform: scale(0.07);
+  }
+  to {
+    opacity: 0.85;
+    transform: scale(0.1);
+  }
+}
+@keyframes portal-light-burst {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.08);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+/* Sin movimiento o sin JS: no hay velo (con movimiento reducido se navega directo). */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .portal-veil {
+    display: none;
+  }
+}
+@media print {
+  .portal-veil {
+    display: none;
+  }
+}

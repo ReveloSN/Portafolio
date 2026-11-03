@@ -10,6 +10,7 @@
 @import "./about.css";
 @import "./abyss.css";
 @import "./dive.css";
+@import "./portal.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));
