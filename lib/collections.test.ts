@@ -2,16 +2,14 @@ import { describe, expect, it } from "vitest";
 import { EXPERIENCE } from "@/data/experience";
 import { PROJECTS } from "@/data/projects";
 import { WORLDS } from "@/data/worlds";
+import type { ExperienceEntry } from "@/types/experience";
 import { WORLD_SLUGS, type World, type WorldSlug } from "@/types/world";
 import {
-  catchSequence,
+  experienceById,
   projectsBySlug,
   sortedExperience,
   worldsBySlug,
 } from "./collections";
-
-/** Índices de la experiencia (ordenada) tras los que aparece una criatura rara. */
-const RARE_AFTER_INDEXES = [1, 3] as const;
 
 describe("sortedExperience", () => {
   it("contiene todas las entradas de la experiencia una sola vez", () => {
@@ -33,6 +31,20 @@ describe("sortedExperience", () => {
     const originalIds = EXPERIENCE.map((entry) => entry.id);
     expect(sortedExperience).not.toBe(EXPERIENCE);
     expect(EXPERIENCE.map((entry) => entry.id)).toEqual(originalIds);
+  });
+});
+
+describe("experienceById", () => {
+  it("indexa cada entrada por su id", () => {
+    expect(experienceById.size).toBe(EXPERIENCE.length);
+    for (const entry of EXPERIENCE) {
+      expect(experienceById.get(entry.id)).toBe(entry);
+    }
+  });
+
+  it("devuelve undefined para un id desconocido", () => {
+    const lookup: ReadonlyMap<string, ExperienceEntry> = experienceById;
+    expect(lookup.get("no-existe")).toBeUndefined();
   });
 });
 
@@ -69,39 +81,5 @@ describe("worldsBySlug", () => {
     for (const slug of slugs) {
       expect(worldsBySlug.get(slug)?.slug).toBe(slug);
     }
-  });
-});
-
-describe("catchSequence", () => {
-  it("incluye las entradas en el mismo orden que sortedExperience", () => {
-    const entries = catchSequence.flatMap((item) =>
-      item.type === "entry" ? [item.entry] : [],
-    );
-    expect(entries).toEqual(sortedExperience);
-  });
-
-  it("coloca una criatura rara justo después de las entradas 2.ª y 4.ª", () => {
-    const expectedRares = RARE_AFTER_INDEXES.filter(
-      (index) => index < sortedExperience.length,
-    ).length;
-    const rares = catchSequence.flatMap((item, position) =>
-      item.type === "rare" ? [{ position, creature: item.creature }] : [],
-    );
-
-    expect(rares).toHaveLength(expectedRares);
-    for (const { position } of rares) {
-      const before = catchSequence[position - 1];
-      expect(before?.type).toBe("entry");
-      if (before?.type !== "entry") continue;
-      const index = sortedExperience.indexOf(before.entry);
-      expect(RARE_AFTER_INDEXES).toContain(index);
-    }
-  });
-
-  it("tiene una posición por entrada más una por cada criatura rara", () => {
-    const rares = RARE_AFTER_INDEXES.filter(
-      (index) => index < sortedExperience.length,
-    ).length;
-    expect(catchSequence).toHaveLength(sortedExperience.length + rares);
   });
 });
