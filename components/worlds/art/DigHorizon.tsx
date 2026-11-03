@@ -1,6 +1,13 @@
 import type { SVGProps } from "react";
 
-export function DigHorizon(props: SVGProps<SVGSVGElement>) {
+const GRASS_GRADIENT_ID = "dig-horizon-grass";
+
+interface DigHorizonProps extends SVGProps<SVGSVGElement> {
+  /** Las dos líneas del cartel de la zona de excavación. */
+  readonly sign: readonly [string, string];
+}
+
+export function DigHorizon({ sign, ...props }: DigHorizonProps) {
   return (
     <svg
       viewBox="0 0 1440 200"
@@ -9,7 +16,7 @@ export function DigHorizon(props: SVGProps<SVGSVGElement>) {
       {...props}
     >
       <defs>
-        <linearGradient id="gr" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={GRASS_GRADIENT_ID} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#2f7a3a" />
           <stop offset="1" stopColor="#1c4a26" />
         </linearGradient>
@@ -23,7 +30,7 @@ export function DigHorizon(props: SVGProps<SVGSVGElement>) {
       </g>
       <path
         d="M0 170 Q120 150 260 168 T520 166 T800 170 T1100 164 T1440 170 V200 H0Z"
-        fill="url(#gr)"
+        fill={`url(#${GRASS_GRADIENT_ID})`}
       />
 
       <path d="M200 168 L270 92 L340 168Z" fill="#d9c79a" />
@@ -43,7 +50,7 @@ export function DigHorizon(props: SVGProps<SVGSVGElement>) {
         fill="#f6e7c4"
         letterSpacing="2"
       >
-        ZONA DE
+        {sign[0]}
       </text>
       <text
         x="606"
@@ -54,7 +61,7 @@ export function DigHorizon(props: SVGProps<SVGSVGElement>) {
         fill="#f6e7c4"
         letterSpacing="2"
       >
-        EXCAVACIÓN
+        {sign[1]}
       </text>
 
       <path d="M900 172 Q960 112 1020 172Z" fill="#7a5233" />

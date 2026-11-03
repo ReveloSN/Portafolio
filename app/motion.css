@@ -129,15 +129,29 @@
 .dirt {
   position: absolute;
   inset: 0;
+  pointer-events: none;
+}
+.dirtbtn {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  min-height: 44px;
   border: 0;
+  border-radius: inherit;
   padding: 0;
   background: none;
   cursor: pointer;
   font: inherit;
   color: #fff;
+  pointer-events: auto;
 }
-.dirt.done {
-  display: none;
+.dirtbtn:focus-visible {
+  outline: 3px solid var(--glow);
+  outline-offset: -6px;
+}
+.dirtbtn:hover ~ .dl {
+  filter: brightness(1.12);
 }
 .dl {
   position: absolute;
@@ -152,9 +166,6 @@
 .dl.gone {
   transform: translateY(70%) rotate(5deg);
   opacity: 0;
-}
-.dirt:hover .dl {
-  filter: brightness(1.12);
 }
 .dhint {
   position: absolute;
@@ -177,6 +188,24 @@
 }
 .hitB {
   animation: shakeB 0.4s;
+}
+/* Movimiento reducido: sin sacudida ni caída; las capas solo se desvanecen. */
+@media (prefers-reduced-motion: reduce) {
+  .hitA,
+  .hitB,
+  .dig {
+    animation: none !important;
+  }
+  .dl {
+    transition-property: opacity !important;
+    transition-duration: 0.3s !important;
+  }
+  .dl.gone {
+    transform: none;
+  }
+  .dirtbtn:hover ~ .dl {
+    filter: none;
+  }
 }
 .egg {
   background: none;

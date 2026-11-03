@@ -16,6 +16,9 @@ import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { useDigSite } from "@/hooks/useDigSite";
 import { DIG_LAYERS_PER_CELL } from "@/lib/constants";
+import { buildDigAnnouncement } from "@/lib/digAnnouncement";
+import { buildCellLabels } from "@/lib/digLabels";
+import { hasDug } from "@/lib/digReducer";
 import type { Skill } from "@/types/skill";
 
 interface SkillsProps {
@@ -43,6 +46,11 @@ export function Skills({ skills }: SkillsProps) {
       : site.found
         ? copy.messages.some
         : copy.messages.none;
+  const announcement = buildDigAnnouncement(
+    site.state,
+    skills.map((skill) => skill.name),
+    { ...copy.announce, layerOne: copy.layerOne, layerMany: copy.layerMany },
+  );
 
   return (
     <SectionShell
@@ -54,6 +62,7 @@ export function Skills({ skills }: SkillsProps) {
         <>
           <SeamLayer seam="contact-skills" host="lower" />
           <DigHorizon
+            sign={copy.sign}
             preserveAspectRatio="xMidYMax slice"
             className="absolute top-0 left-0 h-[200px] w-full"
           />
@@ -76,13 +85,21 @@ export function Skills({ skills }: SkillsProps) {
           {copy.intro}
         </p>
 
+        {/* Un único anuncio por acción; la barra visible no es una región viva. */}
+        <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+          {announcement}
+        </p>
+
         <DigToolbar
+          groupLabel={copy.toolbarLabel}
           label={copy.findings}
           found={site.found}
           total={skills.length}
           message={message}
           digAllLabel={copy.digAll}
           coverLabel={copy.cover}
+          digAllDisabled={site.found >= skills.length}
+          coverDisabled={!hasDug(site.state.layers)}
           onDigAll={site.digAll}
           onCover={site.cover}
         />
@@ -90,10 +107,9 @@ export function Skills({ skills }: SkillsProps) {
         <ul className="gap-fluid-4 grid md:grid-cols-2 lg:grid-cols-3">
           {skills.map((skill, i) => {
             const dug = site.state.layers[i] ?? 0;
-            const left = DIG_LAYERS_PER_CELL - dug;
             const Fossil = FOSSILS[skill.fossil];
-            const shake =
-              site.state.lastDug === i ? (site.state.tick % 2 ? "hitA" : "hitB") : "";
+            const isLast = site.state.lastDug === i;
+            const shake = isLast ? (site.state.tick % 2 ? "hitA" : "hitB") : "";
             return (
               <li key={skill.id} className="dig flex [&>article]:w-full">
                 <SkillCell
@@ -101,22 +117,10 @@ export function Skills({ skills }: SkillsProps) {
                   layersDug={dug}
                   totalLayers={DIG_LAYERS_PER_CELL}
                   shake={shake}
+                  justDug={isLast && site.state.lastEvent === "dig"}
                   fossil={<Fossil />}
                   dirtLayers={DIRT}
-                  labels={{
-                    grid: copy.grid,
-                    fossilFound: copy.fossilFound,
-                    level: copy.level,
-                    stateDone: copy.found,
-                    stateLeft: left === 1 ? copy.layerOne : copy.layerMany,
-                    hint:
-                      dug === 0
-                        ? copy.hintStart
-                        : left === 1
-                          ? copy.hintLast
-                          : copy.hintKeep,
-                    digAria: `${copy.digLabel} ${skill.name}: ${left} ${left === 1 ? copy.layerOne : copy.layerMany}`,
-                  }}
+                  labels={buildCellLabels(copy, skill.name, dug)}
                   onDig={() => site.dig(i)}
                 />
               </li>
