@@ -215,6 +215,12 @@
 .dive[data-inview] .abyss-mote {
   animation-play-state: running;
 }
+/* Móvil y puntero táctil: solo las motas esenciales (menos animaciones a la vez) */
+@media (max-width: 767px), (pointer: coarse) {
+  .abyss-mote[data-extra] {
+    display: none;
+  }
+}
 
 /* Superficie: el lago, el niño y el sedal -------------------------------- */
 .lake-surface {

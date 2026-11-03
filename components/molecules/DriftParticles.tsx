@@ -9,7 +9,8 @@ const SPRITE = ABYSS_ART.particle ?? LAKE_ART["particle-1"];
 
 /**
  * Nieve marina en dos capas con velocidades distintas: suben despacio y se desplazan con
- * --depth a ritmos diferentes. Posiciones fijas por semilla (sin Math.random).
+ * --depth a ritmos diferentes. Posiciones fijas por semilla (sin Math.random). En móvil y
+ * con puntero táctil solo se dibujan las motas esenciales (data-extra las oculta).
  */
 export function DriftParticles() {
   return (
@@ -27,6 +28,7 @@ export function DriftParticles() {
               <span
                 key={i}
                 className="abyss-mote"
+                data-extra={mote.extra ? "" : undefined}
                 style={
                   {
                     left: `${mote.x}%`,
