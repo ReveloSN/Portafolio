@@ -48,7 +48,8 @@ export const COPY = {
     intro: "Notas que otras personas dejaron en mi cuaderno después de trabajar conmigo.",
     previous: "Testimonio anterior",
     next: "Testimonio siguiente",
-    goTo: "Ver testimonio",
+    dotLabel: "Testimonio {n} de {total}",
+    carouselLabel: "Testimonios",
     ratingLabel: "de 5 estrellas",
   },
   experience: {

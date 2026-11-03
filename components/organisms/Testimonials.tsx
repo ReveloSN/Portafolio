@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
+import { CarouselDots } from "@/components/molecules/CarouselDots";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { TestimonialCard } from "@/components/molecules/TestimonialCard";
@@ -16,6 +17,7 @@ import {
   CAROUSEL_SIDE_OPACITY,
   CAROUSEL_SIDE_SCALE,
 } from "@/lib/constants";
+import { carouselDotLabel } from "@/lib/carousel";
 import type { Testimonial } from "@/types/testimonial";
 import { seamBackground } from "@/lib/seams";
 
@@ -59,7 +61,9 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
         <div
           data-testid="carousel-stage"
           className="mt-fluid-6 relative h-[clamp(19rem,calc(var(--u)*29),30rem)] [perspective:1500px]"
+          role="group"
           aria-roledescription="carrusel"
+          aria-label={copy.carouselLabel}
         >
           {testimonials.map((testimonial, i) => {
             const offset = carousel.offsetOf(i);
@@ -84,25 +88,12 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           >
             <Icon name="chevronLeft" size={22} strokeWidth={2.6} />
           </Button>
-          <div className="flex items-center gap-2.5">
-            {testimonials.map((testimonial, i) => {
-              const active = i === carousel.index;
-              return (
-                <button
-                  key={testimonial.id}
-                  type="button"
-                  aria-label={`${copy.goTo} ${i + 1}`}
-                  aria-current={active}
-                  onClick={() => carousel.goTo(i)}
-                  className="h-2.5 cursor-pointer rounded-full border-0 p-0 transition-all duration-300"
-                  style={{
-                    width: active ? 34 : 10,
-                    background: active ? "var(--glow)" : "rgba(238,246,224,.35)",
-                  }}
-                />
-              );
-            })}
-          </div>
+          <CarouselDots
+            count={carousel.count}
+            active={carousel.index}
+            labelFor={(i) => carouselDotLabel(copy.dotLabel, i, carousel.count)}
+            onSelect={carousel.goTo}
+          />
           <Button
             variant="ghost"
             size="icon"
