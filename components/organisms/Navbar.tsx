@@ -28,7 +28,7 @@ export function Navbar({ profile, links }: NavbarProps) {
       <div className="h-nav px-gutter mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*100.0))] items-center justify-between gap-4">
         <a
           href={`#${SECTION_IDS.home}`}
-          className="inline-flex items-center gap-3 no-underline"
+          className="inline-flex min-h-11 items-center gap-3 no-underline"
         >
           <span className="font-display bg-glow text-fluid-base flex size-[max(2.25rem,calc(var(--u)*2.8))] items-center justify-center rounded-xl font-extrabold text-(--ink)">
             {profile.initials}

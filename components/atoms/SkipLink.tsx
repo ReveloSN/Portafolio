@@ -8,7 +8,7 @@ export function SkipLink({ href, children }: SkipLinkProps) {
   return (
     <a
       href={href}
-      className="bg-glow sr-only z-[100] rounded-full px-5 py-3 font-sans font-semibold text-(--ink) no-underline focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      className="bg-glow sr-only z-[100] rounded-full font-sans font-semibold text-(--ink) no-underline focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:inline-flex focus:min-h-11 focus:items-center focus:px-5"
     >
       {children}
     </a>

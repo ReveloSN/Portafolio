@@ -39,12 +39,12 @@ export function Footer({ profile, links }: FooterProps) {
           </div>
           <nav aria-label={footer.navLabel} className="flex-[0_1_200px]">
             <p className={HEADING}>{footer.quickLinks.toUpperCase()}</p>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-1">
               {links.map((link) => (
                 <li key={link.id}>
                   <a
                     href={`#${link.id}`}
-                    className="hover:text-glow no-underline opacity-80 transition hover:opacity-100"
+                    className="hover:text-glow coarse:min-h-11 inline-flex min-h-8 items-center no-underline opacity-80 transition hover:opacity-100"
                   >
                     {link.label}
                   </a>
