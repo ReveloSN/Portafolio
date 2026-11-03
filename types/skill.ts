@@ -16,3 +16,14 @@ export interface Skill {
   readonly bone: BoneKind;
   readonly note: string;
 }
+
+/** Textos ya resueltos que una cuadrícula necesita para renderizarse. */
+export interface SkillCellLabels {
+  readonly grid: string;
+  readonly fossilFound: string;
+  readonly level: string;
+  readonly stateDone: string;
+  readonly stateLeft: string;
+  readonly hint: string;
+  readonly digAria: string;
+}
