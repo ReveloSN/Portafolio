@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Figtree, JetBrains_Mono, Outfit } from "next/font/google";
 import { PortalProvider } from "@/components/templates/PortalProvider";
 import { COPY } from "@/data/copy";
+import { INTRO_BOOT_SCRIPT } from "@/lib/intro";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -33,7 +34,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       lang="es"
       data-scroll-behavior="smooth"
       className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
+      </head>
       <body>
         <PortalProvider>{children}</PortalProvider>
       </body>

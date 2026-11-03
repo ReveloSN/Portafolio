@@ -169,6 +169,11 @@
   }
 }
 
+/* La intro con mandíbulas se ve una vez por sesión: el script del <head> marca <html>. */
+html[data-intro-seen] .portal-veil[data-skin="jaws"] {
+  display: none;
+}
+
 /* Sin movimiento o sin JS: no hay velo (con movimiento reducido se navega directo). */
 @media (prefers-reduced-motion: reduce), (scripting: none) {
   .portal-veil {
