@@ -78,7 +78,7 @@ Tres testimonios de ejemplo (`t1` a `t3`).
 
 Cuatro "huevos" de contacto.
 
-- [ ] `mail`: `value` y `href` (`tu@correo.com`).
+- [ ] `mail`: `value` y `href` (`tu@correo.com`). El formulario de contacto no tiene servidor: al validar abre el correo del visitante (`mailto:`) dirigido a la dirección de este huevo (`href`), así que debe ser tu correo real. Si quitas el huevo `mail`, el formulario no se muestra.
 - [ ] `linkedin`: `value` (`linkedin.com/in/tu-usuario`) y `href`.
 - [ ] `github`: `value` (`github.com/tu-usuario`) y `href`.
 - [ ] `whatsapp`: `value` (`+57 000 000 0000`) y `href` (`https://wa.me/570000000000`). Es un número personal: usa el real o elimina el huevo.

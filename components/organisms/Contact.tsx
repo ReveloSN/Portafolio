@@ -9,6 +9,7 @@ import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { FIREFLY_COUNT } from "@/lib/constants";
+import { findMailRecipient } from "@/lib/mailto";
 import type { ContactEgg } from "@/types/contact";
 import { seamBackground } from "@/lib/seams";
 
@@ -24,6 +25,7 @@ const BACKGROUND = seamBackground(
 
 export function Contact({ eggs }: ContactProps) {
   const { contact: copy } = COPY;
+  const recipient = findMailRecipient(eggs);
   return (
     <SectionShell
       id={SECTION_IDS.contact}
@@ -59,7 +61,7 @@ export function Contact({ eggs }: ContactProps) {
             closeLabel={copy.close}
           />
           <div className="max-w-[calc(var(--u)*36.1)] min-w-[280px] flex-[1_1_400px] rounded-[28px] border border-white/16 bg-[rgba(5,16,11,.72)] p-[clamp(24px,3vw,38px)] backdrop-blur-[10px]">
-            <ContactForm />
+            {recipient ? <ContactForm recipient={recipient} /> : null}
           </div>
         </div>
       </div>

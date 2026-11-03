@@ -1,10 +1,11 @@
 "use client";
 
-import type { ChangeEventHandler } from "react";
+import { useRef, type ChangeEventHandler } from "react";
 import { Button } from "@/components/atoms/Button";
 import { HatchedEgg } from "@/components/worlds/art/HatchedEgg";
 import { COPY } from "@/data/copy";
 import { useContactForm } from "@/hooks/useContactForm";
+import { useFocusOnComplete } from "@/hooks/useFocusOnComplete";
 import { cn } from "@/lib/utils";
 import type { ContactFormValues } from "@/types/contact";
 
@@ -60,23 +61,49 @@ function Field({ name, label, error, multiline, type = "text", ...rest }: FieldP
   );
 }
 
-export function ContactForm() {
-  const { contact: copy } = COPY;
-  const form = useContactForm();
+interface ContactFormProps {
+  /** Dirección a la que se escribe: sale de los datos de contacto. */
+  readonly recipient: string;
+}
 
-  if (form.sent) {
+export function ContactForm({ recipient }: ContactFormProps) {
+  const { contact: copy } = COPY;
+  const form = useContactForm(recipient, {
+    subject: copy.mailSubject,
+    signature: copy.mailSignature,
+  });
+  const confirmationRef = useRef<HTMLHeadingElement>(null);
+  const opened = form.mailtoUrl !== null;
+  useFocusOnComplete(opened, true, confirmationRef);
+
+  if (form.mailtoUrl !== null) {
     return (
       <div role="status" className="py-fluid-4 px-1.5 text-center">
         <HatchedEgg width={92} height={92} className="mx-auto" />
-        <h3 className="font-display text-fluid-xl mt-3.5 font-extrabold">
+        <h3
+          ref={confirmationRef}
+          tabIndex={-1}
+          className="font-display text-fluid-xl mt-3.5 font-extrabold outline-none"
+        >
           {copy.sentTitle}
         </h3>
         <p className="text-fluid-base mt-2.5 leading-relaxed opacity-85">
           {copy.sentText}
         </p>
-        <Button variant="ghost" size="sm" className="mt-fluid-3" onClick={form.reset}>
-          {copy.sendAnother}
-        </Button>
+        <p className="text-fluid-base mt-3 leading-relaxed opacity-85">
+          {copy.fallback}{" "}
+          <span className="text-glow font-semibold break-all select-all">
+            {recipient}
+          </span>
+        </p>
+        <div className="mt-fluid-3 gap-fluid-2 flex flex-wrap justify-center">
+          <Button variant="ghost" size="sm" href={form.mailtoUrl}>
+            {copy.reopen}
+          </Button>
+          <Button variant="ghost" size="sm" onClick={form.reset}>
+            {copy.backToForm}
+          </Button>
+        </div>
       </div>
     );
   }
@@ -115,6 +142,7 @@ export function ContactForm() {
       <Button type="submit" className="text-fluid-base mt-1">
         {copy.submit} <span aria-hidden="true">→</span>
       </Button>
+      <p className="text-fluid-sm -mt-1 text-center opacity-70">{copy.submitHint}</p>
     </form>
   );
 }
