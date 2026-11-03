@@ -100,6 +100,13 @@ export const COPY = {
     findings: "HALLAZGOS",
     digAll: "Excavar todo",
     cover: "Cubrir de nuevo",
+    toolbarLabel: "Controles de la excavación",
+    announce: {
+      layer: "{name}: quedan {left} {unit}.",
+      fossil: "Fósil desenterrado: {name}. Hallazgos {found} de {total}.",
+      all: "Sitio completo. Hallazgos {found} de {total}.",
+      cover: "Sitio cubierto de nuevo. Hallazgos {found} de {total}.",
+    },
     grid: "CUADRÍCULA",
     fossilFound: "FÓSIL DESENTERRADO",
     level: "Nivel",
