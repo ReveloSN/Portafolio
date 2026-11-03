@@ -350,12 +350,13 @@
   transform: translate3d(var(--lx), var(--ly), 0);
   transition: opacity 0.6s var(--ease-enter);
 }
-/* Tinte cálido aditivo en el mismo radio, con un parpadeo mínimo */
+/* Tinte cálido en el mismo radio, con un parpadeo mínimo. Sin mix-blend-mode: mezclar con
+   el escenario obligaría a componer toda la escena en cada frame; con colores claros y
+   poca opacidad sobre el agua oscura se ve igual de aditivo */
 .dive-glow {
   width: calc(var(--beam-r) * 2);
   aspect-ratio: 1;
   margin: calc(var(--beam-r) * -1) 0 0 calc(var(--beam-r) * -1);
-  mix-blend-mode: screen;
   opacity: calc(0.35 + var(--depth) * 0.65);
   transform: translate3d(var(--lx), var(--ly), 0);
 }
@@ -370,7 +371,11 @@
     rgba(255, 190, 100, 0.12) 55%,
     transparent
   );
-  animation: lantern-flicker 3.4s ease-in-out infinite;
+  animation: lantern-flicker 3.4s ease-in-out infinite paused;
+}
+/* Solo parpadea con la sección en pantalla y con la oscuridad puesta */
+.dive[data-inview]:not([data-lights="on"]) .dive-glow::before {
+  animation-play-state: running;
 }
 .dive-lantern-sprite {
   display: none;
