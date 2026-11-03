@@ -6,6 +6,7 @@ export const COPY = {
     madeWith: "Hecho con Next.js + Tailwind CSS",
   },
   nav: {
+    skipToContent: "Saltar al contenido",
     primaryLabel: "Principal",
     toggleMenu: "Abrir o cerrar el menú",
     cvShort: "CV",

@@ -1,10 +1,12 @@
 import type { ComponentType, CSSProperties } from "react";
 import { Button } from "@/components/atoms/Button";
+import { SkipLink } from "@/components/atoms/SkipLink";
 import { WorldSwitcher } from "@/components/molecules/WorldSwitcher";
 import { WorldDetails } from "@/components/worlds/WorldDetails";
 import { WorldGallery } from "@/components/worlds/WorldGallery";
 import { WorldHero } from "@/components/worlds/WorldHero";
 import { COPY } from "@/data/copy";
+import { MAIN_CONTENT_ID } from "@/data/navigation";
 import type { Profile } from "@/types/profile";
 import type { Project } from "@/types/project";
 import type { World } from "@/types/world";
@@ -33,13 +35,14 @@ export function WorldLayout({
   } as CSSProperties;
   return (
     <div style={theme} className="text-leaf w-full overflow-x-clip">
-      <WorldHero
-        world={world}
-        project={project}
-        ownerName={profile.firstName}
-        Scene={Scene}
-      />
-      <main>
+      <SkipLink href={`#${MAIN_CONTENT_ID}`}>{COPY.nav.skipToContent}</SkipLink>
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
+        <WorldHero
+          world={world}
+          project={project}
+          ownerName={profile.firstName}
+          Scene={Scene}
+        />
         <WorldDetails world={world} project={project} />
         <WorldGallery project={project} />
       </main>
