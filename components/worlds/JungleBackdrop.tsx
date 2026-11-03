@@ -116,7 +116,7 @@ export function JungleBackdrop({
       >
         <Illustration
           decorative
-          priority
+          loading="eager"
           src="/images/trunkL.webp"
           width={1024}
           height={1536}
@@ -134,7 +134,7 @@ export function JungleBackdrop({
       >
         <Illustration
           decorative
-          priority
+          loading="eager"
           src="/images/trunkR.webp"
           width={1024}
           height={1536}

@@ -51,7 +51,7 @@ export function GiantDino({ alt }: GiantDinoProps) {
           alt={alt}
           width={DINO_IMAGE.width}
           height={DINO_IMAGE.height}
-          priority
+          loading="eager"
           sizes={DINO_SIZES}
           data-testid="hero-dino"
           className="dino-img relative block h-full w-full"
