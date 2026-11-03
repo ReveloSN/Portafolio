@@ -169,6 +169,101 @@
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Mandíbulas: la entrada al sitio es la boca de un T-rex que se abre.  */
+/* La mitad de arriba es la mandíbula superior (dientes hacia abajo) y  */
+/* la de abajo, la inferior; entrecruzan sus dientes al estar cerradas. */
+/* ------------------------------------------------------------------ */
+.portal-veil[data-skin="jaws"] {
+  /* Alto de cada mandíbula (encía + dientes); las dos se solapan en el centro. */
+  --jaw-h: clamp(220px, 46svh, 440px);
+  --portal-away: calc(-50vh - var(--jaw-h) * 0.6);
+  --jaws-away-low: calc(50vh + var(--jaw-h) * 0.5 + 14vh);
+}
+.portal-veil[data-skin="jaws"] .portal-half {
+  z-index: 1;
+  height: calc(50% - var(--jaw-h) / 2);
+}
+.portal-veil[data-skin="jaws"] .portal-edge {
+  inset-inline: auto;
+  left: 50%;
+  width: max(100%, calc(var(--jaw-h) * 3));
+  height: var(--jaw-h);
+  transform: translateX(-50%);
+}
+/* La luz queda detrás: solo se ve por el hueco que deja la boca al abrirse. */
+.portal-veil[data-skin="jaws"] .portal-light {
+  z-index: 0;
+}
+.portal-veil[data-skin="jaws"][data-phase="opening"] .portal-half-top {
+  animation: portal-jaws-top-out var(--portal-open) linear both;
+}
+.portal-veil[data-skin="jaws"][data-phase="opening"] .portal-half-bottom {
+  animation: portal-jaws-bottom-out var(--portal-open) linear both;
+}
+.portal-veil[data-skin="jaws"][data-phase="opening"] .portal-light {
+  animation: portal-jaws-light var(--portal-open) linear both;
+}
+
+/* Duda y tiembla (hasta ~27 %), luego la mandíbula de abajo cae de golpe y la de arriba apenas sube. */
+@keyframes portal-jaws-top-out {
+  0% {
+    transform: translateY(0);
+  }
+  7% {
+    transform: translateY(2px);
+  }
+  14% {
+    transform: translateY(-1px);
+  }
+  21% {
+    transform: translateY(2px);
+  }
+  27% {
+    transform: translateY(3px);
+    animation-timing-function: cubic-bezier(0.14, 0.78, 0.22, 1);
+  }
+  100% {
+    transform: translateY(var(--portal-away));
+  }
+}
+@keyframes portal-jaws-bottom-out {
+  0% {
+    transform: translateY(0);
+  }
+  7% {
+    transform: translateY(-3px);
+  }
+  14% {
+    transform: translateY(2px);
+  }
+  21% {
+    transform: translateY(-5px);
+  }
+  27% {
+    transform: translateY(-7px);
+    animation-timing-function: cubic-bezier(0.1, 0.8, 0.2, 1);
+  }
+  100% {
+    transform: translateY(var(--jaws-away-low));
+  }
+}
+@keyframes portal-jaws-light {
+  0%,
+  26% {
+    opacity: 0;
+    transform: scale(0.08);
+  }
+  42% {
+    opacity: 1;
+    transform: scale(0.45);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
 /* La intro con mandíbulas se ve una vez por sesión: el script del <head> marca <html>. */
 html[data-intro-seen] .portal-veil[data-skin="jaws"] {
   display: none;
