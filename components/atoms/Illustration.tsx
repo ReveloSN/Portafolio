@@ -41,6 +41,9 @@ export function Illustration(props: IllustrationProps) {
     testId,
   } = props;
   const decorative = props.decorative === true;
+  // React precarga en el HTML toda imagen que no sea lazy; una carga inmediata que no es
+  // la principal de la escena no debe competir con ella por la red.
+  const eagerButSecondary = !priority && loading === "eager";
   return (
     <div
       className={className}
@@ -55,6 +58,7 @@ export function Illustration(props: IllustrationProps) {
         sizes={sizes}
         priority={priority}
         loading={priority ? undefined : loading}
+        fetchPriority={eagerButSecondary ? "low" : undefined}
         draggable={decorative ? false : undefined}
         data-testid={testId}
         className={cn(
