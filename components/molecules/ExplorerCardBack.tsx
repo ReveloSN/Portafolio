@@ -33,7 +33,7 @@ export function ExplorerCardBack({ profile }: ExplorerCardBackProps) {
         <p className="font-display relative text-[clamp(1.1rem,9cqw,2.75rem)] leading-none font-extrabold">
           {funFact.title}
         </p>
-        <p className="relative mt-[4cqw] min-h-0 overflow-y-auto text-[clamp(.85rem,5.4cqw,1.4rem)] leading-[1.45] text-[#2c3b27] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <p className="relative mt-[4cqw] min-h-0 [scrollbar-width:none] overflow-y-auto text-[clamp(.85rem,5.4cqw,1.4rem)] leading-[1.45] text-[#2c3b27] [&::-webkit-scrollbar]:hidden">
           {funFact.text}
         </p>
         {backMeta?.motto ? (

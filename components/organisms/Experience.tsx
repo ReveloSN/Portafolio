@@ -1,22 +1,20 @@
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
-import { DiveScenery } from "@/components/organisms/DiveScenery";
-import { ExperienceDive } from "@/components/organisms/ExperienceDive";
+import { FossilPuzzleLoader } from "@/components/organisms/FossilPuzzleLoader";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
-import { sortedExperience } from "@/lib/collections";
 import { seamBackground } from "@/lib/seams";
 
 const BACKGROUND = seamBackground(
   "--seam-experience-start",
   "--seam-experience-end",
-  "linear-gradient(var(--seam-experience-start), #0a2c3d 30%, #050f1b 80%, var(--seam-experience-end))",
+  "radial-gradient(ellipse 80% 60% at 50% 40%, var(--experience-glow) 0, var(--seam-experience-end) 75%)",
 );
 
 /**
- * Experiencia: una inmersión del lago al abismo guiada por el scroll, con la experiencia
- * académica y laboral en placas de la más reciente a la más antigua.
+ * Experiencia: un fósil tipo puzle. Cada hueso es una experiencia (de la más reciente a
+ * la más antigua) y encajarlo revela su ficha; completo, la lista entera en texto.
  */
 export function Experience() {
   const { experience: copy } = COPY;
@@ -24,16 +22,17 @@ export function Experience() {
     <SectionShell
       id={SECTION_IDS.experience}
       background={BACKGROUND}
-      className="experience"
       decoration={<SeamLayer seam="testimonials-experience" host="lower" />}
     >
-      <ExperienceDive
-        entries={sortedExperience}
-        heading={
-          <SectionHeading eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro} />
-        }
-        scenery={<DiveScenery />}
-      />
+      <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*88.9))]">
+        <SectionHeading
+          eyebrow={copy.eyebrow}
+          title={copy.title}
+          intro={copy.intro}
+          titleClassName="max-w-[calc(var(--u)*59.7)]"
+        />
+        <FossilPuzzleLoader />
+      </div>
     </SectionShell>
   );
 }

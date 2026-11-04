@@ -10,6 +10,7 @@
 @import "./about.css";
 @import "./abyss.css";
 @import "./dive.css";
+@import "./fossil.css";
 @import "./portal.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
@@ -68,7 +69,7 @@
   --seam-testimonials-start: var(--seam-projects-end);
   --seam-testimonials-end: #06120d;
   --seam-experience-start: var(--seam-testimonials-end);
-  --seam-experience-end: #08171e;
+  --seam-experience-end: #17110b;
   --seam-skills-start: var(--seam-experience-end);
   --seam-skills-end: #05100b;
   --seam-contact-start: var(--seam-skills-end);
@@ -83,6 +84,21 @@
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;
   --ink: #07160f;
+  /* Fósil de la experiencia: losa de piedra, huesos marfil y fichas */
+  --experience-glow: #1f2a1d;
+  --fossil-stone: #4a4034;
+  --fossil-stone-deep: #241d16;
+  --fossil-socket: rgba(10, 7, 4, 0.45);
+  --fossil-socket-edge: rgba(241, 217, 168, 0.4);
+  --fossil-tray: rgba(241, 217, 168, 0.06);
+  --fossil-bone: #ecdfc2;
+  --fossil-bone-edge: #8c7650;
+  --fossil-shadow: rgba(0, 0, 0, 0.5);
+  --fossil-tag-bg: rgba(14, 10, 6, 0.82);
+  --fossil-tag-ink: #f6eedb;
+  --fossil-card: rgba(14, 11, 7, 0.72);
+  --fossil-card-edge: rgba(255, 196, 110, 0.28);
+  --fossil-accent: #ffc46e;
   /* Inmersión de experiencia: placas luminosas sobre el agua oscura */
   --abyss-ink: #f3f1e8;
   --abyss-muted: #a9c6c4;

@@ -54,10 +54,30 @@ export const COPY = {
     ratingLabel: "de 5 estrellas",
   },
   experience: {
-    eyebrow: "INMERSIÓN AL ABISMO",
+    eyebrow: "EL FÓSIL DE MI TRAYECTORIA",
     title: "Experiencia académica y laboral",
     intro:
-      "Baja siguiendo el sedal: cada placa es un capítulo, del más reciente al más antiguo. Ilumínala con la linterna, o enciende las luces, para leer sus logros.",
+      "Cada hueso es una etapa, de la más reciente (el cráneo) a la más antigua. Lleva cada pieza a su hueco en la losa para leer su ficha; al completar el fósil, toda la experiencia aparece en texto.",
+    instructions:
+      "Arrastra una pieza hasta su hueco. Con teclado: Tab hasta una pieza, Enter para tomarla, flechas para moverla (Mayús para pasos largos), Enter para soltarla y Esc para cancelar.",
+    toolbarLabel: "Controles del fósil",
+    progress: "Encajadas {placed} de {total}",
+    placeSelected: "Encajar la pieza tomada",
+    placeAll: "Armar todo",
+    reset: "Reiniciar",
+    pieceLabel: "Pieza {n}: {bone}, desde {year}",
+    findingKicker: "FICHA DEL HALLAZGO",
+    findingEmpty: "Encaja una pieza para leer su ficha: cargo, lugar y fechas.",
+    completeTitle: "Fósil completo: toda mi experiencia",
+    announce: {
+      select: "Tomaste {bone}. Muévelo con las flechas y suéltalo con Enter.",
+      cancel: "Soltaste {bone} en la bandeja.",
+      place:
+        "Encajaste {bone}: {title}, {organization}, {period}. Encajadas {placed} de {total}.",
+      miss: "{bone} no encaja ahí; volvió a la bandeja.",
+      placeAll: "Fósil completo. Debajo está toda la experiencia en texto.",
+      reset: "Las piezas volvieron a la bandeja.",
+    },
     academic: "Académica",
     work: "Laboral",
     all: "Todo",

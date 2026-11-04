@@ -25,6 +25,16 @@ export interface BoneShape {
   readonly path: string;
 }
 
+/** Una pieza lista para el tablero: su hueso, su sitio en la bandeja y sus textos. */
+export interface BoardPiece {
+  readonly shape: BoneShape;
+  readonly trayOrigin: Point;
+  /** Texto corto visible sobre el hueso (el año de inicio). */
+  readonly tag: string;
+  /** Nombre accesible del botón. */
+  readonly label: string;
+}
+
 export interface PuzzleBoard {
   readonly width: number;
   /** Alto de la losa de piedra; la bandeja de piezas va debajo. */
