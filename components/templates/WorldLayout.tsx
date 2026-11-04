@@ -34,7 +34,8 @@ export function WorldLayout({
     background: world.background,
   } as CSSProperties;
   return (
-    <div style={theme} className="text-leaf w-full overflow-x-clip">
+    // Los mundos conservan su paleta en los dos temas
+    <div style={theme} data-palette="night" className="text-leaf w-full overflow-x-clip">
       <SkipLink href={`#${MAIN_CONTENT_ID}`}>{COPY.nav.skipToContent}</SkipLink>
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
         <WorldHero

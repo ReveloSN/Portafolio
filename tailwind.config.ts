@@ -25,10 +25,16 @@ const config: Config = {
         glow: {
           DEFAULT: "var(--glow)",
           teal: "#6ef0e0",
-          amber: "#ffc46e",
+          /* Ámbar como texto: cambia con el tema para mantener contraste AA */
+          amber: "var(--amber-ink)",
           pink: "#ff8fb1",
         },
-        leaf: "#eef6e0",
+        /* Tokens del tema (app/theme.css) */
+        leaf: "var(--text)",
+        fg: "var(--text)",
+        muted: "var(--text-muted)",
+        surface: { DEFAULT: "var(--surface)", strong: "var(--surface-strong)" },
+        line: { DEFAULT: "var(--border)", strong: "var(--border-strong)" },
         parchment: "#f1d9a8",
       },
       fontFamily: {

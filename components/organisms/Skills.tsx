@@ -62,6 +62,7 @@ export function Skills({ skills }: SkillsProps) {
   return (
     <SectionShell
       id={SECTION_IDS.skills}
+      palette="night"
       background={BACKGROUND}
       style={SOIL}
       className="pt-[clamp(230px,18vw,280px)] pb-[clamp(90px,9vw,140px)]"

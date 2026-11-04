@@ -1,0 +1,128 @@
+/* ------------------------------------------------------------------ */
+/* Temas. Claro por defecto en :root; oscuro en [data-theme="dark"]      */
+/* (lo pone el script del <head>). Las escenas pintadas de noche (Hero,  */
+/* sitio de excavación, mundos) usan [data-palette="night"]: conservan   */
+/* su paleta oscura en los dos temas. Contrastes AA en lib/themeTokens.  */
+/* ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  /* Contenido */
+  --bg: #e4ecd9;
+  --text: #17261b;
+  --text-muted: #45574a;
+  --surface: rgba(255, 255, 255, 0.55);
+  --surface-strong: rgba(255, 255, 255, 0.85);
+  --border: rgba(23, 38, 27, 0.16);
+  --border-strong: rgba(23, 38, 27, 0.34);
+  --glow: #2d6a12;
+  --ink: #ffffff;
+  --amber-ink: #8a4b00;
+  --btn-dark-bg: #1d2e22;
+  --btn-dark-hover: #2a4130;
+  --btn-dark-fg: #f4f1e6;
+  --field-bg: rgba(255, 255, 255, 0.72);
+  --error-ink: #a1261a;
+  --error-edge: #c2412f;
+  --focus-halo: rgba(45, 106, 18, 0.22);
+  --card-shadow: rgba(40, 56, 30, 0.3);
+  --mist-color: color-mix(in srgb, #ffffff 30%, transparent);
+
+  /* Página */
+  --nav-bg: rgba(228, 236, 217, 0.86);
+  --nav-bg-solid: rgba(228, 236, 217, 0.98);
+  --scrollbar: #8aa27c;
+  --about-glow: #edf3e4;
+  --testimonials-glow: #eef3e6;
+  --contact-glow: #eef4e4;
+  --experience-glow: #f1ece0;
+
+  /* Costuras: el Hero es de noche en los dos temas; Habilidades termina en tierra */
+  --seam-hero-end: #07160f;
+  --seam-about-start: var(--seam-hero-end);
+  --seam-about-end: #e6eedb;
+  --seam-projects-start: var(--seam-about-end);
+  --seam-projects-end: #e1ead5;
+  --seam-testimonials-start: var(--seam-projects-end);
+  --seam-testimonials-end: #e3ebd8;
+  --seam-experience-start: var(--seam-testimonials-end);
+  --seam-experience-end: #e8e3d4;
+  --seam-skills-start: var(--seam-experience-end);
+  --seam-skills-end: #241508;
+  --seam-contact-start: var(--seam-skills-end);
+  --seam-contact-end: #dae5cd;
+
+  /* Fósil de la experiencia: losa de piedra clara, huesos marfil */
+  --fossil-stone: #c9bda5;
+  --fossil-stone-deep: #a4957a;
+  --fossil-socket: rgba(52, 38, 20, 0.28);
+  --fossil-socket-edge: rgba(60, 42, 20, 0.55);
+  --fossil-tray: rgba(120, 92, 52, 0.1);
+  --fossil-bone: #fbf6e8;
+  --fossil-bone-edge: #7a6542;
+  --fossil-shadow: rgba(60, 42, 20, 0.35);
+  --fossil-tag-bg: rgba(24, 18, 10, 0.86);
+  --fossil-tag-ink: #ffffff;
+  --fossil-card: rgba(255, 255, 255, 0.72);
+  --fossil-card-edge: rgba(138, 75, 0, 0.3);
+  --fossil-accent: #8a4b00;
+}
+
+/* Contenido oscuro: el tema oscuro completo y las escenas de noche */
+[data-theme="dark"],
+[data-palette="night"] {
+  --bg: #06120d;
+  --text: #eef6e0;
+  --text-muted: #b9c7b0;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-strong: rgba(255, 255, 255, 0.14);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.25);
+  --glow: #a6ff5c;
+  --ink: #07160f;
+  --amber-ink: #ffc46e;
+  --btn-dark-bg: #0b1d15;
+  --btn-dark-hover: #12301f;
+  --btn-dark-fg: #eef6e0;
+  --field-bg: rgba(3, 14, 9, 0.55);
+  --error-ink: #ffb3a8;
+  --error-edge: #ff8a7a;
+  --focus-halo: rgba(166, 255, 92, 0.18);
+  --card-shadow: rgba(0, 0, 0, 0.7);
+  --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
+  color: var(--text);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --nav-bg: rgba(5, 16, 11, 0.58);
+  --nav-bg-solid: rgba(5, 16, 11, 0.96);
+  --scrollbar: #2f5a3e;
+  --about-glow: #0a2418;
+  --testimonials-glow: #123a27;
+  --contact-glow: #1d4a22;
+  --experience-glow: #1f2a1d;
+
+  --seam-about-end: #0a1f17;
+  --seam-projects-end: #06120d;
+  --seam-testimonials-end: #06120d;
+  --seam-experience-end: #17110b;
+  --seam-skills-end: #05100b;
+  --seam-contact-end: #05100b;
+
+  --fossil-stone: #4a4034;
+  --fossil-stone-deep: #241d16;
+  --fossil-socket: rgba(10, 7, 4, 0.45);
+  --fossil-socket-edge: rgba(241, 217, 168, 0.4);
+  --fossil-tray: rgba(241, 217, 168, 0.06);
+  --fossil-bone: #ecdfc2;
+  --fossil-bone-edge: #8c7650;
+  --fossil-shadow: rgba(0, 0, 0, 0.5);
+  --fossil-tag-bg: rgba(14, 10, 6, 0.82);
+  --fossil-tag-ink: #f6eedb;
+  --fossil-card: rgba(14, 11, 7, 0.72);
+  --fossil-card-edge: rgba(255, 196, 110, 0.28);
+  --fossil-accent: #ffc46e;
+}

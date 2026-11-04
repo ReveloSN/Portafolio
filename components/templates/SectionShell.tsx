@@ -10,6 +10,8 @@ interface SectionShellProps {
   readonly className?: string;
   readonly style?: CSSProperties;
   readonly clip?: boolean;
+  /** Escena de noche (p. ej. bajo tierra): conserva la paleta oscura en los dos temas. */
+  readonly palette?: "night";
 }
 
 /** Contenedor común de las secciones: id para el scroll suave, fondo y padding fluido. */
@@ -21,6 +23,7 @@ export function SectionShell({
   className,
   style,
   clip = true,
+  palette,
 }: SectionShellProps) {
   return (
     <section
@@ -33,6 +36,7 @@ export function SectionShell({
         className,
       )}
       style={{ background, ...style }}
+      data-palette={palette}
     >
       {decoration}
       <div className="relative z-[2]">{children}</div>

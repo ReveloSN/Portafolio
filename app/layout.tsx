@@ -4,6 +4,7 @@ import { Figtree, JetBrains_Mono, Outfit } from "next/font/google";
 import { PortalProvider } from "@/components/templates/PortalProvider";
 import { COPY } from "@/data/copy";
 import { INTRO_BOOT_SCRIPT } from "@/lib/intro";
+import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -37,6 +38,8 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       suppressHydrationWarning
     >
       <head>
+        {/* Antes del primer pintado: tema (sin parpadeo) e intro vista */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
       </head>
       <body>

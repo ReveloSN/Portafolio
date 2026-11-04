@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @config "../tailwind.config.ts";
+@import "./theme.css";
 @import "./keyframes.css";
 @import "./motion.css";
 @import "./stage.css";
@@ -59,44 +60,12 @@
   --seam-blend: 16svh;
   /* Espacio libre bajo el contenido cuando la sección siguiente trae una banda 6:1 que sube */
   --divider-clearance: 13%; /* padding en %: relativo al ancho (1/6 × 78%) */
-  --seam-hero-end: #07160f;
-  --seam-about-start: var(--seam-hero-end);
-  --seam-about-end: #0a1f17;
-  --seam-projects-start: var(--seam-about-end);
-  --seam-projects-end: #06120d;
-  --seam-testimonials-start: var(--seam-projects-end);
-  --seam-testimonials-end: #06120d;
-  --seam-experience-start: var(--seam-testimonials-end);
-  --seam-experience-end: #17110b;
-  --seam-skills-start: var(--seam-experience-end);
-  --seam-skills-end: #05100b;
-  --seam-contact-start: var(--seam-skills-end);
-  --seam-contact-end: #05100b;
+  /* Los colores de cada costura están en app/theme.css (cambian con el tema) */
 
   /* Movimiento: todas las entradas usan la misma duración y curva */
   --dur-enter: 0.7s;
   --ease-enter: cubic-bezier(0.2, 0.8, 0.2, 1);
   --stagger-step: 80ms;
-
-  /* Tema */
-  --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
-  --glow: #a6ff5c;
-  --ink: #07160f;
-  /* Fósil de la experiencia: losa de piedra, huesos marfil y fichas */
-  --experience-glow: #1f2a1d;
-  --fossil-stone: #4a4034;
-  --fossil-stone-deep: #241d16;
-  --fossil-socket: rgba(10, 7, 4, 0.45);
-  --fossil-socket-edge: rgba(241, 217, 168, 0.4);
-  --fossil-tray: rgba(241, 217, 168, 0.06);
-  --fossil-bone: #ecdfc2;
-  --fossil-bone-edge: #8c7650;
-  --fossil-shadow: rgba(0, 0, 0, 0.5);
-  --fossil-tag-bg: rgba(14, 10, 6, 0.82);
-  --fossil-tag-ink: #f6eedb;
-  --fossil-card: rgba(14, 11, 7, 0.72);
-  --fossil-card-edge: rgba(255, 196, 110, 0.28);
-  --fossil-accent: #ffc46e;
 }
 
 /* Pantallas bajas (laptops con escala, móviles en horizontal) */
@@ -132,15 +101,13 @@
 
 html {
   scroll-behavior: smooth;
-  /* Tema oscuro también para los controles del navegador: sin barra de scroll blanca */
-  color-scheme: dark;
-  scrollbar-color: #2f5a3e var(--seam-projects-end);
+  scrollbar-color: var(--scrollbar) var(--seam-projects-end);
   background: var(--seam-projects-end);
 }
 
 body {
-  background: #06120d;
-  color: #eef6e0;
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-figtree), system-ui, sans-serif;
   font-size: var(--fs-base);
 }

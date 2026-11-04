@@ -34,6 +34,7 @@ export function Hero({ profile }: HeroProps) {
     <ParallaxStage
       as="section"
       id={SECTION_IDS.home}
+      palette="night"
       className="bg-jungle-700 fine:cursor-none relative h-svh min-h-80 overflow-hidden"
     >
       <JungleBackdrop
