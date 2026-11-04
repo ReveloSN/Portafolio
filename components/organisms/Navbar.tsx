@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
+import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
@@ -23,7 +24,7 @@ export function Navbar({ profile, links }: NavbarProps) {
   return (
     <header
       onBlur={onBlur}
-      className="-mb-nav sticky top-0 z-60 border-b border-white/10 bg-[rgba(5,16,11,.58)] backdrop-blur-[14px]"
+      className="-mb-nav border-line sticky top-0 z-60 border-b bg-(--nav-bg) backdrop-blur-[14px]"
     >
       <div className="h-nav px-gutter mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*100.0))] items-center justify-between gap-4">
         <a
@@ -53,31 +54,34 @@ export function Navbar({ profile, links }: NavbarProps) {
           </Button>
         </nav>
 
-        <button
-          ref={toggleRef}
-          type="button"
-          aria-label={nav.toggleMenu}
-          aria-expanded={open}
-          aria-controls="menu-movil"
-          onClick={toggle}
-          className="text-leaf inline-flex size-11 cursor-pointer items-center justify-center rounded-xl border border-white/25 bg-white/6 min-[1041px]:hidden"
-        >
-          <Icon name="burger" size={22} strokeWidth={2.4} />
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle toDarkLabel={nav.themeToDark} toLightLabel={nav.themeToLight} />
+          <button
+            ref={toggleRef}
+            type="button"
+            aria-label={nav.toggleMenu}
+            aria-expanded={open}
+            aria-controls="menu-movil"
+            onClick={toggle}
+            className="text-fg border-line-strong bg-surface inline-flex size-11 cursor-pointer items-center justify-center rounded-xl border min-[1041px]:hidden"
+          >
+            <Icon name="burger" size={22} strokeWidth={2.4} />
+          </button>
+        </div>
       </div>
 
       {open ? (
         <nav
           id="menu-movil"
           aria-label={nav.primaryLabel}
-          className="top-nav absolute right-0 left-0 flex max-h-[calc(100svh-var(--nav-h))] flex-col overflow-y-auto border-b border-white/12 bg-[rgba(5,16,11,.96)] px-6 pt-3 pb-6"
+          className="top-nav border-line absolute right-0 left-0 flex max-h-[calc(100svh-var(--nav-h))] flex-col overflow-y-auto border-b bg-(--nav-bg-solid) px-6 pt-3 pb-6"
         >
           {links.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
               onClick={close}
-              className="text-fluid-md border-b border-white/10 px-1 py-4 font-medium no-underline"
+              className="text-fluid-md border-line border-b px-1 py-4 font-medium no-underline"
             >
               {link.label}
             </a>

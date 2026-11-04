@@ -11,6 +11,8 @@ export const COPY = {
     toggleMenu: "Abrir o cerrar el menú",
     cvShort: "CV",
     cvFull: "Descargar CV",
+    themeToDark: "Cambiar a tema oscuro",
+    themeToLight: "Cambiar a tema claro",
   },
   hero: {
     eyebrow: "PORTAFOLIO",
