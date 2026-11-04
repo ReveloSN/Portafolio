@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { DigToolbar } from "@/components/molecules/DigToolbar";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SkillCell } from "@/components/molecules/SkillCell";
+import { SkillInventory } from "@/components/molecules/SkillInventory";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { DigHorizon } from "@/components/worlds/art/DigHorizon";
 import {
@@ -19,6 +20,8 @@ import { DIG_LAYERS_PER_CELL } from "@/lib/constants";
 import { buildDigAnnouncement } from "@/lib/digAnnouncement";
 import { buildCellLabels } from "@/lib/digLabels";
 import { hasDug } from "@/lib/digReducer";
+import { projectsBySlug } from "@/lib/collections";
+import { projectsUsing } from "@/lib/skills";
 import type { Skill } from "@/types/skill";
 
 interface SkillsProps {
@@ -40,6 +43,10 @@ const DIRT = [
 export function Skills({ skills }: SkillsProps) {
   const { skills: copy } = COPY;
   const site = useDigSite(skills.length);
+  const items = skills.map((skill) => ({
+    skill,
+    projects: projectsUsing(skill, projectsBySlug),
+  }));
   const message =
     site.found >= skills.length
       ? copy.messages.all
@@ -105,7 +112,7 @@ export function Skills({ skills }: SkillsProps) {
         />
 
         <ul className="gap-fluid-4 grid md:grid-cols-2 lg:grid-cols-3">
-          {skills.map((skill, i) => {
+          {items.map(({ skill, projects }, i) => {
             const dug = site.state.layers[i] ?? 0;
             const Fossil = FOSSILS[skill.fossil];
             const isLast = site.state.lastDug === i;
@@ -114,6 +121,7 @@ export function Skills({ skills }: SkillsProps) {
               <li key={skill.id} className="dig flex [&>article]:w-full">
                 <SkillCell
                   skill={skill}
+                  projects={projects}
                   layersDug={dug}
                   totalLayers={DIG_LAYERS_PER_CELL}
                   shake={shake}
@@ -127,6 +135,13 @@ export function Skills({ skills }: SkillsProps) {
             );
           })}
         </ul>
+
+        <SkillInventory
+          title={copy.inventoryTitle}
+          intro={copy.inventoryIntro}
+          usedInLabel={copy.usedIn}
+          items={items}
+        />
       </div>
     </SectionShell>
   );

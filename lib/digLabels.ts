@@ -17,7 +17,7 @@ export function buildCellLabels(
   return {
     grid: copy.grid,
     fossilFound: copy.fossilFound,
-    level: copy.level,
+    usedIn: copy.usedIn,
     stateDone: copy.found,
     stateLeft: unit,
     hint,

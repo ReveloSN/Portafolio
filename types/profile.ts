@@ -12,7 +12,15 @@ export interface QuickFact {
 }
 
 export type TechIconId =
-  "fastapi" | "spring" | "nestjs" | "nextjs" | "react" | "tailwind" | "godot";
+  | "fastapi"
+  | "spring"
+  | "nestjs"
+  | "nextjs"
+  | "react"
+  | "tailwind"
+  | "godot"
+  | "kotlin"
+  | "python";
 
 /** Tecnología del camino de huellas: su logotipo llena la huella y brilla con su color. */
 /** Colores del interior de la huella; si faltan se derivan del color de marca. */

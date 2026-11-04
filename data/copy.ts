@@ -105,7 +105,7 @@ export const COPY = {
     eyebrow: "SECCIÓN ADICIONAL · HABILIDADES",
     title: "Sitio de excavación: mi stack",
     intro:
-      "Cada tecnología es un fósil enterrado que fui desenterrando proyecto a proyecto. Toca una cuadrícula para quitar una capa de tierra; cada una esconde tres.",
+      "Cada tecnología es un fósil enterrado que fui desenterrando proyecto a proyecto. Toca una cuadrícula para quitar una capa de tierra; cada una esconde tres y debajo está dónde la usé.",
     findings: "HALLAZGOS",
     digAll: "Excavar todo",
     cover: "Cubrir de nuevo",
@@ -118,7 +118,7 @@ export const COPY = {
     },
     grid: "CUADRÍCULA",
     fossilFound: "FÓSIL DESENTERRADO",
-    level: "Nivel",
+    usedIn: "Usado en",
     found: "Hallazgo",
     layerOne: "capa",
     layerMany: "capas",
@@ -127,6 +127,8 @@ export const COPY = {
     hintKeep: "Sigue excavando",
     digLabel: "Excavar",
     sign: ["ZONA DE", "EXCAVACIÓN"],
+    inventoryTitle: "Inventario de hallazgos",
+    inventoryIntro: "Todo lo que hay bajo la tierra, sin necesidad de excavar.",
     messages: {
       none: "Toca una cuadrícula para empezar a excavar.",
       some: "Buen ojo. Aún quedan fósiles bajo la tierra.",

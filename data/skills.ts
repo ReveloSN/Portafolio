@@ -1,7 +1,9 @@
 import type { Skill } from "@/types/skill";
 
-const NOTE = "[En qué proyecto lo usaste y qué construiste.]";
-
+/**
+ * Hallazgos del sitio de excavación. `usedIn` son slugs de proyectos de `projects.ts`:
+ * el nombre que se muestra sale de allí, así un proyecto renombrado no se desincroniza.
+ */
 export const SKILLS: readonly Skill[] = [
   {
     id: "react-native",
@@ -10,10 +12,8 @@ export const SKILLS: readonly Skill[] = [
     grid: "A1",
     depth: "−0.4 m",
     fossil: "ammonite",
-    levelLabel: "Intermedio",
-    percent: 75,
-    bone: "femur",
-    note: NOTE,
+    icon: "react",
+    usedIn: ["selva"],
   },
   {
     id: "kotlin",
@@ -22,10 +22,8 @@ export const SKILLS: readonly Skill[] = [
     grid: "A2",
     depth: "−0.8 m",
     fossil: "bone",
-    levelLabel: "Intermedio",
-    percent: 65,
-    bone: "femur",
-    note: NOTE,
+    icon: "kotlin",
+    usedIn: ["oceano"],
   },
   {
     id: "python",
@@ -34,10 +32,8 @@ export const SKILLS: readonly Skill[] = [
     grid: "A3",
     depth: "−1.2 m",
     fossil: "fern",
-    levelLabel: "Avanzado",
-    percent: 80,
-    bone: "femur",
-    note: NOTE,
+    icon: "python",
+    usedIn: ["oceano", "cueva"],
   },
   {
     id: "godot",
@@ -46,10 +42,8 @@ export const SKILLS: readonly Skill[] = [
     grid: "B1",
     depth: "−1.6 m",
     fossil: "trilobite",
-    levelLabel: "Intermedio",
-    percent: 70,
-    bone: "rib",
-    note: NOTE,
+    icon: "godot",
+    usedIn: ["cueva"],
   },
   {
     id: "tailwind",
@@ -58,10 +52,8 @@ export const SKILLS: readonly Skill[] = [
     grid: "B2",
     depth: "−2.0 m",
     fossil: "shell",
-    levelLabel: "Avanzado",
-    percent: 85,
-    bone: "rib",
-    note: NOTE,
+    icon: "tailwind",
+    usedIn: ["cueva", "selva"],
   },
   {
     id: "nextjs",
@@ -70,9 +62,7 @@ export const SKILLS: readonly Skill[] = [
     grid: "B3",
     depth: "−2.4 m",
     fossil: "nautilus",
-    levelLabel: "En camino",
-    percent: 60,
-    bone: "femur",
-    note: NOTE,
+    icon: "nextjs",
+    usedIn: ["selva", "oceano"],
   },
 ];

@@ -3,18 +3,17 @@
 import { type ReactNode, useRef } from "react";
 import { Badge } from "@/components/atoms/Badge";
 import { Icon } from "@/components/atoms/Icon";
-import { Illustration } from "@/components/atoms/Illustration";
-import { BoneMeter } from "@/components/molecules/BoneMeter";
-import { ART } from "@/data/art";
+import { TechIcon } from "@/components/atoms/TechIcon";
+import { UsedIn } from "@/components/molecules/UsedIn";
 import { useFocusOnComplete } from "@/hooks/useFocusOnComplete";
 import { cn } from "@/lib/utils";
-import type { BoneKind, Skill, SkillCellLabels } from "@/types/skill";
-import type { ArtEntry } from "@/types/art";
-
-const BONES: Readonly<Record<BoneKind, ArtEntry>> = { femur: ART.bone1, rib: ART.bone2 };
+import type { Project } from "@/types/project";
+import type { Skill, SkillCellLabels } from "@/types/skill";
 
 interface SkillCellProps {
   readonly skill: Skill;
+  /** Proyectos donde se usó, ya resueltos desde `skill.usedIn`. */
+  readonly projects: readonly Project[];
   readonly layersDug: number;
   readonly totalLayers: number;
   readonly shake: "hitA" | "hitB" | "";
@@ -29,6 +28,7 @@ interface SkillCellProps {
 
 export function SkillCell({
   skill,
+  projects,
   layersDug,
   totalLayers,
   shake,
@@ -65,36 +65,20 @@ export function SkillCell({
         <Badge>{done ? labels.stateDone : `${left} ${labels.stateLeft}`}</Badge>
       </div>
       <div className={cn("pit", shake)}>
-        {/* Mientras el fósil sigue enterrado no se expone a lectores de pantalla. */}
-        <div className="find" aria-hidden={done ? undefined : true}>
+        {/* Enterrado: inerte (ni foco ni lector de pantalla) hasta quitar la última capa. */}
+        <div className="find" inert={!done}>
           <div className="flex items-center gap-3.5">
             {fossil}
             <p className="text-glow-amber text-fluid-xs font-mono tracking-[.14em]">
               {labels.fossilFound}
             </p>
           </div>
-          <p className="text-fluid-sm leading-normal opacity-90">{skill.note}</p>
-          <div className="mt-auto flex items-end justify-between gap-3">
-            <div className="text-fluid-xs font-semibold">
-              <span className="flex items-center gap-1.5">
-                <Illustration
-                  decorative
-                  src={ART.boneSmall.src}
-                  width={ART.boneSmall.width}
-                  height={ART.boneSmall.height}
-                  sizes="24px"
-                  className="w-5 flex-none"
-                />
-                {labels.level}
-              </span>
-              <span className="text-glow-amber mt-1 block">
-                {skill.levelLabel} · {skill.percent}%
-              </span>
-            </div>
-            <BoneMeter
-              bone={BONES[skill.bone]}
-              percent={skill.percent}
-              label={`${labels.level} ${skill.name}`}
+          <div className="mt-auto flex items-end gap-3.5">
+            <TechIcon id={skill.icon} className="text-glow-amber size-11 flex-none" />
+            <UsedIn
+              label={labels.usedIn}
+              projects={projects}
+              className="text-fluid-sm min-w-0"
             />
           </div>
         </div>

@@ -386,20 +386,9 @@
   margin-top: calc(var(--u) * 2.2);
 }
 
-/* Barra de nivel en hueso: se revela de izquierda a derecha al desenterrar la celda */
-.bone-fill {
-  clip-path: inset(0 var(--bone-fill, 0%) 0 0);
-}
-.cell.full .bone-fill {
-  animation: bone-reveal var(--dur-enter) var(--ease-enter) both;
-}
-
 /* Pantallas bajas: el pozo de excavación se compacta para que la celda quepa entera */
 @media (max-height: 640px) {
   .pit {
     height: 12rem;
-  }
-  .bone-meter {
-    width: 4.75rem;
   }
 }

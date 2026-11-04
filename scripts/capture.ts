@@ -23,7 +23,6 @@ const MUST_NOT_CLIP = [
   "[data-testid=hero-canoe]",
   "[data-testid=hero-dino]",
   ".track-step img",
-  ".bone-meter img",
   "[data-testid=egg-nest] svg",
   "#proyectos article svg",
 ];
