@@ -5,7 +5,8 @@ export type SeamId =
   | "hero-about"
   | "about-projects"
   | "projects-testimonials"
-  | "testimonials-skills"
+  | "testimonials-experience"
+  | "experience-skills"
   | "contact-footer";
 
 /**

@@ -60,7 +60,7 @@ export function Skills({ skills }: SkillsProps) {
       className="pt-[clamp(230px,18vw,280px)] pb-[clamp(90px,9vw,140px)]"
       decoration={
         <>
-          <SeamLayer seam="testimonials-skills" host="lower" />
+          <SeamLayer seam="experience-skills" host="lower" />
           <DigHorizon
             sign={copy.sign}
             preserveAspectRatio="xMidYMax slice"

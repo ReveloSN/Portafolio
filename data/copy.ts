@@ -53,6 +53,21 @@ export const COPY = {
     carouselLabel: "Testimonios",
     ratingLabel: "de 5 estrellas",
   },
+  experience: {
+    eyebrow: "INMERSIÓN AL ABISMO",
+    title: "Experiencia académica y laboral",
+    intro:
+      "Baja siguiendo el sedal: cada placa es un capítulo, del más reciente al más antiguo. Ilumínala con la linterna, o enciende las luces, para leer sus logros.",
+    academic: "Académica",
+    work: "Laboral",
+    all: "Todo",
+    filterLabel: "Filtrar la inmersión por tipo de experiencia",
+    achievements: "Logros",
+    showing: "Mostrando {shown} de {total} experiencias",
+    surface: "0 m",
+    lights: "Encender luces",
+    backToSurface: "Volver a la superficie",
+  },
   contact: {
     eyebrow: "EL NIDO",
     title: "¿Exploramos algo juntos?",

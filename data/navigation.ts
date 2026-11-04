@@ -5,6 +5,7 @@ export const SECTION_IDS = {
   about: "sobre-mi",
   projects: "proyectos",
   testimonials: "testimonios",
+  experience: "experiencia",
   skills: "habilidades",
   contact: "contacto",
 } as const;
@@ -17,6 +18,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { id: SECTION_IDS.about, label: "Sobre mí" },
   { id: SECTION_IDS.projects, label: "Proyectos" },
   { id: SECTION_IDS.testimonials, label: "Testimonios" },
+  { id: SECTION_IDS.experience, label: "Experiencia" },
   { id: SECTION_IDS.skills, label: "Habilidades" },
   { id: SECTION_IDS.contact, label: "Contacto" },
 ];
