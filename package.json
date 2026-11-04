@@ -14,9 +14,6 @@
     "capture": "tsx scripts/capture.ts",
     "about": "tsx scripts/about.ts",
     "test": "vitest run",
-    "optimize:lake": "tsx scripts/optimize-lake.ts",
-    "optimize:abyss": "tsx scripts/optimize-abyss.ts",
-    "abyss:shots": "tsx scripts/abyss-shots.ts",
     "smoke": "tsx scripts/smoke.ts"
   },
   "dependencies": {

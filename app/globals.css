@@ -8,8 +8,6 @@
 @import "./art.css";
 @import "./flip.css";
 @import "./about.css";
-@import "./abyss.css";
-@import "./dive.css";
 @import "./fossil.css";
 @import "./portal.css";
 
@@ -99,12 +97,6 @@
   --fossil-card: rgba(14, 11, 7, 0.72);
   --fossil-card-edge: rgba(255, 196, 110, 0.28);
   --fossil-accent: #ffc46e;
-  /* Inmersión de experiencia: placas luminosas sobre el agua oscura */
-  --abyss-ink: #f3f1e8;
-  --abyss-muted: #a9c6c4;
-  --abyss-lime: #b8f27c;
-  --abyss-amber: #ffc46b;
-  --abyss-plate: rgba(6, 15, 21, 0.9);
 }
 
 /* Pantallas bajas (laptops con escala, móviles en horizontal) */

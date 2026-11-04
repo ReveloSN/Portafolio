@@ -80,13 +80,7 @@ export const COPY = {
     },
     academic: "Académica",
     work: "Laboral",
-    all: "Todo",
-    filterLabel: "Filtrar la inmersión por tipo de experiencia",
     achievements: "Logros",
-    showing: "Mostrando {shown} de {total} experiencias",
-    surface: "0 m",
-    lights: "Encender luces",
-    backToSurface: "Volver a la superficie",
   },
   contact: {
     eyebrow: "EL NIDO",
