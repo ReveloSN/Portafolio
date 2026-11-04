@@ -112,7 +112,9 @@ export function LakeSurface() {
       </div>
       <span className="dive-line" style={rise("rig")} />
       <span className="dive-thread" style={rise("rig")} />
-      <span className="dive-bait" data-testid="dive-bait" />
+      <span className="dive-bait" data-testid="dive-bait">
+        <span className="dive-bait-glow" />
+      </span>
     </div>
   );
 }

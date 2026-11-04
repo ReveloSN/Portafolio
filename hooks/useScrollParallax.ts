@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { supportsScrollTimeline } from "@/lib/dom";
 
 type Subscriber = () => void;
 
@@ -26,9 +27,6 @@ function subscribe(update: Subscriber) {
     if (subscribers.size === 0) window.removeEventListener("scroll", onScroll);
   };
 }
-
-const supportsScrollTimeline = () =>
-  typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()");
 
 /**
  * Paralaje de scroll. Con soporte de `animation-timeline: view()` lo hace el CSS

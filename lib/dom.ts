@@ -9,3 +9,7 @@ export function listen<K extends keyof HTMLElementEventMap>(
   target.addEventListener(type, listener, options);
   return () => target.removeEventListener(type, listener, options);
 }
+
+/** Animaciones ligadas al scroll (`animation-timeline`): Chrome, Edge y Safari; no Firefox. */
+export const supportsScrollTimeline = () =>
+  typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()");

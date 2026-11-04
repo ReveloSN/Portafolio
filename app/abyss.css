@@ -1,8 +1,11 @@
 /* ------------------------------------------------------------------ */
 /* Inmersión al abismo: el escenario fijo de la sección Experiencia.    */
-/* Todo se mueve con variables que publica useDepthProgress (--depth,   */
-/* --surface) y usePointerLight (--lx, --ly), solo con transform y      */
-/* opacity. Sin JS o con movimiento reducido, ver dive.css.             */
+/* El avance se lee en dos ejes: --depth (0 a 1, toda la sección) y     */
+/* --surface (0 a 1, la primera pantalla). Con animaciones ligadas al   */
+/* scroll los lleva el CSS (bloque @supports al final); sin ellas, los  */
+/* publica useDepthProgress. La linterna (--lx, --ly) es de             */
+/* usePointerLight. Solo transform y opacity. Sin JS o con movimiento   */
+/* reducido, ver dive.css.                                              */
 /* ------------------------------------------------------------------ */
 
 /* Radio del haz como longitud registrada: getComputedStyle lo devuelve en px */
@@ -134,6 +137,12 @@
 }
 
 /* Criaturas -------------------------------------------------------------- */
+/* Envoltorio con la ventana de la zona (--from, --to): del tamaño del escenario */
+.creature-window {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
 .creature {
   position: absolute;
   left: 0;
@@ -308,9 +317,6 @@
   top: 0;
   width: max(0.7rem, calc(var(--u) * 1.1));
   aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff8d6, var(--abyss-amber) 45%, transparent 72%);
-  box-shadow: 0 0 calc(var(--u) * 1.6) calc(var(--u) * 0.4) rgba(255, 196, 107, 0.5);
   transform: translate3d(
     -50%,
     calc(
@@ -321,6 +327,14 @@
   );
 }
 
+.dive-bait-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8d6, var(--abyss-amber) 45%, transparent 72%);
+  box-shadow: 0 0 calc(var(--u) * 1.6) calc(var(--u) * 0.4) rgba(255, 196, 107, 0.5);
+}
+
 /* Linterna --------------------------------------------------------------- */
 /* La oscuridad es una capa grande con el hueco radial pintado una sola vez en su
    centro; para seguir al puntero solo se traslada (transform), sin repintar. */
@@ -329,6 +343,12 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+}
+/* Oscuridad y tinte van juntos en el haz: "Encender luces" lo apaga entero */
+.dive-beam {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.6s var(--ease-enter);
 }
 .dive-dark,
 .dive-glow {
@@ -394,8 +414,7 @@
   filter: drop-shadow(0 0 10px rgba(255, 196, 107, 0.7));
 }
 /* Luces encendidas: sin oscuridad ni tinte, todo a la vista */
-.dive[data-lights="on"] .dive-dark,
-.dive[data-lights="on"] .dive-glow {
+.dive[data-lights="on"] .dive-beam {
   opacity: 0;
 }
 
@@ -458,6 +477,7 @@
     .abyss-rays,
     .abyss-kelp,
     .abyss-motes,
+    .creature-window,
     .creature,
     .dive-dark,
     .dive-glow,

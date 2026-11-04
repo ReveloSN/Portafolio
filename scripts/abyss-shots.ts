@@ -158,7 +158,7 @@ async function checkLights(page: Page, label: string) {
   await page
     .waitForFunction(
       () =>
-        getComputedStyle(document.querySelector(".dive-dark")!).opacity === "0" &&
+        getComputedStyle(document.querySelector(".dive-beam")!).opacity === "0" &&
         [...document.querySelectorAll(".dive-card-achievements")].every(
           (log) => getComputedStyle(log).opacity === "1",
         ),
@@ -170,7 +170,7 @@ async function checkLights(page: Page, label: string) {
     pressed: document
       .querySelector("[data-testid=lights-toggle]")
       ?.getAttribute("aria-pressed"),
-    dark: getComputedStyle(document.querySelector(".dive-dark")!).opacity,
+    dark: getComputedStyle(document.querySelector(".dive-beam")!).opacity,
     hidden: [...document.querySelectorAll(".dive-card-achievements")].filter(
       (log) => getComputedStyle(log).opacity !== "1",
     ).length,
