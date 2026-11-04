@@ -39,7 +39,6 @@ export const COPY = {
     intro:
       "Código que se puede ver funcionando y repositorios que se pueden leer. Entra a cada mundo para conocer el problema, mi rol y el resultado.",
     github: "GitHub",
-    demo: "Demo en vivo",
     enterWorld: "Entrar al mundo",
     forProject: "de {name}",
     newTab: "(se abre en una pestaña nueva)",
@@ -154,7 +153,6 @@ export const COPY = {
     galleryTitle: "Capturas del proyecto",
     technologies: "TECNOLOGÍAS",
     code: "Ver código",
-    tryDemo: "Probar demo",
     chooseTitle: "Elige otro mundo",
     chooseIntro: "Cada proyecto vive en un lugar distinto.",
     here: "estás aquí",

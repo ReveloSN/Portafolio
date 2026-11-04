@@ -43,7 +43,7 @@ const MUST_BE_VISIBLE = [
 
 /** Primera pantalla de cada página de mundo. */
 const WORLD_SLUGS = ["selva", "oceano", "cueva"] as const;
-const WORLD_MUST_BE_VISIBLE = ["world-title", "world-cta-code", "world-cta-demo"];
+const WORLD_MUST_BE_VISIBLE = ["world-title", "world-cta-code"];
 
 /** Escenas que deben caber completas en el alto visible (sin alejar el zoom). */
 const SCENES_FIT = ["lake-scene", "carousel-stage", "egg-nest", "dig-cell"];

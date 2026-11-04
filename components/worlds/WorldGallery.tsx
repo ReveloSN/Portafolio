@@ -53,10 +53,6 @@ export function WorldGallery({ project }: WorldGalleryProps) {
             <Icon name="github" />
             {copy.code}
           </Button>
-          <Button href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-            <Icon name="vercel" size={14} />
-            {copy.tryDemo}
-          </Button>
         </div>
       </div>
     </section>

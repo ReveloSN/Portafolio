@@ -3,7 +3,6 @@ import type { ReactNode, SVGProps } from "react";
 export type IconName =
   | "download"
   | "github"
-  | "vercel"
   | "mail"
   | "linkedin"
   | "instagram"
@@ -33,7 +32,6 @@ const GITHUB_PATH =
 const ICONS: Readonly<Record<IconName, IconSpec>> = {
   download: { paths: <path d="M12 3v12M6 11l6 6 6-6M4 21h16" /> },
   github: { filled: true, paths: <path d={GITHUB_PATH} /> },
-  vercel: { filled: true, paths: <path d="M12 3l10 18H2z" /> },
   mail: {
     paths: (
       <>

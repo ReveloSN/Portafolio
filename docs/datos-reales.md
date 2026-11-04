@@ -42,7 +42,6 @@ Para cada proyecto (1, 2 y 3):
 - [ ] `summary` y `tagline`: placeholders de dos líneas y de una frase.
 - [ ] `technologies`: el stack de ejemplo incluye `"[Tecnología]"`; el resto (React Native / Kotlin / Godot) también es de ejemplo.
 - [ ] `repoUrl` (`https://github.com/tu-usuario/proyecto-N`): repositorio real.
-- [ ] `demoUrl` (`https://proyecto-N.vercel.app`): demo real. El campo es obligatorio en el tipo; si no hay demo, hay que cambiar el tipo y el componente (pendiente).
 - [ ] `problem`: 3 o 4 líneas sobre el problema real.
 - [ ] `roleItems` (3 elementos): qué diseñaste, qué programaste, con quién trabajaste.
 - [ ] `metrics` (3 pares `value` / `label`): cifras reales, p. ej. "[00%]" / "[Métrica 2]". Si no hay cifras, quita el bloque en el componente (pendiente).
@@ -112,7 +111,7 @@ Seis habilidades de ejemplo: React Native, Kotlin, Python, Godot, Tailwind CSS y
 ## Antes de publicar
 
 - [ ] No queda ningún `[`, ni `tu-usuario`, ni `tu@correo.com` en `data/` (comandos de arriba).
-- [ ] Todos los enlaces (`repoUrl`, `demoUrl`, redes y contacto) abren la página correcta.
+- [ ] Todos los enlaces (`repoUrl`, redes y contacto) abren la página correcta.
 - [ ] `public/cv.pdf` abre y descarga desde el Hero y desde la barra de navegación.
 - [ ] Revisa en móvil (390 px) que los textos largos no rompan el diseño.
 - [ ] Corre `npm run lint`, `npx tsc --noEmit`, `npm test` y `npm run build`.

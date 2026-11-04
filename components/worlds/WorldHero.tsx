@@ -64,15 +64,6 @@ export function WorldHero({ world, project, ownerName, Scene }: WorldHeroProps) 
             <Icon name="github" />
             {projects.github}
           </Button>
-          <Button
-            href={project.demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="world-cta-demo"
-          >
-            <Icon name="vercel" size={14} />
-            {projects.demo}
-          </Button>
         </div>
       </div>
     </ParallaxStage>

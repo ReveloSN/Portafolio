@@ -7,7 +7,6 @@ import type { Project } from "@/types/project";
 
 export interface ProjectCardLabels {
   readonly github: string;
-  readonly demo: string;
   readonly enterWorld: string;
   /** Plantilla con `{name}`: da a cada enlace repetido un nombre único. */
   readonly forProject: string;
@@ -67,19 +66,6 @@ export function ProjectCard({
           >
             <Icon name="github" />
             {labels.github}
-            <span className="sr-only">
-              {" "}
-              {owner} {labels.newTab}
-            </span>
-          </Button>
-          <Button
-            size="sm"
-            href={project.demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Icon name="vercel" size={14} />
-            {labels.demo}
             <span className="sr-only">
               {" "}
               {owner} {labels.newTab}

@@ -13,7 +13,7 @@ Estado al cierre de la versión final. Verificado con Lighthouse (portada 97, mu
 - [x] Abismo: `aria-live` con `aria-atomic` en los filtros, `aria-pressed` en "Encender luces", contraste de las placas ≥ 4,5:1 comprobado por un test.
 - [x] Carrusel de testimonios: puntos de al menos 28x28 px con "Testimonio N de M" y `aria-current`; sin reproducción automática (2.2.2).
 - [x] Formulario: errores con `role="alert"`, confirmación honesta (se abre la app de correo) y foco en el título de la confirmación.
-- [x] Enlaces repetidos con nombre propio ("GitHub de [proyecto]", "Demo en vivo de [proyecto]"), con aviso de pestaña nueva (2.4.4 y 2.5.3).
+- [x] Enlaces repetidos con nombre propio ("GitHub de [proyecto]", "Entrar al mundo de [proyecto]"), con aviso de pestaña nueva (2.4.4 y 2.5.3).
 - [x] Objetivos táctiles de 44 px en botones, pie y marca en pantallas táctiles.
 - [x] Sin scroll horizontal en los tres anchos.
 

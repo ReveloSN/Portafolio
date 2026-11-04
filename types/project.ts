@@ -18,7 +18,6 @@ export interface Project {
   readonly tagline: string;
   readonly technologies: readonly string[];
   readonly repoUrl: string;
-  readonly demoUrl: string;
   readonly problem: string;
   readonly roleItems: readonly string[];
   readonly metrics: readonly ProjectMetric[];
