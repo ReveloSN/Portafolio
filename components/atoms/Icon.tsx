@@ -9,7 +9,6 @@ export type IconName =
   | "pin"
   | "cap"
   | "heart"
-  | "briefcase"
   | "star"
   | "quote"
   | "chevronLeft"
@@ -17,8 +16,7 @@ export type IconName =
   | "burger"
   | "arrowUp"
   | "arrowDown"
-  | "shovel"
-  | "lantern";
+  | "shovel";
 
 interface IconSpec {
   readonly paths: ReactNode;
@@ -76,14 +74,6 @@ const ICONS: Readonly<Record<IconName, IconSpec>> = {
       <path d="M12 20s-8-4.6-8-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.8C20 15.4 12 20 12 20z" />
     ),
   },
-  briefcase: {
-    paths: (
-      <>
-        <rect x="3" y="7" width="18" height="13" rx="2" />
-        <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18" />
-      </>
-    ),
-  },
   star: {
     filled: true,
     paths: (
@@ -103,9 +93,6 @@ const ICONS: Readonly<Record<IconName, IconSpec>> = {
   arrowUp: { paths: <path d="M12 20V5M5 12l7-7 7 7" /> },
   arrowDown: { viewBox: "0 0 18 26", paths: <path d="M9 2v20M2 15l7 8 7-8" /> },
   shovel: { paths: <path d="M14 3l7 7-3 3-7-7zM11 6L3 21l15-8" /> },
-  lantern: {
-    paths: <path d="M9 3h6M10 3v3M14 3v3M7 6h10l-1 13H8zM10 10v5M14 10v5M9 21h6" />,
-  },
 };
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {

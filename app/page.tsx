@@ -16,9 +16,6 @@ import { TESTIMONIALS } from "@/data/testimonials";
 const Testimonials = dynamic(() =>
   import("@/components/organisms/Testimonials").then((m) => m.Testimonials),
 );
-const Experience = dynamic(() =>
-  import("@/components/organisms/Experience").then((m) => m.Experience),
-);
 const Contact = dynamic(() =>
   import("@/components/organisms/Contact").then((m) => m.Contact),
 );
@@ -40,7 +37,6 @@ export default function Home() {
         <About profile={PROFILE} />
         <Projects projects={PROJECTS} />
         <Testimonials testimonials={TESTIMONIALS} />
-        <Experience />
         <Skills skills={SKILLS} />
         <Contact eggs={CONTACT_EGGS} />
       </main>

@@ -1,7 +1,5 @@
-import { EXPERIENCE } from "@/data/experience";
 import { PROJECTS } from "@/data/projects";
 import { WORLDS } from "@/data/worlds";
-import type { ExperienceEntry } from "@/types/experience";
 import type { Project } from "@/types/project";
 import type { World, WorldSlug } from "@/types/world";
 
@@ -19,12 +17,3 @@ export const worldsBySlug: ReadonlyMap<WorldSlug, World> = indexBy(
   (world) => world.slug,
 );
 
-/** Ordena de lo más reciente a lo más antiguo. Se calcula una sola vez al cargar el módulo. */
-export const sortedExperience: readonly ExperienceEntry[] = [...EXPERIENCE].sort(
-  (a, b) => b.startYear - a.startYear,
-);
-
-export const experienceById: ReadonlyMap<string, ExperienceEntry> = indexBy(
-  EXPERIENCE,
-  (entry) => entry.id,
-);

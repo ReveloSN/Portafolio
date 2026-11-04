@@ -8,8 +8,6 @@
 @import "./art.css";
 @import "./flip.css";
 @import "./about.css";
-@import "./abyss.css";
-@import "./dive.css";
 @import "./portal.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
@@ -67,9 +65,7 @@
   --seam-projects-end: #06120d;
   --seam-testimonials-start: var(--seam-projects-end);
   --seam-testimonials-end: #06120d;
-  --seam-experience-start: var(--seam-testimonials-end);
-  --seam-experience-end: #08171e;
-  --seam-skills-start: var(--seam-experience-end);
+  --seam-skills-start: var(--seam-testimonials-end);
   --seam-skills-end: #05100b;
   --seam-contact-start: var(--seam-skills-end);
   --seam-contact-end: #05100b;
@@ -83,12 +79,6 @@
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   --glow: #a6ff5c;
   --ink: #07160f;
-  /* Inmersión de experiencia: placas luminosas sobre el agua oscura */
-  --abyss-ink: #f3f1e8;
-  --abyss-muted: #a9c6c4;
-  --abyss-lime: #b8f27c;
-  --abyss-amber: #ffc46b;
-  --abyss-plate: rgba(6, 15, 21, 0.9);
 }
 
 /* Pantallas bajas (laptops con escala, móviles en horizontal) */
