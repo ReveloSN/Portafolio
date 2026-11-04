@@ -440,3 +440,21 @@
     opacity: 0.95;
   }
 }
+
+/* Inmersión ligada al scroll: cada capa define de dónde a dónde va (app/abyss.css) */
+@keyframes dive-travel {
+  from {
+    transform: var(--travel-from);
+  }
+  to {
+    transform: var(--travel-to);
+  }
+}
+@keyframes dive-opacity {
+  from {
+    opacity: var(--fade-from);
+  }
+  to {
+    opacity: var(--fade-to);
+  }
+}

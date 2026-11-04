@@ -4,6 +4,7 @@ import { useEffect, useRef, type RefObject } from "react";
 import { ABYSS_ZONES, DIVE_LAYOUT } from "@/data/abyss";
 import { activeIndexAt, diveProgress, zoneAt } from "@/lib/abyss/depth";
 import type { FrameLoop } from "@/lib/abyss/frame";
+import { supportsScrollTimeline } from "@/lib/dom";
 
 export interface DepthState {
   readonly depth: number;
@@ -31,8 +32,10 @@ function markActive(list: HTMLElement | null, active: number) {
 
 /**
  * Avance de la inmersión con el scroll: el único listener de scroll de la sección (pasivo)
- * pide un frame al bucle compartido. Publica en el escenario --depth (0 a 1) y --surface
- * (salida de la primera pantalla), y en la sección data-zone y data-inview para el CSS;
+ * pide un frame al bucle compartido. Publica en la sección data-zone y data-inview para el
+ * CSS y, solo si el navegador no tiene animaciones ligadas al scroll, --depth (0 a 1) y
+ * --surface (salida de la primera pantalla) en el escenario (con ellas, el CSS mueve las
+ * capas en el compositor y escribirlas en cada frame recalcularía todo el escenario);
  * solo escribe lo que cambió, y fuera de pantalla no hace nada. Sin re-render por frame:
  * devuelve una ref que lee la linterna.
  */
@@ -48,6 +51,7 @@ export function useDepthProgress(
     const root = dive.current;
     const scene = stage.current;
     if (!enabled || !root || !scene) return;
+    const cssDriven = supportsScrollTimeline();
     let inView = false;
     let top = 0;
     let height = 0;
@@ -67,8 +71,9 @@ export function useDepthProgress(
       const active = activeIndexAt(depth, count, DIVE_LAYOUT);
       const depthText = depth.toFixed(PRECISION);
       const surfaceText = surface.toFixed(PRECISION);
-      if (depthText !== written.depth) scene.style.setProperty("--depth", depthText);
-      if (surfaceText !== written.surface)
+      if (!cssDriven && depthText !== written.depth)
+        scene.style.setProperty("--depth", depthText);
+      if (!cssDriven && surfaceText !== written.surface)
         scene.style.setProperty("--surface", surfaceText);
       const zone = zoneAt(depth, ABYSS_ZONES);
       if (zone !== written.zone) root.dataset.zone = zone;

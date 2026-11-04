@@ -485,3 +485,193 @@
   ) {
   will-change: transform, opacity;
 }
+
+/* ------------------------------------------------------------------ */
+/* Con animaciones ligadas al scroll (Chrome, Edge, Safari) el avance   */
+/* lo lleva el navegador en el compositor: el JS no escribe --depth ni  */
+/* --surface y nada se recalcula en cada frame. Equivalencias con las   */
+/* fórmulas de arriba, sobre la línea de tiempo de la sección:          */
+/*   --depth 0 a 1   =  rango "contain" 0 % a 100 %                     */
+/*   --surface 0 a 1 =  "contain 0" a "contain 100svh"                  */
+/* Cada capa dice de dónde a dónde va (--travel-*, --fade-*) con los    */
+/* keyframes genéricos dive-travel y dive-opacity (keyframes.css).      */
+/* ------------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  .dive {
+    view-timeline: --dive block;
+  }
+
+  /* Arriba, el fundido con la sección anterior se va en el primer tercio de pantalla */
+  .dive-stage::before {
+    --fade-from: 1;
+    --fade-to: 0;
+    animation: dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain calc(100svh / 3);
+  }
+
+  /* Agua: cada zona entra en el fundido previo a su inicio; todas bajan un poco */
+  .abyss-backdrop {
+    --fade-from: 0;
+    --fade-to: 1;
+    --travel-from: translate3d(0, 0, 0);
+    --travel-to: translate3d(0, -8svh, 0);
+    animation:
+      dive-opacity linear both,
+      dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range:
+      contain calc((var(--from) - var(--zone-fade)) * 100%) contain
+        calc(var(--from) * 100%),
+      contain 0% contain 100%;
+  }
+  /* La primera zona ya está a la vista al llegar */
+  .abyss-backdrop[data-zone="surface"] {
+    animation-name: none, dive-travel;
+  }
+
+  /* Rayos: se apagan hasta 0.375 de profundidad */
+  .abyss-rays {
+    --fade-from: 0.9;
+    --fade-to: 0;
+    --travel-from: translate3d(0, 0, 0) skewX(-10deg);
+    --travel-to: translate3d(0, -24svh, 0) skewX(-10deg);
+    animation:
+      dive-opacity linear both,
+      dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range:
+      contain 0% contain 37.5%,
+      contain 0% contain 100%;
+  }
+
+  /* Algas: se van entre 0.45 y 0.66 de profundidad; son la capa más rápida */
+  .abyss-kelp {
+    --fade-from: 0.85;
+    --fade-to: 0;
+    --travel-from: translate3d(0, 0, 0);
+    --travel-to: translate3d(0, -210svh, 0);
+    animation:
+      dive-opacity linear both,
+      dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range:
+      contain 45% contain 66.25%,
+      contain 0% contain 100%;
+  }
+  .abyss-kelp[data-side="right"] {
+    --travel-from: translate3d(0, 0, 0) scaleX(-1);
+    --travel-to: translate3d(0, -210svh, 0) scaleX(-1);
+  }
+
+  /* Criaturas: el envoltorio entra al empezar su zona y el dibujo sale al terminarla;
+     la niebla de la distancia (z) queda fija en el vaivén */
+  .creature {
+    opacity: 1;
+  }
+  .creature-sway {
+    opacity: calc(1 - var(--z) * 0.35);
+  }
+  .creature-window {
+    --fade-from: 0;
+    --fade-to: 1;
+    animation: dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range: contain calc(var(--from) * 100%) contain
+      calc((var(--from) + var(--zone-fade)) * 100%);
+  }
+  .creature-art {
+    --fade-from: 1;
+    --fade-to: 0;
+    animation: dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range: contain calc((var(--to) - var(--zone-fade)) * 100%) contain
+      calc(var(--to) * 100%);
+  }
+  /* La primera zona ya está al llegar y la última sigue hasta el final */
+  .creature-window[data-zone="surface"],
+  .creature-window[data-zone="deep"] .creature-art {
+    animation: none;
+  }
+
+  /* Nieve marina: cada capa con su paralaje */
+  .abyss-motes {
+    --travel-from: translate3d(0, 0, 0);
+    --travel-to: translate3d(0, calc(var(--parallax) * -1), 0);
+    animation: dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100%;
+  }
+
+  /* Lago: se funde entre 0.15 y 0.65 de la primera pantalla; sus capas suben */
+  .lake-scene {
+    --fade-from: 1;
+    --fade-to: 0;
+    animation: dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range: contain 15svh contain 65svh;
+  }
+  .lake-layer,
+  .dive-line,
+  .dive-thread {
+    --travel-from: translate3d(0, 0, 0);
+    --travel-to: translate3d(0, calc(var(--rise) * -1svh), 0);
+    animation: dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100svh;
+  }
+  /* El hilo además aparece en el primer cuarto de pantalla */
+  .dive-thread {
+    --fade-from: 0;
+    --fade-to: 1;
+    animation:
+      dive-travel linear both,
+      dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range:
+      contain 0% contain 100svh,
+      contain 0% contain 25svh;
+  }
+
+  /* Cebo: el envoltorio va del agua del lago al centro de la pantalla con la superficie;
+     el brillo baja 18svh con la profundidad */
+  .dive-bait {
+    --travel-from: translate3d(-50%, calc(var(--scene-h) * 0.74), 0);
+    --travel-to: translate3d(-50%, calc(46svh - var(--scene-top)), 0);
+    animation: dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100svh;
+  }
+  .dive-bait-glow {
+    --travel-from: translate3d(0, 0, 0);
+    --travel-to: translate3d(0, 18svh, 0);
+    animation: dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100%;
+  }
+
+  /* Oscuridad y tinte de la linterna crecen con la profundidad */
+  .dive-dark {
+    --fade-from: var(--dark-base);
+    --fade-to: calc(var(--dark-base) + var(--dark-depth));
+    animation: dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100%;
+  }
+  .dive-glow {
+    --fade-from: 0.35;
+    --fade-to: 1;
+    animation: dive-opacity linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100%;
+  }
+
+  /* Medidor */
+  .depth-meter-now {
+    --travel-from: translate3d(0, -50%, 0);
+    --travel-to: translate3d(0, calc(var(--meter-h) - 50%), 0);
+    animation: dive-travel linear both;
+    animation-timeline: --dive;
+    animation-range: contain 0% contain 100%;
+  }
+}
