@@ -8,8 +8,18 @@
   position: relative;
   isolation: isolate;
   width: 100%;
+  container-type: inline-size;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* Puntero grueso: el área táctil de cada pieza crece más allá del dibujo */
+@media (pointer: coarse) {
+  .fossil-piece::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+  }
 }
 
 .fossil-board[data-tray]::after {
@@ -127,5 +137,13 @@
   .fossil-piece:hover:not(:disabled),
   .fossil-piece[data-dragging="true"] {
     scale: 1;
+  }
+}
+
+/* Tablero angosto (móvil): los huesos quedan pequeños y los años se encimarían. El año
+   sigue en el nombre accesible de cada pieza y en su ficha al encajar. */
+@container (max-width: 560px) {
+  .fossil-piece-tag {
+    display: none;
   }
 }
