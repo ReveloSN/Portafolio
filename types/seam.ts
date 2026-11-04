@@ -6,8 +6,8 @@ export type SeamId =
   | "about-projects"
   | "projects-testimonials"
   | "testimonials-experience"
-  | "contact-skills"
-  | "skills-footer";
+  | "experience-skills"
+  | "contact-footer";
 
 /**
  * Borde del divisor que se pega a la costura. El divisor siempre vive en la sección

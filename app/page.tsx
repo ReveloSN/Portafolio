@@ -41,8 +41,8 @@ export default function Home() {
         <Projects projects={PROJECTS} />
         <Testimonials testimonials={TESTIMONIALS} />
         <Experience />
-        <Contact eggs={CONTACT_EGGS} />
         <Skills skills={SKILLS} />
+        <Contact eggs={CONTACT_EGGS} />
       </main>
       <Footer profile={PROFILE} links={FOOTER_LINKS} />
     </>

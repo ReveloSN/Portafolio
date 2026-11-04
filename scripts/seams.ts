@@ -23,8 +23,8 @@ const SEAMS = [
   { name: "about-proyectos", selector: "#proyectos" },
   { name: "proyectos-testimonios", selector: "#testimonios" },
   { name: "testimonios-experiencia", selector: "#experiencia" },
-  { name: "contacto-habilidades", selector: "#habilidades" },
-  { name: "habilidades-footer", selector: "footer" },
+  { name: "experiencia-habilidades", selector: "#habilidades" },
+  { name: "contacto-footer", selector: "footer" },
 ] as const;
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";

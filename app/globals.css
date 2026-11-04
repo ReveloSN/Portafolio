@@ -69,10 +69,10 @@
   --seam-testimonials-end: #06120d;
   --seam-experience-start: var(--seam-testimonials-end);
   --seam-experience-end: #08171e;
-  --seam-contact-start: var(--seam-experience-end);
-  --seam-contact-end: #08171e;
-  --seam-skills-start: var(--seam-contact-end);
+  --seam-skills-start: var(--seam-experience-end);
   --seam-skills-end: #05100b;
+  --seam-contact-start: var(--seam-skills-end);
+  --seam-contact-end: #05100b;
 
   /* Movimiento: todas las entradas usan la misma duración y curva */
   --dur-enter: 0.7s;

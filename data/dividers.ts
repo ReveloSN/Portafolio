@@ -104,7 +104,7 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
       },
     ],
   },
-  "contact-skills": {
+  "experience-skills": {
     divider: {
       art: ART.roots,
       anchor: "top",
@@ -116,7 +116,7 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
     },
     accents: [],
   },
-  "skills-footer": {
+  "contact-footer": {
     divider: {
       art: ART.treeline,
       anchor: "bottom",

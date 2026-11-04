@@ -57,10 +57,10 @@ export function Skills({ skills }: SkillsProps) {
       id={SECTION_IDS.skills}
       background={BACKGROUND}
       style={SOIL}
-      className="pt-[clamp(230px,18vw,280px)] pb-[max(clamp(90px,9vw,140px),var(--divider-clearance))]"
+      className="pt-[clamp(230px,18vw,280px)] pb-[clamp(90px,9vw,140px)]"
       decoration={
         <>
-          <SeamLayer seam="contact-skills" host="lower" />
+          <SeamLayer seam="experience-skills" host="lower" />
           <DigHorizon
             sign={copy.sign}
             preserveAspectRatio="xMidYMax slice"

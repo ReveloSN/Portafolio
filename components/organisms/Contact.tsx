@@ -30,6 +30,7 @@ export function Contact({ eggs }: ContactProps) {
     <SectionShell
       id={SECTION_IDS.contact}
       background={BACKGROUND}
+      className="pb-[max(var(--space-section),var(--divider-clearance))]"
       decoration={
         <>
           <ArtLayer
