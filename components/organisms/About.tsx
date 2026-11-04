@@ -21,8 +21,8 @@ interface AboutProps {
 
 const FACT_COLORS: Readonly<Record<QuickFact["icon"], string>> = {
   pin: "var(--glow)",
-  cap: "#6ef0e0",
-  heart: "#ffc46e",
+  cap: "var(--fact-cap)",
+  heart: "var(--amber-ink)",
 };
 
 /** Orden en la entrada escalonada: primero el texto, luego datos rápidos y tecnologías. */
@@ -32,7 +32,7 @@ const TRAIL_START = 7;
 const BACKGROUND = seamBackground(
   "--seam-about-start",
   "--seam-about-end",
-  "linear-gradient(var(--seam-about-start) 0, #0a2418 60%, var(--seam-about-end) 100%)",
+  "linear-gradient(var(--seam-about-start) 0, var(--about-glow) var(--about-fade), var(--seam-about-end) 100%)",
 );
 
 export function About({ profile }: AboutProps) {

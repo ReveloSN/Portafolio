@@ -27,7 +27,7 @@ export function TestimonialCard({
       style={style}
       className="absolute top-0 left-1/2 w-[min(580px,88%)] transition duration-700 ease-out"
     >
-      <div className="relative rounded-[10px] bg-[#f1e8d0] p-10 pb-8 text-left text-[#1b2a1f] shadow-[0_40px_70px_-26px_rgba(0,0,0,.8)]">
+      <div className="relative rounded-[10px] bg-[#f1e8d0] p-10 pb-8 text-left text-[#1b2a1f] shadow-[0_40px_70px_-26px_var(--card-shadow)]">
         <div
           aria-hidden="true"
           className="absolute inset-x-0 -top-3.5 mx-auto h-[30px] w-[110px]"

@@ -14,7 +14,7 @@ export function CardPaper({ children, className }: CardPaperProps) {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col rounded-[6cqw] bg-[#efe6cf] p-[6cqw] text-[#17281d] shadow-[0_7cqw_14cqw_-5cqw_rgba(0,0,0,.7)]",
+        "relative flex h-full flex-col rounded-[6cqw] bg-[#efe6cf] p-[6cqw] text-[#17281d] shadow-[0_7cqw_14cqw_-5cqw_var(--card-shadow)]",
         className,
       )}
     >

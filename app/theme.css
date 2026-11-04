@@ -2,7 +2,7 @@
 /* Temas. Claro por defecto en :root; oscuro en [data-theme="dark"]      */
 /* (lo pone el script del <head>). Las escenas pintadas de noche (Hero,  */
 /* sitio de excavación, mundos) usan [data-palette="night"]: conservan   */
-/* su paleta oscura en los dos temas. Contrastes AA en lib/themeTokens.  */
+/* su paleta oscura en los dos temas. Contraste AA: lib/themeTokens.test.ts. */
 /* ------------------------------------------------------------------ */
 
 :root {
@@ -27,6 +27,9 @@
   --error-edge: #c2412f;
   --focus-halo: rgba(45, 106, 18, 0.22);
   --card-shadow: rgba(40, 56, 30, 0.3);
+  --card-glow: rgba(45, 106, 18, 0.3);
+  --panel: rgba(255, 255, 255, 0.72);
+  --fact-cap: #0f6b62;
   --mist-color: color-mix(in srgb, #ffffff 30%, transparent);
 
   /* Página */
@@ -40,7 +43,9 @@
 
   /* Costuras: el Hero es de noche en los dos temas; Habilidades termina en tierra */
   --seam-hero-end: #07160f;
+  /* Sobre mí sale de la noche del Hero y amanece rápido, bajo el dosel del divisor */
   --seam-about-start: var(--seam-hero-end);
+  --about-fade: 14%;
   --seam-about-end: #e6eedb;
   --seam-projects-start: var(--seam-about-end);
   --seam-projects-end: #e1ead5;
@@ -51,7 +56,9 @@
   --seam-skills-start: var(--seam-experience-end);
   --seam-skills-end: #241508;
   --seam-contact-start: var(--seam-skills-end);
-  --seam-contact-end: #dae5cd;
+  /* El pie es de noche en los dos temas: Contacto oscurece bajo la línea de árboles */
+  --seam-contact-end: #05100b;
+  --contact-bg: #dae5cd;
 
   /* Fósil de la experiencia: losa de piedra clara, huesos marfil */
   --fossil-stone: #c9bda5;
@@ -90,6 +97,9 @@
   --error-edge: #ff8a7a;
   --focus-halo: rgba(166, 255, 92, 0.18);
   --card-shadow: rgba(0, 0, 0, 0.7);
+  --card-glow: rgba(166, 255, 92, 0.45);
+  --panel: rgba(5, 16, 11, 0.72);
+  --fact-cap: #6ef0e0;
   --mist-color: color-mix(in srgb, #eef6e0 10%, transparent);
   color: var(--text);
 }
@@ -105,12 +115,14 @@
   --contact-glow: #1d4a22;
   --experience-glow: #1f2a1d;
 
+  --about-fade: 60%;
   --seam-about-end: #0a1f17;
   --seam-projects-end: #06120d;
   --seam-testimonials-end: #06120d;
   --seam-experience-end: #17110b;
   --seam-skills-end: #05100b;
   --seam-contact-end: #05100b;
+  --contact-bg: #05100b;
 
   --fossil-stone: #4a4034;
   --fossil-stone-deep: #241d16;
@@ -125,4 +137,32 @@
   --fossil-card: rgba(14, 11, 7, 0.72);
   --fossil-card-edge: rgba(255, 196, 110, 0.28);
   --fossil-accent: #ffc46e;
+}
+
+/* Nombre del mundo en las tarjetas: su color propio en oscuro; en claro, tinta legible
+   con una marca del color del mundo (el lima o el turquesa no llegan a AA sobre claro). */
+.world-label {
+  color: var(--world-accent);
+}
+:root:not([data-theme="dark"]) .world-label {
+  color: var(--text-muted);
+}
+:root:not([data-theme="dark"]) .world-label::before {
+  content: "";
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.6em;
+  border-radius: 50%;
+  background: var(--world-accent);
+  box-shadow: 0 0 0 1px var(--border-strong);
+  vertical-align: -0.05em;
+}
+
+/* Las luciérnagas solo brillan de noche: en claro se apagan salvo en las escenas nocturnas */
+:root:not([data-theme="dark"]) .fireflies {
+  display: none;
+}
+:root:not([data-theme="dark"]) [data-palette="night"] .fireflies {
+  display: block;
 }

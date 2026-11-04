@@ -15,7 +15,7 @@ export function SocialLink({ kind, label, href }: Social) {
       href={href}
       aria-label={label}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="text-leaf hover:bg-glow inline-flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/25 bg-white/5 transition duration-300 hover:-translate-y-1 hover:text-(--ink)"
+      className="text-fg hover:bg-glow border-line-strong bg-surface inline-flex h-[46px] w-[46px] items-center justify-center rounded-full border transition duration-300 hover:-translate-y-1 hover:text-(--ink)"
     >
       <Icon name={SOCIAL_ICONS[kind]} size={22} strokeWidth={2} />
     </a>

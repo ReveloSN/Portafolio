@@ -12,7 +12,7 @@ export function Tag({ children, className, style }: TagProps) {
     <span
       style={style}
       className={cn(
-        "text-fluid-xs rounded-full border border-white/20 bg-white/5 px-3 py-[5px] font-mono",
+        "text-fluid-xs border-line-strong bg-surface rounded-full border px-3 py-[5px] font-mono",
         className,
       )}
     >

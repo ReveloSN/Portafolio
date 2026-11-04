@@ -20,7 +20,7 @@ interface ContactProps {
 const BACKGROUND = seamBackground(
   "--seam-contact-start",
   "--seam-contact-end",
-  "radial-gradient(ellipse 80% 60% at 30% 70%, #1d4a22 0, var(--seam-contact-end) 70%)",
+  "radial-gradient(ellipse 80% 60% at 30% 70%, var(--contact-glow) 0, var(--contact-bg) 70%)",
 );
 
 export function Contact({ eggs }: ContactProps) {
@@ -61,7 +61,7 @@ export function Contact({ eggs }: ContactProps) {
             openLabel={copy.open}
             closeLabel={copy.close}
           />
-          <div className="max-w-[calc(var(--u)*36.1)] min-w-[280px] flex-[1_1_400px] rounded-[28px] border border-white/16 bg-[rgba(5,16,11,.72)] p-[clamp(24px,3vw,38px)] backdrop-blur-[10px]">
+          <div className="border-line max-w-[calc(var(--u)*36.1)] min-w-[280px] flex-[1_1_400px] rounded-[28px] border bg-(--panel) p-[clamp(24px,3vw,38px)] backdrop-blur-[10px]">
             {recipient ? <ContactForm recipient={recipient} /> : null}
           </div>
         </div>

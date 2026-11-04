@@ -27,9 +27,7 @@ export function CarouselDots({ count, active, labelFor, onSelect }: CarouselDots
               aria-hidden="true"
               className={cn(
                 "block h-2.5 rounded-full transition-all duration-300",
-                current
-                  ? "bg-glow w-[34px]"
-                  : "w-2.5 bg-[rgba(238,246,224,.35)] group-hover:bg-[rgba(238,246,224,.7)]",
+                current ? "bg-glow w-[34px]" : "bg-fg/35 group-hover:bg-fg/70 w-2.5",
               )}
             />
           </button>

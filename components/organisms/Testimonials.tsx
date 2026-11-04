@@ -28,7 +28,7 @@ interface TestimonialsProps {
 const BACKGROUND = seamBackground(
   "--seam-testimonials-start",
   "--seam-testimonials-end",
-  "radial-gradient(ellipse 70% 60% at 50% 40%, #123a27 0, var(--seam-testimonials-end) 75%)",
+  "radial-gradient(ellipse 70% 60% at 50% 40%, var(--testimonials-glow) 0, var(--seam-testimonials-end) 75%)",
 );
 const TAPE_TILTS = [-3, 2, -1] as const;
 

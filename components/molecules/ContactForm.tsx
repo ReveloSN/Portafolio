@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import type { ContactFormValues } from "@/types/contact";
 
 const FIELD =
-  "w-full rounded-[14px] border-[1.5px] border-white/20 bg-[rgba(3,14,9,.55)] px-4 py-3.5 font-sans text-fluid-base text-leaf outline-none transition placeholder:text-leaf/45 focus:border-glow focus:shadow-[0_0_0_4px_rgba(166,255,92,.18)]";
+  "w-full rounded-[14px] border-[1.5px] border-line-strong bg-(--field-bg) px-4 py-3.5 font-sans text-fluid-base text-fg outline-none transition placeholder:text-muted focus:border-glow focus:shadow-[0_0_0_4px_var(--focus-halo)]";
 
 interface FieldProps {
   readonly name: keyof ContactFormValues;
@@ -31,7 +31,7 @@ function Field({ name, label, error, multiline, type = "text", ...rest }: FieldP
     name,
     "aria-invalid": error ? true : undefined,
     "aria-describedby": error ? `${id}-error` : undefined,
-    className: cn(FIELD, error && "border-[#ff8a7a]"),
+    className: cn(FIELD, error && "border-(--error-edge)"),
   };
   return (
     <div>
@@ -52,7 +52,7 @@ function Field({ name, label, error, multiline, type = "text", ...rest }: FieldP
         <p
           id={`${id}-error`}
           role="alert"
-          className="text-fluid-sm mt-1.5 text-[#ffb3a8]"
+          className="text-fluid-sm mt-1.5 text-(--error-ink)"
         >
           {error}
         </p>

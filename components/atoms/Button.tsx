@@ -10,8 +10,8 @@ const BASE =
 
 const VARIANTS: Readonly<Record<ButtonVariant, string>> = {
   lime: "bg-glow text-(--ink) hover:shadow-[0_14px_34px_-10px_var(--glow)]",
-  ghost: "border-leaf/55 bg-white/5 text-leaf hover:bg-white/15",
-  dark: "border-white/20 bg-[#0b1d15] text-leaf hover:bg-[#12301f]",
+  ghost: "border-fg/55 bg-surface text-fg hover:bg-surface-strong",
+  dark: "border-line-strong bg-(--btn-dark-bg) text-(--btn-dark-fg) hover:bg-(--btn-dark-hover)",
 };
 
 const SIZES: Readonly<Record<ButtonSize, string>> = {
