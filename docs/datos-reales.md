@@ -50,7 +50,7 @@ Para cada proyecto (1, 2 y 3):
 
 ## `data/experience.ts`
 
-Seis entradas de ejemplo (`e0` a `e5`, ordenadas automáticamente por `lib/collections.ts`). Cada una tiene `kind` (`work` o `academic`), `startYear`, `endYear` (`null` = actual), `periodLabel`, `title`, `organization` y `achievements` (lista de 1 o 2 logros).
+Seis entradas de ejemplo (`e0` a `e5`, ordenadas automáticamente por `lib/collections.ts`). El fósil de la sección admite **entre 6 y 8** (una pieza por experiencia; lo comprueba `lib/fossilPuzzle.test.ts`); la más reciente es el cráneo y cada pieza muestra su `startYear`. Cada una tiene `kind` (`work` o `academic`), `startYear`, `endYear` (`null` = actual), `periodLabel`, `title`, `organization` y `achievements` (lista de 1 o 2 logros).
 
 - [ ] `e0` (laboral, 2025 – Hoy): `periodLabel`, `title`, `organization`, `achievements`.
 - [ ] `e1` (académica, 2023 – Hoy): `periodLabel`, `title`, `organization`, `achievements`.
@@ -86,12 +86,14 @@ Cuatro "huevos" de contacto.
 
 Seis habilidades de ejemplo: React Native, Kotlin, Python, Godot, Tailwind CSS y Next.js + TypeScript.
 
-- [ ] `name`, `area` y `levelLabel` (`Intermedio`, `Avanzado`, `En camino`): confirmar que reflejan tu nivel.
-- [ ] `percent` (60 a 85): nivel mostrado en la barra. Ajustar a tu valoración.
-- [ ] `note` (6 veces `"[En qué proyecto lo usaste y qué construiste.]"`, una constante `NOTE`): escribe una nota por habilidad.
+Sin niveles ni porcentajes (restricción del curso): cada hallazgo muestra su logo y los proyectos donde se usó.
+
+- [ ] `name` y `area`: confirmar que reflejan la tecnología.
+- [ ] `usedIn`: slugs de `data/projects.ts` (al menos uno). El nombre que se muestra sale del proyecto, así que no hay que repetirlo.
+- [ ] `icon`: un `TechIconId` (`lib/techIcons.ts`). Para una tecnología nueva, agrega su trazado y su viewBox allí.
 - [ ] Añade o quita habilidades. `grid`, `depth`, `fossil` y `id` son decorativos o técnicos; `fossil` debe ser uno de los valores de `FossilKind`.
 
-## `data/navigation.ts`, `data/worlds.ts`, `data/abyss.ts`, `data/art.ts`, `data/dividers.ts`, `data/portal.ts`, `data/lakeAssets.ts`, `data/abyssArt.ts`
+## `data/navigation.ts`, `data/worlds.ts`, `data/fossilPuzzle.ts`, `data/art.ts`, `data/dividers.ts`, `data/portal.ts`
 
 - [ ] Sin datos personales. Revisa solo si quieres cambiar nombres de sección o los títulos de profundidad de cada mundo.
 

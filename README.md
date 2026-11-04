@@ -13,8 +13,8 @@ Los componentes no tienen textos de contenido. Para poner tus datos reales solo 
 | Nombre, rol, frase, "Sobre mí", redes | `data/profile.ts`                                          |
 | Proyectos (y su mundo)                | `data/projects.ts`                                         |
 | Testimonios                           | `data/testimonials.ts`                                     |
-| Experiencia académica y laboral       | `data/experience.ts`                                       |
-| Habilidades (fósiles)                 | `data/skills.ts`                                           |
+| Experiencia (6 a 8, una por hueso)    | `data/experience.ts`                                       |
+| Habilidades y dónde se usaron         | `data/skills.ts`                                           |
 | Huevos de contacto                    | `data/contact.ts`                                          |
 | Textos de interfaz                    | `data/copy.ts`                                             |
 | Tu CV                                 | `public/cv.pdf`                                            |

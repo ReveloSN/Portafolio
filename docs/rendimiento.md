@@ -41,7 +41,7 @@ Lighthouse 13.6 en modo móvil (simulado: CPU x4, 4G lento), sobre `next build` 
 
 El LCP ya no depende de la red: el río se descarga en ~0,3 s, pero se pinta ~2–3 s después (*element render delay*). En la traza ese tiempo es estilo, layout y pintado del documento: Lighthouse atribuye ~3,9 s (con CPU x4) al documento y solo ~40 ms a script. Opciones, de menor a mayor riesgo:
 
-- `content-visibility: auto` en las secciones bajo el pliegue. En la ablación bajó el TBT a la mitad, pero hay que revisar las costuras que cruzan de una sección a otra y el escenario `sticky` del abismo.
+- `content-visibility: auto` en las secciones bajo el pliegue. En la ablación bajó el TBT a la mitad, pero hay que revisar las costuras que cruzan de una sección a otra.
 - Aligerar el hero: menos capas apiladas con máscara y desenfoque (niebla, reflejos, viñeta) en móvil.
 - Cargar en el cliente las secciones más pesadas bajo el pliegue. Reduce el HTML, pero pierde la alternativa sin JS, por eso no se hizo.
 

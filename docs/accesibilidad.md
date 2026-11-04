@@ -7,7 +7,7 @@ Estado al cierre de la versión final. Verificado con Lighthouse (portada 97, mu
 - [x] Enlace "Saltar al contenido" como primer Tab; lleva a `<main id="contenido">` en la portada y en los mundos.
 - [x] Foco visible en todos los elementos interactivos (ninguna parada sin indicador en el recorrido con Tab). Anillo interior en la tierra de la excavación, donde el `overflow` recortaba el contorno.
 - [x] El portal y la intro no bloquean el teclado ni el puntero (`aria-hidden`, `pointer-events: none`); Esc salta la intro.
-- [x] `prefers-reduced-motion`: sin velo (se navega directo), sin paralaje, sin sacudidas en la excavación; el abismo pasa a una lista legible. Sin JS también hay alternativa.
+- [x] `prefers-reduced-motion`: sin velo (se navega directo), sin paralaje, sin sacudidas en la excavación; el fósil encaja al instante. Sin JS, la experiencia se muestra como lista.
 - [x] Menú móvil: `aria-expanded`; Esc lo cierra y devuelve el foco al botón; se cierra si el foco sale del encabezado.
 - [x] Excavación: el foco no se pierde al terminar una cuadrícula (pasa a su título); un único `role="status"` anuncia capas, fósiles y el total.
 - [x] Abismo: `aria-live` con `aria-atomic` en los filtros, `aria-pressed` en "Encender luces", contraste de las placas ≥ 4,5:1 comprobado por un test.
@@ -23,7 +23,8 @@ Estado al cierre de la versión final. Verificado con Lighthouse (portada 97, mu
 - [ ] **Nombre accesible de la tarjeta que gira (2.5.3):** el `aria-label` de "Girar tarjeta..." no empieza con el texto visible. Debe incluirlo al principio, o hay que quitar el `aria-label` y dejar el texto visible.
 - [ ] **Orden de encabezados en los mundos (1.3.1):** aparece un `h3`/`h4` sin el nivel anterior. Hay que ajustar los niveles en `WorldDetails`.
 - [ ] Atrapar el foco dentro del menú móvil abierto (hoy solo se cierra con Esc o al salir).
-- [ ] Contraste del título sobre el cielo del lago en la superficie del abismo: tiene sombra de texto y no se pudo medir automáticamente.
+- [x] Fósil de la experiencia: cada pieza es un botón que se mueve con teclado (Enter, flechas, Esc) o se encaja con botones; anuncios en `aria-live`.
+- [x] Tema claro y oscuro con contraste AA de los tokens (`lib/themeTokens.test.ts`); el botón de tema dice a qué tema lleva.
 - [ ] Revisar a ojo los botones `sm`, que ahora miden 44 px en táctil ("Volver a la superficie", la barra de la excavación).
 - [ ] Probar con NVDA (Windows) y VoiceOver (iOS) el portal, el carrusel, la excavación y el formulario.
 - [ ] Cuando llegue la foto real: escribir un `alt` descriptivo en `data/profile.ts`.
