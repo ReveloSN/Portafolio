@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { CRACK_MS, HATCH_TIMING, hatchReducer, isOpen, type HatchPhase } from "./hatch";
+import {
+  CRACK_MS,
+  HATCH_TIMING,
+  anyOpen,
+  hatchReducer,
+  initialNest,
+  isOpen,
+  nestReducer,
+  type HatchPhase,
+} from "./hatch";
 
 const run = (phase: HatchPhase, ...types: Parameters<typeof hatchReducer>[1][]) =>
   types.reduce(hatchReducer, phase);
@@ -52,5 +61,51 @@ describe("hatchReducer", () => {
     expect(CRACK_MS).toBe(800);
     expect(CRACK_MS + HATCH_TIMING.rise).toBeGreaterThanOrEqual(1200);
     expect(CRACK_MS + HATCH_TIMING.rise).toBeLessThanOrEqual(1400);
+  });
+});
+
+describe("nestReducer", () => {
+  const start = initialNest(["a", "b"] as const);
+
+  it("empieza con todos los huevos enteros y sin crías", () => {
+    expect(start.phases).toEqual({ a: "idle", b: "idle" });
+    expect(start.lastHatch).toBeNull();
+    expect(anyOpen(start)).toBe(false);
+  });
+
+  it("cada huevo cambia sin tocar a los demás", () => {
+    const next = nestReducer(start, {
+      type: "egg",
+      id: "a",
+      event: { type: "activate", instant: false },
+    });
+    expect(next.phases).toEqual({ a: "cracking", b: "idle" });
+    expect(anyOpen(next)).toBe(true);
+  });
+
+  it("anota la última cría y cuenta cada eclosión", () => {
+    const hatch = (state: typeof start, id: "a" | "b") =>
+      nestReducer(state, { type: "egg", id, event: { type: "activate", instant: true } });
+    const one = hatch(start, "b");
+    expect(one.lastHatch).toEqual({ id: "b", count: 1 });
+    const again = hatch(nestReducer(one, { type: "resetAll" }), "b");
+    expect(again.lastHatch).toEqual({ id: "b", count: 1 });
+    const two = hatch(one, "a");
+    expect(two.lastHatch).toEqual({ id: "a", count: 2 });
+  });
+
+  it("devuelve el mismo estado si el evento no aplica", () => {
+    expect(nestReducer(start, { type: "egg", id: "a", event: { type: "cracked" } })).toBe(
+      start,
+    );
+  });
+
+  it("resetAll vuelve a los huevos enteros", () => {
+    const open = nestReducer(start, {
+      type: "egg",
+      id: "a",
+      event: { type: "activate", instant: true },
+    });
+    expect(nestReducer(open, { type: "resetAll" })).toEqual(start);
   });
 });
