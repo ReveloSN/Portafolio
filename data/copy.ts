@@ -171,6 +171,12 @@ export const COPY = {
   world: {
     back: "Volver al portal",
     problem: { kicker: "PROYECTO · CONTEXTO", title: "El problema" },
+    facts: {
+      period: "PERIODO",
+      team: "EQUIPO",
+      platform: "PLATAFORMA",
+      status: "ESTADO",
+    },
     role: { kicker: "PROYECTO · PARTICIPACIÓN", title: "Mi rol" },
     result: { kicker: "PROYECTO · IMPACTO", title: "El resultado" },
     depth: "PROFUNDIDAD",

@@ -64,6 +64,18 @@ export function WorldHero({ world, project, ownerName, Scene }: WorldHeroProps) 
             <Icon name="github" />
             {projects.github}
           </Button>
+          {project.download ? (
+            <Button
+              variant="lime"
+              href={project.download.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="download" />
+              {project.download.label}
+              <span className="sr-only"> {projects.newTab}</span>
+            </Button>
+          ) : null}
         </div>
       </div>
     </ParallaxStage>

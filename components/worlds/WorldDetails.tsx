@@ -1,5 +1,6 @@
 import { DepthPanel } from "@/components/molecules/DepthPanel";
 import { FeatureCard } from "@/components/molecules/FeatureCard";
+import { ProjectFactList } from "@/components/molecules/ProjectFactList";
 import { COPY } from "@/data/copy";
 import type { Project } from "@/types/project";
 import type { World } from "@/types/world";
@@ -22,6 +23,7 @@ export function WorldDetails({ world, project }: WorldDetailsProps) {
         heading={copy.problem.title}
       >
         <p className="text-fluid-md leading-[1.65] opacity-90">{project.problem}</p>
+        <ProjectFactList facts={project.facts} labels={copy.facts} />
       </DepthPanel>
       <DepthPanel
         reverse

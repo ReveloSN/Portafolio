@@ -18,6 +18,20 @@ export interface ProjectScreenshot {
   readonly height: number;
 }
 
+/** Ficha breve que acompaña al problema en la página del mundo. */
+export interface ProjectFacts {
+  readonly period: string;
+  readonly team: string;
+  readonly platform: string;
+  readonly status: string;
+}
+
+/** Enlace para probar el proyecto: una versión descargable o publicada. */
+export interface ProjectDownload {
+  readonly href: string;
+  readonly label: string;
+}
+
 export interface Project {
   readonly id: string;
   readonly slug: WorldSlug;
@@ -26,7 +40,10 @@ export interface Project {
   readonly tagline: string;
   readonly technologies: readonly string[];
   readonly repoUrl: string;
+  /** Solo si hay algo que un visitante pueda instalar o abrir. */
+  readonly download?: ProjectDownload;
   readonly problem: string;
+  readonly facts: ProjectFacts;
   readonly roleItems: readonly string[];
   readonly metrics: readonly ProjectMetric[];
   readonly features: readonly ProjectFeature[];
