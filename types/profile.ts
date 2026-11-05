@@ -6,8 +6,11 @@ export interface Social {
   readonly href: string;
 }
 
+export type QuickFactIcon =
+  "pin" | "cap" | "university" | "code" | "network" | "cloud" | "heart";
+
 export interface QuickFact {
-  readonly icon: "pin" | "cap" | "heart";
+  readonly icon: QuickFactIcon;
   readonly text: string;
 }
 
@@ -58,6 +61,8 @@ export interface ProfilePhoto {
   readonly width: number;
   readonly height: number;
   readonly alt: string;
+  /** Punto de la foto que queda a la vista al recortarla (CSS `object-position`). */
+  readonly focus?: string;
 }
 
 export interface Profile {
@@ -69,7 +74,10 @@ export interface Profile {
   readonly year: number;
   readonly cvUrl: string;
   readonly photo?: ProfilePhoto;
-  readonly aboutText: string;
+  /** Texto de "Sobre mí", un elemento por párrafo. */
+  readonly aboutParagraphs: readonly string[];
+  /** Habilidades blandas, en texto (sin niveles ni porcentajes). */
+  readonly softSkills: readonly string[];
   readonly funFact: FunFact;
   readonly backMeta?: CardBackMeta;
   readonly quickFacts: readonly QuickFact[];

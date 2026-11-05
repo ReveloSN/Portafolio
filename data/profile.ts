@@ -8,26 +8,38 @@ export const PROFILE: Profile = {
   tagline: "[Tu frase corta: qué haces y qué te mueve a construir.]",
   year: 2026,
   cvUrl: "/cv.pdf",
-  // Foto personal: al guardar el archivo en public/images/, descomenta y ajusta las medidas.
-  // photo: {
-  //   src: "/images/foto.webp",
-  //   width: 800,
-  //   height: 1000,
-  //   alt: "[Describe tu foto: quién eres y qué se ve.]",
-  // },
-  aboutText:
-    "[Escribe aquí entre 3 y 5 líneas, en primera persona: quién eres, qué estudias, qué te apasiona y qué sabes hacer. Que se pueda leer en 20 segundos y sin errores de ortografía.]",
+  photo: {
+    src: "/images/foto.webp",
+    width: 866,
+    height: 1082,
+    alt: "Retrato sentado en un puf frente a una pared de madera, con camiseta terracota y un bolso cruzado.",
+    focus: "50% 0%",
+  },
+  aboutParagraphs: [
+    "Soy estudiante de Ingeniería de Software en la Universidad Cooperativa de Colombia, actualmente en quinto semestre. Mi interés principal está en el desarrollo backend, la integración de inteligencia artificial, la computación en la nube y el sector salud apoyado con IA.",
+    "Llevo esos intereses al semillero de investigación, donde participo en PEMEC, una plataforma para monitorear enfermedades crónicas en Nariño. Me interesa que la tecnología resuelva problemas reales, y este proyecto me permite trabajar en esa idea desde la investigación.",
+    "Me apasiona también la ciberseguridad. Me interesa proteger la información sensible que manejan los sistemas. Creo que la tecnología tiene sentido cuando resuelve problemas reales, sobre todo en salud, educación y cultura.",
+  ],
+  softSkills: [
+    "Comunicación técnica y presentación de ideas",
+    "Trabajo en equipo y colaboración en proyectos de investigación",
+    "Resolución de problemas y pensamiento analítico",
+    "Aprendizaje autónomo y adaptación a nuevas tecnologías",
+  ],
   funFact: {
     title: "Dato curioso",
-    text: "[Escribe aquí un dato curioso sobre ti en 1 o 2 frases.]",
+    text: "Me gusta la natación. Nadar me enseñó constancia y a concentrarme paso a paso, algo que llevo también a mis proyectos.",
   },
   backMeta: {
     motto: "[Tu lema de expedición]",
   },
   quickFacts: [
-    { icon: "pin", text: "[Ciudad, País]" },
-    { icon: "cap", text: "[Semestre] · [Universidad]" },
-    { icon: "heart", text: "[Tus intereses]" },
+    { icon: "pin", text: "Pasto, Nariño, Colombia" },
+    { icon: "cap", text: "Ingeniería de Software · 5.º semestre" },
+    { icon: "university", text: "Universidad Cooperativa de Colombia" },
+    { icon: "code", text: "Perfil Full Stack" },
+    { icon: "network", text: "Interés en redes neuronales e IA" },
+    { icon: "cloud", text: "Cloud computing" },
   ],
   technologies: [
     { name: "FastAPI", icon: "fastapi", color: "#05a594" },

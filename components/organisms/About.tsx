@@ -6,6 +6,7 @@ import { AboutCard } from "@/components/organisms/AboutCard";
 import { Fireflies } from "@/components/molecules/Fireflies";
 import { RevealGroup } from "@/components/molecules/RevealGroup";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
+import { SoftSkillList } from "@/components/molecules/SoftSkillList";
 import { TechTrail } from "@/components/molecules/TechTrail";
 import { StaggerText } from "@/components/molecules/StaggerText";
 import { SectionShell } from "@/components/templates/SectionShell";
@@ -14,6 +15,7 @@ import { SECTION_IDS } from "@/data/navigation";
 import { FIREFLY_COUNT } from "@/lib/constants";
 import type { Profile, QuickFact } from "@/types/profile";
 import { seamBackground } from "@/lib/seams";
+import { countSentences, paragraphStarts } from "@/lib/sentences";
 
 interface AboutProps {
   readonly profile: Profile;
@@ -22,13 +24,14 @@ interface AboutProps {
 const FACT_COLORS: Readonly<Record<QuickFact["icon"], string>> = {
   pin: "var(--glow)",
   cap: "var(--fact-cap)",
+  university: "var(--amber-ink)",
+  code: "var(--glow)",
+  network: "var(--fact-cap)",
+  cloud: "var(--amber-ink)",
   heart: "var(--amber-ink)",
 };
 
-/** Orden en la entrada escalonada: primero el texto, luego datos rápidos y tecnologías. */
-const FACTS_START = 4;
 const FACT_ICON_PX = 14;
-const TRAIL_START = 7;
 const BACKGROUND = seamBackground(
   "--seam-about-start",
   "--seam-about-end",
@@ -37,6 +40,12 @@ const BACKGROUND = seamBackground(
 
 export function About({ profile }: AboutProps) {
   const { about } = COPY;
+  // Orden en la entrada escalonada: texto, datos rápidos, habilidades y tecnologías.
+  const paragraphs = profile.aboutParagraphs;
+  const starts = paragraphStarts(paragraphs);
+  const factsStart = countSentences(paragraphs);
+  const softSkillsStart = factsStart + profile.quickFacts.length;
+  const trailStart = softSkillsStart + profile.softSkills.length;
   return (
     <SectionShell
       id={SECTION_IDS.about}
@@ -59,10 +68,11 @@ export function About({ profile }: AboutProps) {
           <h2 className="font-display mt-[calc(var(--u)*.8)] mb-[var(--about-gap)] text-[clamp(2rem,calc(var(--u)*4.2),3.75rem)] leading-[1.05] font-extrabold tracking-[-.02em] text-balance">
             {about.title}
           </h2>
-          <StaggerText
-            text={profile.aboutText}
-            className="max-w-[60ch] text-[clamp(.9rem,calc(var(--u)*1.35),1.1rem)] leading-[1.5] opacity-90"
-          />
+          <div className="max-w-[60ch] space-y-[.8em] text-[clamp(.9rem,calc(var(--u)*1.35),1.1rem)] leading-[1.5] opacity-90">
+            {paragraphs.map((paragraph, i) => (
+              <StaggerText key={starts[i]} text={paragraph} startIndex={starts[i]} />
+            ))}
+          </div>
 
           <h3 className="text-fluid-xs mt-[var(--about-gap)] font-mono font-medium tracking-[.2em] opacity-70">
             {about.factsTitle}
@@ -71,13 +81,15 @@ export function About({ profile }: AboutProps) {
             {profile.quickFacts.map((fact, i) => (
               <li
                 key={fact.text}
-                className="stagger-item"
-                style={{ "--i": FACTS_START + i } as CSSProperties}
+                className="stagger-item max-w-full"
+                style={{ "--i": factsStart + i } as CSSProperties}
               >
-                <Tag className="inline-flex items-center gap-[.5em] px-[1em] py-[.35em] whitespace-nowrap">
+                {/* En pantallas angostas los datos largos parten línea en vez de salirse */}
+                <Tag className="inline-flex max-w-full items-center gap-[.5em] px-[1em] py-[.35em] sm:whitespace-nowrap">
                   <Icon
                     name={fact.icon}
                     size={FACT_ICON_PX}
+                    className="shrink-0"
                     style={{ color: FACT_COLORS[fact.icon] }}
                   />
                   {fact.text}
@@ -87,9 +99,14 @@ export function About({ profile }: AboutProps) {
           </ul>
 
           <h3 className="text-fluid-xs mt-[var(--about-gap)] font-mono font-medium tracking-[.2em] opacity-70">
+            {about.softSkillsTitle}
+          </h3>
+          <SoftSkillList skills={profile.softSkills} startIndex={softSkillsStart} />
+
+          <h3 className="text-fluid-xs mt-[var(--about-gap)] font-mono font-medium tracking-[.2em] opacity-70">
             {about.skillsTitle}
           </h3>
-          <TechTrail technologies={profile.technologies} startIndex={TRAIL_START} />
+          <TechTrail technologies={profile.technologies} startIndex={trailStart} />
         </RevealGroup>
       </div>
     </SectionShell>

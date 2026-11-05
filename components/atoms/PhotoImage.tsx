@@ -21,6 +21,7 @@ export function PhotoImage({ photo, sizes, className, priority }: PhotoImageProp
       sizes={sizes}
       priority={priority}
       className={cn("size-full object-cover", className)}
+      style={photo.focus ? { objectPosition: photo.focus } : undefined}
     />
   );
 }
