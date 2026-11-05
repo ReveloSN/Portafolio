@@ -15,7 +15,7 @@ Los componentes no tienen textos de contenido. Para poner tus datos reales solo 
 | Testimonios                           | `data/testimonials.ts`                                     |
 | Experiencia (6 a 8, una por hueso)    | `data/experience.ts`                                       |
 | Habilidades y dónde se usaron         | `data/skills.ts`                                           |
-| Huevos de contacto                    | `data/contact.ts`                                          |
+| Canales del nido de contacto          | `data/contactChannels.ts`                                  |
 | Textos de interfaz                    | `data/copy.ts`                                             |
 | Tu CV                                 | `public/cv.pdf`                                            |
 | Tu foto                               | `public/images/` (y el componente `Avatar`/`ExplorerCard`) |
@@ -31,6 +31,8 @@ npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm run build      # build de producción
 npm run format     # Prettier
+npm run contact:art    # arte del nido de Contacto (imagenes_webp/contacto -> public/art/contact)
+npm run contact:check  # Playwright del nido (con el servidor en marcha)
 ```
 
 ## Estructura

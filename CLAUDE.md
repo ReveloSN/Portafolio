@@ -18,10 +18,10 @@ Todavía no hay datos reales. Usa datos de ejemplo ("[Tu Nombre]", enlaces ficti
 
 ## Arquitectura
 
-- **Atomic Design:** `components/atoms` (Button, Tag, Icon, Badge, ArtLayer, PortalLink, BoneShape, TechIcon), `molecules` (ProjectCard, TestimonialCard, ContactEgg, SkillCell, SkillInventory, UsedIn, SocialLink, ThemeToggle, PuzzlePiece, FossilBoard, FossilSlab, FossilFinding, PuzzleToolbar, ExperienceList), `organisms` (Navbar, Hero, About, Projects, Testimonials, Experience, FossilPuzzle, FossilPuzzleLoader, Contact, Skills, Footer, PortalVeil), `templates` (SectionShell, WorldLayout, PortalProvider), `worlds` (escenas de cada mundo). Las páginas viven en `app/`.
+- **Atomic Design:** `components/atoms` (Button, Tag, Icon, Badge, ArtLayer, PortalLink, BoneShape, TechIcon, EggCracks), `molecules` (ProjectCard, TestimonialCard, NestEgg, NestStage, EggShells, HatchActions, ChannelLinks, SkillCell, SkillInventory, UsedIn, SocialLink, ThemeToggle, PuzzlePiece, FossilBoard, FossilSlab, FossilFinding, PuzzleToolbar, ExperienceList), `organisms` (Navbar, Hero, About, Projects, Testimonials, Experience, FossilPuzzle, FossilPuzzleLoader, Contact, ContactNest, Skills, Footer, PortalVeil), `templates` (SectionShell, WorldLayout, PortalProvider), `worlds` (escenas de cada mundo). Las páginas viven en `app/`.
 - **SOLID:** una responsabilidad por componente o módulo; componentes de menos de ~120 líneas; composición sobre herencia; dependencias por props e interfaces; abierto a extensión (agregar un mundo o proyecto = agregar datos, sin tocar componentes).
-- **Separación de responsabilidades:** UI en `components/`, lógica en `hooks/` (useParallax, useCarousel, useDigSite, useContactForm, usePieceDrag, useFossilPuzzle, useTheme), lógica pura en `lib/` (validators, utilidades, constantes), datos en `data/`, tipos en `types/`. Ningún componente mezcla datos, lógica y presentación.
-- **Estados explícitos:** la excavación es un reducer tipado con `useReducer`.
+- **Separación de responsabilidades:** UI en `components/`, lógica en `hooks/` (useParallax, useCarousel, useDigSite, useContactForm, usePieceDrag, useFossilPuzzle, useTheme, useHatch, useEggHint, useOnScreen), lógica pura en `lib/` (validators, utilidades, constantes), datos en `data/`, tipos en `types/`. Ningún componente mezcla datos, lógica y presentación.
+- **Estados explícitos:** la excavación, el puzle del fósil y la eclosión de los huevos son reducers tipados con `useReducer`.
 - **Patrones solo donde aportan:** Strategy (escena del mundo según slug), registry/Factory (mundos y escenas por clave), custom hooks para mouse y scroll, Compound Components para el carrusel. No sobreingenierices.
 - **Estructuras de datos:** `Record`/`Map` por id o slug (búsqueda O(1)), arrays `readonly` con `as const`, uniones discriminadas (tipos de fósil), ordenar la experiencia por fecha una sola vez.
 
@@ -31,8 +31,8 @@ Todavía no hay datos reales. Usa datos de ejemplo ("[Tu Nombre]", enlaces ficti
 app/            layout.tsx, page.tsx (compone las secciones en orden), mundos/[slug]/page.tsx
 components/     atoms | molecules | organisms | templates | worlds
 hooks/  lib/  types/
-data/           projects.ts, testimonials.ts, experience.ts, skills.ts, worlds.ts
-public/         cv.pdf, images/
+data/           projects.ts, testimonials.ts, experience.ts, skills.ts, worlds.ts, contactChannels.ts, contactArt.ts (generado)
+public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 ```
 
 ## Sección Experiencia (fósil tipo puzle)
@@ -43,6 +43,15 @@ public/         cv.pdf, images/
 - **Carga:** `FossilPuzzleLoader` usa `dynamic(..., { ssr: false })`. Mientras carga, un hueco reserva el alto del tablero (sin CLS) y la lista ya está en la página para lectores de pantalla; sin JS (`@media (scripting: none)`) la lista se ve.
 - **Movimiento reducido:** el encaje y el regreso son instantáneos y no hay escala al pasar el ratón. Estilos en `app/fossil.css`; colores `--fossil-*` en `app/theme.css`.
 - **Arte:** los huesos y la losa son SVG pequeños hechos en código (`BoneShape`, `FossilSlab`). El juego de pesca vive en la etiqueta `archive/lake-game` y la inmersión al abismo en el historial de git.
+
+## Sección Contacto (nido que eclosiona)
+
+- **Contenido:** un huevo por canal en `data/contactChannels.ts` (`CONTACT_CHANNELS` por id y `CHANNEL_ORDER`): correo ámbar, LinkedIn azul cobalto, GitHub carbón con violeta. Cada canal trae rótulo, color, brillo, enlace, usuario, `ariaLabel`, `action` (`focusForm` para el correo, `openLink` para los perfiles) y su arte. El formulario de la derecha no cambia; su destinatario sale del canal de correo (`findMailRecipient`).
+- **Arte:** originales en `imagenes_webp/contacto/{nido,huevos,crias,cascaras}` (carpeta local, fuera de git). `npm run contact:art` (`scripts/optimize-contact.ts`, sharp) limpia motas y halos, recorta al borde, separa los 6 trozos de cada imagen de cáscaras (fondo verde con despill) en un sprite por canal, quita el verde de las dos capas del nido sin tocar sus helechos (mismo recorte para que encajen) y genera el manifiesto `data/contactArt.ts` (`CONTACT_ART`, `NEST_ART`). Unos 300 KB en total. También imprime dónde empieza el borde delantero en cada huevo, para ajustar `base` en `nestLayout`. No hay fondo ni mamá asomando (opcionales).
+- **Composición:** `ContactNest` → `NestStage` (capa trasera del nido, huevos y crías, capa delantera que tapa la base de los huevos) → `NestEgg` por canal. Las crías se paran un poco más arriba que su huevo para verse enteras y solo la última muestra su globito. Debajo, `HatchActions` (pista, "Abrir LinkedIn/GitHub" y "Volver a los huevos") y `ChannelLinks`, el único rótulo de cada canal, con su enlace real siempre visible: el huevo es un juego, no un requisito. Geometría en `lib/contact/nestLayout.ts` (porcentajes del escenario, ancho máximo en `--u`); sus pruebas comprueban que las crías no se solapan.
+- **Eclosión:** `hatchReducer` y `nestReducer` en `lib/contact/hatch.ts` (`idle → hover → cracking → hatched`, con pruebas); `useHatch` encadena temblor (400 ms), grietas con `stroke-dashoffset` (250 ms), destello (150 ms), seis cáscaras con trayectorias fijas (`lib/contact/shells.ts`, redondeadas para no romper la hidratación) y la subida de la cría con squash and stretch (450 ms). La cría respira y se inclina con ratón; en reposo los huevos se mecen y `useEggHint` agrieta uno cada 9 s. `useOnScreen` pausa los bucles fuera de pantalla. Estilos en `app/contact.css`.
+- **Acciones y accesibilidad:** cada huevo es un `<button>` con `aria-pressed`; el correo lleva el foco al primer campo del formulario y pulsar una cría repite su acción. Un `aria-live` anuncia "Salió la cría de …". Con movimiento reducido no hay temblor, cáscaras ni rebote: el huevo da paso a la cría con un fundido de 250 ms.
+- **Verificación:** `npm run contact:check` (Playwright, con el servidor en marcha) eclosiona con ratón, teclado y toque en 1280x575, 1440x900 y 390x844 y guarda capturas en `screenshots/contact/`.
 
 ## Sección adicional: sitio de excavación (Habilidades)
 

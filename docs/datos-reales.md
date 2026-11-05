@@ -73,13 +73,14 @@ Tres testimonios de ejemplo (`t1` a `t3`).
 - [ ] `tapeColor`, `avatarBackground`, `avatarFigure`: colores de la silueta y de la cinta decorativa. Cámbialos o déjalos si no usarás fotos de autor.
 - [ ] Si hay menos o más de tres testimonios, ajusta la lista y revisa el carrusel en móvil y escritorio.
 
-## `data/contact.ts`
+## `data/contactChannels.ts`
 
-Cuatro "huevos" de contacto.
+Tres canales, un huevo por cada uno: correo, LinkedIn y GitHub.
 
-- [ ] `mail`: `value` y `href` (`tu@correo.com`). El formulario de contacto no tiene servidor: al validar abre el correo del visitante (`mailto:`) dirigido a la dirección de este huevo (`href`), así que debe ser tu correo real. Si quitas el huevo `mail`, el formulario no se muestra.
-- [ ] `linkedin`: `value` (`linkedin.com/in/tu-usuario`) y `href`.
-- [ ] `github`: `value` (`github.com/tu-usuario`) y `href`.
+- [ ] `correo`: `href` (`mailto:…`) y `handle`. El formulario de contacto no tiene servidor: al validar abre el correo del visitante (`mailto:`) dirigido a esta dirección, así que debe ser tu correo real. Si el canal de correo no tiene un `mailto:`, el formulario no se muestra.
+- [ ] `linkedin`: `href` y `handle` (el usuario que se lee bajo el nido y en el globito).
+- [ ] `github`: `href` y `handle`.
+- [ ] El arte de cada canal sale de `data/contactArt.ts`; se regenera con `npm run contact:art`.
 
 ## `data/skills.ts`
 
