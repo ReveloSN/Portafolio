@@ -1,9 +1,9 @@
 import type { Profile } from "@/types/profile";
 
 export const PROFILE: Profile = {
-  firstName: "[TU NOMBRE]",
-  lastName: "[TU APELLIDO]",
-  initials: "TN",
+  firstName: "Santiago Nicolas",
+  lastName: "Revelo Saavedra",
+  initials: "SR",
   role: "Ingeniero de Software",
   tagline: "[Tu frase corta: qué haces y qué te mueve a construir.]",
   year: 2026,
