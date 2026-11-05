@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { splitSentences } from "@/lib/sentences";
 
 interface StaggerTextProps {
   readonly text: string;
@@ -7,12 +8,9 @@ interface StaggerTextProps {
   readonly startIndex?: number;
 }
 
-/** Corta después de punto, signo de cierre o puntos suspensivos (deja el corchete pegado). */
-const SENTENCE_BREAK = /(?<=[.!?…]\]?)\s+/;
-
 /** Párrafo que aparece frase por frase dentro de un `RevealGroup`. */
 export function StaggerText({ text, className, startIndex = 0 }: StaggerTextProps) {
-  const phrases = text.split(SENTENCE_BREAK).filter(Boolean);
+  const phrases = splitSentences(text);
   return (
     <p className={className}>
       {phrases.map((phrase, i) => (
