@@ -131,7 +131,7 @@ async function nothingCovers(page: Page, label: string) {
   );
 }
 
-async function layout(page: Page, label: string) {
+async function layout(page: Page, label: string, mobile = false) {
   // Sin funciones con nombre dentro de evaluate: tsx les añade un ayudante que el
   // navegador no tiene
   const info = await page.evaluate(() => {
@@ -141,6 +141,7 @@ async function layout(page: Page, label: string) {
     const form = document.querySelector("#contacto form")?.getBoundingClientRect();
     return {
       overflow: document.documentElement.scrollWidth > window.innerWidth,
+      sideBySide: !!nest && !!form && form.left >= nest.right && form.top < nest.bottom,
       inside: [nest, form].every((r) => r && r.left >= 0 && r.right <= window.innerWidth),
       hatchlings: [
         ...document.querySelectorAll(
@@ -153,6 +154,8 @@ async function layout(page: Page, label: string) {
   });
   check(!info.overflow, `${label}: sin scroll horizontal`);
   check(info.inside, `${label}: nido y formulario completos a lo ancho`);
+  if (!mobile)
+    check(info.sideBySide, `${label}: nido a la izquierda y formulario a la derecha`);
   const spans = info.hatchlings.sort((a, b) => a[0]! - b[0]!);
   const overlap = spans.some((span, i) => i > 0 && span[0]! < spans[i - 1]![1]!);
   check(!overlap, `${label}: las crías no se solapan`);
@@ -204,7 +207,7 @@ async function hatchAll(
       );
     }
   }
-  await layout(page, label);
+  await layout(page, label, viewport.mobile);
   await nothingCovers(page, label);
   await shot(page, `${viewport.name}-final-${method}`);
   await page.getByTestId("hatch-reset").click();
@@ -245,7 +248,7 @@ async function main() {
     for (const method of methods) {
       const { context, page, errors } = await open(browser, viewport);
       if (method !== "teclado") await shot(page, `${viewport.name}-reposo`);
-      await layout(page, `${viewport.name} reposo`);
+      await layout(page, `${viewport.name} reposo`, viewport.mobile);
       await nothingCovers(page, `${viewport.name} reposo`);
       await links(page, viewport.name);
       await hatchAll(page, viewport, method);

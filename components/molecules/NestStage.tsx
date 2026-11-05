@@ -34,7 +34,7 @@ export function NestStage({ label, paused, stageRef, children }: NestStageProps)
   return (
     <div
       ref={stageRef}
-      className="nest-stage mx-auto w-full max-w-[calc(var(--u)*46)]"
+      className="nest-stage mx-auto w-full max-w-[calc(var(--u)*42)]"
       style={STAGE_STYLE}
       data-paused={paused || undefined}
       data-testid="egg-nest"
