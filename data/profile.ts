@@ -4,7 +4,7 @@ export const PROFILE: Profile = {
   firstName: "Santiago Nicolas",
   lastName: "Revelo Saavedra",
   initials: "SR",
-  role: "Ingeniero de Software",
+  role: "Ingeniero de Software - Full Stack",
   tagline: "",
   year: 2026,
   cvUrl: "/cv.pdf",
