@@ -14,6 +14,7 @@
     "capture": "tsx scripts/capture.ts",
     "about": "tsx scripts/about.ts",
     "contact:art": "tsx scripts/optimize-contact.ts && prettier --write data/contactArt.ts",
+    "contact:check": "tsx scripts/contact-check.ts",
     "test": "vitest run",
     "theme:shots": "tsx scripts/theme-shots.ts",
     "smoke": "tsx scripts/smoke.ts"
