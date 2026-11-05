@@ -63,6 +63,7 @@ export function ContactNest({ channels }: ContactNestProps) {
               slot={EGG_SLOTS[channel.id]}
               phase={phase}
               hint={hint === channel.id}
+              current={hatch.lastHatch?.id === channel.id}
               flights={shellFlights(i, shellSizes(channel))}
               label={
                 phase === "hatched"

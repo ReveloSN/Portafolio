@@ -162,7 +162,7 @@
 /* Cría: sube con squash and stretch, respira y se inclina al pasar el cursor */
 .nest-hatchling {
   position: absolute;
-  bottom: 0;
+  bottom: calc(var(--hatch-lift) * 1cqw);
   left: 50%;
   width: var(--hatch-w);
   margin-left: calc(var(--hatch-w) / -2);
@@ -195,7 +195,7 @@
 /* Globito con el usuario del canal, sobre la cría */
 .nest-bubble {
   position: absolute;
-  bottom: calc(var(--hatch-h) * 1cqw + 0.6em + var(--lift));
+  bottom: calc((var(--hatch-lift) + var(--hatch-h)) * 1cqw + 0.6em);
   left: 50%;
   translate: -50% 0;
   padding: 0.3em 0.75em;
@@ -211,7 +211,8 @@
   pointer-events: none;
   backdrop-filter: blur(6px);
 }
-.nest-slot[data-phase="hatched"] .nest-bubble {
+/* Solo la última cría muestra su globito: con los huevos juntos no se cruzan */
+.nest-slot[data-phase="hatched"][data-current] .nest-bubble {
   animation: bubble-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) var(--t-rise) both;
 }
 
@@ -363,7 +364,7 @@
     transition: opacity var(--t-fade) ease-out;
   }
   .nest-slot[data-phase="hatched"] .nest-hatchling,
-  .nest-slot[data-phase="hatched"] .nest-bubble {
+  .nest-slot[data-phase="hatched"][data-current] .nest-bubble {
     scale: 1;
     animation: nest-fade var(--t-fade) ease-out both;
   }

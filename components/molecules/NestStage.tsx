@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode, Ref } from "react";
-import { NestBack } from "@/components/worlds/art/NestBack";
-import { NestFront } from "@/components/worlds/art/NestFront";
+import { Illustration } from "@/components/atoms/Illustration";
+import { NEST_ART } from "@/data/contactArt";
 import { HATCH_TIMING } from "@/lib/contact/hatch";
 import { NEST_STAGE } from "@/lib/contact/nestLayout";
 
@@ -14,9 +14,11 @@ interface NestStageProps {
 
 const ms = (value: number) => `${value}ms`;
 
+/** El nido ocupa todo el escenario: hasta ~46 --u en escritorio, casi todo el ancho en móvil. */
+const NEST_SIZES = "(min-width: 1024px) 560px, 92vw";
+
 const STAGE_STYLE = {
   aspectRatio: `${NEST_STAGE.width} / ${NEST_STAGE.height}`,
-  "--nest-base": `${NEST_STAGE.base}%`,
   "--t-shake": ms(HATCH_TIMING.shake),
   "--t-cracks": ms(HATCH_TIMING.cracks),
   "--t-flash": ms(HATCH_TIMING.flash),
@@ -37,11 +39,21 @@ export function NestStage({ label, paused, stageRef, children }: NestStageProps)
       data-paused={paused || undefined}
       data-testid="egg-nest"
     >
-      <NestBack className="nest-back" />
+      <Illustration
+        decorative
+        {...NEST_ART.back}
+        sizes={NEST_SIZES}
+        className="nest-back"
+      />
       <ul aria-label={label} className="absolute inset-0">
         {children}
       </ul>
-      <NestFront className="nest-front" />
+      <Illustration
+        decorative
+        {...NEST_ART.front}
+        sizes={NEST_SIZES}
+        className="nest-front"
+      />
     </div>
   );
 }

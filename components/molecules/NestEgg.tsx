@@ -6,7 +6,9 @@ import { isOpen, type HatchPhase } from "@/lib/contact/hatch";
 import {
   NEST_STAGE,
   hatchlingHeightCqw,
+  hatchlingLiftCqw,
   hatchlingWidth,
+  slotBottom,
   type EggSlot,
 } from "@/lib/contact/nestLayout";
 import type { ShellFlight } from "@/lib/contact/shells";
@@ -17,6 +19,8 @@ interface NestEggProps {
   readonly slot: EggSlot;
   readonly phase: HatchPhase;
   readonly hint: boolean;
+  /** Última cría que salió: solo ella muestra su globito, así no se cruzan. */
+  readonly current: boolean;
   readonly flights: readonly ShellFlight[];
   /** Nombre accesible: el del huevo cerrado o el de la cría ya fuera. */
   readonly label: string;
@@ -34,13 +38,14 @@ const isMouse = (event: PointerEvent) => event.pointerType === "mouse";
 
 /** Un huevo del nido: botón que tiembla, se agrieta y deja salir la cría del canal. */
 export function NestEgg(props: NestEggProps) {
-  const { channel, slot, phase, hint, flights, label, buttonRef } = props;
+  const { channel, slot, phase, hint, current, flights, label, buttonRef } = props;
   const style = {
     "--x": `${slot.x}%`,
+    "--nest-base": `${slotBottom(slot)}%`,
     "--egg-w": `${NEST_STAGE.eggWidth}%`,
     "--sway": `${slot.sway}s`,
     "--sway-delay": `${slot.swayDelay}s`,
-    "--lift": `${slot.bubbleLift}em`,
+    "--hatch-lift": hatchlingLiftCqw,
     "--c": channel.color,
     "--glow-c": channel.glow,
     "--flash-c": channel.color,
@@ -53,6 +58,7 @@ export function NestEgg(props: NestEggProps) {
       style={style}
       data-phase={phase}
       data-hint={hint || undefined}
+      data-current={current || undefined}
     >
       <button
         ref={buttonRef}
