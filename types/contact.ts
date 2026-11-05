@@ -1,15 +1,3 @@
-export type EggKind = "mail" | "linkedin" | "github";
-
-export interface ContactEgg {
-  readonly id: EggKind;
-  readonly label: string;
-  readonly color: string;
-  readonly value: string;
-  readonly href: string;
-  /** Texto del botón que aparece al abrir el huevo (por ejemplo, "Ir a GitHub"). */
-  readonly action: string;
-}
-
 /** Canales del nido de Contacto, en el orden en que se dibujan. */
 export type ChannelId = "correo" | "linkedin" | "github";
 

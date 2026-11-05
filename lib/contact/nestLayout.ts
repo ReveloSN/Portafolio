@@ -14,7 +14,7 @@ export const NEST_STAGE = {
   /** Ancho de cada huevo (% del escenario): los tres tienen la misma escala. */
   eggWidth: 17,
   /** Alto de cada cría (% del ancho del escenario). */
-  hatchlingHeight: 29,
+  hatchlingHeight: 27,
   /** Base de huevos y crías (% del alto): queda tapada por el borde delantero del nido. */
   base: 15,
 } as const;
@@ -36,9 +36,6 @@ export const EGG_SLOTS: Readonly<Record<ChannelId, EggSlot>> = {
   github: { x: 81, sway: 7, swayDelay: -0.6, bubbleLift: 0 },
 };
 
-/** Alto del escenario como porcentaje de su ancho (para aspect-ratio y cálculos). */
-const stageRatio = NEST_STAGE.height / NEST_STAGE.width;
-
 /** Ancho de la cría como porcentaje del ancho del huevo (su contenedor). */
 export function hatchlingWidth(art: ArtImage): number {
   const width = (NEST_STAGE.hatchlingHeight * art.width) / art.height;
@@ -53,12 +50,4 @@ export const hatchlingHeightCqw =
 export function hatchlingSpan(slot: EggSlot, art: ArtImage): readonly [number, number] {
   const half = (NEST_STAGE.hatchlingHeight * art.width) / art.height / 2;
   return [slot.x - half, slot.x + half];
-}
-
-/** Proporción del escenario para CSS (`aspect-ratio`). */
-export const stageAspect = `${NEST_STAGE.width} / ${NEST_STAGE.height}`;
-
-/** Alto del huevo como porcentaje del alto del escenario. */
-export function eggHeightOfStage(art: ArtImage): number {
-  return (NEST_STAGE.eggWidth * art.height) / art.width / stageRatio;
 }

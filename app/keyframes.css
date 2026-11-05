@@ -79,18 +79,6 @@
     visibility: hidden;
   }
 }
-@keyframes wobble {
-  0%,
-  100% {
-    transform: rotate(0);
-  }
-  25% {
-    transform: rotate(-7deg);
-  }
-  75% {
-    transform: rotate(7deg);
-  }
-}
 @keyframes grow {
   from {
     transform: scaleX(0);
@@ -346,4 +334,3 @@
     transform: scale(1.05);
   }
 }
-

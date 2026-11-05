@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { CHANNEL_ORDER, CONTACT_CHANNELS } from "@/data/contactChannels";
 import { EGG_SLOTS, NEST_STAGE, hatchlingSpan, hatchlingWidth } from "./nestLayout";
 
+/** Hueco mínimo entre crías (% del escenario): la inclinación al pasar el cursor lo usa. */
+const MIN_GAP = 3;
+
 const spans = CHANNEL_ORDER.map((id) =>
   hatchlingSpan(EGG_SLOTS[id], CONTACT_CHANNELS[id].hatchling),
 );
@@ -14,9 +17,9 @@ describe("nestLayout", () => {
     }
   });
 
-  it("las crías vecinas no se solapan al abrirse", () => {
+  it("las crías vecinas no se solapan, con margen para inclinarse", () => {
     for (let i = 1; i < spans.length; i++) {
-      expect(spans[i]![0]).toBeGreaterThan(spans[i - 1]![1]);
+      expect(spans[i]![0] - spans[i - 1]![1]).toBeGreaterThan(MIN_GAP);
     }
   });
 

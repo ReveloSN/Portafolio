@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ContactEgg, ContactFormValues } from "@/types/contact";
+import type { ContactChannel, ContactFormValues } from "@/types/contact";
 import { buildMailtoUrl, findMailRecipient, type MailTemplates } from "./mailto";
 
 const TEMPLATES: MailTemplates = {
@@ -68,30 +68,28 @@ describe("buildMailtoUrl", () => {
   });
 });
 
-const egg = (over: Partial<ContactEgg>): ContactEgg => ({
-  id: "mail",
-  label: "Correo",
-  color: "#fff",
-  value: "valor@correo.com",
+const channel = (over: Partial<Pick<ContactChannel, "action" | "href">>) => ({
+  action: "focusForm" as const,
   href: "mailto:href@correo.com",
-  action: "Enviar un correo",
   ...over,
 });
 
 describe("findMailRecipient", () => {
   it("lee la dirección del enlace mailto", () => {
-    expect(findMailRecipient([egg({})])).toBe("href@correo.com");
+    expect(findMailRecipient([channel({})])).toBe("href@correo.com");
   });
 
   it("ignora parámetros del mailto", () => {
-    expect(findMailRecipient([egg({ href: "mailto:a@b.co?subject=x" })])).toBe("a@b.co");
+    expect(findMailRecipient([channel({ href: "mailto:a@b.co?subject=x" })])).toBe(
+      "a@b.co",
+    );
   });
 
-  it("usa el valor visible si el enlace no es mailto", () => {
-    expect(findMailRecipient([egg({ href: "https://x.test" })])).toBe("valor@correo.com");
+  it("ignora canales que no llevan al formulario", () => {
+    expect(findMailRecipient([channel({ action: "openLink" })])).toBeUndefined();
   });
 
-  it("devuelve undefined si no hay huevo de correo", () => {
-    expect(findMailRecipient([egg({ id: "github" })])).toBeUndefined();
+  it("devuelve undefined si el canal de correo no tiene mailto", () => {
+    expect(findMailRecipient([channel({ href: "https://x.test" })])).toBeUndefined();
   });
 });

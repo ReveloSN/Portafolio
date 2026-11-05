@@ -15,6 +15,21 @@ describe("shellFlights", () => {
     expect(shellFlights(1, WIDTHS)).toEqual(shellFlights(1, WIDTHS));
   });
 
+  it("redondea a dos decimales para que servidor y cliente pinten igual", () => {
+    for (const flight of shellFlights(1, [33.480176, 10.5])) {
+      for (const value of [
+        flight.startX,
+        flight.startY,
+        flight.dx,
+        flight.rise,
+        flight.fall,
+      ]) {
+        expect(Math.round(value * 100) / 100).toBe(value);
+      }
+    }
+    expect(shellFlights(0, [33.480176])[0]!.size).toBe(33.48);
+  });
+
   it("cambia de un canal a otro", () => {
     expect(shellFlights(0, WIDTHS)).not.toEqual(shellFlights(2, WIDTHS));
   });

@@ -1,7 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { CRACK_MS, HATCH_TIMING, initialNest, nestReducer } from "@/lib/contact/hatch";
+import {
+  CRACK_MS,
+  HATCH_TIMING,
+  anyOpen,
+  initialNest,
+  nestReducer,
+} from "@/lib/contact/hatch";
 
 interface UseHatchOptions<Id extends string> {
   readonly ids: readonly Id[];
@@ -73,6 +79,7 @@ export function useHatch<Id extends string>(options: UseHatchOptions<Id>) {
   }, [clearTimers]);
 
   return {
+    open: anyOpen(state),
     phases: state.phases,
     lastHatch: state.lastHatch,
     activate,

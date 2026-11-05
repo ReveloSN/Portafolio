@@ -207,48 +207,6 @@
     filter: none;
   }
 }
-.egg {
-  background: none;
-  border: 0;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: var(--text);
-  font-family: "Figtree", sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-}
-.egg svg {
-  overflow: visible;
-}
-.egg:hover svg {
-  animation: wobble 0.6s;
-}
-.egg .shell {
-  fill: var(--c);
-}
-.egg .cap {
-  transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
-  transform-box: fill-box;
-  transform-origin: 20% 100%;
-}
-.egg.open .cap {
-  transform: translate(-16px, -46px) rotate(-26deg);
-}
-.egg .baby {
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity 0.4s 0.15s,
-    transform 0.6s 0.15s cubic-bezier(0.3, 1.4, 0.5, 1);
-}
-.egg.open .baby {
-  opacity: 1;
-  transform: translateY(-6px);
-}
 .fossil {
   transition:
     transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),

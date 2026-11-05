@@ -6,6 +6,7 @@ import { HatchedEgg } from "@/components/worlds/art/HatchedEgg";
 import { COPY } from "@/data/copy";
 import { useContactForm } from "@/hooks/useContactForm";
 import { useFocusOnComplete } from "@/hooks/useFocusOnComplete";
+import { contactFieldId } from "@/lib/contact/form";
 import { cn } from "@/lib/utils";
 import type { ContactFormValues } from "@/types/contact";
 
@@ -25,7 +26,7 @@ interface FieldProps {
 }
 
 function Field({ name, label, error, multiline, type = "text", ...rest }: FieldProps) {
-  const id = `f-${name}`;
+  const id = contactFieldId(name);
   const shared = {
     id,
     name,

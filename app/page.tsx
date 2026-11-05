@@ -5,7 +5,7 @@ import { Footer } from "@/components/organisms/Footer";
 import { Hero } from "@/components/organisms/Hero";
 import { Navbar } from "@/components/organisms/Navbar";
 import { Projects } from "@/components/organisms/Projects";
-import { CONTACT_EGGS } from "@/data/contact";
+import { CHANNEL_ORDER, CONTACT_CHANNELS } from "@/data/contactChannels";
 import { COPY } from "@/data/copy";
 import { FOOTER_LINKS, MAIN_CONTENT_ID, NAV_LINKS } from "@/data/navigation";
 import { PROFILE } from "@/data/profile";
@@ -42,7 +42,7 @@ export default function Home() {
         <Testimonials testimonials={TESTIMONIALS} />
         <Experience />
         <Skills skills={SKILLS} />
-        <Contact eggs={CONTACT_EGGS} />
+        <Contact channels={CHANNEL_ORDER.map((id) => CONTACT_CHANNELS[id])} />
       </main>
       <Footer profile={PROFILE} links={FOOTER_LINKS} />
     </>

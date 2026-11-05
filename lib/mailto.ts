@@ -1,5 +1,5 @@
 import { interpolate } from "./utils";
-import type { ContactEgg, ContactFormValues } from "@/types/contact";
+import type { ContactChannel, ContactFormValues } from "@/types/contact";
 
 /** Textos con marcadores `{name}` y `{email}` para el asunto y la firma del correo. */
 export interface MailTemplates {
@@ -38,13 +38,13 @@ export function buildMailtoUrl(
   return `${MAILTO_PREFIX}${recipient}?subject=${encodePart(subject)}&body=${encodePart(body)}`;
 }
 
-/** Dirección de destino a partir de los huevos de contacto; `undefined` si no hay uno de correo. */
-export function findMailRecipient(eggs: readonly ContactEgg[]): string | undefined {
-  const mail = eggs.find((egg) => egg.id === "mail");
-  if (!mail) return undefined;
-  const raw = mail.href.startsWith(MAILTO_PREFIX)
-    ? mail.href.slice(MAILTO_PREFIX.length)
-    : mail.value;
-  const address = raw.split("?")[0]?.trim();
+/** Dirección de destino: el enlace mailto del canal que lleva al formulario. */
+export function findMailRecipient(
+  channels: readonly Pick<ContactChannel, "action" | "href">[],
+): string | undefined {
+  const mail = channels.find(
+    (channel) => channel.action === "focusForm" && channel.href.startsWith(MAILTO_PREFIX),
+  );
+  const address = mail?.href.slice(MAILTO_PREFIX.length).split("?")[0]?.trim();
   return address ? address : undefined;
 }

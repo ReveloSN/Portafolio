@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import type { HatchPhase } from "@/lib/contact/hatch";
 
 /** Cada cuánto un huevo entero se agrieta un poco como pista, y cuánto dura. */
-export const HINT_EVERY_MS = 9000;
-export const HINT_MS = 900;
+const HINT_EVERY_MS = 9000;
+const HINT_MS = 900;
 
 /**
  * Turna una pista entre los huevos que siguen enteros. Solo corre si el movimiento
