@@ -5,7 +5,7 @@ export const PROFILE: Profile = {
   lastName: "Revelo Saavedra",
   initials: "SR",
   role: "Ingeniero de Software",
-  tagline: "[Tu frase corta: qué haces y qué te mueve a construir.]",
+  tagline: "",
   year: 2026,
   cvUrl: "/cv.pdf",
   photo: {
@@ -17,8 +17,8 @@ export const PROFILE: Profile = {
   },
   aboutParagraphs: [
     "Soy estudiante de Ingeniería de Software en la Universidad Cooperativa de Colombia, actualmente en quinto semestre. Mi interés principal está en el desarrollo backend, la integración de inteligencia artificial, la computación en la nube y el sector salud apoyado con IA.",
-    "Llevo esos intereses al semillero de investigación, donde participo en PEMEC, una plataforma para monitorear enfermedades crónicas en Nariño. Me interesa que la tecnología resuelva problemas reales, y este proyecto me permite trabajar en esa idea desde la investigación.",
-    "Me apasiona también la ciberseguridad. Me interesa proteger la información sensible que manejan los sistemas. Creo que la tecnología tiene sentido cuando resuelve problemas reales, sobre todo en salud, educación y cultura.",
+    "Llevo esos intereses al semillero de investigación, donde participo en PMEC, una plataforma para monitorear enfermedades crónicas en Nariño. Me interesa que la tecnología resuelva problemas reales, y este proyecto me permite trabajar en esa idea desde la investigación.",
+    "Me apasiona también la ciberseguridad. Me interesa proteger la información sensible que manejan los sistemas. Creo que la tecnología tiene sentido cuando resuelve problemas reales.",
   ],
   softSkills: [
     "Comunicación técnica y presentación de ideas",
