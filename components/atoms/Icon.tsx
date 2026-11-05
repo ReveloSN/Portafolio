@@ -9,6 +9,10 @@ export type IconName =
   | "pin"
   | "cap"
   | "heart"
+  | "university"
+  | "code"
+  | "network"
+  | "cloud"
   | "star"
   | "quote"
   | "chevronLeft"
@@ -75,6 +79,26 @@ const ICONS: Readonly<Record<IconName, IconSpec>> = {
     paths: (
       <path d="M12 20s-8-4.6-8-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.8C20 15.4 12 20 12 20z" />
     ),
+  },
+  university: {
+    paths: (
+      <path d="M3 9.5 12 4l9 5.5M5.5 10v7.5M10 10v7.5M14 10v7.5M18.5 10v7.5M3 20h18" />
+    ),
+  },
+  code: { paths: <path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16" /> },
+  network: {
+    paths: (
+      <>
+        <circle cx="5" cy="6" r="2" />
+        <circle cx="5" cy="18" r="2" />
+        <circle cx="12" cy="12" r="2" />
+        <circle cx="19" cy="12" r="2" />
+        <path d="M6.6 7.3l3.8 3.4M6.6 16.7l3.8-3.4M14 12h3" />
+      </>
+    ),
+  },
+  cloud: {
+    paths: <path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9a4.5 4.5 0 0 1 0 9z" />,
   },
   star: {
     filled: true,
