@@ -62,3 +62,10 @@ export const OCEAN_BUBBLES: ParticleRecipe = {
   sizeBonus: 5,
   durationBase: 8,
 };
+
+/** Brasas del volcán: suben como las burbujas, pequeñas y un poco más rápidas. */
+export const VOLCANO_EMBERS: ParticleRecipe = {
+  ...WORLD_PARTICLES,
+  sizeBonus: 1,
+  durationBase: 6,
+};

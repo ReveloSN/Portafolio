@@ -2,7 +2,7 @@ export const COPY = {
   site: {
     title: "Portafolio | Expedición",
     description:
-      "Portafolio personal con tema de expedición: selva, océano y cueva de fósiles.",
+      "Portafolio personal con tema de expedición: selva, océano, cueva de fósiles y volcán.",
     madeWith: "Hecho con Next.js + Tailwind CSS",
   },
   nav: {

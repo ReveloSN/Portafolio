@@ -43,4 +43,18 @@ export const WORLDS: readonly World[] = [
       { title: "Cámara", subtitle: "El corazón de la cueva" },
     ],
   },
+  {
+    slug: "volcan",
+    number: "04",
+    name: "VOLCÁN",
+    accent: "#ff9a5c",
+    ink: "#2a0d05",
+    background:
+      "linear-gradient(180deg,#120504 0,#2e0f08 900px,#3a140a 1900px,#220905 3000px,#120504 100%)",
+    depths: [
+      { title: "Ladera", subtitle: "Donde empieza el ascenso" },
+      { title: "Cráter", subtitle: "Donde todo hierve" },
+      { title: "Magma", subtitle: "Lo que salió del fuego" },
+    ],
+  },
 ];

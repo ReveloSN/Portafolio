@@ -26,7 +26,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: COPY.site.title,
   description:
-    "Portafolio personal con tema de expedición: selva, océano y cueva de fósiles.",
+    "Portafolio personal con tema de expedición: selva, océano, cueva de fósiles y volcán.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

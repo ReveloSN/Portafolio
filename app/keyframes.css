@@ -334,3 +334,12 @@
     transform: scale(1.05);
   }
 }
+@keyframes lava-glow {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}

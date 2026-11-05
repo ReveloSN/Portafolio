@@ -35,7 +35,7 @@ export function Projects({ projects }: ProjectsProps) {
           intro={copy.intro}
           titleClassName="max-w-[calc(var(--u)*59.7)]"
         />
-        <ul className="mt-fluid-6 grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <ul className="mt-fluid-6 grid grid-cols-1 gap-8 md:grid-cols-2">
           {projects.map((project, index) => {
             const world = worldsBySlug.get(project.slug);
             if (!world) return null;

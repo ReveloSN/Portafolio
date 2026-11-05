@@ -17,7 +17,12 @@ const IDLE_TIMEOUT_MS = 15000;
 const HTTP_OK = 200;
 const HTTP_NOT_FOUND = 404;
 const HOME_PATH = "/";
-const WORLD_PATHS = ["/mundos/selva", "/mundos/oceano", "/mundos/cueva"] as const;
+const WORLD_PATHS = [
+  "/mundos/selva",
+  "/mundos/oceano",
+  "/mundos/cueva",
+  "/mundos/volcan",
+] as const;
 const MISSING_PATH = "/mundos/nada";
 const CV_HREF = "/cv.pdf";
 const CV_LABEL = "Descargar CV";
