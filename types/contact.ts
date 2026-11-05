@@ -6,6 +6,8 @@ export interface ContactEgg {
   readonly color: string;
   readonly value: string;
   readonly href: string;
+  /** Texto del botón que aparece al abrir el huevo (por ejemplo, "Ir a GitHub"). */
+  readonly action: string;
 }
 
 export interface ContactFormValues {

@@ -74,6 +74,7 @@ const egg = (over: Partial<ContactEgg>): ContactEgg => ({
   color: "#fff",
   value: "valor@correo.com",
   href: "mailto:href@correo.com",
+  action: "Enviar un correo",
   ...over,
 });
 

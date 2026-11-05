@@ -91,6 +91,7 @@ export const COPY = {
     intro:
       "Si quieres conversar sobre un proyecto, una práctica o una oportunidad, escríbeme.",
     eggHint: "// toca un huevo para romper el cascarón",
+    newTab: "(se abre en una pestaña nueva)",
     open: "Abrir",
     close: "Cerrar",
     formTitle: "Escríbeme un mensaje",

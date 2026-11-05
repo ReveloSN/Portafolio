@@ -60,6 +60,7 @@ export function Contact({ eggs }: ContactProps) {
             hint={copy.eggHint}
             openLabel={copy.open}
             closeLabel={copy.close}
+            newTabLabel={copy.newTab}
           />
           <div className="border-line max-w-[calc(var(--u)*36.1)] min-w-[280px] flex-[1_1_400px] rounded-[28px] border bg-(--panel) p-[clamp(24px,3vw,38px)] backdrop-blur-[10px]">
             {recipient ? <ContactForm recipient={recipient} /> : null}

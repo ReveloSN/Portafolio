@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ContactEgg } from "@/components/molecules/ContactEgg";
+import { EggReveal } from "@/components/molecules/EggReveal";
 import { EggArt } from "@/components/worlds/art/EggArt";
 import { NestBack } from "@/components/worlds/art/NestBack";
 import { NestFront } from "@/components/worlds/art/NestFront";
@@ -12,10 +13,17 @@ interface EggNestProps {
   readonly hint: string;
   readonly openLabel: string;
   readonly closeLabel: string;
+  readonly newTabLabel: string;
 }
 
 /** Nido con huevos: cada huevo se abre para revelar un dato de contacto. */
-export function EggNest({ eggs, hint, openLabel, closeLabel }: EggNestProps) {
+export function EggNest({
+  eggs,
+  hint,
+  openLabel,
+  closeLabel,
+  newTabLabel,
+}: EggNestProps) {
   const [openId, setOpenId] = useState<EggKind | null>(null);
   const open = eggs.find((egg) => egg.id === openId);
 
@@ -49,19 +57,7 @@ export function EggNest({ eggs, hint, openLabel, closeLabel }: EggNestProps) {
       </div>
       <div aria-live="polite" className="mt-fluid-3 min-h-[84px] text-center">
         {open ? (
-          <div>
-            <p className="text-glow text-fluid-xs font-mono tracking-[.3em]">
-              {open.label.toUpperCase()}
-            </p>
-            <a
-              href={open.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-display border-glow text-fluid-xl mt-2 inline-block border-b-2 font-extrabold no-underline"
-            >
-              {open.value}
-            </a>
-          </div>
+          <EggReveal egg={open} newTabLabel={newTabLabel} />
         ) : (
           <p className="text-fluid-sm font-mono tracking-[.12em] opacity-75">{hint}</p>
         )}
