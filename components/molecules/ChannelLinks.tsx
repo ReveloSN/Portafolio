@@ -1,46 +1,54 @@
-import type { ContactChannel } from "@/types/contact";
+import { Icon, type IconName } from "@/components/atoms/Icon";
+import type { ChannelId, ContactChannel } from "@/types/contact";
 
 interface ChannelLinksProps {
   readonly channels: readonly ContactChannel[];
   readonly label: string;
+  /** Texto corto antes de los enlaces ("o ve directo:"). */
+  readonly lead: string;
   readonly newTabLabel: string;
 }
+
+const CHANNEL_ICONS: Readonly<Record<ChannelId, IconName>> = {
+  correo: "mail",
+  linkedin: "linkedin",
+  github: "github",
+};
+const ICON_PX = 16;
 
 const isExternal = (href: string) => !href.startsWith("mailto:");
 
 /**
- * Rótulo y enlace real de cada canal, siempre visibles bajo el nido: el huevo es una
- * capa de juego, no un requisito para encontrar el contacto.
+ * Enlaces reales de cada canal en una sola línea discreta bajo el nido: el huevo es un
+ * juego, no un requisito para encontrar el contacto (ni para un lector de pantalla).
  */
-export function ChannelLinks({ channels, label, newTabLabel }: ChannelLinksProps) {
+export function ChannelLinks({ channels, label, lead, newTabLabel }: ChannelLinksProps) {
   return (
-    <ul aria-label={label} className="grid gap-x-3 gap-y-1 sm:grid-cols-3">
-      {channels.map((channel) => {
-        const external = isExternal(channel.href);
-        return (
-          <li key={channel.id} className="min-w-0">
-            <a
-              href={channel.href}
-              data-testid={`link-${channel.id}`}
-              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="hover:bg-surface flex min-h-11 flex-col items-center justify-center rounded-2xl px-2 py-1.5 text-center no-underline transition-colors"
-            >
-              <span className="text-fluid-xs flex items-center gap-[.5em] font-mono font-semibold tracking-[.25em]">
-                <span
-                  aria-hidden="true"
-                  className="size-[.6em] shrink-0 rounded-full"
-                  style={{ background: channel.color }}
-                />
-                {channel.label.toUpperCase()}
-              </span>
-              <span className="text-fluid-sm text-muted max-w-full [overflow-wrap:anywhere]">
-                {channel.handle}
-              </span>
-              {external ? <span className="sr-only"> {newTabLabel}</span> : null}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+    <nav
+      aria-label={label}
+      className="text-fluid-sm flex flex-wrap items-center justify-center gap-x-1"
+    >
+      <span className="text-muted font-mono">{lead}</span>
+      <ul className="flex flex-wrap justify-center">
+        {channels.map((channel) => {
+          const external = isExternal(channel.href);
+          return (
+            <li key={channel.id}>
+              <a
+                href={channel.href}
+                title={channel.handle}
+                data-testid={`link-${channel.id}`}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="hover:bg-surface inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 font-semibold underline-offset-4 transition-colors hover:underline"
+              >
+                <Icon name={CHANNEL_ICONS[channel.id]} size={ICON_PX} />
+                {channel.label}
+                {external ? <span className="sr-only"> {newTabLabel}</span> : null}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }

@@ -89,6 +89,7 @@ export function ContactNest({ channels }: ContactNestProps) {
         <ChannelLinks
           channels={channels}
           label={copy.linksLabel}
+          lead={copy.linksLead}
           newTabLabel={copy.newTab}
         />
       </div>

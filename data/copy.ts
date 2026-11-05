@@ -94,6 +94,7 @@ export const COPY = {
     newTab: "(se abre en una pestaña nueva)",
     nestLabel: "Nido de contacto",
     linksLabel: "Dónde encontrarme",
+    linksLead: "o ve directo:",
     openLink: "Abrir {label}",
     hatchlingForm: "Cría de {label}: ir al formulario",
     hatchlingLink: "Cría de {label}: abrir {label} en una pestaña nueva",
