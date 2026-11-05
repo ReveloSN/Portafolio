@@ -13,6 +13,7 @@
     "seams": "tsx scripts/seams.ts",
     "capture": "tsx scripts/capture.ts",
     "about": "tsx scripts/about.ts",
+    "contact:art": "tsx scripts/optimize-contact.ts && prettier --write data/contactArt.ts",
     "test": "vitest run",
     "theme:shots": "tsx scripts/theme-shots.ts",
     "smoke": "tsx scripts/smoke.ts"
