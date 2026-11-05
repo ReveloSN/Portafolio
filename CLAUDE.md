@@ -35,6 +35,13 @@ data/           projects.ts, testimonials.ts, experience.ts, skills.ts, worlds.t
 public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 ```
 
+## Sección Proyectos (un mundo por proyecto)
+
+- **Contenido:** cuatro proyectos reales en `data/projects.ts`, uno por mundo (`WORLD_SLUGS`): Isla Espejo → `selva` (videojuego en Godot, en pareja con Fabián), Verificador de Salida → `oceano` (app Android con Expo y Supabase), LOST → `cueva` (Wear OS en Kotlin) y ARGUS → `volcan` (escritorio con Tauri, React y Python). Cada entrada trae resumen, tagline, tecnologías, repositorio, `facts` (periodo, equipo, plataforma, estado), problema, rol, tres métricas, funcionalidades y capturas. `download` es opcional: solo si hay una versión que un visitante pueda instalar (hoy, el APK del Verificador vía `releases/latest`).
+- **Fuente de verdad:** cada dato sale del repositorio del proyecto (git, README, docs) y se contrastó con lo publicado en GitHub. Si un repositorio local va por delante del remoto (LOST y ARGUS tienen commits sin subir), las cifras describen el proyecto local: conviene hacer push para que el visitante pueda comprobarlas.
+- **Capturas:** en `public/images/projects/<slug>/`, con `alt` descriptivo y su tamaño real (`ProjectScreenshot`). La galería usa `next/image` con `object-contain`; si un proyecto no tiene capturas muestra `galleryEmpty`. `lib/projects.test.ts` comprueba que no queden marcadores, que haya tres métricas y que cada captura exista con el tamaño declarado.
+- **Mundos:** `data/worlds.ts` (paleta y profundidades) y los registros `THUMBNAILS` y `SCENES` en `components/worlds/registry.tsx`. El cuarto mundo, Volcán, son SVG en código (`VolcanArt`, `VolcanThumbnail`) con brasas (`.ember`) y lava que respira (`.lava-glow`); sin animación con movimiento reducido. La ficha es `ProjectFactList` (lista `dl`) bajo el problema; la grilla de tarjetas es de dos columnas desde `md`.
+
 ## Sección Experiencia (fósil tipo puzle)
 
 - **Contenido:** cada entrada de `data/experience.ts` (entre 6 y 8, ordenadas una vez en `lib/collections.ts`, de la más reciente a la más antigua) es un hueso del esqueleto (`BONE_SHAPES` en `data/fossilPuzzle.ts`, en orden: cráneo, cuello, costillas…). Encajar la pieza en su hueco de la losa revela su ficha (`FossilFinding`: tipo, periodo, cargo e institución). Al completar el fósil, `ExperienceList` muestra todo en texto (con logros) y el foco pasa a su título.
