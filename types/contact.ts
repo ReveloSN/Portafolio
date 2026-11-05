@@ -42,6 +42,25 @@ export interface ChannelArt {
 /** Manifiesto que genera `scripts/optimize-contact.ts`. */
 export type ContactArt = Readonly<Record<ChannelId, ChannelArt>>;
 
+/** Qué hace la cría al salir: llevar al formulario o abrir el perfil. */
+export type ChannelAction = "focusForm" | "openLink";
+
+/** Un canal del nido: su huevo, su cría y el enlace real que siempre está visible. */
+export interface ContactChannel extends ChannelArt {
+  readonly id: ChannelId;
+  readonly label: string;
+  /** Color del canal (hex): marca del rótulo, globito y cáscaras. */
+  readonly color: string;
+  /** Brillo del suelo del nido bajo el huevo (rgba). */
+  readonly glow: string;
+  readonly href: string;
+  /** Usuario o dirección que se lee en el enlace y en el globito. */
+  readonly handle: string;
+  /** Nombre accesible del huevo cerrado ("Abrir huevo de LinkedIn"). */
+  readonly ariaLabel: string;
+  readonly action: ChannelAction;
+}
+
 export interface ContactFormValues {
   readonly name: string;
   readonly email: string;
