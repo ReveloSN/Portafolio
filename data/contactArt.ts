@@ -1,5 +1,5 @@
 // Generado por scripts/optimize-contact.ts: no editar a mano.
-import type { ContactArt } from "@/types/contact";
+import type { ContactArt, NestArt } from "@/types/contact";
 
 export const CONTACT_ART: ContactArt = {
   correo: {
@@ -166,5 +166,18 @@ export const CONTACT_ART: ContactArt = {
         },
       ],
     },
+  },
+};
+
+export const NEST_ART: NestArt = {
+  back: {
+    src: "/art/contact/nest/back.webp",
+    width: 1100,
+    height: 642,
+  },
+  front: {
+    src: "/art/contact/nest/front.webp",
+    width: 1100,
+    height: 642,
   },
 };

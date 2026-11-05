@@ -30,6 +30,12 @@ export interface ChannelArt {
 /** Manifiesto que genera `scripts/optimize-contact.ts`. */
 export type ContactArt = Readonly<Record<ChannelId, ChannelArt>>;
 
+/** Capas del nido, recortadas con el mismo rectángulo para que encajen. */
+export interface NestArt {
+  readonly back: ArtImage;
+  readonly front: ArtImage;
+}
+
 /** Qué hace la cría al salir: llevar al formulario o abrir el perfil. */
 export type ChannelAction = "focusForm" | "openLink";
 

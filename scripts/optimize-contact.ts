@@ -11,6 +11,10 @@
  *   invisible, y se recortan al contenido.
  * - Cada imagen de cáscaras trae 6 trozos sobre verde #00FF00: se quita el verde con
  *   despill (sin halo), se separa cada trozo y se empaquetan en un sprite por canal.
+ * - El nido viene en dos capas (trasera y delantera) sobre verde y con helechos verdes:
+ *   umbrales propios que respetan los helechos, el borde semitransparente se separa del
+ *   verde (sin desteñirlo) y las dos capas se recortan con el mismo rectángulo para que
+ *   sigan encajando.
  * - Además se escribe una hoja de control sobre fondo oscuro para revisar halos.
  */
 import { mkdir, writeFile } from "node:fs/promises";
@@ -38,6 +42,13 @@ const SPECK_RATIO = 0.004;
 const KEY_HIGH = 90;
 const KEY_LOW = 25;
 const SHELL_PIECES = 6;
+/** Los helechos del nido tienen hasta ~70 de verde de más; el fondo, ~240. */
+const NEST_KEY = { low: 85, high: 170 } as const;
+const KEY_COLOR = [6, 248, 6] as const;
+/** Ancho final del nido (px): ~2x del escenario más ancho. */
+const NEST_WIDTH = 1100;
+/** Puntos (fracción del ancho) donde se mide el borde delantero: los centros de los huevos. */
+const RIM_PROBES = [0.25, 0.5, 0.76] as const;
 const SPRITE_GAP = 2;
 const WEBP = { quality: 78, alphaQuality: 80, effort: 6, smartSubsample: true } as const;
 const DARK = { r: 16, g: 22, b: 18 };
@@ -77,6 +88,30 @@ function chromaKey(img: Rgba): void {
     else if (spill > KEY_LOW)
       data[i + 3] = Math.round((255 * (KEY_HIGH - spill)) / (KEY_HIGH - KEY_LOW));
     if (spill > 0) data[i + 1] = other;
+  }
+}
+
+/**
+ * Fondo verde con helechos verdes: solo es fondo lo que tiene muchísimo verde de más.
+ * En el borde semitransparente se quita la parte del verde de fondo (des-mezcla), así
+ * el color queda como el de la pieza y no gris.
+ */
+function nestKey(img: Rgba): void {
+  const { data } = img;
+  const { low, high } = NEST_KEY;
+  for (let i = 0; i < data.length; i += 4) {
+    const spill = data[i + 1]! - Math.max(data[i]!, data[i + 2]!);
+    if (spill <= low) continue;
+    if (spill >= high) {
+      data[i + 3] = 0;
+      continue;
+    }
+    const alpha = (high - spill) / (high - low);
+    data[i + 3] = Math.round(alpha * 255);
+    for (let c = 0; c < 3; c++) {
+      const unmixed = (data[i + c]! - (1 - alpha) * KEY_COLOR[c]!) / alpha;
+      data[i + c] = Math.max(0, Math.min(255, Math.round(unmixed)));
+    }
   }
 }
 
@@ -222,11 +257,57 @@ async function shellSprite(file: string, out: string, scale: number) {
   return { width, height, pieces };
 }
 
+/** Capas del nido: mismo recorte para las dos, así la delantera tapa justo la base. */
+async function nestLayers() {
+  const layers = await Promise.all(
+    ["nido-trasero", "nido-delantero"].map(async (name) => {
+      const img = await readRgba(path.join(SRC, "nido", `${name}.webp`));
+      nestKey(img);
+      clampAlpha(img);
+      return { img, box: union(dropSpecks(img).boxes) };
+    }),
+  );
+  const box = union(layers.map((layer) => layer.box));
+  const outs = ["back", "front"].map((name) => path.join(OUT, "nest", `${name}.webp`));
+  const sized: Sized[] = [];
+  for (const [i, layer] of layers.entries()) {
+    const result = await toSharp(layer.img)
+      .extract({ left: box.x, top: box.y, width: box.w, height: box.h })
+      .resize({ width: NEST_WIDTH, kernel: "lanczos3" })
+      .webp(WEBP)
+      .toBuffer({ resolveWithObject: true });
+    await writeFile(outs[i]!, result.data);
+    sized.push({
+      src: `/art/contact/nest/${path.basename(outs[i]!)}`,
+      width: result.info.width,
+      height: result.info.height,
+    });
+  }
+  await rimProfile(outs[1]!);
+  return { outs, back: sized[0]!, front: sized[1]! };
+}
+
+/** Dónde empieza el borde delantero en cada huevo (para ajustar nestLayout a mano). */
+async function rimProfile(front: string) {
+  const img = await readRgba(front);
+  const tops = RIM_PROBES.map((fraction) => {
+    const x = Math.round(fraction * (img.width - 1));
+    for (let y = 0; y < img.height; y++) {
+      if (img.data[(y * img.width + x) * 4 + 3]! > 128)
+        return (y / img.height).toFixed(3);
+    }
+    return "sin borde";
+  });
+  console.log(
+    `Borde delantero (fracción del alto) en ${RIM_PROBES.join(", ")}: ${tops.join(", ")}`,
+  );
+}
+
 const kb = async (file: string) =>
   Math.round((await sharp(file).toBuffer()).length / 1024);
 
 async function main() {
-  for (const dir of ["eggs", "hatchlings", "shells"]) {
+  for (const dir of ["eggs", "hatchlings", "shells", "nest"]) {
     await mkdir(path.join(OUT, dir), { recursive: true });
   }
   await mkdir(path.dirname(CHECK), { recursive: true });
@@ -266,11 +347,14 @@ async function main() {
     };
     outputs.push(eggOut, hatchOut, shellOut);
   }
+  const nest = await nestLayers();
+  outputs.push(...nest.outs);
   await writeFile(
     MANIFEST,
     `// Generado por scripts/optimize-contact.ts: no editar a mano.\n` +
-      `import type { ContactArt } from "@/types/contact";\n\n` +
-      `export const CONTACT_ART: ContactArt = ${JSON.stringify(manifest, null, 2)};\n`,
+      `import type { ContactArt, NestArt } from "@/types/contact";\n\n` +
+      `export const CONTACT_ART: ContactArt = ${JSON.stringify(manifest, null, 2)};\n\n` +
+      `export const NEST_ART: NestArt = ${JSON.stringify({ back: nest.back, front: nest.front }, null, 2)};\n`,
   );
   await contactSheet(outputs);
   let total = 0;
