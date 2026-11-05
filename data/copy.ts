@@ -178,6 +178,7 @@ export const COPY = {
     featuresTitle: "Funcionalidades principales",
     galleryKicker: "GALERÍA",
     galleryTitle: "Capturas del proyecto",
+    galleryEmpty: "Las capturas de este proyecto están en camino.",
     technologies: "TECNOLOGÍAS",
     code: "Ver código",
     chooseTitle: "Elige otro mundo",
