@@ -23,7 +23,7 @@ grep -rn "tu-usuario\|tu@correo\|000 0000\|570000000000\|proyecto-[0-9]\|vercel.
 - [ ] `backMeta.motto` (`"[Tu lema de expedición]"`): lema del reverso. `backMeta` es opcional: si lo quitas, el reverso usa `role` y `year` del perfil.
 - [ ] `quickFacts` (3 entradas con iconos `pin`, `cap`, `heart`): ciudad, semestre y universidad, intereses.
 - [ ] `technologies`: lista de ejemplo (FastAPI, Spring Boot, NestJS, Next.js, React Native, Tailwind CSS, Godot). Cada entrada necesita un `icon` del tipo `TechIconId` (`fastapi`, `spring`, `nestjs`, `nextjs`, `react`, `tailwind`, `godot`) y un `color`; si quieres otra tecnología, hay que añadir su logotipo (pendiente: requiere componente y SVG).
-- [ ] `socials`: GitHub, LinkedIn, Instagram y correo, todos con `tu-usuario` o `tu@correo.com`. Si no usas Instagram, elimina esa entrada.
+- [ ] `socials`: GitHub, LinkedIn y correo, todos con `tu-usuario` o `tu@correo.com`.
 
 ## `data/copy.ts`
 
@@ -80,7 +80,6 @@ Cuatro "huevos" de contacto.
 - [ ] `mail`: `value` y `href` (`tu@correo.com`). El formulario de contacto no tiene servidor: al validar abre el correo del visitante (`mailto:`) dirigido a la dirección de este huevo (`href`), así que debe ser tu correo real. Si quitas el huevo `mail`, el formulario no se muestra.
 - [ ] `linkedin`: `value` (`linkedin.com/in/tu-usuario`) y `href`.
 - [ ] `github`: `value` (`github.com/tu-usuario`) y `href`.
-- [ ] `whatsapp`: `value` (`+57 000 000 0000`) y `href` (`https://wa.me/570000000000`). Es un número personal: usa el real o elimina el huevo.
 
 ## `data/skills.ts`
 

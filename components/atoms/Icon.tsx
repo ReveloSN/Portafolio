@@ -5,7 +5,6 @@ export type IconName =
   | "github"
   | "mail"
   | "linkedin"
-  | "instagram"
   | "pin"
   | "cap"
   | "heart"
@@ -48,15 +47,6 @@ const ICONS: Readonly<Record<IconName, IconSpec>> = {
     filled: true,
     paths: (
       <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11.5H3V9.75Zm6.5 0h3.8v1.6h.06c.53-1 1.84-2.06 3.78-2.06 4.04 0 4.78 2.66 4.78 6.1v5.86h-4v-5.2c0-1.24-.02-2.84-1.73-2.84-1.73 0-2 1.35-2 2.75v5.29h-4V9.75Z" />
-    ),
-  },
-  instagram: {
-    paths: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
-      </>
     ),
   },
   pin: {

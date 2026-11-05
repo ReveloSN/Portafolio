@@ -4,7 +4,6 @@ import type { Social, SocialKind } from "@/types/profile";
 const SOCIAL_ICONS: Readonly<Record<SocialKind, IconName>> = {
   github: "github",
   linkedin: "linkedin",
-  instagram: "instagram",
   mail: "mail",
 };
 

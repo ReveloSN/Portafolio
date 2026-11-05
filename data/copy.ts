@@ -89,7 +89,7 @@ export const COPY = {
     eyebrow: "EL NIDO",
     title: "¿Exploramos algo juntos?",
     intro:
-      "Rompe un huevo para ver cómo encontrarme, o escríbeme directo con el formulario.",
+      "Si quieres conversar sobre un proyecto, una práctica o una oportunidad, escríbeme.",
     eggHint: "// toca un huevo para romper el cascarón",
     open: "Abrir",
     close: "Cerrar",

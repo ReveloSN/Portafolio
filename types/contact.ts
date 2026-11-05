@@ -1,4 +1,4 @@
-export type EggKind = "mail" | "linkedin" | "github" | "whatsapp";
+export type EggKind = "mail" | "linkedin" | "github";
 
 export interface ContactEgg {
   readonly id: EggKind;

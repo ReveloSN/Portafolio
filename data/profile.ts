@@ -56,9 +56,12 @@ export const PROFILE: Profile = {
     { name: "Godot", icon: "godot", color: "#478cbf" },
   ],
   socials: [
-    { kind: "github", label: "GitHub", href: "https://github.com/tu-usuario" },
-    { kind: "linkedin", label: "LinkedIn", href: "https://linkedin.com/in/tu-usuario" },
-    { kind: "instagram", label: "Instagram", href: "https://instagram.com/tu-usuario" },
-    { kind: "mail", label: "Correo", href: "mailto:tu@correo.com" },
+    { kind: "github", label: "GitHub", href: "https://github.com/ReveloSN" },
+    {
+      kind: "linkedin",
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/santiago-nicol%C3%A1s-revelo-54b045262",
+    },
+    { kind: "mail", label: "Correo", href: "mailto:revelo.sns@gmail.com" },
   ],
 };
