@@ -117,9 +117,12 @@ export function Hero({ profile }: HeroProps) {
               _
             </span>
           </p>
-          <p className="hero-tagline text-fluid-md leading-relaxed opacity-90">
-            {profile.tagline}
-          </p>
+          {/* Sin frase corta no queda un párrafo vacío ocupando espacio */}
+          {profile.tagline ? (
+            <p className="hero-tagline text-fluid-md leading-relaxed opacity-90">
+              {profile.tagline}
+            </p>
+          ) : null}
           <div className="hero-actions gap-fluid-2 flex flex-wrap">
             <Button href={profile.cvUrl} download data-testid="hero-cta-primary">
               <Icon name="download" size={18} strokeWidth={2.4} />
