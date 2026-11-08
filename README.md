@@ -14,7 +14,8 @@ Los componentes no tienen textos de contenido. Para poner tus datos reales solo 
 | Proyectos (y su mundo)                | `data/projects.ts`                                         |
 | Testimonios                           | `data/testimonials.ts`                                     |
 | Experiencia (6 a 8, una por hueso)    | `data/experience.ts`                                       |
-| Habilidades y dónde se usaron         | `data/skills.ts`                                           |
+| Tecnologías y dónde se usaron         | `data/profile.ts` y `data/techUsage.ts`                    |
+| Hobbies                               | `data/hobbies.ts`                                          |
 | Canales del nido de contacto          | `data/contactChannels.ts`                                  |
 | Textos de interfaz                    | `data/copy.ts`                                             |
 | Tu CV                                 | `public/cv.pdf`                                            |
@@ -33,15 +34,17 @@ npm run build      # build de producción
 npm run format     # Prettier
 npm run contact:art    # arte del nido de Contacto (imagenes_webp/contacto -> public/art/contact)
 npm run contact:check  # Playwright del nido (con el servidor en marcha)
+npm run smoke          # rutas, <h1> y errores de consola (con el servidor en marcha)
+npm run icons          # favicon.ico y apple-icon.png desde app/icon.svg
 ```
 
 ## Estructura
 
 ```
-app/         layout, page (compone las secciones) y mundos/[slug]
+app/         layout, page (compone las secciones), mundos/[slug] y hobbies
 components/  atoms · molecules · organisms · templates · worlds
-hooks/       useParallax, useCarousel, useDigSite, useContactForm, useInView, useDepthProgress, usePointerLight
-lib/         validadores, reducer de la excavación, filtro y profundidad de la experiencia, linterna, constantes y utilidades puras
+hooks/       useParallax, useScrollParallax, useCarousel, useContactForm, useFossilPuzzle, usePieceDrag, useHatch, useTheme, useInView, useOnScreen y otros
+lib/         validadores, puzle del fósil, filtro y profundidad de la experiencia, linterna, constantes y utilidades puras
 data/        contenido tipado
 types/       tipos del dominio
 ```

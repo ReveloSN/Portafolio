@@ -18,20 +18,20 @@ Todavía no hay datos reales. Usa datos de ejemplo ("[Tu Nombre]", enlaces ficti
 
 ## Arquitectura
 
-- **Atomic Design:** `components/atoms` (Button, Tag, Icon, Badge, ArtLayer, PortalLink, BoneShape, TechIcon, EggCracks), `molecules` (ProjectCard, TestimonialCard, NestEgg, NestStage, EggShells, HatchActions, ChannelLinks, SkillCell, SkillInventory, UsedIn, SocialLink, ThemeToggle, PuzzlePiece, FossilBoard, FossilSlab, FossilFinding, PuzzleToolbar, ExperienceList), `organisms` (Navbar, Hero, About, Projects, Testimonials, Experience, FossilPuzzle, FossilPuzzleLoader, Contact, ContactNest, Skills, Footer, PortalVeil), `templates` (SectionShell, WorldLayout, PortalProvider), `worlds` (escenas de cada mundo). Las páginas viven en `app/`.
+- **Atomic Design:** `components/atoms` (Button, Tag, Icon, Badge, ArtLayer, PortalLink, BoneShape, TechIcon, EggCracks), `molecules` (ProjectCard, TestimonialCard, NestEgg, NestStage, EggShells, HatchActions, ChannelLinks, TechTrail, TrackStep, TechUsagePanel, HobbyCard, SocialLink, ThemeToggle, PuzzlePiece, FossilBoard, FossilSlab, FossilFinding, PuzzleToolbar, ExperienceList), `organisms` (Navbar, Hero, About, Projects, Testimonials, Experience, FossilPuzzle, FossilPuzzleLoader, HobbiesTeaser, Hobbies, Contact, ContactNest, Footer, PortalVeil), `templates` (SectionShell, WorldLayout, PortalProvider), `worlds` (escenas de cada mundo). Las páginas viven en `app/`.
 - **SOLID:** una responsabilidad por componente o módulo; componentes de menos de ~120 líneas; composición sobre herencia; dependencias por props e interfaces; abierto a extensión (agregar un mundo o proyecto = agregar datos, sin tocar componentes).
-- **Separación de responsabilidades:** UI en `components/`, lógica en `hooks/` (useParallax, useCarousel, useDigSite, useContactForm, usePieceDrag, useFossilPuzzle, useTheme, useHatch, useEggHint, useOnScreen), lógica pura en `lib/` (validators, utilidades, constantes), datos en `data/`, tipos en `types/`. Ningún componente mezcla datos, lógica y presentación.
-- **Estados explícitos:** la excavación, el puzle del fósil y la eclosión de los huevos son reducers tipados con `useReducer`.
+- **Separación de responsabilidades:** UI en `components/`, lógica en `hooks/` (useParallax, useCarousel, useContactForm, usePieceDrag, useFossilPuzzle, useTheme, useHatch, useEggHint, useOnScreen), lógica pura en `lib/` (validators, utilidades, constantes), datos en `data/`, tipos en `types/`. Ningún componente mezcla datos, lógica y presentación.
+- **Estados explícitos:** el puzle del fósil y la eclosión de los huevos son reducers tipados con `useReducer`.
 - **Patrones solo donde aportan:** Strategy (escena del mundo según slug), registry/Factory (mundos y escenas por clave), custom hooks para mouse y scroll, Compound Components para el carrusel. No sobreingenierices.
 - **Estructuras de datos:** `Record`/`Map` por id o slug (búsqueda O(1)), arrays `readonly` con `as const`, uniones discriminadas (tipos de fósil), ordenar la experiencia por fecha una sola vez.
 
 ## Estructura de carpetas
 
 ```
-app/            layout.tsx, page.tsx (compone las secciones en orden), mundos/[slug]/page.tsx
+app/            layout.tsx, page.tsx (compone las secciones en orden), mundos/[slug]/page.tsx, hobbies/page.tsx, not-found.tsx (404 en español), icon.svg (favicon: huella de tres dedos; favicon.ico y apple-icon.png se generan desde él)
 components/     atoms | molecules | organisms | templates | worlds
 hooks/  lib/  types/
-data/           projects.ts, testimonials.ts, experience.ts, skills.ts, worlds.ts, contactChannels.ts, contactArt.ts (generado)
+data/           projects.ts, testimonials.ts, experience.ts, hobbies.ts, techUsage.ts, worlds.ts, contactChannels.ts, contactArt.ts (generado)
 public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 ```
 
@@ -60,16 +60,21 @@ public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 - **Acciones y accesibilidad:** cada huevo es un `<button>` con `aria-pressed`; el correo lleva el foco al primer campo del formulario y pulsar una cría repite su acción. Un `aria-live` anuncia "Salió la cría de …". Con movimiento reducido no hay temblor, cáscaras ni rebote: el huevo da paso a la cría con un fundido de 250 ms.
 - **Verificación:** `npm run contact:check` (Playwright, con el servidor en marcha) eclosiona con ratón, teclado y toque en 1280x575, 1440x900 y 390x844 y guarda capturas en `screenshots/contact/`.
 
-## Sección adicional: sitio de excavación (Habilidades)
+## Tecnologías (en Sobre mí)
 
-- Cada tecnología de `data/skills.ts` es un hallazgo: fósil, logo (`TechIcon`, trazados en `lib/techIcons.ts`) y contexto "Usado en A y B". **Sin niveles, porcentajes ni barras** (restricción del curso; `lib/skills.test.ts` lo comprueba). `usedIn` son slugs de proyectos y los nombres salen de `data/projects.ts` (`projectsUsing`); `UsedIn` los enlaza a su mundo con la enumeración del idioma (`Intl.ListFormat`, `lib/listFormat.ts`).
-- La excavación sigue siendo un reducer (`useDigSite`); el contenido enterrado es `inert` hasta quitar la última capa. Debajo, `SkillInventory` lista todo sin necesidad de excavar.
+- `TechTrail` dibuja `profile.technologies` como huellas (`TrackStep`, logo con `TechIcon`). **Sin niveles, porcentajes ni barras** (restricción del curso). Cada huella es un `<button>` con `aria-expanded`: abre `TechUsagePanel`, que lista los mundos del portafolio y los otros repositorios públicos donde se usó la tecnología.
+- Fuente: `data/techUsage.ts` (clave: `icon` de la tecnología), sacada de los archivos de dependencias de los repos de GitHub (`package.json`, `pom.xml`, `requirements.txt`...). `lib/techUsage.test.ts` comprueba que cada tecnología del perfil tenga datos, que los mundos existan y que los repos apunten a la cuenta. Si cambian las tecnologías del perfil, hay que actualizar ese archivo.
+
+## Sección adicional: Hobbies
+
+- En la portada, `HobbiesTeaser` (entre Experiencia y Contacto) muestra como fichas solo los hobbies confirmados (sin `example`) y lleva a la página `/hobbies` (`HOBBIES_PATH`), donde `Hobbies` muestra las tarjetas (`HobbyCard`, dibujo de línea `HobbyGlyph`). La tarjeta `featured` ocupa dos columnas y dos filas en escritorio.
+- Datos en `data/hobbies.ts`. Natación es real; las entradas con `example: true` son marcadores visibles ("Ejemplo, por reemplazar") que hay que reemplazar o borrar antes de publicar.
 
 ## Temas claro y oscuro
 
 - Tokens en `app/theme.css`: claro por defecto en `:root`, oscuro en `[data-theme="dark"]`. Tailwind los expone como `fg`, `muted`, `surface`, `line`, `glow` y `glow-amber`; los componentes no usan colores fijos para texto, fondos ni bordes.
 - `THEME_BOOT_SCRIPT` (`lib/theme.ts`, en el `<head>`) pone el tema antes del primer pintado: preferencia guardada en `localStorage` (dentro de try/catch) o `prefers-color-scheme`. `ThemeToggle` en el Navbar (`useTheme`) guarda la elección; sin elección, sigue al sistema.
-- Escenas que conservan su paleta en los dos temas: `[data-palette="night"]` en el Hero, el sitio de excavación, el pie y los mundos (que además fijan su `--glow`/`--ink`). En claro, Sobre mí amanece bajo el dosel del Hero, Contacto oscurece hacia el pie y las luciérnagas solo brillan en escenas nocturnas.
+- Escenas que conservan su paleta en los dos temas: `[data-palette="night"]` en el Hero, el pie y los mundos (que además fijan su `--glow`/`--ink`). En claro, Sobre mí amanece bajo el dosel del Hero, Contacto oscurece hacia el pie y las luciérnagas solo brillan en escenas nocturnas.
 - Contraste AA de los tokens en los dos temas: `lib/themeTokens.test.ts`. El lima no es texto en claro: `--glow` pasa a verde oscuro y el nombre de cada mundo usa tinta con una marca de su color.
 
 ## Portal e intro
@@ -85,9 +90,11 @@ public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 - Server Components por defecto; `"use client"` solo donde haya interactividad.
 - `next/image` y `next/font`; `dynamic import` para secciones pesadas.
 - Animaciones con `transform` y `opacity`; `requestAnimationFrame` con throttling para el paralaje; `useMemo`/`useCallback` solo si mejora medible; `IntersectionObserver` para animar al entrar en pantalla.
+- Nada de animar elementos dentro de un SVG grande: esas animaciones no se componen y repintan todo el SVG en cada frame (por eso `Pterodactyls` vuela en carriles HTML). `OffscreenPause` (`useOffscreenPause`) pausa los bucles de las secciones de la portada fuera de pantalla. En el paralaje por JS, primero todas las lecturas del DOM y luego todas las escrituras (`useScrollParallax`).
 - Respeta `prefers-reduced-motion`.
 - Accesibilidad: HTML semántico, botones y enlaces reales, `alt`, foco visible, `aria-live` en los estados de juego. Mobile-first y 100% responsive. Sin emojis; íconos en SVG.
 - Tailwind: tokens de color, tipografía y espaciado en `tailwind.config`; clases repetidas extraídas a componentes, no a `@apply` masivo.
+- Buscadores y enlaces compartidos: el título, la descripción y Open Graph salen de `PROFILE` (`app/layout.tsx`, plantilla "Página | Nombre"); la portada lleva JSON-LD `Person` (`lib/structuredData.ts`) solo con perfiles públicos, sin el correo. Las imágenes se sirven en AVIF con WebP de respaldo (`next.config.ts`). `app/opengraph-image.tsx` genera la tarjeta de 1200×630 para enlaces compartidos; `app/robots.ts` y `app/sitemap.ts` usan `SITE_URL` (`data/site.ts`). Cabeceras de seguridad en `next.config.ts`, sin X-Frame-Options a propósito.
 
 ## Antes de dar algo por terminado
 
