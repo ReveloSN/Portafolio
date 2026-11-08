@@ -34,9 +34,11 @@ export function DepthPanel({
           <p className="text-fluid-sm mt-1.5 opacity-80">{subtitle}</p>
         </div>
         <div className="world-panel-card">
-          <p className="font-display text-glow text-fluid-xs tracking-[.35em]">
-            {kicker}
-          </p>
+          {kicker ? (
+            <p className="font-display text-glow text-fluid-xs tracking-[.35em]">
+              {kicker}
+            </p>
+          ) : null}
           <h2
             id={`${id}-title`}
             className="font-display text-fluid-2xl mt-2.5 mb-4 leading-[1.1] font-extrabold"

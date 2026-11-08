@@ -92,12 +92,10 @@ export function Hero({ profile }: HeroProps) {
                 figureWidth="68%"
                 photo={profile.heroPhoto ?? profile.photo}
                 photoSizes={AVATAR_SIZES}
+                photoLoading="eager"
               />
             </div>
             <div className="text-left">
-              <p className="font-display text-glow text-fluid-xs font-medium tracking-[.5em]">
-                {hero.eyebrow} · {profile.year}
-              </p>
               <p className="font-display text-fluid-md mt-1 font-medium opacity-90">
                 {hero.greeting}
               </p>
@@ -113,9 +111,6 @@ export function Hero({ profile }: HeroProps) {
           </h1>
           <p className="font-display text-glow text-fluid-lg tiny-h:hidden font-medium tracking-[.2em] uppercase">
             {profile.role}
-            <span className="cursor-blink" aria-hidden="true">
-              _
-            </span>
           </p>
           {/* Sin frase corta no queda un párrafo vacío ocupando espacio */}
           {profile.tagline ? (

@@ -9,9 +9,11 @@ export function WorldJourney({ slug }: { readonly slug: WorldSlug }) {
       <div className="mx-auto max-w-[1200px]">
         <div className="project-journey-intro">
           <div>
-            <p className="text-glow text-fluid-xs font-mono tracking-[.25em]">
-              {COPY.world.journeyKicker}
-            </p>
+            {COPY.world.journeyKicker ? (
+              <p className="text-glow text-fluid-xs font-mono tracking-[.25em]">
+                {COPY.world.journeyKicker}
+              </p>
+            ) : null}
             <h2
               id="recorrido-title"
               className="font-display text-fluid-3xl mt-3 mb-8 font-extrabold"

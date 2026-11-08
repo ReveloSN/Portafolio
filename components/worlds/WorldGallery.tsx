@@ -17,9 +17,11 @@ export function WorldGallery({ project }: WorldGalleryProps) {
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
         {project.screenshots.length > 0 && (
           <>
-            <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
-              {copy.galleryKicker}
-            </p>
+            {copy.galleryKicker ? (
+              <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
+                {copy.galleryKicker}
+              </p>
+            ) : null}
             <h2 className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold">
               {copy.galleryTitle}
             </h2>

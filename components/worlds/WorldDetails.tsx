@@ -75,9 +75,11 @@ export function WorldDetails({ world, project, journey }: WorldDetailsProps) {
         className="px-gutter pb-fluid-6 pt-10"
       >
         <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
-          <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
-            {copy.featuresKicker}
-          </p>
+          {copy.featuresKicker ? (
+            <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
+              {copy.featuresKicker}
+            </p>
+          ) : null}
           <h2
             id="funcionalidades-title"
             className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold"

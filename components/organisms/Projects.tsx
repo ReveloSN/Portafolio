@@ -43,7 +43,7 @@ export function Projects({ projects }: ProjectsProps) {
                 <Reveal className="flex w-full" delay={index * 120}>
                   <ProjectCard
                     project={project}
-                    worldLabel={`MUNDO ${world.number} · ${world.name}`}
+                    worldLabel={world.name}
                     accent={world.accent}
                     labels={copy}
                   />

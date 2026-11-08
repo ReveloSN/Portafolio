@@ -52,7 +52,7 @@ export function WorldLayout({ world, worlds, project, profile }: WorldLayoutProp
             </li>
             {project.screenshots.length > 0 && (
               <li>
-                <a href="#capturas">{copy.galleryKicker}</a>
+                <a href="#capturas">{copy.galleryTitle}</a>
               </li>
             )}
           </ul>
