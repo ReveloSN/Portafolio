@@ -17,7 +17,8 @@
     "contact:check": "tsx scripts/contact-check.ts",
     "test": "vitest run",
     "theme:shots": "tsx scripts/theme-shots.ts",
-    "smoke": "tsx scripts/smoke.ts"
+    "smoke": "tsx scripts/smoke.ts",
+    "icons": "tsx scripts/icons.ts"
   },
   "dependencies": {
     "next": "16.4.3",

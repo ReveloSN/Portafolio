@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Ícono del sitio: el cuadrado lima del Navbar con una huella de terópodo (tres dedos). -->
+  <rect width="64" height="64" rx="15" fill="#a6ff5c"/>
+  <g fill="none" stroke="#0d2a1d" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 45 L32 14" stroke-width="8"/>
+    <path d="M31 44 L16 23" stroke-width="7.5"/>
+    <path d="M33 44 L48 23" stroke-width="7.5"/>
+  </g>
+  <ellipse cx="32" cy="46" rx="8.5" ry="7" fill="#0d2a1d"/>
+</svg>

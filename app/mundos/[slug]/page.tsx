@@ -20,9 +20,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: WorldPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = isWorldSlug(slug) ? projectsBySlug.get(slug) : undefined;
-  return project
-    ? { title: `${project.name} | ${PROFILE.firstName}`, description: project.tagline }
-    : {};
+  return project ? { title: project.name, description: project.tagline } : {};
 }
 
 export default async function WorldPage({ params }: WorldPageProps) {
