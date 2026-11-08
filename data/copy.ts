@@ -95,6 +95,10 @@ export const COPY = {
     academic: "Experiencia académica e investigativa",
     work: "Experiencia profesional",
     achievements: "Logros",
+    prevPage: "Página anterior",
+    nextPage: "Página siguiente",
+    pageOf: "Página {n} de {total}",
+    pagerLabel: "Páginas: {title}",
   },
   contact: {
     eyebrow: "",

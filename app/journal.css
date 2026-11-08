@@ -59,15 +59,6 @@
   line-height: 1.1;
   text-align: center;
 }
-.journal-chapter {
-  margin-top: max(1.75rem, calc(var(--u) * 3));
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--journal-rule);
-  color: var(--journal-rust);
-  font-size: var(--fs-lg);
-  font-variant: small-caps;
-  letter-spacing: 0.05em;
-}
 
 /* Entradas: renglones separados por una línea de tinta ------------- */
 .journal-list {
@@ -128,4 +119,115 @@
 }
 .journal-achievements > li + li {
   margin-top: 0.3rem;
+}
+
+/* Dos diarios, uno por tipo de experiencia --------------------------- */
+.journal-books {
+  display: grid;
+  gap: max(1.5rem, calc(var(--u) * 3));
+  margin-top: max(1.25rem, calc(var(--u) * 2.2));
+}
+@media (min-width: 1024px) {
+  .journal-books {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.journal-books > .journal-sheet {
+  margin-top: 0;
+}
+/* Los dos libros miden lo mismo: las páginas ocupan el alto libre y los botones quedan abajo */
+.journal-book {
+  display: flex;
+  flex-direction: column;
+}
+.journal-book .journal-pages {
+  flex: 1 1 auto;
+}
+.journal-book .journal-heading {
+  font-size: var(--fs-xl);
+}
+
+/* Páginas apiladas en la misma celda: el libro mide su página más alta */
+.journal-pages {
+  display: grid;
+  margin-top: max(1rem, calc(var(--u) * 1.6));
+  border-top: 1px solid var(--journal-rule);
+}
+.journal-page {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+.journal-page:not([data-active]) {
+  visibility: hidden;
+}
+.journal-page .journal-entry {
+  border-bottom: 0;
+}
+/* Al pasar de página la nueva entra desde el lado del paso, con transform y opacidad */
+.journal-pages[data-dir] .journal-page[data-active] {
+  animation: journal-turn-forward 0.35s var(--ease-enter) both;
+}
+.journal-pages[data-dir="back"] .journal-page[data-active] {
+  animation-name: journal-turn-back;
+}
+@keyframes journal-turn-forward {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem) rotate(0.6deg);
+  }
+}
+@keyframes journal-turn-back {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem) rotate(-0.6deg);
+  }
+}
+
+/* Paso de página: dos botones de tinta y el número de página */
+.journal-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--journal-rule);
+}
+.journal-turn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(43, 33, 23, 0.4);
+  border-radius: 50%;
+  color: var(--journal-ink);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+.journal-turn:hover:not(:disabled) {
+  background: var(--journal-ink);
+  color: var(--journal-paper);
+}
+.journal-turn:focus-visible {
+  outline: 2px solid var(--journal-rust);
+  outline-offset: 2px;
+}
+.journal-turn:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+.journal-page-count {
+  color: var(--journal-faded);
+  font-size: var(--fs-sm);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-page[data-active] {
+    animation: none;
+  }
 }
