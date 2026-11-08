@@ -10,6 +10,12 @@ interface ExplorerCardBackProps {
   readonly profile: Profile;
 }
 
+/**
+ * La huella es una marca de agua al 13 % de opacidad: no necesita la nitidez completa.
+ * Con 160px, un móvil de densidad 3 pide 640 px en lugar de 1080 (unos 120 KB menos).
+ */
+const WATERMARK_SIZES = "160px";
+
 /** Reverso de la credencial: el dato curioso sobre una huella de dinosaurio. */
 export function ExplorerCardBack({ profile }: ExplorerCardBackProps) {
   const { about } = COPY;
@@ -27,7 +33,7 @@ export function ExplorerCardBack({ profile }: ExplorerCardBackProps) {
           src={footprint.src}
           width={footprint.width}
           height={footprint.height}
-          sizes="320px"
+          sizes={WATERMARK_SIZES}
           className="absolute top-1/2 left-1/2 w-[78cqw] -translate-1/2 -rotate-12 opacity-[.13]"
         />
         <p className="font-display relative text-[clamp(1.1rem,9cqw,2.75rem)] leading-none font-extrabold">

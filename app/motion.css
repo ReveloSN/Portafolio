@@ -1,14 +1,18 @@
 /* Movimiento y estados de las escenas interactivas (del diseño de referencia) */
+
+/* Secciones fuera de pantalla (useOffscreenPause): sus bucles decorativos se detienen. */
+main > [data-paused] *,
+main > [data-paused] *::before,
+main > [data-paused] *::after {
+  animation-play-state: paused !important;
+}
+
 .px {
   transition: transform 0.25s ease-out;
   will-change: transform;
 }
 .bob2 {
   animation: bob 4.5s ease-in-out infinite;
-}
-.breathe {
-  animation: breathe 7s ease-in-out infinite;
-  transform-origin: 85% 95%;
 }
 .blink {
   animation: blink 6s ease-in-out infinite;
@@ -39,12 +43,6 @@
   pointer-events: none;
   animation: flick 4s ease-in-out infinite;
 }
-.chip-float {
-  animation: float 6s ease-in-out infinite;
-}
-.cursor-blink {
-  animation: cblink 1s steps(2, start) infinite;
-}
 .rise {
   animation: rise 9s linear infinite;
   transform-box: fill-box;
@@ -55,199 +53,6 @@
   transform-box: fill-box;
   transform-origin: center;
 }
-.idcard {
-  transform: rotate(-3deg);
-  transition:
-    transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.5s;
-}
-.idcard:hover {
-  transform: rotate(0deg) translateY(-8px);
-  box-shadow: 0 40px 80px -30px rgba(166, 255, 92, 0.5);
-}
-.cell {
-  position: relative;
-  padding: 22px 22px 24px;
-  border-radius: 20px;
-  background: linear-gradient(160deg, rgba(90, 61, 38, 0.85), rgba(40, 24, 12, 0.9));
-  border: 1px solid rgba(255, 196, 110, 0.25);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  transition:
-    border-color 0.4s,
-    box-shadow 0.4s;
-}
-.cell:before,
-.cell:after {
-  content: "";
-  position: absolute;
-  top: -8px;
-  width: 10px;
-  height: 26px;
-  border-radius: 2px;
-  background: #e0612b;
-}
-.cell:before {
-  left: 22px;
-}
-.cell:after {
-  right: 22px;
-}
-.cell.full {
-  border-color: #ffc46e;
-  box-shadow: 0 0 36px rgba(255, 170, 70, 0.28);
-}
-.stat {
-  flex: none;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  border: 1px solid rgba(255, 196, 110, 0.45);
-  color: #ffc46e;
-  white-space: nowrap;
-}
-.pit {
-  position: relative;
-  height: clamp(12.5rem, calc(var(--u) * 17), 16.5rem);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 196, 110, 0.25);
-  background: #2a1a0e;
-}
-.find {
-  position: absolute;
-  inset: 0;
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: radial-gradient(circle at 28% 18%, #6a4629, #2a1a0e 75%);
-}
-.dirt {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.dirtbtn {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  min-height: 44px;
-  border: 0;
-  border-radius: inherit;
-  padding: 0;
-  background: none;
-  cursor: pointer;
-  font: inherit;
-  color: #fff;
-  pointer-events: auto;
-}
-.dirtbtn:focus-visible {
-  outline: 3px solid var(--glow);
-  outline-offset: -6px;
-}
-.dirtbtn:hover ~ .dl {
-  filter: brightness(1.12);
-}
-.dl {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transition:
-    transform 0.6s cubic-bezier(0.5, 0, 0.8, 0.4),
-    opacity 0.5s;
-  pointer-events: none;
-}
-.dl.gone {
-  transform: translateY(70%) rotate(5deg);
-  opacity: 0;
-}
-.dhint {
-  position: absolute;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(20, 10, 4, 0.78);
-  border: 1px solid rgba(255, 196, 110, 0.5);
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.hitA {
-  animation: shakeA 0.4s;
-}
-.hitB {
-  animation: shakeB 0.4s;
-}
-/* Movimiento reducido: sin sacudida ni caída; las capas solo se desvanecen. */
-@media (prefers-reduced-motion: reduce) {
-  .hitA,
-  .hitB,
-  .dig {
-    animation: none !important;
-  }
-  .dl {
-    transition-property: opacity !important;
-    transition-duration: 0.3s !important;
-  }
-  .dl.gone {
-    transform: none;
-  }
-  .dirtbtn:hover ~ .dl {
-    filter: none;
-  }
-}
-.fossil {
-  transition:
-    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.4s,
-    border-color 0.4s;
-}
-.fossil:hover {
-  transform: translateY(-10px) rotate(-1deg);
-  border-color: rgba(255, 196, 110, 0.7);
-  box-shadow: 0 30px 60px -24px rgba(255, 170, 70, 0.45);
-}
-.bar {
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-}
-.bar i {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  transform-origin: left;
-  animation: grow 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-@supports (animation-timeline: view()) {
-  .dig {
-    animation: dig linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 85%;
-  }
-}
-.bar-fill {
-  transform-origin: left;
-  animation: grow 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-.dl > svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 /* Mundo océano */
 .swimA {
   animation: swimA 9s ease-in-out infinite;
@@ -287,14 +92,6 @@
   background: rgba(255, 255, 255, 0.12);
   pointer-events: none;
   animation: up 10s linear infinite;
-}
-.jelly {
-  animation: jelly 5s ease-in-out infinite;
-}
-.pulse {
-  animation: pulse 3s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
 }
 /* Mundo cueva */
 .flame {
@@ -364,11 +161,4 @@
 /* Camino de huellas: zigzag de pie izquierdo y derecho */
 .track-step[data-lift="down"] {
   margin-top: calc(var(--u) * 2.2);
-}
-
-/* Pantallas bajas: el pozo de excavación se compacta para que la celda quepa entera */
-@media (max-height: 640px) {
-  .pit {
-    height: 12rem;
-  }
 }

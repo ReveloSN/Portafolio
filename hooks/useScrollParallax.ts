@@ -3,17 +3,24 @@
 import { useEffect, useRef } from "react";
 import { supportsScrollTimeline } from "@/lib/dom";
 
-type Subscriber = () => void;
+/** Mide (solo lee el DOM) y devuelve la escritura que se hará después. */
+type Subscriber = () => () => void;
 
 /** Un único listener de scroll (con rAF) compartido por todos los elementos visibles. */
 const subscribers = new Set<Subscriber>();
 let frame = 0;
 
+/** Primero todas las lecturas, luego todas las escrituras: un solo layout por frame. */
+function flush() {
+  const writes = [...subscribers].map((measure) => measure());
+  writes.forEach((write) => write());
+}
+
 function onScroll() {
   if (frame) return;
   frame = requestAnimationFrame(() => {
     frame = 0;
-    subscribers.forEach((update) => update());
+    flush();
   });
 }
 
@@ -21,7 +28,7 @@ function subscribe(update: Subscriber) {
   if (subscribers.size === 0)
     window.addEventListener("scroll", onScroll, { passive: true });
   subscribers.add(update);
-  update();
+  update()();
   return () => {
     subscribers.delete(update);
     if (subscribers.size === 0) window.removeEventListener("scroll", onScroll);
@@ -47,7 +54,8 @@ export function useScrollParallax<T extends HTMLElement>() {
       const rect = element.getBoundingClientRect();
       // -1 cuando entra por abajo, 1 cuando sale por arriba
       const progress = 1 - (rect.top + rect.height) / (window.innerHeight + rect.height);
-      element.style.setProperty("--scroll-shift", (progress * 2 - 1).toFixed(3));
+      const shift = (progress * 2 - 1).toFixed(3);
+      return () => element.style.setProperty("--scroll-shift", shift);
     };
 
     const observer = new IntersectionObserver(([entry]) => {
