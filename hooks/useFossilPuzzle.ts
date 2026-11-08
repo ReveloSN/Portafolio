@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { PUZZLE_BOARD } from "@/data/fossilPuzzle";
+import { PUZZLE_BOARD, PUZZLE_TRAY_SCALE } from "@/data/fossilPuzzle";
 import {
   createInitialPuzzleState,
   fitsSlot,
@@ -38,7 +38,21 @@ export function useFossilPuzzle(pieces: readonly PieceGeometry[]) {
   const drop = (index: number, offset: Point) => {
     const piece = pieces[index];
     if (!piece) return false;
-    const moved = { x: piece.trayOrigin.x + offset.x, y: piece.trayOrigin.y + offset.y };
+    const element =
+      board.current?.querySelectorAll<HTMLButtonElement>(".fossil-piece")[index];
+    const unit = pxPerUnit();
+    const actualWidth =
+      element && unit > 0
+        ? element.offsetWidth / unit
+        : piece.shape.size.width * PUZZLE_TRAY_SCALE;
+    const actualHeight =
+      element && unit > 0
+        ? element.offsetHeight / unit
+        : piece.shape.size.height * PUZZLE_TRAY_SCALE;
+    const moved = {
+      x: piece.trayOrigin.x + offset.x - (piece.shape.size.width - actualWidth) / 2,
+      y: piece.trayOrigin.y + offset.y - (piece.shape.size.height - actualHeight) / 2,
+    };
     const fits = fitsSlot(
       moved,
       piece.shape.slot,
@@ -59,7 +73,7 @@ export function useFossilPuzzle(pieces: readonly PieceGeometry[]) {
     const lost =
       !active || active === document.body || (active as HTMLButtonElement).disabled;
     if (!lost) return;
-    if (complete) result.current?.focus();
+    if (complete) result.current?.focus({ preventScroll: true });
     else
       board.current
         ?.querySelector<HTMLButtonElement>(".fossil-piece:not(:disabled)")

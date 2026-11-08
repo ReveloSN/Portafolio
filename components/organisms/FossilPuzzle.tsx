@@ -1,6 +1,5 @@
 "use client";
 
-import { ExperienceList } from "@/components/molecules/ExperienceList";
 import { FossilBoard } from "@/components/molecules/FossilBoard";
 import { FossilFinding } from "@/components/molecules/FossilFinding";
 import { PuzzleToolbar } from "@/components/molecules/PuzzleToolbar";
@@ -14,7 +13,7 @@ import { interpolate } from "@/lib/utils";
 import type { ExperienceEntry, ExperienceKind } from "@/types/experience";
 
 interface FossilPuzzleProps {
-  /** Ya ordenadas de la más reciente a la más antigua (entre 6 y 8). */
+  /** Una experiencia real por fragmento de la ilustración. */
   readonly entries: readonly ExperienceEntry[];
 }
 
@@ -110,11 +109,6 @@ export default function FossilPuzzle({ entries }: FossilPuzzleProps) {
           >
             {copy.completeTitle}
           </h3>
-          <ExperienceList
-            entries={entries}
-            kindLabels={KIND_LABELS}
-            achievementsLabel={copy.achievements}
-          />
         </section>
       )}
     </div>

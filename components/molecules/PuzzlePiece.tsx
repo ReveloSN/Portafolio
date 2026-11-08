@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { BoneShape } from "@/components/atoms/BoneShape";
 import { usePieceDrag } from "@/hooks/usePieceDrag";
+import { PUZZLE_TRAY_SCALE } from "@/data/fossilPuzzle";
 import type { BoneShape as BoneShapeData, Point, PuzzleBoard } from "@/types/puzzle";
 
 interface PuzzlePieceProps {
@@ -58,8 +59,8 @@ export function PuzzlePiece({
   const style: CSSProperties = {
     left: percent(origin.x, board.width),
     top: percent(origin.y, boardHeight),
-    width: percent(shape.size.width, board.width),
-    height: percent(shape.size.height, boardHeight),
+    width: percent(shape.size.width * (placed ? 1 : PUZZLE_TRAY_SCALE), board.width),
+    height: percent(shape.size.height * (placed ? 1 : PUZZLE_TRAY_SCALE), boardHeight),
   };
 
   return (

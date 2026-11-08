@@ -15,7 +15,16 @@ export function BoneShape({ shape, className }: BoneShapeProps) {
       focusable="false"
       className={className}
     >
-      <path d={shape.path} fillRule="evenodd" />
+      {shape.image ? (
+        <image
+          href={shape.image}
+          width={width}
+          height={height}
+          preserveAspectRatio="none"
+        />
+      ) : (
+        <path d={shape.path} fillRule="evenodd" />
+      )}
     </svg>
   );
 }

@@ -47,6 +47,7 @@ export function FossilBoard({
         width={board.width}
         height={board.slabHeight}
         shapes={pieces.map((piece) => piece.shape)}
+        placed={state.placed}
       />
       {pieces.map((piece, i) => {
         const placed = state.placed[i] ?? false;

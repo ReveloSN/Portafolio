@@ -4,6 +4,7 @@ interface FossilSlabProps {
   readonly width: number;
   readonly height: number;
   readonly shapes: readonly BoneShape[];
+  readonly placed?: readonly boolean[];
 }
 
 /** Margen del canto de la losa respecto al tablero (unidades). */
@@ -11,7 +12,7 @@ const EDGE = 16;
 const RADIUS = 36;
 
 /** Losa de piedra con el hueco punteado de cada hueso. Decorativa: el puzle se lee aparte. */
-export function FossilSlab({ width, height, shapes }: FossilSlabProps) {
+export function FossilSlab({ width, height, shapes, placed }: FossilSlabProps) {
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
@@ -35,15 +36,34 @@ export function FossilSlab({ width, height, shapes }: FossilSlabProps) {
         stroke="var(--fossil-socket-edge)"
         strokeWidth="2"
       />
-      {shapes.map((shape) => (
-        <path
-          key={shape.id}
-          d={shape.path}
-          fillRule="evenodd"
-          transform={`translate(${shape.slot.x} ${shape.slot.y})`}
-          className="fossil-socket"
-        />
-      ))}
+      <image
+        href="/art/experience/bones/empty-slab.webp"
+        width={width}
+        height={height}
+        preserveAspectRatio="none"
+      />
+      {shapes.map((shape, index) =>
+        placed?.[index] ? null : shape.image ? (
+          <image
+            key={shape.id}
+            href={shape.image}
+            x={shape.slot.x}
+            y={shape.slot.y}
+            width={shape.size.width}
+            height={shape.size.height}
+            opacity=".16"
+            preserveAspectRatio="none"
+          />
+        ) : (
+          <path
+            key={shape.id}
+            d={shape.path}
+            fillRule="evenodd"
+            transform={`translate(${shape.slot.x} ${shape.slot.y})`}
+            className="fossil-socket"
+          />
+        ),
+      )}
     </svg>
   );
 }

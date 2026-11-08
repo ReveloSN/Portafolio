@@ -1,6 +1,8 @@
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { FossilPuzzleLoader } from "@/components/organisms/FossilPuzzleLoader";
+import { ExperienceList } from "@/components/molecules/ExperienceList";
+import { sortedExperience } from "@/lib/collections";
 import { SectionShell } from "@/components/templates/SectionShell";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
@@ -12,10 +14,7 @@ const BACKGROUND = seamBackground(
   "radial-gradient(ellipse 80% 60% at 50% 40%, var(--experience-glow) 0, var(--seam-experience-end) 75%)",
 );
 
-/**
- * Experiencia: un fósil tipo puzle. Cada hueso es una experiencia (de la más reciente a
- * la más antigua) y encajarlo revela su ficha; completo, la lista entera en texto.
- */
+/** Reconstrucción del fósil ilustrado, con una experiencia por fragmento. */
 export function Experience() {
   const { experience: copy } = COPY;
   return (
@@ -32,6 +31,16 @@ export function Experience() {
           titleClassName="max-w-[calc(var(--u)*59.7)]"
         />
         <FossilPuzzleLoader />
+        <div className="mt-fluid-6">
+          <h3 className="font-display text-fluid-2xl mb-6 font-extrabold">
+            {copy.timelineTitle}
+          </h3>
+          <ExperienceList
+            entries={sortedExperience}
+            kindLabels={{ academic: copy.academic, work: copy.work }}
+            achievementsLabel={copy.achievements}
+          />
+        </div>
       </div>
     </SectionShell>
   );

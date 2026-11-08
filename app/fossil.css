@@ -1,4 +1,115 @@
 /* ------------------------------------------------------------------ */
+
+.experience-discovery {
+  display: grid;
+  grid-template-columns: minmax(0, 2.3fr) minmax(240px, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+.experience-fossil-art {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 2.2;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: #102923;
+}
+.experience-fossil-art > img {
+  object-fit: contain;
+}
+.experience-fossil-hotspots {
+  position: absolute;
+  inset: 0;
+}
+.experience-hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(236, 221, 180, 0.8);
+  color: #f3e5c6;
+  background: rgba(9, 29, 23, 0.87);
+  box-shadow: 0 0 0 5px rgba(9, 29, 23, 0.2);
+  font:
+    600 12px var(--font-jetbrains),
+    monospace;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
+.experience-hotspot[aria-pressed="true"] {
+  color: #17261b;
+  background: #e4c684;
+  border-color: #f7dfa6;
+  box-shadow: 0 0 0 6px rgba(228, 198, 132, 0.2);
+}
+.experience-hotspot:focus-visible {
+  outline: 3px solid #f7dfa6;
+  outline-offset: 5px;
+}
+.experience-hotspot:hover {
+  box-shadow: 0 0 0 7px rgba(228, 198, 132, 0.3);
+}
+.experience-fossil-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: #f3e5c6;
+  background: rgba(9, 29, 23, 0.8);
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.experience-discovery-detail {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: clamp(20px, 2.5vw, 32px);
+  background: var(--surface);
+}
+#experiencia .experience-entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--glow);
+  padding: 24px;
+}
+#experiencia .experience-kind {
+  color: var(--glow);
+}
+@media (max-width: 1000px) {
+  .experience-discovery {
+    grid-template-columns: 1fr;
+  }
+  .experience-fossil-art {
+    aspect-ratio: 2.2;
+  }
+}
+@media (max-width: 600px) {
+  .experience-fossil-hint {
+    display: none;
+  }
+  .experience-fossil-art {
+    border-radius: 16px;
+  }
+  .experience-hotspot {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-hotspot {
+    transition: none;
+  }
+}
 /* Experiencia: fósil tipo puzle                                        */
 /* Solo se animan transform y opacity; las piezas se mueven con         */
 /* translate3d desde JS (usePieceDrag), sin re-render por frame.         */
@@ -11,6 +122,10 @@
   container-type: inline-size;
   user-select: none;
   -webkit-user-select: none;
+}
+.fossil-board:not([data-tray]) {
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 /* Puntero grueso: el área táctil de cada pieza crece más allá del dibujo */
@@ -58,6 +173,10 @@
 .fossil-piece:hover:not(:disabled) {
   scale: 1.04;
 }
+.fossil-piece:not(:disabled) {
+  min-width: 44px;
+  min-height: 44px;
+}
 
 .fossil-piece[data-dragging="true"] {
   z-index: 3;
@@ -95,10 +214,18 @@
   stroke-width: 3;
   stroke-linejoin: round;
 }
+.fossil-bone path.fossil-fragment-edge {
+  fill: none;
+  stroke: rgba(230, 206, 152, 0.65);
+  stroke-width: 1.5;
+}
+.fossil-piece[data-placed] .fossil-fragment-edge {
+  stroke: transparent;
+}
 
 .fossil-piece-tag {
   position: absolute;
-  inset: 0;
+  inset: auto 0 -22px;
   display: grid;
   place-items: center;
   pointer-events: none;

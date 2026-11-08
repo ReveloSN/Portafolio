@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+import sharp from "sharp";
+import path from "node:path";
 import { BONE_SHAPES, PUZZLE_BOARD, PUZZLE_PIECES } from "@/data/fossilPuzzle";
-import { EXPERIENCE } from "@/data/experience";
 import {
   countPlaced,
   createInitialPuzzleState,
@@ -121,9 +122,19 @@ describe("layoutTray", () => {
 });
 
 describe("datos del fósil", () => {
-  it("hay entre 6 y 8 experiencias y una forma para cada una", () => {
-    expect(EXPERIENCE.length).toBeGreaterThanOrEqual(PUZZLE_PIECES.min);
-    expect(EXPERIENCE.length).toBeLessThanOrEqual(PUZZLE_PIECES.max);
+  it.each(BONE_SHAPES)(
+    "$id es un grupo de huesos con transparencia, no un recorte de roca",
+    async (shape) => {
+      expect(shape.image).toMatch(/^\/art\/experience\/bones\//);
+      const image = sharp(path.join(process.cwd(), "public", shape.image!));
+      expect((await image.metadata()).hasAlpha).toBe(true);
+      const alpha = (await image.stats()).channels[3]!;
+      expect(alpha.min).toBe(0);
+      expect(alpha.max).toBeGreaterThan(200);
+      expect(alpha.mean).toBeLessThan(240);
+    },
+  );
+  it("el catálogo de formas cubre la capacidad del puzle", () => {
     expect(BONE_SHAPES.length).toBeGreaterThanOrEqual(PUZZLE_PIECES.max);
   });
 

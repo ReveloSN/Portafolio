@@ -2,6 +2,7 @@ import type { ExperienceEntry } from "@/types/experience";
 import type { BoardPiece, BoneShape, PuzzleBoard } from "@/types/puzzle";
 import { layoutTray } from "./fossilPuzzle";
 import { interpolate } from "./utils";
+import { PUZZLE_TRAY_SCALE } from "@/data/fossilPuzzle";
 
 export interface BoardSetup {
   readonly pieces: readonly BoardPiece[];
@@ -21,7 +22,10 @@ export function buildBoardPieces(
 ): BoardSetup {
   const used = shapes.slice(0, entries.length);
   const tray = layoutTray(
-    used.map((shape) => shape.size),
+    used.map((shape) => ({
+      width: shape.size.width * PUZZLE_TRAY_SCALE,
+      height: shape.size.height * PUZZLE_TRAY_SCALE,
+    })),
     board,
   );
   const pieces = used.map((shape, i): BoardPiece => {
@@ -29,7 +33,7 @@ export function buildBoardPieces(
     return {
       shape,
       trayOrigin: tray.positions[i]!,
-      tag: year,
+      tag: String(i + 1).padStart(2, "0"),
       label: interpolate(labelTemplate, { n: i + 1, bone: shape.label, year }),
     };
   });

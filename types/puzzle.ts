@@ -23,6 +23,8 @@ export interface BoneShape {
   readonly size: Size;
   readonly slot: Point;
   readonly path: string;
+  /** Imagen del grupo de huesos, con transparencia entre y alrededor de los huesos. */
+  readonly image?: string;
 }
 
 /** Una pieza lista para el tablero: su hueso, su sitio en la bandeja y sus textos. */
