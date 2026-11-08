@@ -35,11 +35,21 @@ export function Experience() {
           <h3 className="font-display text-fluid-2xl mb-6 font-extrabold">
             {copy.timelineTitle}
           </h3>
-          <ExperienceList
-            entries={sortedExperience}
-            kindLabels={{ academic: copy.academic, work: copy.work }}
-            achievementsLabel={copy.achievements}
-          />
+          {(["work", "academic"] as const).map((kind) => (
+            <section key={kind} className="mt-8" aria-labelledby={`experience-${kind}`}>
+              <h3
+                id={`experience-${kind}`}
+                className="font-display text-fluid-xl mb-4 font-bold"
+              >
+                {copy[kind]}
+              </h3>
+              <ExperienceList
+                entries={sortedExperience.filter((entry) => entry.kind === kind)}
+                kindLabels={{ academic: copy.academic, work: copy.work }}
+                achievementsLabel={copy.achievements}
+              />
+            </section>
+          ))}
         </div>
       </div>
     </SectionShell>

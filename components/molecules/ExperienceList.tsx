@@ -21,9 +21,9 @@ export function ExperienceList({
             <span aria-hidden="true"> · </span>
             {entry.periodLabel}
           </p>
-          <h3 className="font-display text-fluid-lg mt-1.5 leading-tight font-extrabold">
+          <h4 className="font-display text-fluid-lg mt-1.5 leading-tight font-extrabold">
             {entry.title}
-          </h3>
+          </h4>
           <p className="text-fluid-sm mt-0.5 opacity-85">{entry.organization}</p>
           <p className="sr-only">{achievementsLabel}</p>
           <ul className="text-fluid-sm mt-3 flex list-disc flex-col gap-1.5 pl-5 leading-normal">

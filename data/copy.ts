@@ -82,7 +82,7 @@ export const COPY = {
     pieceLabel: "Pieza {n}: {bone}, desde {year}",
     findingKicker: "Detalle",
     findingEmpty: "Encaja una pieza para leer su ficha: cargo, lugar y fechas.",
-    completeTitle: "Fósil completo: descubriste las cuatro etapas",
+    completeTitle: "Fósil completo: descubriste toda mi trayectoria",
     announce: {
       select: "Tomaste {bone}. Muévelo con las flechas y suéltalo con Enter.",
       cancel: "Soltaste {bone} en la bandeja.",
@@ -92,8 +92,8 @@ export const COPY = {
       placeAll: "Fósil completo. Debajo está toda la experiencia en texto.",
       reset: "Las piezas volvieron a la bandeja.",
     },
-    academic: "Académica",
-    work: "Laboral",
+    academic: "Experiencia académica e investigativa",
+    work: "Experiencia profesional",
     achievements: "Logros",
   },
   contact: {
