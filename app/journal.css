@@ -1,0 +1,131 @@
+/* ------------------------------------------------------------------ */
+/* Diario de la expedición: una hoja de papel envejecido con la       */
+/* trayectoria, enmarcada por jeroglíficos. Es un objeto: se ve igual  */
+/* en los dos temas. Serif de grabado y tinta oscura; sin imágenes.    */
+/* ------------------------------------------------------------------ */
+.journal-sheet {
+  --journal-paper: #e6d6b2;
+  --journal-ink: #2b2117;
+  --journal-faded: #5f5343;
+  --journal-rust: #8b4a1f;
+  --journal-rule: rgba(43, 33, 23, 0.3);
+  position: relative;
+  margin-top: max(2.5rem, calc(var(--u) * 4.5));
+  padding: max(1.25rem, calc(var(--u) * 2.6)) max(1.1rem, calc(var(--u) * 3.6));
+  border-radius: 4px;
+  color: var(--journal-ink);
+  font-family: var(--font-fell), Georgia, serif;
+  /* Papel: manchas suaves, bordes tostados y una leve fibra */
+  background:
+    radial-gradient(ellipse 60% 40% at 18% 12%, rgba(150, 110, 60, 0.13), transparent),
+    radial-gradient(ellipse 50% 35% at 85% 80%, rgba(150, 110, 60, 0.15), transparent),
+    repeating-linear-gradient(0deg, rgba(110, 72, 30, 0.035) 0 1px, transparent 1px 5px),
+    var(--journal-paper);
+  box-shadow:
+    inset 0 0 70px rgba(110, 72, 30, 0.38),
+    inset 0 0 6px rgba(80, 50, 20, 0.45),
+    0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Franja de jeroglíficos entre dos líneas de tinta ---------------- */
+.journal-band {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  border-block: 1.5px solid var(--journal-rule);
+  color: var(--journal-rust);
+  overflow: hidden;
+}
+.journal-glyph {
+  flex: none;
+  width: max(1.4rem, calc(var(--u) * 2.2));
+  height: max(1.4rem, calc(var(--u) * 2.2));
+  opacity: 0.85;
+}
+/* En pantallas angostas caben menos glifos */
+@media (max-width: 639px) {
+  .journal-glyph:nth-child(n + 8) {
+    display: none;
+  }
+}
+.journal-band:last-child {
+  margin-top: max(1.5rem, calc(var(--u) * 2.4));
+}
+
+.journal-heading {
+  margin-top: max(1.25rem, calc(var(--u) * 2.2));
+  font-size: var(--fs-2xl);
+  line-height: 1.1;
+  text-align: center;
+}
+.journal-chapter {
+  margin-top: max(1.75rem, calc(var(--u) * 3));
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--journal-rule);
+  color: var(--journal-rust);
+  font-size: var(--fs-lg);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+/* Entradas: renglones separados por una línea de tinta ------------- */
+.journal-list {
+  display: grid;
+}
+@media (min-width: 768px) {
+  .journal-list {
+    grid-template-columns: 1fr 1fr;
+    column-gap: max(1.5rem, calc(var(--u) * 3.6));
+  }
+}
+.journal-entry {
+  min-width: 0;
+  padding: 1.1rem 0 1.25rem;
+  border-bottom: 1px solid rgba(43, 33, 23, 0.16);
+}
+.journal-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--journal-faded);
+  font-size: var(--fs-sm);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+.journal-kind {
+  color: var(--journal-rust);
+}
+/* Sello de tinta: el glifo del tipo, un poco ladeado como estampado a mano */
+.journal-seal {
+  flex: none;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0.2rem;
+  border: 1.5px solid var(--journal-rust);
+  border-radius: 50%;
+  color: var(--journal-rust);
+  transform: rotate(-8deg);
+  opacity: 0.85;
+}
+.journal-title {
+  margin-top: 0.35rem;
+  font-size: var(--fs-lg);
+  line-height: 1.2;
+}
+.journal-org {
+  margin-top: 0.15rem;
+  color: var(--journal-faded);
+  font-style: italic;
+}
+.journal-achievements {
+  margin-top: 0.6rem;
+  padding-left: 1.1rem;
+  list-style: "– ";
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.journal-achievements > li + li {
+  margin-top: 0.3rem;
+}

@@ -75,12 +75,6 @@
   padding: clamp(20px, 2.5vw, 32px);
   background: var(--surface);
 }
-#experiencia .experience-entry {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--glow);
-  padding: 24px;
-}
 #experiencia .experience-kind {
   color: var(--glow);
 }
@@ -235,8 +229,7 @@
   white-space: nowrap;
 }
 
-.fossil-finding,
-.experience-entry {
+.fossil-finding {
   background: var(--fossil-card);
   border: 1px solid var(--fossil-card-edge);
 }

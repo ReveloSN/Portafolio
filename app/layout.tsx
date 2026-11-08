@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Figtree, JetBrains_Mono, Outfit } from "next/font/google";
+import { Figtree, IM_Fell_English, JetBrains_Mono, Outfit } from "next/font/google";
 import { PortalProvider } from "@/components/templates/PortalProvider";
 import { PROFILE } from "@/data/profile";
 import { SITE_URL } from "@/data/site";
@@ -23,6 +23,14 @@ const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
   weight: ["500"],
+});
+/** Serif de grabado del diario de Experiencia; sin precarga: se pide al llegar a la sección. */
+const fell = IM_Fell_English({
+  variable: "--font-fell",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  preload: false,
 });
 
 /** Nombre completo: título del sitio y de la vista previa al compartir el enlace. */
@@ -48,7 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable}`}
+      className={`${outfit.variable} ${figtree.variable} ${jetbrains.variable} ${fell.variable}`}
       suppressHydrationWarning
     >
       <head>
