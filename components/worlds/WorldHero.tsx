@@ -12,7 +12,7 @@ interface WorldHeroProps {
   readonly ownerName: string;
 }
 
-export function WorldHero({ world, project, ownerName }: WorldHeroProps) {
+export function WorldHero({ project, ownerName }: WorldHeroProps) {
   const { world: copy, projects } = COPY;
   return (
     <header className="world-hero relative overflow-hidden">
@@ -31,9 +31,6 @@ export function WorldHero({ world, project, ownerName }: WorldHeroProps) {
         </p>
       </div>
       <div className="world-hero-copy">
-        <p className="font-display text-glow text-fluid-sm font-medium tracking-[.5em]">
-          MUNDO {world.number} · {world.name}
-        </p>
         <h1
           data-testid="world-title"
           className="world-hero-title font-display mt-3 font-extrabold"
@@ -64,7 +61,7 @@ export function WorldHero({ world, project, ownerName }: WorldHeroProps) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Icon name="download" />
+              <Icon name={project.download.kind === "web" ? "external" : "download"} />
               {project.download.label}
               <span className="sr-only"> {projects.newTab}</span>
             </Button>

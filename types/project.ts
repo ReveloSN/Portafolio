@@ -25,6 +25,8 @@ export interface ProjectFacts {
 export interface ProjectDownload {
   readonly href: string;
   readonly label: string;
+  /** "web": se abre en el navegador (ícono de enlace); por defecto se instala (ícono de descarga). */
+  readonly kind?: "install" | "web";
 }
 
 export interface Project {

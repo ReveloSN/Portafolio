@@ -29,6 +29,7 @@ export const PROJECTS: readonly Project[] = [
     download: {
       href: "https://neuro-live-frontend.vercel.app/",
       label: "Ver plataforma",
+      kind: "web",
     },
     facts: {
       period: "2026",
