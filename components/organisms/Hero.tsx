@@ -18,8 +18,8 @@ interface HeroProps {
   readonly profile: Profile;
 }
 
-/** Ancho máximo del avatar del Hero (4.7 u, con u <= 1.15rem). */
-const AVATAR_SIZES = "88px";
+/** La portada usa un retrato más grande que el avatar de navegación. */
+const AVATAR_SIZES = "(max-width: 900px) 50vw, 320px";
 /** Distancia de la canoa al borde inferior, en coordenadas del diseño. */
 const CANOE_PLACEMENT = { "--b": 64 } as StageVars;
 /** El final del Hero se funde con el color de inicio de Sobre mí. */
@@ -35,7 +35,7 @@ export function Hero({ profile }: HeroProps) {
       as="section"
       id={SECTION_IDS.home}
       palette="night"
-      className="bg-jungle-700 fine:cursor-none relative h-svh min-h-80 overflow-hidden"
+      className="hero-section bg-jungle-700 fine:cursor-none relative h-svh min-h-80 overflow-hidden"
     >
       <JungleBackdrop
         back={
@@ -82,7 +82,7 @@ export function Hero({ profile }: HeroProps) {
 
       <div className="hero-copy pt-nav absolute inset-0 z-[3] flex cursor-auto">
         <div className="hero-copy-inner gap-fluid-3 flex flex-col">
-          <div className="gap-fluid-2 flex items-center">
+          <div className="hero-introduction gap-fluid-2 flex items-center">
             <div className="hero-avatar flex-none rounded-full bg-[conic-gradient(var(--glow),#6ef0e0,var(--glow))] p-[3px]">
               <Avatar
                 label={hero.photoAlt}
@@ -90,7 +90,7 @@ export function Hero({ profile }: HeroProps) {
                 figure="#6a8f77"
                 className="h-full w-full"
                 figureWidth="68%"
-                photo={profile.photo}
+                photo={profile.heroPhoto ?? profile.photo}
                 photoSizes={AVATAR_SIZES}
               />
             </div>

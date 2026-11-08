@@ -37,10 +37,12 @@ export const COPY = {
     flipHint: "Toca para volver",
   },
   projects: {
+    completed: "Terminado",
+    technologiesLabel: "Tecnologías",
     eyebrow: "MIS PROYECTOS",
     title: "Cada proyecto vive en un mundo distinto",
     intro:
-      "Código que se puede ver funcionando y repositorios que se pueden leer. Entra a cada mundo para conocer el problema, mi rol y el resultado.",
+      "Aplicaciones y experiencias que he desarrollado de forma individual o en equipo. Explora cada proyecto para conocer qué se construyó, cómo funciona y las tecnologías que utiliza.",
     github: "GitHub",
     enterWorld: "Entrar al mundo",
     forProject: "de {name}",
@@ -60,7 +62,14 @@ export const COPY = {
     eyebrow: "EL FÓSIL DE MI TRAYECTORIA",
     title: "Experiencia académica y laboral",
     intro:
-      "Cada hueso es una etapa, de la más reciente (el cráneo) a la más antigua. Lleva cada pieza a su hueco en la losa para leer su ficha; al completar el fósil, toda la experiencia aparece en texto.",
+      "Reconstruye el esqueleto colocando el cráneo, el torso, las patas y la cola sobre la piedra. Cada grupo de huesos revela una experiencia de mi trayectoria. También puedes usar el teclado o leer la experiencia completa debajo.",
+    fossilAlt:
+      "Fósil articulado de un dinosaurio sobre una losa de piedra, con cráneo, columna, costillas, extremidades y cola.",
+    fossilLabel: "Explorar las etapas de mi trayectoria",
+    fossilHint: "Selecciona un hallazgo para conocer una etapa.",
+    fossilDetail: "Detalle del hallazgo",
+    timelineTitle: "Mi trayectoria, paso a paso",
+    discoveryLabel: "Hallazgo {n}: {title}",
     instructions:
       "Arrastra una pieza hasta su hueco. Con teclado: Tab hasta una pieza, Enter para tomarla, flechas para moverla (Mayús para pasos largos), Enter para soltarla y Esc para cancelar.",
     toolbarLabel: "Controles del fósil",
@@ -71,7 +80,7 @@ export const COPY = {
     pieceLabel: "Pieza {n}: {bone}, desde {year}",
     findingKicker: "FICHA DEL HALLAZGO",
     findingEmpty: "Encaja una pieza para leer su ficha: cargo, lugar y fechas.",
-    completeTitle: "Fósil completo: toda mi experiencia",
+    completeTitle: "Fósil completo: descubriste las cuatro etapas",
     announce: {
       select: "Tomaste {bone}. Muévelo con las flechas y suéltalo con Enter.",
       cancel: "Soltaste {bone} en la bandeja.",
@@ -169,6 +178,13 @@ export const COPY = {
     navLabel: "Enlaces rápidos",
   },
   world: {
+    navigationLabel: "Recorrido del proyecto",
+    journeyTitle: "Así funciona",
+    journeyIntro:
+      "Del problema a la solución: este recorrido resume cómo se conectan las partes del proyecto.",
+    conceptArt: "Ilustración del concepto",
+    journeyKicker: "EL RECORRIDO",
+    galleryOpen: "Abrir captura completa",
     back: "Volver al portal",
     problem: { kicker: "PROYECTO · CONTEXTO", title: "El problema" },
     facts: {
@@ -177,8 +193,8 @@ export const COPY = {
       platform: "PLATAFORMA",
       status: "ESTADO",
     },
-    role: { kicker: "PROYECTO · PARTICIPACIÓN", title: "Mi rol" },
-    result: { kicker: "PROYECTO · IMPACTO", title: "El resultado" },
+    role: { kicker: "PROYECTO · DESARROLLO", title: "Cómo se construyó" },
+    result: { kicker: "PROYECTO · APORTE", title: "Qué aporta el proyecto" },
     depth: "PROFUNDIDAD",
     featuresKicker: "QUÉ INCLUYE",
     featuresTitle: "Funcionalidades principales",

@@ -12,6 +12,8 @@
 @import "./fossil.css";
 @import "./portal.css";
 @import "./contact.css";
+@import "./projects.css";
+@import "./project-scenes.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));

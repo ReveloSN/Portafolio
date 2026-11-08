@@ -4,8 +4,9 @@ export const PROFILE: Profile = {
   firstName: "Santiago Nicolas",
   lastName: "Revelo Saavedra",
   initials: "SR",
-  role: "Ingeniero de Software - Full Stack",
-  tagline: "",
+  role: "Estudiante de Ingeniería de Software · Full Stack",
+  tagline:
+    "Desarrollo software y exploro cómo aplicar la inteligencia artificial a problemas cotidianos.",
   year: 2026,
   cvUrl: "/cv.pdf",
   photo: {
@@ -16,9 +17,9 @@ export const PROFILE: Profile = {
     focus: "50% 0%",
   },
   aboutParagraphs: [
-    "Soy estudiante de Ingeniería de Software en la Universidad Cooperativa de Colombia, actualmente en quinto semestre. Mi interés principal está en el desarrollo backend, la integración de inteligencia artificial, la computación en la nube y el sector salud apoyado con IA.",
-    "Llevo esos intereses al semillero de investigación, donde participo en PMEC, una plataforma para monitorear enfermedades crónicas en Nariño. Me interesa que la tecnología resuelva problemas reales, y este proyecto me permite trabajar en esa idea desde la investigación.",
-    "Me apasiona también la ciberseguridad. Me interesa proteger la información sensible que manejan los sistemas. Creo que la tecnología tiene sentido cuando resuelve problemas reales.",
+    "Soy estudiante de quinto semestre de Ingeniería de Software en la Universidad Cooperativa de Colombia. Me enfoco en el desarrollo backend y me interesa integrar inteligencia artificial y servicios en la nube en aplicaciones útiles.",
+    "Participo en un semillero de investigación y colaboro en PMEC, una plataforma para el monitoreo de enfermedades crónicas en Nariño. Esta experiencia conecta mi formación con mi interés por la tecnología aplicada a la salud.",
+    "También me interesa la ciberseguridad y la protección de la información. En mis proyectos exploro distintas plataformas, desde aplicaciones móviles y de escritorio hasta videojuegos.",
   ],
   softSkills: [
     "Comunicación técnica y presentación de ideas",
@@ -31,7 +32,7 @@ export const PROFILE: Profile = {
     text: "Me gusta la natación. Nadar me enseñó constancia y a concentrarme paso a paso, algo que llevo también a mis proyectos.",
   },
   backMeta: {
-    motto: "[Tu lema de expedición]",
+    motto: "Explorar, aprender y construir.",
   },
   quickFacts: [
     { icon: "pin", text: "Pasto, Nariño, Colombia" },

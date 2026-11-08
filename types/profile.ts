@@ -74,6 +74,8 @@ export interface Profile {
   readonly year: number;
   readonly cvUrl: string;
   readonly photo?: ProfilePhoto;
+  /** Foto de portada independiente de la credencial de Sobre mí. */
+  readonly heroPhoto?: ProfilePhoto;
   /** Texto de "Sobre mí", un elemento por párrafo. */
   readonly aboutParagraphs: readonly string[];
   /** Habilidades blandas, en texto (sin niveles ni porcentajes). */
