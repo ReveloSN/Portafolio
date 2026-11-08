@@ -144,7 +144,7 @@ export function JungleBackdrop({
       {CORNERS.map((corner) => (
         <div
           key={corner.className}
-          className={`stage-w pointer-events-none absolute ${corner.className}`}
+          className={`stage-w stage-corner pointer-events-none absolute ${corner.className}`}
           style={
             {
               "--w": corner.width,

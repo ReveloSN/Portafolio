@@ -8,10 +8,18 @@ interface PhotoImageProps {
   readonly sizes: string;
   readonly className?: string;
   readonly priority?: boolean;
+  /** "eager" para fotos visibles al cargar (p. ej. la portada) que no son la imagen principal. */
+  readonly loading?: "eager" | "lazy";
 }
 
 /** Foto personal con dimensiones explícitas y texto alternativo tomado de los datos. */
-export function PhotoImage({ photo, sizes, className, priority }: PhotoImageProps) {
+export function PhotoImage({
+  photo,
+  sizes,
+  className,
+  priority,
+  loading,
+}: PhotoImageProps) {
   return (
     <Image
       src={photo.src}
@@ -20,6 +28,7 @@ export function PhotoImage({ photo, sizes, className, priority }: PhotoImageProp
       height={photo.height}
       sizes={sizes}
       priority={priority}
+      loading={priority ? undefined : loading}
       className={cn("size-full object-cover", className)}
       style={photo.focus ? { objectPosition: photo.focus } : undefined}
     />

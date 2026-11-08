@@ -12,6 +12,8 @@ interface AvatarProps {
   readonly photo?: ProfilePhoto;
   /** Ancho con el que se pinta la foto (atributo `sizes`). */
   readonly photoSizes?: string;
+  /** "eager" cuando el avatar se ve al cargar la página (portada). */
+  readonly photoLoading?: "eager" | "lazy";
 }
 
 /** Silueta provisional; si hay `photo` (datos del perfil) se muestra la foto real. */
@@ -23,6 +25,7 @@ export function Avatar({
   figureWidth = "70%",
   photo,
   photoSizes,
+  photoLoading,
 }: AvatarProps) {
   if (photo && photoSizes) {
     return (
@@ -30,7 +33,7 @@ export function Avatar({
         className={cn("overflow-hidden rounded-full", className)}
         style={{ background }}
       >
-        <PhotoImage photo={photo} sizes={photoSizes} />
+        <PhotoImage photo={photo} sizes={photoSizes} loading={photoLoading} />
       </div>
     );
   }

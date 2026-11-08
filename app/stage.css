@@ -17,11 +17,6 @@
   --sf: min(var(--s), calc(100cqh / 760));
 }
 
-/* Posición horizontal relativa al centro del stage: x es la coordenada del diseño */
-.stage-x {
-  left: calc(50% + (var(--x) - 720) * var(--sf));
-}
-
 /* Anclada arriba: la parte superior (cabeza del dino) nunca se recorta */
 .stage-top {
   top: calc(var(--y) * var(--sf));
@@ -34,6 +29,14 @@
 
 .stage-w {
   width: calc(var(--w) * var(--sf));
+}
+
+/* Teléfono vertical: la escena escala con el alto y las hojas de las esquinas llegaban
+   a cubrir todo el ancho, tapando la canoa. Aquí se quedan en su esquina. */
+@media (orientation: portrait) and (max-width: 767px) {
+  .stage-corner {
+    max-width: 38cqw;
+  }
 }
 
 /* Agua: se puede bajar en pantallas bajas sin mover el resto de la escena */

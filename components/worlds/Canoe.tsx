@@ -12,8 +12,12 @@ interface CanoeProps {
 
 const RIPPLE =
   "ripple absolute -left-[30%] top-[88%] h-[18%] w-[160%] rounded-full border-2 border-[rgba(214,255,159,.5)]";
-/** Ancho de la canoa: 238 unidades del diseño, escaladas con el stage (mínimo legible 7.5rem). */
-const CANOE_SIZE = "max(7.5rem, calc(238 * var(--sf, 1px)))";
+/**
+ * Ancho de la canoa: 238 unidades del diseño, escaladas con el stage (mínimo legible 7.5rem).
+ * En teléfonos se limita al 40 % del ancho para que el explorador no quede detrás de los
+ * botones del Hero; en tablet y escritorio ese tope nunca se alcanza.
+ */
+const CANOE_SIZE = "clamp(7.5rem, calc(238 * var(--sf, 1px)), 40vw)";
 const FADE = "linear-gradient(to top, #000 0, transparent 55%)";
 /** Subir "v" al reemplazar el archivo para que ningún navegador muestre la versión anterior. */
 const CANOE_SRC = "/images/canoa.webp?v=2";
