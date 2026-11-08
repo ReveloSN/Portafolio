@@ -42,3 +42,8 @@ next-env.d.ts
 
 # capturas de pruebas
 /screenshots
+
+# salidas de herramientas (no son código)
+/.playwright-cli/
+/output/
+/.impeccable/
