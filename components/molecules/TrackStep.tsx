@@ -39,7 +39,7 @@ export function TrackStep({
         aria-expanded={selected}
         aria-controls={panelId}
         onClick={onSelect}
-        className="flex cursor-pointer flex-col items-center gap-[calc(var(--u)*.4)] rounded-2xl p-1"
+        className="flex w-full cursor-pointer flex-col items-center gap-[calc(var(--u)*.4)] rounded-2xl p-1"
       >
         <TechFootprint
           icon={tech.icon}

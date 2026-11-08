@@ -23,10 +23,10 @@ interface TechFootprintProps {
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
 /**
- * Ancho servido de la huella: en escritorio se pinta entre ~50 y ~96 px (antes se pedían
- * 260 px y se descargaba la variante de 384); en móvil, hasta ~120 px.
+ * Ancho servido de la huella (`--print-size` en app/art.css): hasta 240 px (15rem) desde
+ * tablet y unos 80 px en móvil.
  */
-const PRINT_SIZES = "(min-width: 1024px) 96px, 120px";
+const PRINT_SIZES = "(min-width: 768px) 240px, 96px";
 
 /**
  * Huella de dinosaurio con el logo de una tecnología grabado en el fondo. Capas, de
