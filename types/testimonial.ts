@@ -1,3 +1,5 @@
+import type { ProfilePhoto } from "@/types/profile";
+
 export interface Testimonial {
   readonly id: string;
   readonly quote: string;
@@ -7,4 +9,5 @@ export interface Testimonial {
   readonly tapeColor: string;
   readonly avatarBackground: string;
   readonly avatarFigure: string;
+  readonly photo?: ProfilePhoto;
 }

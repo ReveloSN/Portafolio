@@ -35,7 +35,7 @@ const TAPE_TILTS = [-3, 2, -1] as const;
 function cardStyle(offset: -1 | 0 | 1) {
   const side = offset !== 0;
   return {
-    transform: `translateX(-50%) translateX(${offset * CAROUSEL_OFFSET_PERCENT}%) translateZ(${side ? -CAROUSEL_DEPTH_PX : 0}px) rotateY(${-offset * CAROUSEL_ROTATION_DEG}deg) scale(${side ? CAROUSEL_SIDE_SCALE : 1})`,
+    transform: `translateX(${offset * CAROUSEL_OFFSET_PERCENT}%) translateZ(${side ? -CAROUSEL_DEPTH_PX : 0}px) rotateY(${-offset * CAROUSEL_ROTATION_DEG}deg) scale(${side ? CAROUSEL_SIDE_SCALE : 1})`,
     opacity: side ? CAROUSEL_SIDE_OPACITY : 1,
     zIndex: side ? 1 : 3,
   };
@@ -60,7 +60,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
         />
         <div
           data-testid="carousel-stage"
-          className="mt-fluid-6 relative h-[clamp(19rem,calc(var(--u)*29),30rem)] [perspective:1500px]"
+          className="mt-fluid-6 relative grid items-start [perspective:1500px]"
           role="group"
           aria-roledescription="carrusel"
           aria-label={copy.carouselLabel}
