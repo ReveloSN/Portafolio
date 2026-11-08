@@ -1,0 +1,32 @@
+{
+  "mode": "built-in image_gen",
+  "prompt": "Create a new understated environment painting for a professional software portfolio portal. Match the attached reference's HAND PAINTED 2D matte illustration, visible broad brush textures, forest teal shadows, olive highlights, soft atmospheric depth. Serious, restrained, elegant. Landscape environment only; strong recognizable world silhouette with few elements. No characters, devices, documents, hospital, bags, gadgets, text, logos, borders or UI. No glossy 3D, no cartoon toys, no excessive details. Wide 16:9. Scene: ",
+  "subjects": [
+    [
+      "oceano",
+      "A tranquil deep prehistoric ocean, shafts of soft green-blue light entering from the surface, layered submerged rock arches, restrained coral and kelp framing the edges, clear open water in center, elegant turquoise and navy palette. No animals, no dinosaurs."
+    ],
+    [
+      "volcan",
+      "A distant imposing volcano above a misty prehistoric valley, subtle amber lava glow near crater, dark basalt foreground and sparse ferns at edges, deep teal and muted burnt amber palette. Quiet serious atmosphere, not an explosion. No animals, no dinosaurs."
+    ],
+    [
+      "aurora",
+      "A still prehistoric lake and distant layered mountains beneath a restrained mint aurora in a deep teal night sky, silhouettes of ancient forest at edges, calm open center, atmospheric mist. No animals, no dinosaurs."
+    ]
+  ],
+  "files": [
+    {
+      "slug": "oceano",
+      "id": "38b0e9cb-fcb3-4cc5-9bbc-a09074ca436c"
+    },
+    {
+      "slug": "volcan",
+      "id": "d601e6c2-2a74-4c74-9184-54cad884b6e4"
+    },
+    {
+      "slug": "aurora",
+      "id": "db4bc11a-3256-4fa5-b4a7-83176be24912"
+    }
+  ]
+}

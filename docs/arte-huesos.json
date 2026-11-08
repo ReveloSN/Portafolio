@@ -1,0 +1,26 @@
+{
+  "mode": "built-in image_gen",
+  "source": "public/art/experience/dinosaur-fossil.webp",
+  "bonesPrompt": "Edit the attached fossil illustration for an interactive skeleton assembly. Keep the EXACT ORIGINAL wide canvas, camera angle, skeleton scale and spatial placement. Do NOT recenter, enlarge, redesign, rotate, add or rearrange any bone. This is an extraction, not a new drawing. Preserve the existing warm ivory fossil texture and painterly relief. Output true transparent background: remove ALL stone, moss, sediment, plants, shadows on the rock and every background pixel, including through holes between bones. No rectangular rock fragments, no outlines, no labels. Keep original empty margins so this layer aligns perfectly with the source at identical dimensions. Keep ONLY the following anatomical group and remove every other bone: ",
+  "groups": [
+    [
+      "skull",
+      "The skull, lower jaw and curved neck vertebrae up to the shoulder joint. Keep the complete skull silhouette and neck connection. Remove rib cage, torso spine, pelvis, limbs and tail."
+    ],
+    [
+      "ribs",
+      "The torso: spinal vertebrae over the rib cage, all curved ribs, shoulder girdle, small forelimbs with claws, and pelvic girdle. Remove skull and neck, both long hind legs below their hip joints, and tail vertebrae beyond the pelvis."
+    ],
+    [
+      "hips",
+      "BOTH hind legs only, from hip joints down through thigh bones, shins, ankles and all toes. Keep their exact original articulated poses. Remove pelvis, rib cage, forelimbs, skull, neck, backbone and tail."
+    ],
+    [
+      "tail",
+      "The entire long tapering articulated tail vertebrae from immediately behind the pelvic girdle to the thin tail tip. Remove pelvis and all other skeleton parts."
+    ]
+  ],
+  "slabPrompt": "Edit this exact wide fossil slab illustration. Remove ALL dinosaur bones completely, filling their former areas with the same natural undisturbed dark limestone texture. Keep the EXACT original canvas dimensions/aspect, same framing, same slab silhouette, same warm directional lighting, same moss, ferns, surrounding dark teal shadows and painterly style. The result is the identical EMPTY stone slab, no fossil outlines, no imprints, no skull, no ribs, no bones, no labels. Do not add anything. This will be a fixed background underneath independently draggable transparent fossil bones.",
+  "outputDirectory": "public/art/experience/bones",
+  "note": "La losa es una imagen fija; las cuatro piezas son archivos WebP con canal alfa y sin roca. Se recortaron únicamente los márgenes transparentes para optimizar el tamaño."
+}

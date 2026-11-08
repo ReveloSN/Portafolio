@@ -1,0 +1,72 @@
+{
+  "mode": "built-in image_gen",
+  "reference": "Hero de inicio: captura proporcionada por el usuario",
+  "backgroundPrompt": "Use case: illustration-story. Generate a NEW BACKGROUND LAYER for a multi-layer software portfolio portal. The attached image is STYLE REFERENCE ONLY, not the composition to copy. Closely match its 2D hand-painted digital illustration: visible broad brush textures, matte surfaces, deep forest-teal shadows, mossy olive greens, filtered amber-green light, layered atmospheric mist, detailed ferns and tree bark. Mature serious expedition concept art. No glossy 3D toy rendering, no children's book, no cute characters, no exaggerated saturation, no photo realism. Wide 16:9, relatively uncluttered middle and lower-left for later dinosaur and HTML overlays. Background environment only, no main character. No words, letters, logos, watermarks. Scene: ",
+  "backgroundScenes": [
+    [
+      "aurora",
+      "A quiet contemporary psychiatric care hospital room, dignified and welcoming, soft teal walls, simple clean patient bed on right, bedside biometric monitor with a small abstract pulse line and no text, tall window looking onto a misty prehistoric jungle, plant in corner, muted green linens, soft daylight, no people, no dinosaur yet. No padded walls, no restraints, no frightening imagery."
+    ],
+    [
+      "cueva",
+      "An amber fossil cave opening onto a misty ancient forest with two diverging paths, subtle old stone trail markers with no letters, one softly illuminated trail leading through giant ferns, atmospheric teal shadow, quiet uncertain exploration mood. No people and no dinosaur yet."
+    ],
+    [
+      "selva",
+      "A mysterious prehistoric island jungle ruin, ancient mossy stone gateway and tangled roots, damp ground with old compass and fragments of a broken compass near the right foreground, distant silhouettes of ruins and volcanic mountains, restrained adventure atmosphere. No people or dinosaurs yet."
+    ],
+    [
+      "oceano",
+      "The threshold of a small serious explorer field station beside a prehistoric turquoise lake, sturdy open door on right, a wooden bench with a small leather satchel, house keys and a folded checklist with wordless simple marks, dense fern forest and mist through the entrance, a practical leaving-home scene. No people and no dinosaurs yet."
+    ],
+    [
+      "volcan",
+      "A mature expedition archive workroom open toward a volcanic prehistoric landscape, wooden worktable on right with two document pages, magnifying glass and an amber lamp, shelves with organized field folders, basalt rock and moss at edges. Documents have abstract strokes only, no legible text. Quiet careful investigative mood. No people and no dinosaur yet."
+    ]
+  ],
+  "dinosaurPrompt": "Use case: illustration-story. Asset type: ISOLATED DINOSAUR FOREGROUND LAYER with TRUE TRANSPARENT BACKGROUND for compositing into an illustrated expedition portfolio. The attached dinosaur image is STYLE REFERENCE ONLY. Match the reference's matte hand-painted 2D digital illustration, textured painterly brush strokes, organic patterned dinosaur skin, soft filtered forest lighting, deep teal shadows, olive green highlights. Make the dinosaur distinctly more serious: adult natural proportions, modest eyes, closed or relaxed mouth, no smile, no baby proportions, no chibi, no plush-toy appearance, no Pixar child character, no clothing costume. Subject must be complete including feet and tail, entirely inside the image with safe margins, centered, three-quarter view, directional light from upper left. Transparent everywhere except dinosaur and its specified small accessories; no cast floor shadow, no plants, no ground, no scenery, no text, no watermark. Subject: ",
+  "dinosaurs": [
+    [
+      "aurora",
+      "An adult Parasaurolophus dinosaur resting calmly in a natural seated crouch, three-quarter view facing left, a discreet mint biometric sensor band around one forelimb, composed thoughtful expression, pale olive green patterned skin, modest natural eyes, long elegant crest. Patient in a quiet care setting, dignified and calm. No bed, furniture or scenery."
+    ],
+    [
+      "cueva",
+      "An adult Iguanodon dinosaur standing at a fork in a journey, three-quarter view facing left, slightly lowered head examining a small round navigation watch strapped to its forelimb, alert slightly uncertain expression, not comic, forest green and muted amber markings, mature proportions and modest eyes. No paths, rocks or scenery."
+    ],
+    [
+      "selva",
+      "An adult feathered Deinonychus dinosaur in a cautious exploration stance facing left in three-quarter view, a small rugged expedition harness and an old compass attached to the harness, muted moss green and dark teal feather patterns with restrained amber accents, keen serious expression, anatomical adult proportions, modest eyes. No weapons and no scenery."
+    ],
+    [
+      "oceano",
+      "An adult Triceratops dinosaur standing ready to depart, three-quarter view facing left, small practical leather satchel on a simple expedition harness with a ring of keys attached, muted olive skin and darker forest-green markings, mature heavy protective anatomy, natural horns, calm focused expression, no smile, modest eyes. No door, floor or scenery."
+    ],
+    [
+      "volcan",
+      "An adult slender Velociraptor dinosaur in a composed investigative pose facing left in three-quarter view, head lowered thoughtfully and one foreclaw gently holding a simple brass magnifying glass, muted charcoal teal and moss green feathered skin with warm brown accents, serious observant expression, adult anatomy, small natural eyes. No documents, table or scenery."
+    ]
+  ],
+  "files": [
+    {
+      "slug": "aurora",
+      "id": "1fc8b257-c1c5-42dd-98bf-93297a3341b7"
+    },
+    {
+      "slug": "cueva",
+      "id": "41d5e904-4129-4676-a72b-dcbf51b48934"
+    },
+    {
+      "slug": "selva",
+      "id": "50688dc1-b1cd-46af-b9d4-470d36195e26"
+    },
+    {
+      "slug": "oceano",
+      "id": "6d8c04c6-9ad0-457b-a74a-b4364336a5b1"
+    },
+    {
+      "slug": "volcan",
+      "id": "4ffdd2c8-6da5-4f52-af23-97713c132799"
+    }
+  ]
+}
