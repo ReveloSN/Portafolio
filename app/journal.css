@@ -147,15 +147,20 @@
   font-size: var(--fs-xl);
 }
 
-/* Páginas apiladas en la misma celda: el libro mide su página más alta */
+/* Páginas apiladas en la misma celda: el libro mide su página más alta.
+   Con perspectiva, para que la hoja gire sobre el lomo (borde izquierdo). */
 .journal-pages {
   display: grid;
   margin-top: max(1rem, calc(var(--u) * 1.6));
   border-top: 1px solid var(--journal-rule);
+  perspective: 1800px;
 }
 .journal-page {
+  position: relative;
   grid-area: 1 / 1;
   min-width: 0;
+  transform-origin: left center;
+  backface-visibility: hidden;
 }
 .journal-page:not([data-active]) {
   visibility: hidden;
@@ -163,24 +168,89 @@
 .journal-page .journal-entry {
   border-bottom: 0;
 }
-/* Al pasar de página la nueva entra desde el lado del paso, con transform y opacidad */
-.journal-pages[data-dir] .journal-page[data-active] {
-  animation: journal-turn-forward 0.35s var(--ease-enter) both;
+
+/* Pasar hoja. Solo después de pulsar (data-dir): nada gira al cargar.
+   Adelante: la hoja actual se levanta y gira hacia el lomo y deja ver la siguiente.
+   Atrás: la hoja anterior vuelve girando encima de la actual. */
+.journal-pages[data-dir] .journal-page[data-leaving] {
+  visibility: visible;
+}
+.journal-pages[data-dir="forward"] .journal-page[data-leaving] {
+  z-index: 2;
+  animation: journal-page-away 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) forwards;
 }
 .journal-pages[data-dir="back"] .journal-page[data-active] {
-  animation-name: journal-turn-back;
+  z-index: 2;
+  animation: journal-page-return 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) backwards;
 }
-@keyframes journal-turn-forward {
+.journal-pages[data-dir="back"] .journal-page[data-leaving] {
+  animation: journal-page-hold 0.7s step-end forwards;
+}
+/* Sombra del lomo sobre la página de abajo mientras la otra gira */
+.journal-pages[data-dir="forward"] .journal-page[data-active]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(70, 45, 20, 0.28), transparent 65%);
+  animation: journal-page-shade 0.7s ease-out forwards;
+}
+/* La hoja que gira lleva papel propio para tapar la de abajo */
+@keyframes journal-page-away {
   from {
-    opacity: 0;
-    transform: translateX(1.5rem) rotate(0.6deg);
+    transform: rotateY(0deg);
+    background-color: var(--journal-paper);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  45% {
+    box-shadow: -18px 10px 28px rgba(60, 38, 15, 0.35);
+  }
+  to {
+    transform: rotateY(-180deg);
+    background-color: var(--journal-paper);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   }
 }
-@keyframes journal-turn-back {
+@keyframes journal-page-return {
   from {
-    opacity: 0;
-    transform: translateX(-1.5rem) rotate(-0.6deg);
+    transform: rotateY(-180deg);
+    background-color: var(--journal-paper);
   }
+  55% {
+    box-shadow: -18px 10px 28px rgba(60, 38, 15, 0.35);
+  }
+  to {
+    transform: rotateY(0deg);
+    background-color: var(--journal-paper);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+@keyframes journal-page-hold {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes journal-page-shade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Hueso del fósil que guarda la experiencia */
+.journal-fragment {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+  color: var(--journal-rust);
+  font-size: var(--fs-sm);
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+.journal-fragment-glyph {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
 /* Paso de página: dos botones de tinta y el número de página */
@@ -227,7 +297,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .journal-page[data-active] {
+  .journal-pages[data-dir] .journal-page {
     animation: none;
+  }
+  .journal-pages[data-dir] .journal-page[data-leaving],
+  .journal-pages[data-dir] .journal-page[data-active]::after {
+    display: none;
   }
 }
