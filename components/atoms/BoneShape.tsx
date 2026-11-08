@@ -18,8 +18,10 @@ export function BoneShape({ shape, className }: BoneShapeProps) {
       {shape.image ? (
         <image
           href={shape.image}
-          width={width}
-          height={height}
+          x={-(shape.imageOffset?.x ?? 0)}
+          y={-(shape.imageOffset?.y ?? 0)}
+          width={shape.imageSize?.width ?? width}
+          height={shape.imageSize?.height ?? height}
           preserveAspectRatio="none"
         />
       ) : (

@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 import { BONE_SHAPES, PUZZLE_BOARD } from "../data/fossilPuzzle";
 import { COPY } from "../data/copy";
+import { EXPERIENCE } from "../data/experience";
 
 const base = process.env.BASE_URL ?? "http://localhost:3301";
 const output = "output/playwright/experience-review";
@@ -19,11 +20,15 @@ try {
     const board = section.locator('[data-testid="fossil-board"]');
     const pieces = section.locator('[data-testid="fossil-piece"]');
     await board.waitFor();
-    if ((await pieces.count()) !== 4) throw Error("Deben existir cuatro fragmentos");
-    if ((await section.locator('[data-testid="experience-list"] > li').count()) !== 4)
+    if ((await pieces.count()) !== EXPERIENCE.length)
+      throw Error("Falta una pieza por experiencia");
+    if (
+      (await section.locator('[data-testid="experience-list"] > li').count()) !==
+      EXPERIENCE.length
+    )
       throw Error("Falta la trayectoria visible");
     await board.scrollIntoViewIfNeeded();
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < EXPERIENCE.length; i++) {
       const box = await pieces.nth(i).boundingBox();
       const target = await board.boundingBox();
       if (!box || !target) throw Error("Fragmento fuera del tablero");
@@ -60,7 +65,7 @@ try {
     await section
       .getByRole("button", { name: COPY.experience.placeAll, exact: true })
       .click();
-    if ((await pieces.filter({ visible: true }).count()) !== 4)
+    if ((await pieces.filter({ visible: true }).count()) !== EXPERIENCE.length)
       throw Error("Desaparecieron los fragmentos");
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth))
       throw Error("Desborde horizontal");
@@ -70,7 +75,7 @@ try {
     await section.screenshot({ path: `${output}/construction-${width}.png` });
     await context.close();
     console.log(
-      `${width}px: arrastre de cuatro piezas, teclado, completar y reiniciar correctos`,
+      `${width}px: arrastre de ${EXPERIENCE.length} piezas, teclado, completar y reiniciar correctos`,
     );
   }
 } finally {

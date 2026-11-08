@@ -10,7 +10,15 @@ export interface Size {
 
 /** Huesos del esqueleto; cada experiencia toma uno en este orden. */
 export type BoneId =
-  "skull" | "neck" | "ribs" | "hips" | "tail" | "legBack" | "legFront" | "tailTip";
+  | "skull"
+  | "neck"
+  | "ribs"
+  | "hips"
+  | "feet"
+  | "tail"
+  | "legBack"
+  | "legFront"
+  | "tailTip";
 
 /**
  * Una pieza del fósil. Medidas en unidades del tablero (ver `PUZZLE_BOARD`): `path` está
@@ -25,6 +33,9 @@ export interface BoneShape {
   readonly path: string;
   /** Imagen del grupo de huesos, con transparencia entre y alrededor de los huesos. */
   readonly image?: string;
+  /** Región de un recurso transparente que comparten varias piezas. */
+  readonly imageSize?: Size;
+  readonly imageOffset?: Point;
 }
 
 /** Una pieza lista para el tablero: su hueso, su sitio en la bandeja y sus textos. */

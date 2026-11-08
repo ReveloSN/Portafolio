@@ -44,16 +44,25 @@ export function FossilSlab({ width, height, shapes, placed }: FossilSlabProps) {
       />
       {shapes.map((shape, index) =>
         placed?.[index] ? null : shape.image ? (
-          <image
+          <svg
             key={shape.id}
-            href={shape.image}
             x={shape.slot.x}
             y={shape.slot.y}
             width={shape.size.width}
             height={shape.size.height}
+            viewBox={`0 0 ${shape.size.width} ${shape.size.height}`}
             opacity=".16"
-            preserveAspectRatio="none"
-          />
+            overflow="hidden"
+          >
+            <image
+              href={shape.image}
+              x={-(shape.imageOffset?.x ?? 0)}
+              y={-(shape.imageOffset?.y ?? 0)}
+              width={shape.imageSize?.width ?? shape.size.width}
+              height={shape.imageSize?.height ?? shape.size.height}
+              preserveAspectRatio="none"
+            />
+          </svg>
         ) : (
           <path
             key={shape.id}
