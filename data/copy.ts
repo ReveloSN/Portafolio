@@ -99,6 +99,8 @@ export const COPY = {
     nextPage: "Página siguiente",
     pageOf: "Página {n} de {total}",
     pagerLabel: "Páginas: {title}",
+    fragment: "Fragmento del fósil: {bone}",
+    readInJournal: "Leer en el diario",
   },
   contact: {
     eyebrow: "",

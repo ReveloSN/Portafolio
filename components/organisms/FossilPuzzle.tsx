@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import { FossilBoard } from "@/components/molecules/FossilBoard";
 import { FossilFinding } from "@/components/molecules/FossilFinding";
 import { PuzzleToolbar } from "@/components/molecules/PuzzleToolbar";
 import { COPY } from "@/data/copy";
 import { BONE_SHAPES, PUZZLE_BOARD } from "@/data/fossilPuzzle";
+import { useExperienceLink } from "@/hooks/useExperienceLink";
 import { useFossilPuzzle } from "@/hooks/useFossilPuzzle";
 import { countPlaced } from "@/lib/fossilPuzzle";
 import { describePuzzleEvent } from "@/lib/puzzleAnnouncement";
@@ -48,6 +50,13 @@ export default function FossilPuzzle({ entries }: FossilPuzzleProps) {
   } = useFossilPuzzle(pieces);
   const placed = countPlaced(state);
   const shown = state.lastPlaced;
+  // Al encajar un hueso, su diario abre la página de esa experiencia (vínculo con los libros).
+  const reveal = useExperienceLink()?.reveal;
+  const revealedId =
+    state.lastEvent === "place" && shown !== null ? entries[shown]?.id : undefined;
+  useEffect(() => {
+    if (revealedId) reveal?.(revealedId);
+  }, [revealedId, reveal]);
   const announcement = describePuzzleEvent(
     state,
     pieces.map((piece, i) => ({ bone: piece.shape.label, entry: entries[i]! })),
@@ -97,6 +106,8 @@ export default function FossilPuzzle({ entries }: FossilPuzzleProps) {
           entry={shown === null ? null : (entries[shown] ?? null)}
           boneLabel={shown === null ? null : (pieces[shown]?.shape.label ?? null)}
           kindLabel={shown === null ? null : KIND_LABELS[entries[shown]!.kind]}
+          journalHref={shown === null ? null : `#diario-${entries[shown]!.kind}`}
+          journalLabel={copy.readInJournal}
         />
       </div>
       {complete && (
