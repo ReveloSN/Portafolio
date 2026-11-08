@@ -68,7 +68,7 @@ public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 ## Sección adicional: Hobbies
 
 - En la portada, `HobbiesTeaser` (entre Experiencia y Contacto) muestra como fichas solo los hobbies confirmados (sin `example`) y lleva a la página `/hobbies` (`HOBBIES_PATH`), donde `Hobbies` muestra las tarjetas (`HobbyCard`, dibujo de línea `HobbyGlyph`). La tarjeta `featured` ocupa dos columnas y dos filas en escritorio.
-- Datos en `data/hobbies.ts`. Natación es real; las entradas con `example: true` son marcadores visibles ("Ejemplo, por reemplazar") que hay que reemplazar o borrar antes de publicar.
+- Datos en `data/hobbies.ts`, con las palabras de la persona: `HOBBIES_INTRO` (presentación bajo el título), cuatro hobbies (naturaleza y animales destacado, música, natación, y películas y tiempo compartido con `wide` para cerrar la rejilla) y `HOBBIES_VALUES` (cierre). Una entrada con `example: true` mostraría el aviso "Ejemplo, por reemplazar" y no saldría en la portada.
 
 ## Temas claro y oscuro
 
