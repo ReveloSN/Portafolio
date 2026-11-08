@@ -104,18 +104,6 @@ export const SEAMS: Readonly<Record<SeamId, SeamConfig>> = {
       },
     ],
   },
-  "experience-skills": {
-    divider: {
-      art: ART.roots,
-      anchor: "top",
-      zIndex: 1,
-      overlapU: 1.5,
-      parallaxSpeed: 0.3,
-      // Las raíces cuelgan desde la línea de tierra del sitio de excavación
-      offset: "var(--dig-soil-line)",
-    },
-    accents: [],
-  },
   "contact-footer": {
     divider: {
       art: ART.treeline,

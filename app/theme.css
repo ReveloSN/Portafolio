@@ -53,9 +53,8 @@
   --seam-testimonials-end: #e3ebd8;
   --seam-experience-start: var(--seam-testimonials-end);
   --seam-experience-end: #e8e3d4;
-  --seam-skills-start: var(--seam-experience-end);
-  --seam-skills-end: #241508;
-  --seam-contact-start: var(--seam-skills-end);
+  /* Entre Experiencia y Contacto va la entrada de Hobbies, con el mismo color de costura. */
+  --seam-contact-start: var(--seam-experience-end);
   /* El pie es de noche en los dos temas: Contacto oscurece bajo la línea de árboles */
   --seam-contact-end: #05100b;
   --contact-bg: #dae5cd;
@@ -120,7 +119,6 @@
   --seam-projects-end: #06120d;
   --seam-testimonials-end: #06120d;
   --seam-experience-end: #17110b;
-  --seam-skills-end: #05100b;
   --seam-contact-end: #05100b;
   --contact-bg: #05100b;
 

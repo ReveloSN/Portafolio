@@ -214,14 +214,6 @@
   stroke-width: 3;
   stroke-linejoin: round;
 }
-.fossil-bone path.fossil-fragment-edge {
-  fill: none;
-  stroke: rgba(230, 206, 152, 0.65);
-  stroke-width: 1.5;
-}
-.fossil-piece[data-placed] .fossil-fragment-edge {
-  stroke: transparent;
-}
 
 .fossil-piece-tag {
   position: absolute;
