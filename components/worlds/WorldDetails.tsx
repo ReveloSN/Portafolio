@@ -1,4 +1,5 @@
 import { DepthPanel } from "@/components/molecules/DepthPanel";
+import type { ReactNode } from "react";
 import { FeatureCard } from "@/components/molecules/FeatureCard";
 import { ProjectFactList } from "@/components/molecules/ProjectFactList";
 import { COPY } from "@/data/copy";
@@ -8,14 +9,16 @@ import type { World } from "@/types/world";
 interface WorldDetailsProps {
   readonly world: World;
   readonly project: Project;
+  readonly journey: ReactNode;
 }
 
-export function WorldDetails({ world, project }: WorldDetailsProps) {
+export function WorldDetails({ world, project, journey }: WorldDetailsProps) {
   const { world: copy } = COPY;
   const [first, second, third] = world.depths;
   return (
     <>
       <DepthPanel
+        id="contexto"
         depthLabel={`${copy.depth} 1`}
         title={first.title}
         subtitle={first.subtitle}
@@ -26,6 +29,7 @@ export function WorldDetails({ world, project }: WorldDetailsProps) {
         <ProjectFactList facts={project.facts} labels={copy.facts} />
       </DepthPanel>
       <DepthPanel
+        id="desarrollo"
         reverse
         depthLabel={`${copy.depth} 2`}
         title={second.title}
@@ -48,36 +52,39 @@ export function WorldDetails({ world, project }: WorldDetailsProps) {
           ))}
         </ul>
       </DepthPanel>
+      {journey}
       <DepthPanel
+        id="aporte"
         depthLabel={`${copy.depth} 3`}
         title={third.title}
         subtitle={third.subtitle}
         kicker={copy.result.kicker}
         heading={copy.result.title}
       >
-        <ul className="grid grid-cols-3 gap-3.5">
-          {project.metrics.map((metric) => (
-            <li
-              key={metric.label}
-              className="py-fluid-3 rounded-2xl border border-white/18 bg-white/7 px-3.5 text-center"
-            >
-              <p className="font-display text-glow text-fluid-2xl font-extrabold">
-                {metric.value}
-              </p>
-              <p className="text-fluid-xs mt-1 opacity-80">{metric.label}</p>
-            </li>
+        <div className="flex flex-col gap-5">
+          {project.contribution.map((paragraph) => (
+            <p key={paragraph} className="text-fluid-md leading-[1.65] opacity-90">
+              {paragraph}
+            </p>
           ))}
-        </ul>
+        </div>
       </DepthPanel>
-      <section className="px-gutter pb-fluid-6 pt-10">
+      <section
+        id="funcionalidades"
+        aria-labelledby="funcionalidades-title"
+        className="px-gutter pb-fluid-6 pt-10"
+      >
         <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
           <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
             {copy.featuresKicker}
           </p>
-          <h2 className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold">
+          <h2
+            id="funcionalidades-title"
+            className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold"
+          >
             {copy.featuresTitle}
           </h2>
-          <ul className="gap-fluid-3 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
+          <ul className="world-feature-grid">
             {project.features.map((feature, i) => (
               <li key={feature.title}>
                 <FeatureCard

@@ -1,6 +1,9 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
+import { ProjectEmblem } from "@/components/molecules/ProjectEmblem";
+import { PortalLink } from "@/components/atoms/PortalLink";
+import { COPY } from "@/data/copy";
 import { Button } from "@/components/atoms/Button";
-import { Icon } from "@/components/atoms/Icon";
+import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
 import { Tag } from "@/components/atoms/Tag";
 import { interpolate } from "@/lib/utils";
 import type { Project } from "@/types/project";
@@ -17,63 +20,51 @@ interface ProjectCardProps {
   readonly project: Project;
   readonly worldLabel: string;
   readonly accent: string;
-  readonly thumbnail: ReactNode;
   readonly labels: ProjectCardLabels;
 }
 
-/** Proporción del dibujo de cada mundo (viewBox 390x460). */
-const THUMBNAIL_RATIO = "390 / 460";
-
-export function ProjectCard({
-  project,
-  worldLabel,
-  accent,
-  thumbnail,
-  labels,
-}: ProjectCardProps) {
+export function ProjectCard({ project, worldLabel, accent, labels }: ProjectCardProps) {
   const owner = interpolate(labels.forProject, { name: project.name });
   return (
-    <article className="group hover:border-glow/50 gap-fluid-3 border-line bg-surface flex flex-col rounded-[30px] border p-4 pb-7 transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-24px_var(--card-glow)]">
-      {/* La escena se ve completa: el arco toma la proporción del dibujo (390x460) */}
-      <div
-        className="border-line mx-auto w-full max-w-[calc(var(--u)*19)] overflow-hidden rounded-[200px_200px_18px_18px] border transition-transform duration-500 group-hover:-translate-y-1"
-        style={{ aspectRatio: THUMBNAIL_RATIO }}
+    <article
+      className="project-card"
+      style={{ "--world-accent": accent } as CSSProperties}
+    >
+      <PortalLink
+        href={`/mundos/${project.slug}`}
+        className="project-card-art"
+        aria-label={`${labels.enterWorld} · ${project.name}`}
       >
-        {thumbnail}
-      </div>
-      <div className="flex flex-1 flex-col gap-3 px-2.5">
-        <p
-          className="world-label text-fluid-xs font-mono tracking-[.25em]"
-          style={{ "--world-accent": accent } as CSSProperties}
-        >
-          {worldLabel}
-        </p>
+        <ProjectEmblem slug={project.slug} name={project.name} />
+      </PortalLink>
+      <div className="project-card-body">
+        <div className="project-card-meta">
+          <p
+            className="world-label text-fluid-xs font-mono tracking-[.25em]"
+            style={{ "--world-accent": accent } as CSSProperties}
+          >
+            {worldLabel}
+          </p>
+          <span className="project-card-status">{COPY.projects.completed}</span>
+        </div>
         <h3 className="font-display text-fluid-xl leading-[1.1] font-extrabold">
           {project.name}
         </h3>
-        <p className="text-fluid-base leading-relaxed opacity-80">{project.summary}</p>
-        <ul className="flex flex-wrap gap-2" aria-label="Tecnologías">
-          {project.technologies.map((tech) => (
+        <p className="project-card-summary text-fluid-base">{project.summary}</p>
+        <ul className="flex flex-wrap gap-2" aria-label={COPY.projects.technologiesLabel}>
+          {project.technologies.slice(0, 3).map((tech) => (
             <li key={tech}>
               <Tag>{tech}</Tag>
             </li>
           ))}
+          {project.technologies.length > 3 && (
+            <li aria-label={project.technologies.slice(3).join(", ")}>
+              <Tag>+{project.technologies.length - 3}</Tag>
+            </li>
+          )}
         </ul>
-        <div className="mt-auto flex flex-wrap gap-3 pt-2.5">
-          <Button
-            variant="dark"
-            size="sm"
-            href={project.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Icon name="github" />
-            {labels.github}
-            <span className="sr-only">
-              {" "}
-              {owner} {labels.newTab}
-            </span>
-          </Button>
+        <div className="project-card-actions">
+          <ProjectRepoLinks project={project} label={labels.github} size="sm" />
           <Button variant="ghost" size="sm" href={`/mundos/${project.slug}`}>
             {labels.enterWorld} <span aria-hidden="true">→</span>
             <span className="sr-only"> {owner}</span>

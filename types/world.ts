@@ -1,4 +1,4 @@
-export const WORLD_SLUGS = ["selva", "oceano", "cueva", "volcan"] as const;
+export const WORLD_SLUGS = ["selva", "oceano", "cueva", "volcan", "aurora"] as const;
 
 export type WorldSlug = (typeof WORLD_SLUGS)[number];
 

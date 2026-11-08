@@ -4,31 +4,108 @@ const SHOTS = "/images/projects";
 
 export const PROJECTS: readonly Project[] = [
   {
+    id: "neurolive",
+    slug: "aurora",
+    name: "NeuroLive",
+    summary:
+      "Colaboré en una plataforma de seguimiento biométrico con dispositivos ESP32 e IA. Mi participación abarcó backend, infraestructura, integración de IA y comunicación en tiempo real.",
+    tagline:
+      "Datos biométricos y seguimiento conectado para pacientes, cuidadores y profesionales de salud.",
+    technologies: [
+      "Spring Boot",
+      "Next.js",
+      "PostgreSQL",
+      "Python",
+      "FastAPI",
+      "ESP32",
+      "Gemini",
+    ],
+    repoUrl: "https://github.com/ReveloSN/neuro-live-backend",
+    repositories: [
+      { label: "Frontend", href: "https://github.com/ReveloSN/neuro-live-frontend" },
+      { label: "Backend", href: "https://github.com/ReveloSN/neuro-live-backend" },
+      { label: "WebSocket", href: "https://github.com/ReveloSN/WebSocket-neurolive" },
+    ],
+    download: {
+      href: "https://neuro-live-frontend.vercel.app/",
+      label: "Ver plataforma",
+    },
+    facts: {
+      period: "2026",
+      team: "Proyecto colaborativo. Participé en backend, infraestructura, IA y servidor WebSocket.",
+      platform: "Plataforma web conectada a dispositivos ESP32",
+      status: "Proyecto terminado, con frontend en Vercel y backend en Azure",
+    },
+    problem:
+      "El seguimiento de datos biométricos requiere conectar las lecturas del dispositivo con la información que consultan pacientes, cuidadores y profesionales de salud. NeuroLive reúne telemetría, historial de eventos y vínculos entre usuarios en una plataforma con acceso según el rol.",
+    roleItems: [
+      "La plataforma integra una interfaz en Next.js, un backend en Java y Spring Boot y una base de datos PostgreSQL. La autenticación con JWT y los permisos por rol organizan el acceso a la información y la vinculación entre pacientes, cuidadores y médicos.",
+      "Un servicio en Python y FastAPI recibe la telemetría del ESP32 mediante WebSocket, autentica los dispositivos y comunica sus lecturas al backend. El sistema registra frecuencia cardiaca, saturación de oxígeno y contacto del sensor, además de gestionar desconexiones y comandos de iluminación.",
+      "El análisis de señales combina reglas locales sobre ventanas de telemetría con una integración opcional de Gemini. La IA apoya el análisis predictivo y la generación de información de seguimiento; la plataforma conserva el historial de eventos, las respuestas SAM y la auditoría de accesos.",
+    ],
+    contribution: [
+      "NeuroLive conecta el dispositivo y la plataforma web para consultar datos biométricos, revisar eventos y coordinar el seguimiento entre distintos roles. La información se presenta junto con el historial del paciente para facilitar su consulta.",
+      "El proyecto reúne la comunicación en tiempo real, la persistencia de datos y el análisis en una solución integrada, con servicios desplegados en Vercel, Azure y Railway.",
+    ],
+    features: [
+      {
+        title: "Telemetría en tiempo real",
+        description:
+          "Recepción de frecuencia cardiaca, saturación de oxígeno y estado del sensor desde dispositivos ESP32.",
+      },
+      {
+        title: "Análisis con IA",
+        description:
+          "Reglas locales y una integración opcional de Gemini apoyan el análisis de tendencias de las lecturas biométricas.",
+      },
+      {
+        title: "Paneles por rol",
+        description:
+          "Vistas para pacientes, cuidadores, médicos y usuarios personales, con autenticación y acceso según su rol.",
+      },
+      {
+        title: "Historial de eventos",
+        description:
+          "Registro de eventos, duración y respuestas al cuestionario SAM posterior a una intervención.",
+      },
+      {
+        title: "Vinculación de cuentas",
+        description:
+          "Asociación entre pacientes, cuidadores y profesionales mediante tokens, con posibilidad de revocar los vínculos.",
+      },
+      {
+        title: "Trazabilidad y exportación",
+        description:
+          "Auditoría de accesos a la información y exportación de datos para su consulta y seguimiento.",
+      },
+    ],
+    screenshots: [],
+  },
+  {
     id: "isla-espejo",
     slug: "selva",
     name: "Isla Espejo",
     summary:
-      "Roguelike en pixel art hecho en pareja con Godot. Programé la mayoría de los enemigos, el arte propio del bosque y un mando desde el celular.",
-    tagline: "Un roguelike en pixel art donde la isla aprende cómo juegas.",
+      "Colaboré en el desarrollo de un roguelike en Godot con escenarios procedurales e IA que adapta la experiencia al estilo de juego. Mi participación se centró en enemigos, arte, audio y control desde el celular.",
+    tagline: "Una aventura en pixel art que adapta sus desafíos a tu forma de jugar.",
     technologies: ["Godot 4", "GDScript", "Python", "Aseprite", "GitHub Actions"],
     repoUrl: "https://github.com/Fabiann1809/isla-espejo",
     facts: {
       period: "Octubre y noviembre de 2026 (3 semanas)",
-      team: "Pareja: Fabián llevó mapas, IA y habilidades; yo, enemigos, arte, audio y mando",
+      team: "Proyecto colaborativo. Participé en el desarrollo de enemigos, arte, audio y control desde el celular.",
       platform: "Escritorio con Windows; el celular sirve de mando por Wi-Fi",
-      status: "En desarrollo: el bosque está completo; las ruinas y el templo, en curso",
+      status: "Proyecto terminado: aventura con bosque, ruinas y templo",
     },
     problem:
-      "Nico queda atrapado en una isla tras una tormenta y debe cruzar tres escenarios, vencer a un jefe en cada uno y recuperar los fragmentos de su brújula para volver a casa. El reto era que cada partida se sintiera distinta: mapas procedurales armados con salas hechas a mano, una habilidad por jefe y una IA que nota si juegas agresivo o sigiloso y cambia el juego en respuesta.",
+      "Isla Espejo propone una aventura en la que Nico debe recuperar los fragmentos de su brújula para regresar a casa. El reto del proyecto es ofrecer partidas diferentes mediante escenarios procedurales y un sistema que adapta enemigos y salas al comportamiento del jugador.",
     roleItems: [
-      "Programé casi todos los enemigos: la bestia de la niebla, la sombra errante que se teletransporta, el murciélago en picada y unos 25 enemigos pensados para el templo, cada uno con su propia mecánica.",
-      "Hice el arte propio y la sensación del combate: Nico en 32x32, el Guardián del bosque y sus raíces, el Anciano, el agua y los caminos, más pausa al golpe, temblor de pantalla, números de daño y el sistema de música y efectos.",
-      "Programé el mando desde el celular (servidor WebSocket, código QR y página web) y trabajé con Fabián por ramas y pull requests: abrí 9 de los 10 que entraron a main.",
+      "El juego se construyó en Godot con salas diseñadas a mano que se conectan de forma procedural. Se integraron enemigos con comportamientos propios, combates contra jefes, arte en pixel art y efectos visuales y sonoros.",
+      "La IA se aplica a la adaptación de las partidas: un perfil registra si el jugador actúa de forma agresiva o sigilosa y un director ajusta enemigos y salas según ese comportamiento. Un bot recorre mapas y registra el daño recibido para apoyar los ajustes de dificultad.",
+      "Se implementó un control desde el navegador del celular mediante WebSocket y un código QR, usando la misma red Wi-Fi. El desarrollo colaborativo se organizó con ramas, revisiones de código y pruebas automáticas en GitHub Actions.",
     ],
-    metrics: [
-      { value: "159", label: "commits míos" },
-      { value: "38", label: "enemigos y jefes" },
-      { value: "90", label: "archivos de pruebas en CI" },
+    contribution: [
+      "Isla Espejo explora cómo ofrecer partidas distintas a partir de escenarios procedurales y desafíos que responden a la forma de jugar. El control desde el celular añade otra manera de interactuar con el juego sin un mando dedicado.",
+      "La aventura reúne el bosque, las ruinas y el templo en un recorrido de exploración y combate, con enemigos, jefes y habilidades que acompañan la recuperación de los fragmentos de la brújula.",
     ],
     features: [
       {
@@ -37,9 +114,9 @@ export const PROJECTS: readonly Project[] = [
           "Un algoritmo coloca y conecta salas diseñadas a mano: cada partida recorre una isla distinta.",
       },
       {
-        title: "La isla aprende",
+        title: "IA adaptativa",
         description:
-          "Un perfil observa cómo juegas y un director ajusta enemigos y salas a tu estilo.",
+          "El sistema analiza el comportamiento del jugador y ajusta la selección de enemigos y salas durante la partida.",
       },
       {
         title: "Mando desde el celular",
@@ -88,7 +165,7 @@ export const PROJECTS: readonly Project[] = [
     slug: "oceano",
     name: "Verificador de Salida",
     summary:
-      "App Android para no olvidar nada al salir de casa: rutinas de verificación que avisan por hora, al dejar tu Wi-Fi o al llegar. Publicada con APK descargable.",
+      "Aplicación Android para organizar rutinas de verificación y reducir olvidos al salir de casa. Combina recordatorios por horario, Wi-Fi o ubicación con la creación de rutinas asistida por Gemini.",
     tagline:
       "Rutinas de verificación que te avisan por hora, al dejar tu Wi-Fi o al llegar a casa.",
     technologies: ["React Native", "Expo", "TypeScript", "Supabase", "Gemini"],
@@ -101,19 +178,18 @@ export const PROJECTS: readonly Project[] = [
       period: "Septiembre a noviembre de 2026 (5 semanas)",
       team: "Individual: diseño, app y backend",
       platform: "Android 7 o superior, con widget en la pantalla de inicio",
-      status: "Publicada en GitHub Releases con APK; sigue en mejora",
+      status: "Proyecto terminado, con APK disponible en GitHub Releases",
     },
     problem:
-      "Llaves, billetera, la estufa: los olvidos pasan justo al cambiar de contexto, al salir de casa o del trabajo. La app propone rutinas cortas de verificación, de 1 a 12 ítems y algunos marcados como críticos, que se disparan a una hora, al dejar una red Wi-Fi o al llegar a casa, para revisar en segundos, dejar registro y aprender de lo que se olvida.",
+      "Los cambios de rutina al salir de casa o del trabajo pueden llevar a olvidar objetos o tareas importantes. La aplicación permite crear listas de verificación, señalar elementos críticos y recibir avisos según el horario, la conexión Wi-Fi o la llegada a casa. Cada revisión queda registrada para consultar los olvidos más frecuentes.",
     roleItems: [
-      "Definí la arquitectura: 24 módulos por funcionalidad, Atomic Design, repositorios para Supabase y una estrategia por cada tipo de aviso.",
-      "Programé las 17 pantallas y el widget en React Native y TypeScript: acceso o modo invitado, rutinas, verificación, historial, ajustes, crear con IA e importar rutinas.",
-      "Resolví lo que pasa con la app cerrada: tareas periódicas que revisan la Wi-Fi, una geocerca de casa, notificaciones para verificar, posponer u omitir, y una cola sin conexión.",
+      "La aplicación se desarrolló con React Native, Expo y TypeScript, con módulos separados por funcionalidad y persistencia en Supabase. Incluye gestión de rutinas, historial, modo invitado y un widget para acceder a la próxima verificación.",
+      "Gemini se utiliza para convertir una descripción en lenguaje natural en un borrador de rutina. La persona revisa los elementos propuestos y puede modificarlos antes de guardar la lista.",
+      "Los recordatorios combinan horarios, cambios de conexión Wi-Fi y una geocerca alrededor de casa. Las tareas en segundo plano permiten generar avisos con la aplicación cerrada, y una cola local sincroniza los registros cuando vuelve la conexión.",
     ],
-    metrics: [
-      { value: "17", label: "pantallas" },
-      { value: "119", label: "archivos de pruebas" },
-      { value: "263", label: "commits en 5 semanas" },
+    contribution: [
+      "Verificador de Salida reúne las tareas que suelen olvidarse en una lista que puede consultarse en el momento de salir o llegar a casa. La creación asistida por IA facilita preparar una rutina, mientras la revisión de cada elemento conserva el control en manos de la persona.",
+      "La aplicación terminada está disponible como APK en GitHub Releases. Permite crear y utilizar rutinas, recibir recordatorios y consultar el historial de verificaciones.",
     ],
     features: [
       {
@@ -134,7 +210,7 @@ export const PROJECTS: readonly Project[] = [
       {
         title: "Crear con IA",
         description:
-          "Describes la rutina en una frase y Gemini arma un borrador que revisas ítem por ítem antes de guardar.",
+          "Gemini genera un borrador de lista a partir de una descripción. Cada elemento puede revisarse y editarse antes de guardar.",
       },
       {
         title: "Aprende de tus olvidos",
@@ -154,35 +230,33 @@ export const PROJECTS: readonly Project[] = [
     slug: "cueva",
     name: "LOST",
     summary:
-      "App para Wear OS que aprende tus recorridos, nota cuándo te desorientas y te guía de vuelta sin sacar el celular. Investigación, diseño y código propios.",
+      "Aplicación para Wear OS que analiza recorridos y señales de posible desorientación para ofrecer orientación desde el reloj. Proyecto individual de investigación, diseño y desarrollo en Kotlin.",
     tagline:
-      "Un guía sereno en tu muñeca: nota cuándo te desorientas y te ayuda a volver a tu ruta.",
+      "Orientación desde el reloj para reconocer posibles desvíos y facilitar el regreso a la ruta.",
     technologies: ["Kotlin", "Wear OS", "Jetpack Compose", "Room", "OpenStreetMap"],
     repoUrl: "https://github.com/ReveloSN/LOST-smartwatch",
     facts: {
       period: "Octubre y noviembre de 2026 (2 semanas)",
       team: "Individual: investigación, diseño y código",
       platform: "Reloj con Wear OS 3 o superior, sin depender del celular",
-      status:
-        "Entrega final de Diseño de Interfaces de Software; falta la prueba con usuarios",
+      status: "Proyecto terminado como entrega de Diseño de Interfaces de Software",
     },
     problem:
-      "Perderse en un recorrido habitual o en un lugar nuevo, como un hospital o un aeropuerto, genera ansiedad, y sacar el celular para orientarse no siempre es posible. LOST aprende tus recorridos y compara el de hoy con la rutina para distinguir un desvío voluntario de una desorientación real. La meta: recuperar la ruta en menos de 30 segundos.",
+      "Desorientarse durante un recorrido puede generar ansiedad, especialmente cuando consultar el celular resulta incómodo. LOST analiza la ruta actual y los patrones habituales para identificar señales de posible desorientación y ofrecer ayuda desde el reloj. Su objetivo es facilitar el regreso a la ruta con indicaciones breves y accesibles desde la muñeca.",
     roleItems: [
-      "Investigué y diseñé la experiencia: tres personas (estudiante, adulto mayor y viajero), journey map, arquitectura de información, voz y tono, y tokens de diseño en tres niveles.",
-      "Programé la app nativa en Kotlin con Compose para Wear OS: 5 módulos con arquitectura limpia (más uno para medir rendimiento), Hilt, Room y un servicio de ubicación en primer plano.",
-      "Construí el motor de detección: compara secuencias con DTW y suma señales de bucles, giros erráticos, paradas y alejamiento del destino.",
+      "El diseño partió de tres perfiles de usuario y del análisis de su recorrido de uso. Se definieron la navegación, los mensajes y un sistema visual adaptado a la pantalla y las interacciones de un reloj.",
+      "La aplicación se construyó en Kotlin con Jetpack Compose para Wear OS, almacenamiento local en Room y un servicio de ubicación en primer plano. Integra mapas de OpenStreetMap y orientación mediante la brújula del dispositivo.",
+      "El análisis de recorridos utiliza DTW para comparar secuencias y combina señales como bucles, giros erráticos, paradas y alejamiento del destino. Ante una posible desorientación, el sistema pregunta si se necesita ayuda y ofrece orientación progresiva. La detección se ejecuta en el reloj.",
     ],
-    metrics: [
-      { value: "489", label: "pruebas automáticas" },
-      { value: "23", label: "pantallas en el reloj" },
-      { value: "3,6 MB", label: "APK (antes 57 MB)" },
+    contribution: [
+      "LOST propone una forma de pedir y recibir orientación desde la muñeca, con preguntas breves y ayuda progresiva. El análisis de recorridos en el reloj permite mantener la detección activa sin depender del celular.",
+      "La aplicación terminada integra monitoreo, alertas y guía de regreso en una experiencia para Wear OS. Reúne el análisis de recorridos y las indicaciones de orientación en el mismo dispositivo.",
     ],
     features: [
       {
         title: "Detección por secuencias",
         description:
-          "Separa un «¿Vas a otro lado hoy?» de un «¿Necesitas ayuda?» comparando tu recorrido con la rutina.",
+          "Compara el recorrido actual con los patrones habituales para identificar señales de posible desorientación.",
       },
       {
         title: "Ayuda escalonada",
@@ -236,8 +310,9 @@ export const PROJECTS: readonly Project[] = [
     slug: "volcan",
     name: "ARGUS",
     summary:
-      "App de escritorio que detecta inconsistencias entre documentos antes de firmarlos o enviarlos. La detección corre en el equipo, sin internet; la IA es opcional.",
-    tagline: "Un auditor local que compara tus documentos antes de que firmes o envíes.",
+      "Aplicación de escritorio para identificar inconsistencias entre documentos antes de firmarlos o enviarlos. Combina extracción de texto, procesamiento de lenguaje y comparación de datos con un motor que funciona de forma local.",
+    tagline:
+      "Revisión documental con evidencia para detectar diferencias antes de firmar o enviar.",
     technologies: [
       "Tauri",
       "React",
@@ -252,19 +327,18 @@ export const PROJECTS: readonly Project[] = [
       period: "Octubre y noviembre de 2026 (3 semanas)",
       team: "Individual: diseño, motor e interfaz",
       platform: "Escritorio: Windows 10/11 y Linux, con instaladores MSI, DEB y AppImage",
-      status: "Versión 0.1 funcional; sigue en mejora y aún sin versión publicada",
+      status: "Proyecto terminado, con instaladores para Windows y Linux",
     },
     problem:
-      "Un «Contrato No. 4857» que en el anexo aparece como «4587», o un correo que habla del informe de junio con un adjunto de mayo: errores pequeños que salen caros cuando ya se firmó o se envió. ARGUS cruza contratos, montos, fechas y periodos entre PDF, DOCX, XLSX y correos, muestra cada valor con su archivo, página y fragmento, y deja la decisión al usuario.",
+      "Revisar varios documentos de un mismo expediente exige comprobar que coincidan números de contrato, montos, fechas y periodos. ARGUS ayuda a localizar diferencias entre archivos PDF, DOCX, XLSX y correos, y presenta cada hallazgo con su archivo y fragmento de origen para que la persona decida cómo resolverlo.",
     roleItems: [
-      "Definí la arquitectura: motor en Python con arquitectura hexagonal, interfaz con Atomic Design y tokens, y 32 decisiones registradas como ADR.",
-      "Definí la identidad, el ojo de Argos que vigila sin juzgar, y dirigí los mockups de alta fidelidad que guiaron cada pantalla.",
-      "Construí el sistema de punta a punta: lectores y OCR, comparadores, base SQLite, interfaz en Tauri y React, e instaladores para Windows y Linux con GitHub Actions.",
+      "Se desarrolló un motor en Python y FastAPI, una interfaz de escritorio con Tauri y React y una base de datos SQLite. La arquitectura separa la lectura de documentos, el análisis, la comparación y la presentación de resultados.",
+      "El procesamiento de lenguaje con spaCy apoya el análisis del texto, mientras los comparadores cruzan datos para señalar posibles inconsistencias. Tesseract permite extraer texto de documentos escaneados en el equipo. La detección principal funciona sin conexión; las funciones adicionales de IA y OCR en la nube son opcionales.",
+      "La interfaz permite revisar hallazgos, comparar versiones y exportar informes en PDF y DOCX. Cada decisión queda asociada a su evidencia y al historial de la revisión. Los instaladores para Windows y Linux se generan mediante GitHub Actions.",
     ],
-    metrics: [
-      { value: "2.100+", label: "casos de prueba" },
-      { value: "32", label: "decisiones de arquitectura" },
-      { value: "202", label: "commits en 3 semanas" },
+    contribution: [
+      "ARGUS concentra la revisión de documentos en un espacio donde cada diferencia puede consultarse junto con su evidencia. Esto permite seguir el origen de los hallazgos y registrar las decisiones sin sustituir el criterio de quien revisa.",
+      "La aplicación terminada integra análisis local, comparación de versiones e informes exportables, con instaladores para Windows y Linux. El historial conserva la evidencia y las decisiones de cada revisión.",
     ],
     features: [
       {

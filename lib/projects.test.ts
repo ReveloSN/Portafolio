@@ -4,8 +4,6 @@ import { describe, expect, it } from "vitest";
 import { PROJECTS } from "@/data/projects";
 import { WORLD_SLUGS } from "@/types/world";
 
-/** La página de mundo pinta las métricas en una fila de tres. */
-const METRICS_PER_PROJECT = 3;
 const MIN_FEATURES = 3;
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 const PLACEHOLDER = /\[[^\]]+\]/;
@@ -52,18 +50,18 @@ describe("PROJECTS", () => {
     for (const text of textsOf(PROJECTS)) expect(text).not.toMatch(PLACEHOLDER);
   });
 
-  it.each(PROJECTS)(
-    "$name trae ficha, métricas y funcionalidades completas",
-    (project) => {
-      expect(project.metrics).toHaveLength(METRICS_PER_PROJECT);
-      expect(project.features.length).toBeGreaterThanOrEqual(MIN_FEATURES);
-      expect(project.roleItems.length).toBeGreaterThan(0);
-      expect(Object.values(project.facts).every((value) => value.trim().length > 0)).toBe(
-        true,
-      );
-      expect(project.repoUrl).toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+$/);
-    },
-  );
+  it.each(PROJECTS)("$name trae ficha, aporte y funcionalidades completas", (project) => {
+    expect(project.contribution.length).toBeGreaterThan(0);
+    expect(project.contribution.every((paragraph) => paragraph.trim().length > 0)).toBe(
+      true,
+    );
+    expect(project.features.length).toBeGreaterThanOrEqual(MIN_FEATURES);
+    expect(project.roleItems.length).toBeGreaterThan(0);
+    expect(Object.values(project.facts).every((value) => value.trim().length > 0)).toBe(
+      true,
+    );
+    expect(project.repoUrl).toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+$/);
+  });
 
   it.each(PROJECTS)(
     "$name: cada captura existe, describe su contenido y declara su tamaño real",

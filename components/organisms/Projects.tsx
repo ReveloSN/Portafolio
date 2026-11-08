@@ -3,7 +3,6 @@ import { Reveal } from "@/components/molecules/Reveal";
 import { ProjectCard } from "@/components/molecules/ProjectCard";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { THUMBNAILS } from "@/components/worlds/registry";
 import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
 import { worldsBySlug } from "@/lib/collections";
@@ -35,11 +34,10 @@ export function Projects({ projects }: ProjectsProps) {
           intro={copy.intro}
           titleClassName="max-w-[calc(var(--u)*59.7)]"
         />
-        <ul className="mt-fluid-6 grid grid-cols-1 gap-8 md:grid-cols-2">
+        <ul className="projects-grid mt-fluid-6">
           {projects.map((project, index) => {
             const world = worldsBySlug.get(project.slug);
             if (!world) return null;
-            const Thumbnail = THUMBNAILS[project.slug];
             return (
               <li key={project.id} className="flex">
                 <Reveal className="flex w-full" delay={index * 120}>
@@ -47,7 +45,6 @@ export function Projects({ projects }: ProjectsProps) {
                     project={project}
                     worldLabel={`MUNDO ${world.number} · ${world.name}`}
                     accent={world.accent}
-                    thumbnail={<Thumbnail />}
                     labels={copy}
                   />
                 </Reveal>

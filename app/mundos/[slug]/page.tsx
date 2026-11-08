@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { WorldLayout } from "@/components/templates/WorldLayout";
-import { SCENES } from "@/components/worlds/registry";
 import { PROFILE } from "@/data/profile";
 import { WORLDS } from "@/data/worlds";
 import { projectsBySlug, worldsBySlug } from "@/lib/collections";
@@ -34,12 +33,6 @@ export default async function WorldPage({ params }: WorldPageProps) {
   if (!world || !project) notFound();
 
   return (
-    <WorldLayout
-      world={world}
-      worlds={WORLDS}
-      project={project}
-      profile={PROFILE}
-      Scene={SCENES[slug]}
-    />
+    <WorldLayout world={world} worlds={WORLDS} project={project} profile={PROFILE} />
   );
 }

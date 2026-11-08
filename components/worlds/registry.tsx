@@ -15,11 +15,14 @@ import { SelvaScene } from "./scenes/SelvaScene";
 import { TrilobiteFossil } from "./art/TrilobiteFossil";
 import { VolcanThumbnail } from "./art/VolcanThumbnail";
 import { VolcanScene } from "./scenes/VolcanScene";
+import { AuroraThumbnail } from "./art/AuroraThumbnail";
+import { AuroraScene } from "./scenes/AuroraScene";
 
 type SvgComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
 /** Registro: miniatura de cada proyecto según el slug de su mundo. */
 export const THUMBNAILS: Readonly<Record<WorldSlug, SvgComponent>> = {
+  aurora: AuroraThumbnail,
   selva: SelvaThumbnail,
   oceano: OceanoThumbnail,
   cueva: CuevaThumbnail,
@@ -38,6 +41,7 @@ export const FOSSILS: Readonly<Record<FossilKind, SvgComponent>> = {
 
 /** Strategy: la escena de cada mundo se elige por su slug. */
 export const SCENES: Readonly<Record<WorldSlug, ComponentType>> = {
+  aurora: AuroraScene,
   selva: SelvaScene,
   oceano: OceanoScene,
   cueva: CuevaScene,

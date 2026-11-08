@@ -1,4 +1,5 @@
-import type { ComponentType, CSSProperties } from "react";
+import type { CSSProperties } from "react";
+import { WorldJourney } from "@/components/worlds/WorldJourney";
 import { Button } from "@/components/atoms/Button";
 import { SkipLink } from "@/components/atoms/SkipLink";
 import { WorldSwitcher } from "@/components/molecules/WorldSwitcher";
@@ -16,17 +17,10 @@ interface WorldLayoutProps {
   readonly worlds: readonly World[];
   readonly project: Project;
   readonly profile: Profile;
-  readonly Scene: ComponentType;
 }
 
 /** Plantilla común de las páginas de mundo: cambia la escena y los datos, no la estructura. */
-export function WorldLayout({
-  world,
-  worlds,
-  project,
-  profile,
-  Scene,
-}: WorldLayoutProps) {
+export function WorldLayout({ world, worlds, project, profile }: WorldLayoutProps) {
   const { world: copy, site } = COPY;
   const theme = {
     "--glow": world.accent,
@@ -35,16 +29,39 @@ export function WorldLayout({
   } as CSSProperties;
   return (
     // Los mundos conservan su paleta en los dos temas
-    <div style={theme} data-palette="night" className="text-leaf w-full overflow-x-clip">
+    <div style={theme} data-palette="night" className="world-page w-full overflow-x-clip">
       <SkipLink href={`#${MAIN_CONTENT_ID}`}>{COPY.nav.skipToContent}</SkipLink>
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
-        <WorldHero
+        <WorldHero world={world} project={project} ownerName={profile.firstName} />
+        <nav className="world-section-nav" aria-label={copy.navigationLabel}>
+          <ul>
+            <li>
+              <a href="#contexto">{copy.problem.title}</a>
+            </li>
+            <li>
+              <a href="#desarrollo">{copy.role.title}</a>
+            </li>
+            <li>
+              <a href="#recorrido">{copy.journeyTitle}</a>
+            </li>
+            <li>
+              <a href="#aporte">{copy.result.title}</a>
+            </li>
+            <li>
+              <a href="#funcionalidades">{copy.featuresTitle}</a>
+            </li>
+            {project.screenshots.length > 0 && (
+              <li>
+                <a href="#capturas">{copy.galleryKicker}</a>
+              </li>
+            )}
+          </ul>
+        </nav>
+        <WorldDetails
           world={world}
           project={project}
-          ownerName={profile.firstName}
-          Scene={Scene}
+          journey={<WorldJourney slug={project.slug} />}
         />
-        <WorldDetails world={world} project={project} />
         <WorldGallery project={project} />
       </main>
       <footer className="px-gutter pt-fluid-5 pb-14 text-center">

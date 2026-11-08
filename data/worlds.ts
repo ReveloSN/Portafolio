@@ -2,6 +2,20 @@ import type { World } from "@/types/world";
 
 export const WORLDS: readonly World[] = [
   {
+    slug: "aurora",
+    number: "05",
+    name: "AURORA",
+    accent: "#a9f4e0",
+    ink: "#061a28",
+    background:
+      "linear-gradient(180deg,#061a28 0,#123044 900px,#103a40 1900px,#061a28 100%)",
+    depths: [
+      { title: "Horizonte", subtitle: "La necesidad que conecta el proyecto" },
+      { title: "Luces", subtitle: "Datos, dispositivos e inteligencia artificial" },
+      { title: "Refugio", subtitle: "Tecnología para acompañar" },
+    ],
+  },
+  {
     slug: "selva",
     number: "01",
     name: "SELVA",
@@ -11,7 +25,7 @@ export const WORLDS: readonly World[] = [
       "linear-gradient(180deg,#0d3b26 0,#0a2a1c 900px,#0c3322 1900px,#06120d 3200px,#04100a 100%)",
     depths: [
       { title: "Dosel", subtitle: "Donde empezó la idea" },
-      { title: "Sotobosque", subtitle: "Donde me ensucié las manos" },
+      { title: "Sotobosque", subtitle: "Cómo tomó forma el proyecto" },
       { title: "Raíces", subtitle: "Lo que quedó funcionando" },
     ],
   },

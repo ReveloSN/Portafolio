@@ -1,11 +1,10 @@
 import Image from "next/image";
-import { Button } from "@/components/atoms/Button";
-import { Icon } from "@/components/atoms/Icon";
+import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
 import { COPY } from "@/data/copy";
 import type { Project } from "@/types/project";
 
-/** Ancho aproximado de cada captura: tres columnas en escritorio, una en móvil. */
-const GALLERY_SIZES = "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw";
+/** Captura principal a todo el ancho; secundarias en dos columnas. */
+const GALLERY_SIZES = "(min-width: 1200px) 560px, (min-width: 640px) 45vw, 100vw";
 
 interface WorldGalleryProps {
   readonly project: Project;
@@ -14,36 +13,43 @@ interface WorldGalleryProps {
 export function WorldGallery({ project }: WorldGalleryProps) {
   const { world: copy } = COPY;
   return (
-    <section className="px-gutter pt-fluid-4 pb-20">
+    <section id="capturas" className="px-gutter pt-fluid-4 pb-20">
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
-        <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
-          {copy.galleryKicker}
-        </p>
-        <h2 className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold">
-          {copy.galleryTitle}
-        </h2>
-        {project.screenshots.length > 0 ? (
-          <ul className="gap-fluid-3 grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))]">
-            {project.screenshots.map((shot) => (
-              <li
-                key={shot.src}
-                className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[20px] border border-white/18 bg-black/40 p-2"
-              >
-                <Image
-                  src={shot.src}
-                  alt={shot.alt}
-                  width={shot.width}
-                  height={shot.height}
-                  sizes={GALLERY_SIZES}
-                  className="h-full w-full rounded-[14px] object-contain"
-                />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="rounded-[20px] border-2 border-dashed border-white/40 bg-white/5 p-8 text-center font-semibold tracking-[.06em]">
-            {copy.galleryEmpty}
-          </p>
+        {project.screenshots.length > 0 && (
+          <>
+            <p className="font-display text-glow text-fluid-xs tracking-[.4em]">
+              {copy.galleryKicker}
+            </p>
+            <h2 className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold">
+              {copy.galleryTitle}
+            </h2>
+            <ul className="world-gallery-grid">
+              {project.screenshots.map((shot, index) => (
+                <li key={shot.src}>
+                  <figure>
+                    <a
+                      href={shot.src}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="world-gallery-shot"
+                      aria-label={`${copy.galleryOpen} · ${shot.alt} ${COPY.projects.newTab}`}
+                    >
+                      <Image
+                        src={shot.src}
+                        alt={shot.alt}
+                        width={shot.width}
+                        height={shot.height}
+                        sizes={
+                          index === 0 ? "(min-width: 1200px) 1120px, 95vw" : GALLERY_SIZES
+                        }
+                      />
+                    </a>
+                    <figcaption>{shot.alt}</figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
         <div className="px-fluid-4 py-fluid-3 mt-11 flex flex-wrap items-center gap-3.5 rounded-3xl border border-white/18 bg-white/7">
           <div className="min-w-[220px] flex-1">
@@ -61,15 +67,7 @@ export function WorldGallery({ project }: WorldGalleryProps) {
               ))}
             </ul>
           </div>
-          <Button
-            variant="dark"
-            href={project.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Icon name="github" />
-            {copy.code}
-          </Button>
+          <ProjectRepoLinks project={project} label={copy.code} />
         </div>
       </div>
     </section>

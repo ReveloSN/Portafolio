@@ -1,0 +1,185 @@
+/* Capas reales: el personaje conserva su transparencia y se mueve separado del fondo. */
+.world-cover {
+  object-position: center;
+}
+.world-cover[data-world="cueva"] {
+  object-position: left center;
+}
+.project-journey-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 64px);
+  margin-bottom: 40px;
+}
+.project-journey-lead {
+  max-width: 40ch;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+.project-story-art {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 16/10;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.project-story-art .project-scene-dinosaur {
+  width: 72%;
+  right: 3%;
+  height: 90%;
+  bottom: 1%;
+}
+.project-story-art .project-scene-foreground {
+  height: 22%;
+  opacity: 0.7;
+}
+.project-story-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(3, 12, 18, 0.72);
+  font-size: 11px;
+  color: #edf5e5;
+}
+@media (max-width: 767px) {
+  .project-journey-intro {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+.project-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.project-scene-background {
+  position: absolute;
+  inset: -4%;
+  transform: translate3d(calc(var(--mx, 0) * -5px), calc(var(--my, 0) * -4px), 0);
+}
+.project-scene-background img {
+  object-position: 64% center;
+}
+.project-scene-atmosphere {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 35, 29, 0.03),
+    transparent 45%,
+    rgba(4, 18, 17, 0.2)
+  );
+}
+.project-scene-dinosaur {
+  position: absolute;
+  width: 118%;
+  height: 86%;
+  right: -14%;
+  bottom: 3%;
+  transform: translate3d(calc(var(--mx, 0) * 9px), calc(var(--my, 0) * 6px), 0);
+}
+.project-scene-dinosaur img {
+  object-position: center bottom;
+}
+.project-scene-foreground {
+  position: absolute;
+  bottom: -3%;
+  width: 44%;
+  height: 35%;
+  pointer-events: none;
+  transform: translate3d(calc(var(--mx, 0) * 14px), calc(var(--my, 0) * 8px), 0);
+}
+.project-scene-foreground-left {
+  left: -9%;
+}
+.project-scene-foreground-right {
+  right: -9%;
+}
+.project-scene-vignette {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 50px 8px rgba(2, 12, 10, 0.42);
+}
+.project-scene[data-world="aurora"] .project-scene-background img {
+  object-position: 70% center;
+}
+.project-scene[data-world="aurora"] .project-scene-foreground {
+  height: 23%;
+  opacity: 0.65;
+}
+.project-scene[data-world="volcan"] .project-scene-dinosaur {
+  height: 72%;
+}
+.project-scene-hero .project-scene-background {
+  inset: -3%;
+}
+.project-scene-hero .project-scene-background img {
+  object-position: center;
+}
+.project-scene-hero .project-scene-dinosaur {
+  width: 58%;
+  height: 88%;
+  right: 0;
+  bottom: 1%;
+}
+.project-scene-hero .project-scene-foreground {
+  width: 26%;
+  height: 40%;
+}
+.project-scene-hero .project-scene-foreground-left {
+  left: -4%;
+}
+.project-scene-hero .project-scene-foreground-right {
+  right: -4%;
+}
+.project-scene-hero[data-world="volcan"] .project-scene-dinosaur {
+  height: 85%;
+}
+.world-hero-shade {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 12, 18, 0.86),
+      rgba(3, 12, 18, 0.35) 50%,
+      transparent 75%
+    ),
+    linear-gradient(0deg, rgba(3, 12, 18, 0.8), transparent 50%);
+}
+.world-hero-copy {
+  pointer-events: none;
+}
+.world-hero-copy a {
+  pointer-events: auto;
+}
+.world-hero-description {
+  max-width: 44ch;
+}
+@media (max-width: 900px) {
+  .project-scene-hero .project-scene-dinosaur {
+    right: -2%;
+    width: 96%;
+    height: 60%;
+    bottom: 35%;
+  }
+  .world-hero-shade {
+    background: linear-gradient(
+      0deg,
+      rgba(3, 12, 18, 0.98),
+      rgba(3, 12, 18, 0.65) 43%,
+      rgba(3, 12, 18, 0.08) 75%
+    );
+  }
+}
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .project-scene-background,
+  .project-scene-dinosaur,
+  .project-scene-foreground {
+    transform: none;
+  }
+}

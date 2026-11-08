@@ -1,10 +1,5 @@
 import type { WorldSlug } from "./world";
 
-export interface ProjectMetric {
-  readonly value: string;
-  readonly label: string;
-}
-
 export interface ProjectFeature {
   readonly title: string;
   readonly description: string;
@@ -40,12 +35,14 @@ export interface Project {
   readonly tagline: string;
   readonly technologies: readonly string[];
   readonly repoUrl: string;
+  readonly repositories?: readonly { readonly label: string; readonly href: string }[];
   /** Solo si hay algo que un visitante pueda instalar o abrir. */
   readonly download?: ProjectDownload;
   readonly problem: string;
   readonly facts: ProjectFacts;
   readonly roleItems: readonly string[];
-  readonly metrics: readonly ProjectMetric[];
+  /** Utilidad de la solución y alcance actual, sin atribuir impacto no validado. */
+  readonly contribution: readonly string[];
   readonly features: readonly ProjectFeature[];
   /** Puede ir vacío: la galería avisa que las capturas están en camino. */
   readonly screenshots: readonly ProjectScreenshot[];
