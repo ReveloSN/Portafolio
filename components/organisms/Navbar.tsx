@@ -4,7 +4,7 @@ import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 import { COPY } from "@/data/copy";
-import { SECTION_IDS } from "@/data/navigation";
+import Link from "next/link";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 import type { NavLink } from "@/types/navigation";
 import type { Profile } from "@/types/profile";
@@ -27,24 +27,21 @@ export function Navbar({ profile, links }: NavbarProps) {
       className="-mb-nav border-line sticky top-0 z-60 border-b bg-(--nav-bg) backdrop-blur-[14px]"
     >
       <div className="h-nav px-gutter mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*100.0))] items-center justify-between gap-4">
-        <a
-          href={`#${SECTION_IDS.home}`}
-          className="inline-flex min-h-11 items-center gap-3 no-underline"
-        >
+        <Link href="/" className="inline-flex min-h-11 items-center gap-3 no-underline">
           <span className="font-display bg-glow text-fluid-base flex size-[max(2.25rem,calc(var(--u)*2.8))] items-center justify-center rounded-xl font-extrabold text-(--ink)">
             {profile.initials}
           </span>
           <span className="font-display text-fluid-md font-extrabold tracking-[.03em]">
             {profile.firstName}
           </span>
-        </a>
+        </Link>
 
         <nav
           aria-label={nav.primaryLabel}
           className="gap-fluid-4 text-fluid-sm hidden items-center font-medium min-[1041px]:flex"
         >
           {links.map((link) => (
-            <a key={link.id} href={`#${link.id}`} className={LINK_STYLE}>
+            <a key={link.id} href={link.href ?? `/#${link.id}`} className={LINK_STYLE}>
               {link.label}
             </a>
           ))}
@@ -79,7 +76,7 @@ export function Navbar({ profile, links }: NavbarProps) {
           {links.map((link) => (
             <a
               key={link.id}
-              href={`#${link.id}`}
+              href={link.href ?? `/#${link.id}`}
               onClick={close}
               className="text-fluid-md border-line border-b px-1 py-4 font-medium no-underline"
             >

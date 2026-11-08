@@ -3,7 +3,7 @@ import { Icon } from "@/components/atoms/Icon";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SocialLink } from "@/components/molecules/SocialLink";
 import { COPY } from "@/data/copy";
-import { SECTION_IDS } from "@/data/navigation";
+import Link from "next/link";
 import type { NavLink } from "@/types/navigation";
 import type { Profile } from "@/types/profile";
 
@@ -25,17 +25,14 @@ export function Footer({ profile, links }: FooterProps) {
       <div className="relative z-[2] mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
         <div className="flex flex-wrap justify-between gap-12">
           <div className="max-w-[calc(var(--u)*26.4)] flex-[1_1_280px]">
-            <a
-              href={`#${SECTION_IDS.home}`}
-              className="inline-flex items-center gap-3 no-underline"
-            >
+            <Link href="/" className="inline-flex items-center gap-3 no-underline">
               <span className="font-display bg-glow text-fluid-base flex h-11 w-11 items-center justify-center rounded-xl font-extrabold text-(--ink)">
                 {profile.initials}
               </span>
               <span className="font-display text-fluid-lg font-extrabold">
                 {profile.firstName}
               </span>
-            </a>
+            </Link>
             <p className="mt-4 leading-relaxed opacity-70">
               {profile.role}. {footer.blurb}
             </p>
@@ -46,7 +43,7 @@ export function Footer({ profile, links }: FooterProps) {
               {links.map((link) => (
                 <li key={link.id}>
                   <a
-                    href={`#${link.id}`}
+                    href={link.href ?? `/#${link.id}`}
                     className="hover:text-glow coarse:min-h-11 inline-flex min-h-8 items-center no-underline opacity-80 transition hover:opacity-100"
                   >
                     {link.label}
@@ -70,12 +67,7 @@ export function Footer({ profile, links }: FooterProps) {
           <p className="text-fluid-sm leading-relaxed opacity-70">
             © {profile.year} {profile.firstName} · {site.madeWith}
           </p>
-          <Button
-            size="sm"
-            href={`#${SECTION_IDS.home}`}
-            aria-label={footer.backToTop}
-            className="totop"
-          >
+          <Button size="sm" href="/" aria-label={footer.backToTop} className="totop">
             <Icon name="arrowUp" size={18} strokeWidth={2.6} />
             {footer.backToTop}
           </Button>
