@@ -226,14 +226,21 @@
 .tech-print-logo path {
   filter: url(#tech-engrave);
 }
-.track-step:hover .tech-print {
+/* La huella responde igual al ratón, al foco con teclado y cuando está seleccionada. */
+.track-step:hover .tech-print,
+.track-step:has(:focus-visible) .tech-print,
+.track-step:has([aria-expanded="true"]) .tech-print {
   scale: 1.07;
 }
-.track-step:hover .tech-print-glow {
+.track-step:hover .tech-print-glow,
+.track-step:has(:focus-visible) .tech-print-glow,
+.track-step:has([aria-expanded="true"]) .tech-print-glow {
   opacity: 0.55;
 }
 @media (prefers-reduced-motion: reduce) {
-  .track-step:hover .tech-print {
+  .track-step:hover .tech-print,
+  .track-step:has(:focus-visible) .tech-print,
+  .track-step:has([aria-expanded="true"]) .tech-print {
     scale: none;
   }
 }

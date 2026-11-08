@@ -23,6 +23,12 @@ interface TechFootprintProps {
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
 /**
+ * Ancho servido de la huella: en escritorio se pinta entre ~50 y ~96 px (antes se pedían
+ * 260 px y se descargaba la variante de 384); en móvil, hasta ~120 px.
+ */
+const PRINT_SIZES = "(min-width: 1024px) 96px, 120px";
+
+/**
  * Huella de dinosaurio con el logo de una tecnología grabado en el fondo. Capas, de
  * abajo arriba: tierra (ilustración), relleno de la cavidad, sombra bajo el borde,
  * luz tenue del borde y logo marfil hundido (filtro EngraveFilter). El color solo
@@ -63,7 +69,7 @@ export function TechFootprint({
           src={art.src}
           width={art.width}
           height={art.height}
-          sizes="(min-width: 1024px) 260px, 120px"
+          sizes={PRINT_SIZES}
         />
         <span className="tech-print-fill" />
         <span className="tech-print-shade" />
