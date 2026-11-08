@@ -1,7 +1,7 @@
 /**
- * Smoke test: la portada y las tres páginas de mundo responden 200, cada página de mundo
- * tiene un solo <h1>, la portada enlaza "Descargar CV" a /cv.pdf, una ruta inexistente
- * responde 404 y ninguna página emite console.error ni pageerror.
+ * Smoke test: la portada, las páginas de mundo y la de hobbies responden 200, cada página
+ * interna tiene un solo <h1>, la portada enlaza "Descargar CV" a /cv.pdf, una ruta
+ * inexistente responde 404 y ninguna página emite console.error ni pageerror.
  *
  * Uso:  npm run dev                                  (otra terminal, puerto 3000)
  *       npm run smoke                                (BASE_URL=http://localhost:3000)
@@ -17,12 +17,14 @@ const IDLE_TIMEOUT_MS = 15000;
 const HTTP_OK = 200;
 const HTTP_NOT_FOUND = 404;
 const HOME_PATH = "/";
+/** Páginas internas: cada una con su propio <h1>. */
 const WORLD_PATHS = [
   "/mundos/aurora",
   "/mundos/selva",
   "/mundos/oceano",
   "/mundos/cueva",
   "/mundos/volcan",
+  "/hobbies",
 ] as const;
 const MISSING_PATH = "/mundos/nada";
 const CV_HREF = "/cv.pdf";
