@@ -28,10 +28,11 @@ Todavía no hay datos reales. Usa datos de ejemplo ("[Tu Nombre]", enlaces ficti
 ## Estructura de carpetas
 
 ```
-app/            layout.tsx, page.tsx (compone las secciones en orden), mundos/[slug]/page.tsx, hobbies/page.tsx, not-found.tsx (404 en español), icon.svg (favicon: huella de tres dedos; favicon.ico y apple-icon.png se generan desde él)
+app/            [lang]/ (layout.tsx, page.tsx que compone las secciones en orden, mundos/[slug]/page.tsx, hobbies/page.tsx, not-found.tsx, [...missing]/page.tsx, opengraph-image.tsx), sitemap.ts, robots.ts, icon.svg (favicon: huella de tres dedos; favicon.ico y apple-icon.png se generan desde él)
+proxy.ts        rutas por idioma (ver "Idiomas")
 components/     atoms | molecules | organisms | templates | worlds
 hooks/  lib/  types/
-data/           projects.ts, testimonials.ts, experience.ts, hobbies.ts, techUsage.ts, worlds.ts, contactChannels.ts, contactArt.ts (generado)
+data/           projects.ts, testimonials.ts, experience.ts, hobbies.ts, techUsage.ts, worlds.ts, contactChannels.ts, contactArt.ts (generado), copy.ts, content.ts (registro por idioma), en/ (versión en inglés)
 public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 ```
 
@@ -78,7 +79,17 @@ public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 - Tokens en `app/theme.css`: claro por defecto en `:root`, oscuro en `[data-theme="dark"]`. Tailwind los expone como `fg`, `muted`, `surface`, `line`, `glow` y `glow-amber`; los componentes no usan colores fijos para texto, fondos ni bordes.
 - `THEME_BOOT_SCRIPT` (`lib/theme.ts`, en el `<head>`) pone el tema antes del primer pintado: preferencia guardada en `localStorage` (dentro de try/catch) o `prefers-color-scheme`. `ThemeToggle` en el Navbar (`useTheme`) guarda la elección; sin elección, sigue al sistema.
 - Escenas que conservan su paleta en los dos temas: `[data-palette="night"]` en el Hero, el pie y los mundos (que además fijan su `--glow`/`--ink`). En claro, Sobre mí amanece bajo el dosel del Hero, Contacto oscurece hacia el pie y las luciérnagas solo brillan en escenas nocturnas.
-- Contraste AA de los tokens en los dos temas: `lib/themeTokens.test.ts`. El lima no es texto en claro: `--glow` pasa a verde oscuro y el nombre de cada mundo usa tinta con una marca de su color.
+- El claro es selva de día en verde pastel con color de verdad (`--bg: #d8eacf`; nada de blanco ni salvia gris) y verde de hoja `#1b6340` como acento, no lima ni oliva. Como el oscuro, cada sección tiene su tono y su luz (`--*-glow`): sol en Sobre mí, menta en Testimonios, musgo ocre en Experiencia, hoja más honda en Contacto.
+- Contraste AA de los tokens en los dos temas: `lib/themeTokens.test.ts`. El lima no es texto en claro: `--glow` pasa a verde bosque y el nombre de cada mundo usa tinta con una marca de su color.
+
+## Idiomas (español e inglés)
+
+- **Rutas:** el español vive en la raíz (`/`, `/hobbies`, `/mundos/selva`) y el inglés bajo `/en`. Por dentro todo cuelga de `app/[lang]` (estático, `generateStaticParams` en el layout). `proxy.ts` reescribe las rutas sin prefijo a `/es/...`, redirige `/es/...` a la ruta sin prefijo y, si la cookie `portafolio-lang` dice `en`, manda `/` a `/en`. Sin elección se sirve español: no se adivina por el navegador. Rutas que no existen caen en `[...missing]` y muestran la 404 del idioma.
+- **Contenido:** `data/content.ts` (`CONTENT[locale]`) junta todo lo que cambia con el idioma: textos de interfaz (`COPY` / `COPY_EN`, mismo tipo `Copy` gracias a `Widen`), perfil, navegación, proyectos, mundos, recorridos, testimonios, experiencia, huesos, hobbies y canales. Cada archivo de `data/` tiene su par en `data/en/` con el sufijo `_EN`; lo neutro (arte, geometría, ids, enlaces) no se duplica. `lib/content.test.ts` exige que los dos idiomas tengan la misma forma, ids, enlaces, imágenes y números. Agregar un proyecto = agregarlo en los dos idiomas.
+- **Leer el idioma:** en Server Components, `getContent()`, `getCopy()`, `getCollections()` y `getLocale()` (`lib/locale.server.ts`, con `next/root-params`, sin pasar props). En cliente, `useCopy()`, `useLocale()` y `useLocalizeHref()` (`hooks/useLocale.ts`, contexto de `LocaleProvider` en el layout). El contenido largo llega a los componentes de cliente por props, para no mandar los dos idiomas al navegador.
+- **Enlaces:** los componentes escriben rutas sin idioma (`/hobbies`, `/#proyectos`); `PortalLink` (y por tanto `Button`), la navbar y el pie las pasan por `localizeHref` (`lib/i18n.ts`, con pruebas). Los ids de sección son los mismos en los dos idiomas.
+- **Selector:** `LanguageSwitch` (en la navbar y en la cabecera de cada mundo) es un enlace real a la misma página en el otro idioma; muestra a dónde lleva ("EN" / "ES"), su nombre va en el idioma de destino y guarda la elección en la cookie (`useLanguageSwitch`). En teléfonos de menos de 420 px la navbar muestra solo el monograma.
+- **Buscadores:** cada página declara su canónica y sus alternativas `hreflang` (`lib/seo.ts`); el sitemap lista las dos versiones; Open Graph y la tarjeta de `opengraph-image` salen en el idioma de la ruta.
 
 ## Portal e intro
 
@@ -97,7 +108,7 @@ public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 - Respeta `prefers-reduced-motion`.
 - Accesibilidad: HTML semántico, botones y enlaces reales, `alt`, foco visible, `aria-live` en los estados de juego. Mobile-first y 100% responsive. Sin emojis; íconos en SVG.
 - Tailwind: tokens de color, tipografía y espaciado en `tailwind.config`; clases repetidas extraídas a componentes, no a `@apply` masivo.
-- Buscadores y enlaces compartidos: el título, la descripción y Open Graph salen de `PROFILE` (`app/layout.tsx`, plantilla "Página | Nombre"); la portada lleva JSON-LD `Person` (`lib/structuredData.ts`) solo con perfiles públicos, sin el correo. Las imágenes se sirven en AVIF con WebP de respaldo (`next.config.ts`). `app/opengraph-image.tsx` genera la tarjeta de 1200×630 para enlaces compartidos; `app/robots.ts` y `app/sitemap.ts` usan `SITE_URL` (`data/site.ts`). Cabeceras de seguridad en `next.config.ts`, sin X-Frame-Options a propósito.
+- Buscadores y enlaces compartidos: el título, la descripción y Open Graph salen del perfil del idioma (`app/[lang]/layout.tsx`, plantilla "Página | Nombre"); la portada lleva JSON-LD `Person` (`lib/structuredData.ts`) solo con perfiles públicos, sin el correo. Las imágenes se sirven en AVIF con WebP de respaldo (`next.config.ts`). `app/opengraph-image.tsx` genera la tarjeta de 1200×630 para enlaces compartidos; `app/robots.ts` y `app/sitemap.ts` usan `SITE_URL` (`data/site.ts`). Cabeceras de seguridad en `next.config.ts`, sin X-Frame-Options a propósito.
 
 ## Antes de dar algo por terminado
 
