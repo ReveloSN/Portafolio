@@ -6,7 +6,7 @@ import { WorldSwitcher } from "@/components/molecules/WorldSwitcher";
 import { WorldDetails } from "@/components/worlds/WorldDetails";
 import { WorldGallery } from "@/components/worlds/WorldGallery";
 import { WorldHero } from "@/components/worlds/WorldHero";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import { MAIN_CONTENT_ID } from "@/data/navigation";
 import type { Profile } from "@/types/profile";
 import type { Project } from "@/types/project";
@@ -20,7 +20,8 @@ interface WorldLayoutProps {
 }
 
 /** Plantilla común de las páginas de mundo: cambia la escena y los datos, no la estructura. */
-export function WorldLayout({ world, worlds, project, profile }: WorldLayoutProps) {
+export async function WorldLayout({ world, worlds, project, profile }: WorldLayoutProps) {
+  const COPY = await getCopy();
   const { world: copy, site } = COPY;
   const theme = {
     "--glow": world.accent,

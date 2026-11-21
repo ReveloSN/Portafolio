@@ -1,31 +1,36 @@
+import type { Metadata } from "next";
 import { SkipLink } from "@/components/atoms/SkipLink";
 import { Footer } from "@/components/organisms/Footer";
 import { Hobbies } from "@/components/organisms/Hobbies";
 import { Navbar } from "@/components/organisms/Navbar";
-import { COPY } from "@/data/copy";
-import { HOBBIES, HOBBIES_INTRO, HOBBIES_VALUES } from "@/data/hobbies";
-import { FOOTER_LINKS, MAIN_CONTENT_ID, NAV_LINKS } from "@/data/navigation";
-import { PROFILE } from "@/data/profile";
-import type { Metadata } from "next";
+import { HOBBIES_PATH, MAIN_CONTENT_ID } from "@/data/navigation";
+import { getContent, getLocale } from "@/lib/locale.server";
+import { languageAlternates } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: COPY.hobbies.title,
-  description: COPY.hobbies.intro,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { copy } = await getContent();
+  return {
+    title: copy.hobbies.title,
+    description: copy.hobbies.intro,
+    alternates: languageAlternates(await getLocale(), HOBBIES_PATH),
+  };
+}
 
-export default function HobbiesPage() {
+export default async function HobbiesPage() {
+  const { copy, profile, navLinks, hobbies, hobbiesIntro, hobbiesValues } =
+    await getContent();
   return (
     <>
-      <SkipLink href={`#${MAIN_CONTENT_ID}`}>{COPY.nav.skipToContent}</SkipLink>
-      <Navbar profile={PROFILE} links={NAV_LINKS} />
+      <SkipLink href={`#${MAIN_CONTENT_ID}`}>{copy.nav.skipToContent}</SkipLink>
+      <Navbar profile={profile} links={navLinks} />
       <main
         id={MAIN_CONTENT_ID}
         tabIndex={-1}
         className="pt-nav w-full overflow-x-clip focus:outline-none"
       >
-        <Hobbies hobbies={HOBBIES} intro={HOBBIES_INTRO} values={HOBBIES_VALUES} />
+        <Hobbies hobbies={hobbies} intro={hobbiesIntro} values={hobbiesValues} />
       </main>
-      <Footer profile={PROFILE} links={FOOTER_LINKS} />
+      <Footer profile={profile} links={navLinks} />
     </>
   );
 }

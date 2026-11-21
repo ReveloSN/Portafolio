@@ -3,7 +3,7 @@
 import { useRef, type ChangeEventHandler } from "react";
 import { Button } from "@/components/atoms/Button";
 import { HatchedEgg } from "@/components/worlds/art/HatchedEgg";
-import { COPY } from "@/data/copy";
+import { useCopy } from "@/hooks/useLocale";
 import { useContactForm } from "@/hooks/useContactForm";
 import { useFocusOnComplete } from "@/hooks/useFocusOnComplete";
 import { contactFieldId } from "@/lib/contact/form";
@@ -68,11 +68,16 @@ interface ContactFormProps {
 }
 
 export function ContactForm({ recipient }: ContactFormProps) {
+  const COPY = useCopy();
   const { contact: copy } = COPY;
-  const form = useContactForm(recipient, {
-    subject: copy.mailSubject,
-    signature: copy.mailSignature,
-  });
+  const form = useContactForm(
+    recipient,
+    {
+      subject: copy.mailSubject,
+      signature: copy.mailSignature,
+    },
+    copy.errors,
+  );
   const confirmationRef = useRef<HTMLHeadingElement>(null);
   const opened = form.mailtoUrl !== null;
   useFocusOnComplete(opened, true, confirmationRef);

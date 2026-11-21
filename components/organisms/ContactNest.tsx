@@ -5,7 +5,7 @@ import { ChannelLinks } from "@/components/molecules/ChannelLinks";
 import { HatchActions } from "@/components/molecules/HatchActions";
 import { NestEgg } from "@/components/molecules/NestEgg";
 import { NestStage } from "@/components/molecules/NestStage";
-import { COPY } from "@/data/copy";
+import { useCopy } from "@/hooks/useLocale";
 import { useEggHint } from "@/hooks/useEggHint";
 import { useHatch } from "@/hooks/useHatch";
 import { useOnScreen } from "@/hooks/useOnScreen";
@@ -22,6 +22,7 @@ interface ContactNestProps {
 
 /** Nido con un huevo por canal: al romperlo sale la cría y lleva al contacto. */
 export function ContactNest({ channels }: ContactNestProps) {
+  const COPY = useCopy();
   const { contact: copy } = COPY;
   const reducedMotion = useReducedMotion();
   const { ref, onScreen } = useOnScreen<HTMLDivElement>();

@@ -5,21 +5,22 @@ import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { Footer } from "@/components/organisms/Footer";
 import { Navbar } from "@/components/organisms/Navbar";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
-import { FOOTER_LINKS, MAIN_CONTENT_ID, NAV_LINKS, SECTION_IDS } from "@/data/navigation";
-import { PROFILE } from "@/data/profile";
+import { MAIN_CONTENT_ID, SECTION_IDS } from "@/data/navigation";
+import { getContent } from "@/lib/locale.server";
 
-export const metadata: Metadata = {
-  title: COPY.notFound.title,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { copy } = await getContent();
+  return { title: copy.notFound.title };
+}
 
-/** Página 404 en español, con la navegación del sitio y dos caminos de vuelta. */
-export default function NotFound() {
-  const copy = COPY.notFound;
+/** Página 404 en el idioma de la ruta, con la navegación del sitio y dos caminos de vuelta. */
+export default async function NotFound() {
+  const { copy: allCopy, profile, navLinks } = await getContent();
+  const copy = allCopy.notFound;
   return (
     <>
-      <SkipLink href={`#${MAIN_CONTENT_ID}`}>{COPY.nav.skipToContent}</SkipLink>
-      <Navbar profile={PROFILE} links={NAV_LINKS} />
+      <SkipLink href={`#${MAIN_CONTENT_ID}`}>{allCopy.nav.skipToContent}</SkipLink>
+      <Navbar profile={profile} links={navLinks} />
       <main
         id={MAIN_CONTENT_ID}
         tabIndex={-1}
@@ -37,7 +38,7 @@ export default function NotFound() {
           </div>
         </SectionShell>
       </main>
-      <Footer profile={PROFILE} links={FOOTER_LINKS} />
+      <Footer profile={profile} links={navLinks} />
     </>
   );
 }

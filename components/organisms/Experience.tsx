@@ -4,11 +4,9 @@ import { FossilPuzzleLoader } from "@/components/organisms/FossilPuzzleLoader";
 import { JournalBook } from "@/components/organisms/JournalBook";
 import { ExperienceLinkProvider } from "@/components/templates/ExperienceLinkProvider";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
-import { BONE_SHAPES } from "@/data/fossilPuzzle";
 import { SECTION_IDS } from "@/data/navigation";
-import { sortedExperience } from "@/lib/collections";
 import { boneLabelsByEntry } from "@/lib/journalLink";
+import { getCollections, getContent } from "@/lib/locale.server";
 import { seamBackground } from "@/lib/seams";
 
 const BACKGROUND = seamBackground(
@@ -18,15 +16,17 @@ const BACKGROUND = seamBackground(
 );
 /** Un diario por tipo de experiencia, en este orden. */
 const BOOKS = ["work", "academic"] as const;
-/** Hueso de cada experiencia: lo dice cada página del diario. */
-const BONES = boneLabelsByEntry(sortedExperience, BONE_SHAPES);
 
 /**
  * Reconstrucción del fósil ilustrado, con una experiencia por hueso. Debajo, dos diarios
  * (profesional y académico) que se leen página a página; encajar un hueso abre su página.
  */
-export function Experience() {
-  const { experience: copy } = COPY;
+export async function Experience() {
+  const { copy: allCopy, boneShapes } = await getContent();
+  const { sortedExperience } = await getCollections();
+  const { experience: copy } = allCopy;
+  // Hueso de cada experiencia: lo dice cada página del diario.
+  const bones = boneLabelsByEntry(sortedExperience, boneShapes);
   const labels = {
     achievements: copy.achievements,
     prev: copy.prevPage,
@@ -49,7 +49,7 @@ export function Experience() {
           titleClassName="max-w-[calc(var(--u)*59.7)]"
         />
         <ExperienceLinkProvider>
-          <FossilPuzzleLoader />
+          <FossilPuzzleLoader entries={sortedExperience} bones={boneShapes} />
           <h3 className="font-display text-fluid-2xl mt-fluid-6 font-extrabold">
             {copy.timelineTitle}
           </h3>
@@ -60,7 +60,7 @@ export function Experience() {
                 id={`diario-${kind}`}
                 title={copy[kind]}
                 entries={sortedExperience.filter((entry) => entry.kind === kind)}
-                bones={BONES}
+                bones={bones}
                 labels={labels}
               />
             ))}

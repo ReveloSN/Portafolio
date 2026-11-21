@@ -1,9 +1,9 @@
-import { COPY } from "@/data/copy";
 import { ProjectScene } from "@/components/worlds/ProjectScene";
-import { PROJECT_JOURNEYS } from "@/data/projectJourneys";
+import { getContent } from "@/lib/locale.server";
 import type { WorldSlug } from "@/types/world";
 
-export function WorldJourney({ slug }: { readonly slug: WorldSlug }) {
+export async function WorldJourney({ slug }: { readonly slug: WorldSlug }) {
+  const { copy: COPY, journeys } = await getContent();
   return (
     <section id="recorrido" aria-labelledby="recorrido-title" className="world-panel">
       <div className="mx-auto max-w-[1200px]">
@@ -30,7 +30,7 @@ export function WorldJourney({ slug }: { readonly slug: WorldSlug }) {
           </figure>
         </div>
         <ol className="world-journey">
-          {PROJECT_JOURNEYS[slug].map((step, index) => (
+          {journeys[slug].map((step, index) => (
             <li key={step.title}>
               <div className="journey-signal" aria-hidden="true" />
               <h3 className="font-display">

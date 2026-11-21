@@ -7,7 +7,7 @@ import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { TestimonialCard } from "@/components/molecules/TestimonialCard";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
+import { useCopy } from "@/hooks/useLocale";
 import { SECTION_IDS } from "@/data/navigation";
 import { useCarousel } from "@/hooks/useCarousel";
 import {
@@ -42,6 +42,7 @@ function cardStyle(offset: -1 | 0 | 1) {
 }
 
 export function Testimonials({ testimonials }: TestimonialsProps) {
+  const COPY = useCopy();
   const { testimonials: copy } = COPY;
   const carousel = useCarousel(testimonials.length);
 

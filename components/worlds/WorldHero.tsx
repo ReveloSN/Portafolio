@@ -2,7 +2,8 @@ import { WorldCover } from "@/components/worlds/WorldCover";
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
-import { COPY } from "@/data/copy";
+import { LanguageSwitch } from "@/components/molecules/LanguageSwitch";
+import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 import type { World } from "@/types/world";
 
@@ -12,7 +13,8 @@ interface WorldHeroProps {
   readonly ownerName: string;
 }
 
-export function WorldHero({ project, ownerName }: WorldHeroProps) {
+export async function WorldHero({ project, ownerName }: WorldHeroProps) {
+  const COPY = await getCopy();
   const { world: copy, projects } = COPY;
   return (
     <header className="world-hero relative overflow-hidden">
@@ -26,9 +28,12 @@ export function WorldHero({ project, ownerName }: WorldHeroProps) {
         >
           <span aria-hidden="true">←</span> {copy.back}
         </Button>
-        <p className="font-display text-fluid-lg font-extrabold tracking-[.04em] text-white [text-shadow:0_2px_12px_rgba(0,0,0,.5)]">
-          {ownerName}
-        </p>
+        <div className="flex items-center gap-3">
+          <p className="font-display text-fluid-lg font-extrabold tracking-[.04em] text-white [text-shadow:0_2px_12px_rgba(0,0,0,.5)]">
+            {ownerName}
+          </p>
+          <LanguageSwitch />
+        </div>
       </div>
       <div className="world-hero-copy">
         <h1

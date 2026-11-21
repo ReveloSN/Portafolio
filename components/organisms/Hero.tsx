@@ -9,7 +9,7 @@ import { DinoWater } from "@/components/worlds/DinoWater";
 import { GiantDino } from "@/components/worlds/GiantDino";
 import { JungleBackdrop, type StageVars } from "@/components/worlds/JungleBackdrop";
 import { Pterodactyls } from "@/components/worlds/art/Pterodactyls";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import { SECTION_IDS } from "@/data/navigation";
 import { FIREFLY_COUNT } from "@/lib/constants";
 import type { Profile } from "@/types/profile";
@@ -28,7 +28,8 @@ const SEAM_FADE =
 const CURSOR_LIGHT =
   "radial-gradient(circle, rgba(210,255,140,.55) 0, rgba(166,255,92,.18) 40%, rgba(166,255,92,0) 70%)";
 
-export function Hero({ profile }: HeroProps) {
+export async function Hero({ profile }: HeroProps) {
+  const COPY = await getCopy();
   const { hero } = COPY;
   return (
     <ParallaxStage

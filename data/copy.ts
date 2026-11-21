@@ -1,3 +1,6 @@
+import type { Widen } from "@/types/i18n";
+
+/** Textos de la interfaz en español. La versión en inglés está en `data/en/copy.ts`. */
 export const COPY = {
   site: {
     madeWith: "Hecho con Next.js + Tailwind CSS",
@@ -10,6 +13,7 @@ export const COPY = {
     cvFull: "Descargar CV",
     themeToDark: "Cambiar a tema oscuro",
     themeToLight: "Cambiar a tema claro",
+    language: "Idioma",
   },
   hero: {
     eyebrow: "",
@@ -195,3 +199,6 @@ export const COPY = {
     here: "estás aquí",
   },
 } as const;
+
+/** Forma de los textos de la interfaz: cada idioma tiene las mismas claves. */
+export type Copy = Widen<typeof COPY>;

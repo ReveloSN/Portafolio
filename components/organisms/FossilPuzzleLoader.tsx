@@ -1,20 +1,23 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { createContext, useContext } from "react";
 import { ExperienceList } from "@/components/molecules/ExperienceList";
-import { COPY } from "@/data/copy";
-import { BONE_SHAPES, PUZZLE_BOARD } from "@/data/fossilPuzzle";
-import { sortedExperience } from "@/lib/collections";
+import { PUZZLE_BOARD } from "@/data/fossilPuzzle";
+import { useCopy } from "@/hooks/useLocale";
 import { buildBoardPieces } from "@/lib/puzzlePieces";
+import type { ExperienceEntry } from "@/types/experience";
+import type { BoneShape } from "@/types/puzzle";
 
-const { experience: copy } = COPY;
-const KIND_LABELS = { academic: copy.academic, work: copy.work } as const;
-const { height } = buildBoardPieces(
-  sortedExperience,
-  BONE_SHAPES,
-  PUZZLE_BOARD,
-  copy.pieceLabel,
-);
+interface PuzzleData {
+  /** Experiencia de la más reciente a la más antigua: una por hueso. */
+  readonly entries: readonly ExperienceEntry[];
+  /** Huesos con su nombre en el idioma de la página. */
+  readonly bones: readonly BoneShape[];
+}
+
+/** El hueco de carga de `dynamic` no recibe props: lee los datos de aquí. */
+const PuzzleDataContext = createContext<PuzzleData>({ entries: [], bones: [] });
 
 /**
  * Mientras llega el puzle (o si no hay JS) la experiencia ya está en la página: oculta a
@@ -22,6 +25,9 @@ const { height } = buildBoardPieces(
  * alto del tablero para que nada salte al cargar.
  */
 function PuzzleFallback() {
+  const { entries, bones } = useContext(PuzzleDataContext);
+  const { experience: copy } = useCopy();
+  const { height } = buildBoardPieces(entries, bones, PUZZLE_BOARD, copy.pieceLabel);
   return (
     <div className="mt-fluid-4">
       <div
@@ -31,8 +37,8 @@ function PuzzleFallback() {
       />
       <div className="sr-only [@media(scripting:none)]:not-sr-only">
         <ExperienceList
-          entries={sortedExperience}
-          kindLabels={KIND_LABELS}
+          entries={entries}
+          kindLabels={{ academic: copy.academic, work: copy.work }}
           achievementsLabel={copy.achievements}
         />
       </div>
@@ -45,6 +51,10 @@ const FossilPuzzle = dynamic(() => import("@/components/organisms/FossilPuzzle")
   loading: PuzzleFallback,
 });
 
-export function FossilPuzzleLoader() {
-  return <FossilPuzzle entries={sortedExperience} />;
+export function FossilPuzzleLoader({ entries, bones }: PuzzleData) {
+  return (
+    <PuzzleDataContext value={{ entries, bones }}>
+      <FossilPuzzle entries={entries} bones={bones} />
+    </PuzzleDataContext>
+  );
 }

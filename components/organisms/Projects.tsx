@@ -3,9 +3,8 @@ import { Reveal } from "@/components/molecules/Reveal";
 import { ProjectCard } from "@/components/molecules/ProjectCard";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
 import { SECTION_IDS } from "@/data/navigation";
-import { worldsBySlug } from "@/lib/collections";
+import { getCollections, getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 import { seamBackground } from "@/lib/seams";
 
@@ -19,7 +18,9 @@ const BACKGROUND = seamBackground(
   "linear-gradient(var(--seam-projects-start), var(--seam-projects-end))",
 );
 
-export function Projects({ projects }: ProjectsProps) {
+export async function Projects({ projects }: ProjectsProps) {
+  const COPY = await getCopy();
+  const { worldsBySlug } = await getCollections();
   const { projects: copy } = COPY;
   return (
     <SectionShell

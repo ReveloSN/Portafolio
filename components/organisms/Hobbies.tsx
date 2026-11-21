@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button";
 import { HobbyCard } from "@/components/molecules/HobbyCard";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import { SECTION_IDS } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 import type { Hobby } from "@/types/hobby";
@@ -18,7 +18,8 @@ interface HobbiesProps {
 /** Página propia (`/hobbies`): el mismo tono de fondo que Sobre mí en cada tema. */
 const BACKGROUND = "var(--seam-about-end)";
 
-export function Hobbies({ hobbies, intro, values }: HobbiesProps) {
+export async function Hobbies({ hobbies, intro, values }: HobbiesProps) {
+  const COPY = await getCopy();
   const { hobbies: copy } = COPY;
   return (
     <SectionShell id={SECTION_IDS.hobbies} background={BACKGROUND}>

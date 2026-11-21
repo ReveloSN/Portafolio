@@ -1,6 +1,5 @@
-import { EXPERIENCE } from "@/data/experience";
-import { PROJECTS } from "@/data/projects";
-import { WORLDS } from "@/data/worlds";
+import { CONTENT } from "@/data/content";
+import { LOCALES, type Locale } from "@/lib/i18n";
 import type { ExperienceEntry } from "@/types/experience";
 import type { Project } from "@/types/project";
 import type { World, WorldSlug } from "@/types/world";
@@ -9,22 +8,30 @@ function indexBy<T, K extends string>(items: readonly T[], key: (item: T) => K) 
   return new Map<K, T>(items.map((item) => [key(item), item]));
 }
 
-export const projectsBySlug: ReadonlyMap<WorldSlug, Project> = indexBy(
-  PROJECTS,
-  (project) => project.slug,
-);
+/** Búsquedas O(1) y la experiencia ordenada de un idioma. */
+export interface Collections {
+  readonly projectsBySlug: ReadonlyMap<WorldSlug, Project>;
+  readonly worldsBySlug: ReadonlyMap<WorldSlug, World>;
+  /** De lo más reciente a lo más antiguo. */
+  readonly sortedExperience: readonly ExperienceEntry[];
+  readonly experienceById: ReadonlyMap<string, ExperienceEntry>;
+}
 
-export const worldsBySlug: ReadonlyMap<WorldSlug, World> = indexBy(
-  WORLDS,
-  (world) => world.slug,
-);
+function buildCollections(locale: Locale): Collections {
+  const { projects, worlds, experience } = CONTENT[locale];
+  return {
+    projectsBySlug: indexBy(projects, (project) => project.slug),
+    worldsBySlug: indexBy(worlds, (world) => world.slug),
+    sortedExperience: [...experience].sort((a, b) => b.startYear - a.startYear),
+    experienceById: indexBy(experience, (entry) => entry.id),
+  };
+}
 
-/** Ordena de lo más reciente a lo más antiguo. Se calcula una sola vez al cargar el módulo. */
-export const sortedExperience: readonly ExperienceEntry[] = [...EXPERIENCE].sort(
-  (a, b) => b.startYear - a.startYear,
-);
+/** Se calculan una sola vez por idioma, al cargar el módulo. */
+export const COLLECTIONS: Readonly<Record<Locale, Collections>> = Object.fromEntries(
+  LOCALES.map((locale) => [locale, buildCollections(locale)]),
+) as Record<Locale, Collections>;
 
-export const experienceById: ReadonlyMap<string, ExperienceEntry> = indexBy(
-  EXPERIENCE,
-  (entry) => entry.id,
-);
+/** Atajos del idioma base (español): los usan las pruebas de los datos. */
+export const { projectsBySlug, worldsBySlug, sortedExperience, experienceById } =
+  COLLECTIONS.es;

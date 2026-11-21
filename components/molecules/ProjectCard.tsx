@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { ProjectEmblem } from "@/components/molecules/ProjectEmblem";
 import { PortalLink } from "@/components/atoms/PortalLink";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import { Button } from "@/components/atoms/Button";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
 import { Tag } from "@/components/atoms/Tag";
@@ -23,7 +23,13 @@ interface ProjectCardProps {
   readonly labels: ProjectCardLabels;
 }
 
-export function ProjectCard({ project, worldLabel, accent, labels }: ProjectCardProps) {
+export async function ProjectCard({
+  project,
+  worldLabel,
+  accent,
+  labels,
+}: ProjectCardProps) {
+  const COPY = await getCopy();
   const owner = interpolate(labels.forProject, { name: project.name });
   return (
     <article

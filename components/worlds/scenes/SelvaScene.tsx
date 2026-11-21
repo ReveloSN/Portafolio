@@ -1,7 +1,7 @@
 import { Canoe } from "@/components/worlds/Canoe";
 import { Particles } from "@/components/worlds/Particles";
 import { JungleBackdrop, type StageVars } from "@/components/worlds/JungleBackdrop";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import { WORLD_PARTICLE_COUNT } from "@/lib/constants";
 import { makeParticles, WORLD_PARTICLES } from "@/lib/particles";
 
@@ -9,7 +9,8 @@ import { makeParticles, WORLD_PARTICLES } from "@/lib/particles";
 const CANOE_PLACEMENT = { "--b": 200 } as StageVars;
 const PARTICLES = makeParticles(WORLD_PARTICLE_COUNT, WORLD_PARTICLES);
 
-export function SelvaScene() {
+export async function SelvaScene() {
+  const COPY = await getCopy();
   return (
     <>
       <JungleBackdrop

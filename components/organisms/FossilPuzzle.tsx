@@ -4,34 +4,37 @@ import { useEffect } from "react";
 import { FossilBoard } from "@/components/molecules/FossilBoard";
 import { FossilFinding } from "@/components/molecules/FossilFinding";
 import { PuzzleToolbar } from "@/components/molecules/PuzzleToolbar";
-import { COPY } from "@/data/copy";
-import { BONE_SHAPES, PUZZLE_BOARD } from "@/data/fossilPuzzle";
+import { PUZZLE_BOARD } from "@/data/fossilPuzzle";
 import { useExperienceLink } from "@/hooks/useExperienceLink";
 import { useFossilPuzzle } from "@/hooks/useFossilPuzzle";
+import { useCopy } from "@/hooks/useLocale";
 import { countPlaced } from "@/lib/fossilPuzzle";
 import { describePuzzleEvent } from "@/lib/puzzleAnnouncement";
 import { buildBoardPieces } from "@/lib/puzzlePieces";
 import { interpolate } from "@/lib/utils";
 import type { ExperienceEntry, ExperienceKind } from "@/types/experience";
+import type { BoneShape } from "@/types/puzzle";
 
 interface FossilPuzzleProps {
   /** Una experiencia real por fragmento de la ilustración. */
   readonly entries: readonly ExperienceEntry[];
+  /** Huesos con su nombre en el idioma de la página, en el orden de `entries`. */
+  readonly bones: readonly BoneShape[];
 }
 
-const { experience: copy } = COPY;
-const KIND_LABELS: Readonly<Record<ExperienceKind, string>> = {
-  academic: copy.academic,
-  work: copy.work,
-};
 const INSTRUCTIONS_ID = "fossil-instrucciones";
 const RESULT_ID = "fossil-resultado";
 
 /** Fósil tipo puzle: cada pieza encajada revela una experiencia; completo, la lista entera. */
-export default function FossilPuzzle({ entries }: FossilPuzzleProps) {
+export default function FossilPuzzle({ entries, bones }: FossilPuzzleProps) {
+  const { experience: copy } = useCopy();
+  const kindLabels: Readonly<Record<ExperienceKind, string>> = {
+    academic: copy.academic,
+    work: copy.work,
+  };
   const { pieces, height } = buildBoardPieces(
     entries,
-    BONE_SHAPES,
+    bones,
     PUZZLE_BOARD,
     copy.pieceLabel,
   );
@@ -105,7 +108,7 @@ export default function FossilPuzzle({ entries }: FossilPuzzleProps) {
           emptyText={copy.findingEmpty}
           entry={shown === null ? null : (entries[shown] ?? null)}
           boneLabel={shown === null ? null : (pieces[shown]?.shape.label ?? null)}
-          kindLabel={shown === null ? null : KIND_LABELS[entries[shown]!.kind]}
+          kindLabel={shown === null ? null : kindLabels[entries[shown]!.kind]}
           journalHref={shown === null ? null : `#diario-${entries[shown]!.kind}`}
           journalLabel={copy.readInJournal}
         />

@@ -1,6 +1,6 @@
 import type { WorldSlug } from "@/types/world";
 
-interface JourneyStep {
+export interface JourneyStep {
   readonly title: string;
   readonly text: string;
 }

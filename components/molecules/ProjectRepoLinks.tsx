@@ -1,6 +1,6 @@
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 
 interface ProjectRepoLinksProps {
@@ -10,12 +10,13 @@ interface ProjectRepoLinksProps {
   readonly testId?: string;
 }
 
-export function ProjectRepoLinks({
+export async function ProjectRepoLinks({
   project,
   label,
   size,
   testId,
 }: ProjectRepoLinksProps) {
+  const COPY = await getCopy();
   const repositories = project.repositories ?? [{ label, href: project.repoUrl }];
   return (
     <>

@@ -2,7 +2,11 @@
 
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { buildMailtoUrl, type MailTemplates } from "@/lib/mailto";
-import { hasErrors, validateContactForm } from "@/lib/validators";
+import {
+  hasErrors,
+  validateContactForm,
+  type ContactErrorMessages,
+} from "@/lib/validators";
 import type { ContactFormErrors, ContactFormValues } from "@/types/contact";
 
 const EMPTY_VALUES: ContactFormValues = { name: "", email: "", message: "" };
@@ -11,7 +15,11 @@ const EMPTY_VALUES: ContactFormValues = { name: "", email: "", message: "" };
  * Formulario de contacto sin servidor: tras validar, abre el correo del visitante
  * con el mensaje listo (`mailto:`). Conserva lo escrito por si la app de correo no abre.
  */
-export function useContactForm(recipient: string, templates: MailTemplates) {
+export function useContactForm(
+  recipient: string,
+  templates: MailTemplates,
+  errorMessages: ContactErrorMessages,
+) {
   const [values, setValues] = useState<ContactFormValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const [mailtoUrl, setMailtoUrl] = useState<string | null>(null);
@@ -24,7 +32,7 @@ export function useContactForm(recipient: string, templates: MailTemplates) {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const found = validateContactForm(values);
+    const found = validateContactForm(values, errorMessages);
     setErrors(found);
     if (hasErrors(found)) return;
     const url = buildMailtoUrl(recipient, values, templates);

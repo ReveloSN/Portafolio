@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 
 /** Captura principal a todo el ancho; secundarias en dos columnas. */
@@ -10,7 +10,8 @@ interface WorldGalleryProps {
   readonly project: Project;
 }
 
-export function WorldGallery({ project }: WorldGalleryProps) {
+export async function WorldGallery({ project }: WorldGalleryProps) {
+  const COPY = await getCopy();
   const { world: copy } = COPY;
   return (
     <section id="capturas" className="px-gutter pt-fluid-4 pb-20">

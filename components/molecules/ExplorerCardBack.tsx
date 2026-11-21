@@ -3,7 +3,7 @@ import { CardPaper } from "@/components/atoms/CardPaper";
 import { Illustration } from "@/components/atoms/Illustration";
 import { CardHeader } from "@/components/molecules/CardHeader";
 import { ART } from "@/data/art";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import type { Profile } from "@/types/profile";
 
 interface ExplorerCardBackProps {
@@ -17,7 +17,8 @@ interface ExplorerCardBackProps {
 const WATERMARK_SIZES = "160px";
 
 /** Reverso de la credencial: el dato curioso sobre una huella de dinosaurio. */
-export function ExplorerCardBack({ profile }: ExplorerCardBackProps) {
+export async function ExplorerCardBack({ profile }: ExplorerCardBackProps) {
+  const COPY = await getCopy();
   const { about } = COPY;
   const { funFact, backMeta } = profile;
   const footprint = ART.footprint1;

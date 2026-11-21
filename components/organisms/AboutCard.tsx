@@ -1,7 +1,7 @@
 import { FlipCard } from "@/components/atoms/FlipCard";
 import { ExplorerCardBack } from "@/components/molecules/ExplorerCardBack";
 import { ExplorerCardFront } from "@/components/molecules/ExplorerCardFront";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import type { Profile } from "@/types/profile";
 
 interface AboutCardProps {
@@ -12,7 +12,8 @@ interface AboutCardProps {
  * Credencial de explorador que gira para mostrar un dato curioso. El contenedor fija
  * el ancho (--card-w) y es la referencia de las medidas cqw de ambas caras.
  */
-export function AboutCard({ profile }: AboutCardProps) {
+export async function AboutCard({ profile }: AboutCardProps) {
+  const COPY = await getCopy();
   return (
     <div className="@container mx-auto w-[var(--card-w)] shrink-0">
       <FlipCard

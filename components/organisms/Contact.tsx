@@ -6,7 +6,7 @@ import { Fireflies } from "@/components/molecules/Fireflies";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { ContactNest } from "@/components/organisms/ContactNest";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
+import { useCopy } from "@/hooks/useLocale";
 import { SECTION_IDS } from "@/data/navigation";
 import { FIREFLY_COUNT } from "@/lib/constants";
 import { findMailRecipient } from "@/lib/mailto";
@@ -24,6 +24,7 @@ const BACKGROUND = seamBackground(
 );
 
 export function Contact({ channels }: ContactProps) {
+  const COPY = useCopy();
   const { contact: copy } = COPY;
   const recipient = findMailRecipient(channels);
   return (

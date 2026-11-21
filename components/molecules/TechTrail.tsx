@@ -5,14 +5,17 @@ import { EngraveFilter } from "@/components/atoms/EngraveFilter";
 import { TechUsagePanel } from "@/components/molecules/TechUsagePanel";
 import { TrackStep } from "@/components/molecules/TrackStep";
 import { FOOTPRINTS } from "@/data/art";
-import { COPY } from "@/data/copy";
+import { useCopy } from "@/hooks/useLocale";
 import { TECH_USAGE } from "@/data/techUsage";
 import type { TechIconId, Technology } from "@/types/profile";
+import type { WorldSlug } from "@/types/world";
 
 interface TechTrailProps {
   readonly technologies: readonly Technology[];
   /** Orden de la primera huella dentro del grupo (para empezar tras el texto). */
   readonly startIndex: number;
+  /** Nombre de cada proyecto en el idioma de la página (para el panel de uso). */
+  readonly projectNames: Readonly<Partial<Record<WorldSlug, string>>>;
 }
 
 /** Inclinación alterna de cada paso, como un dinosaurio caminando. */
@@ -25,7 +28,8 @@ const PANEL_ID = "tech-usage";
  * Camino de huellas: aparecen una tras otra, alternando pie izquierdo y derecho.
  * Cada huella es un botón: al pulsarla, debajo se ve dónde se usó esa tecnología.
  */
-export function TechTrail({ technologies, startIndex }: TechTrailProps) {
+export function TechTrail({ technologies, startIndex, projectNames }: TechTrailProps) {
+  const COPY = useCopy();
   const [selected, setSelected] = useState<TechIconId | null>(null);
   const trail = useRef<HTMLDivElement>(null);
   const current = technologies.find((tech) => tech.icon === selected) ?? null;
@@ -72,6 +76,7 @@ export function TechTrail({ technologies, startIndex }: TechTrailProps) {
         tech={current}
         usage={current ? TECH_USAGE[current.icon] : undefined}
         onClose={close}
+        projectNames={projectNames}
       />
     </div>
   );

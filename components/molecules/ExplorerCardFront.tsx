@@ -2,7 +2,7 @@ import { Barcode } from "@/components/atoms/Barcode";
 import { CardPaper } from "@/components/atoms/CardPaper";
 import { PhotoImage } from "@/components/atoms/PhotoImage";
 import { CardHeader } from "@/components/molecules/CardHeader";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import type { Profile } from "@/types/profile";
 
 interface ExplorerCardFrontProps {
@@ -13,7 +13,8 @@ interface ExplorerCardFrontProps {
 const PHOTO_SIZES = "(min-width: 1024px) 420px, 72vw";
 
 /** Frente de la credencial de explorador: foto (o silueta provisional), nombre y rol. */
-export function ExplorerCardFront({ profile }: ExplorerCardFrontProps) {
+export async function ExplorerCardFront({ profile }: ExplorerCardFrontProps) {
+  const COPY = await getCopy();
   const { about } = COPY;
   return (
     <CardPaper className="aspect-[2/3]">

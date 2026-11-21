@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button";
 import { HobbyGlyph } from "@/components/atoms/HobbyGlyph";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import { HOBBIES_PATH, SECTION_IDS } from "@/data/navigation";
 import { seamBackground } from "@/lib/seams";
 import type { Hobby } from "@/types/hobby";
@@ -22,7 +22,8 @@ const BACKGROUND = seamBackground(
  * Entrada a la página de hobbies. Muestra solo los hobbies reales: los de ejemplo
  * llevan su aviso en `/hobbies`, pero aquí parecerían datos confirmados.
  */
-export function HobbiesTeaser({ hobbies }: HobbiesTeaserProps) {
+export async function HobbiesTeaser({ hobbies }: HobbiesTeaserProps) {
+  const COPY = await getCopy();
   const { hobbies: copy } = COPY;
   const confirmed = hobbies.filter((hobby) => !hobby.example);
   return (

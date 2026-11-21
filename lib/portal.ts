@@ -1,4 +1,5 @@
 import { PORTAL_DEFAULT_SKIN, PORTAL_ENTRANCES } from "@/data/portal";
+import { splitLocale } from "@/lib/i18n";
 import type {
   PortalAction,
   PortalClick,
@@ -14,8 +15,9 @@ export function initialPortalState(pathname: string): PortalState {
   return { phase: "opening", href: null, skin: entranceSkin(pathname), entrance: true };
 }
 
+/** La entrada depende de la página, no del idioma: `/` y `/en` abren igual. */
 export function entranceSkin(pathname: string): PortalSkinKey {
-  return PORTAL_ENTRANCES[pathname] ?? PORTAL_DEFAULT_SKIN;
+  return PORTAL_ENTRANCES[splitLocale(pathname).path] ?? PORTAL_DEFAULT_SKIN;
 }
 
 /** Desde qué fases es válida cada acción. Una acción fuera de lugar no cambia nada. */

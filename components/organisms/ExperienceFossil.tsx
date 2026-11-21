@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import Image from "next/image";
-import { COPY } from "@/data/copy";
+import { useCopy } from "@/hooks/useLocale";
 import { EXPERIENCE_HOTSPOTS } from "@/data/experienceArt";
 import { interpolate } from "@/lib/utils";
 import type { ExperienceEntry } from "@/types/experience";
@@ -12,6 +12,7 @@ export function ExperienceFossil({
 }: {
   readonly entries: readonly ExperienceEntry[];
 }) {
+  const COPY = useCopy();
   const [selected, setSelected] = useState(0);
   const id = useId();
   const { experience: copy } = COPY;

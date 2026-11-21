@@ -1,10 +1,14 @@
-import { COPY } from "@/data/copy";
+import { COPY, type Copy } from "@/data/copy";
 import type { ContactFormErrors, ContactFormValues } from "@/types/contact";
 import { EMAIL_PATTERN, MIN_MESSAGE_LENGTH } from "./constants";
 
-const { errors } = COPY.contact;
+/** Mensajes de error del formulario en un idioma. */
+export type ContactErrorMessages = Copy["contact"]["errors"];
 
-export function validateContactForm(values: ContactFormValues): ContactFormErrors {
+export function validateContactForm(
+  values: ContactFormValues,
+  errors: ContactErrorMessages = COPY.contact.errors,
+): ContactFormErrors {
   const result: { name?: string; email?: string; message?: string } = {};
   const name = values.name.trim();
   const email = values.email.trim();

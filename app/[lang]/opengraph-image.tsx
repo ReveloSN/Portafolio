@@ -1,8 +1,13 @@
 import { ImageResponse } from "next/og";
+import { CONTENT } from "@/data/content";
 import { PROFILE } from "@/data/profile";
+import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 
-/** Tarjeta para enlaces compartidos (LinkedIn, WhatsApp, etc.): nombre, rol y frase. */
-export const alt = `${PROFILE.firstName} ${PROFILE.lastName}, ${PROFILE.role}`;
+/**
+ * Tarjeta para enlaces compartidos (LinkedIn, WhatsApp, etc.): nombre, rol y frase, en
+ * el idioma de la ruta. El texto alternativo es solo el nombre, que no cambia de idioma.
+ */
+export const alt = `${PROFILE.firstName} ${PROFILE.lastName}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -15,7 +20,13 @@ const COLORS = {
   muted: "#b9c7b0",
 };
 
-export default function OpengraphImage() {
+export default async function OpengraphImage({
+  params,
+}: {
+  readonly params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const profile = CONTENT[isLocale(lang) ? lang : DEFAULT_LOCALE].profile;
   return new ImageResponse(
     <div
       style={{
@@ -56,18 +67,18 @@ export default function OpengraphImage() {
         <div
           style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}
         >
-          {PROFILE.firstName}
+          {profile.firstName}
         </div>
         <div
           style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}
         >
-          {PROFILE.lastName}
+          {profile.lastName}
         </div>
         <div style={{ fontSize: 34, color: COLORS.lime, marginTop: 28 }}>
-          {PROFILE.role}
+          {profile.role}
         </div>
         <div style={{ fontSize: 28, color: COLORS.muted, marginTop: 16, maxWidth: 900 }}>
-          {PROFILE.tagline}
+          {profile.tagline}
         </div>
       </div>
     </div>,

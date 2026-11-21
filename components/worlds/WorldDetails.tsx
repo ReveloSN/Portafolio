@@ -2,7 +2,7 @@ import { DepthPanel } from "@/components/molecules/DepthPanel";
 import type { ReactNode } from "react";
 import { FeatureCard } from "@/components/molecules/FeatureCard";
 import { ProjectFactList } from "@/components/molecules/ProjectFactList";
-import { COPY } from "@/data/copy";
+import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 import type { World } from "@/types/world";
 
@@ -12,7 +12,8 @@ interface WorldDetailsProps {
   readonly journey: ReactNode;
 }
 
-export function WorldDetails({ world, project, journey }: WorldDetailsProps) {
+export async function WorldDetails({ world, project, journey }: WorldDetailsProps) {
+  const COPY = await getCopy();
   const { world: copy } = COPY;
   const [first, second, third] = world.depths;
   return (

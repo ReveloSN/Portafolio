@@ -1,8 +1,8 @@
 import { Button } from "@/components/atoms/Button";
-import { COPY } from "@/data/copy";
-import { projectsBySlug } from "@/lib/collections";
+import { useCopy } from "@/hooks/useLocale";
 import type { Technology } from "@/types/profile";
 import type { TechUsage } from "@/types/techUsage";
+import type { WorldSlug } from "@/types/world";
 
 interface TechUsagePanelProps {
   readonly id: string;
@@ -10,14 +10,23 @@ interface TechUsagePanelProps {
   readonly tech: Technology | null;
   readonly usage?: TechUsage;
   readonly onClose: () => void;
+  /** Nombre de cada proyecto en el idioma de la página. */
+  readonly projectNames: Readonly<Partial<Record<WorldSlug, string>>>;
 }
 
 /** Dónde se usó la tecnología elegida: mundos del portafolio y otros repositorios. */
-export function TechUsagePanel({ id, tech, usage, onClose }: TechUsagePanelProps) {
+export function TechUsagePanel({
+  id,
+  tech,
+  usage,
+  onClose,
+  projectNames,
+}: TechUsagePanelProps) {
+  const COPY = useCopy();
   const { about, projects: projectsCopy } = COPY;
   const projects = (usage?.projects ?? []).flatMap((slug) => {
-    const project = projectsBySlug.get(slug);
-    return project ? [project] : [];
+    const name = projectNames[slug];
+    return name ? [{ slug, name }] : [];
   });
   const repos = usage?.repos ?? [];
 

@@ -2,7 +2,8 @@ import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { SeamLayer } from "@/components/molecules/SeamLayer";
 import { SocialLink } from "@/components/molecules/SocialLink";
-import { COPY } from "@/data/copy";
+import { localizeHref } from "@/lib/i18n";
+import { getCopy, getLocale } from "@/lib/locale.server";
 import Link from "next/link";
 import type { NavLink } from "@/types/navigation";
 import type { Profile } from "@/types/profile";
@@ -14,7 +15,9 @@ interface FooterProps {
 
 const HEADING = "font-mono text-fluid-xs tracking-[.25em] text-glow mb-4";
 
-export function Footer({ profile, links }: FooterProps) {
+export async function Footer({ profile, links }: FooterProps) {
+  const COPY = await getCopy();
+  const locale = await getLocale();
   const { footer, site } = COPY;
   return (
     <footer
@@ -25,7 +28,10 @@ export function Footer({ profile, links }: FooterProps) {
       <div className="relative z-[2] mx-auto max-w-[min(var(--content-max),calc(var(--u)*83.3))]">
         <div className="flex flex-wrap justify-between gap-12">
           <div className="max-w-[calc(var(--u)*26.4)] flex-[1_1_280px]">
-            <Link href="/" className="inline-flex items-center gap-3 no-underline">
+            <Link
+              href={localizeHref(locale, "/")}
+              className="inline-flex items-center gap-3 no-underline"
+            >
               <span className="font-display bg-glow text-fluid-base flex h-11 w-11 items-center justify-center rounded-xl font-extrabold text-(--ink)">
                 {profile.initials}
               </span>
@@ -43,7 +49,7 @@ export function Footer({ profile, links }: FooterProps) {
               {links.map((link) => (
                 <li key={link.id}>
                   <a
-                    href={link.href ?? `/#${link.id}`}
+                    href={localizeHref(locale, link.href ?? `/#${link.id}`)}
                     className="hover:text-glow coarse:min-h-11 inline-flex min-h-8 items-center no-underline opacity-80 transition hover:opacity-100"
                   >
                     {link.label}

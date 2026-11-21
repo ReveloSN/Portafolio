@@ -10,7 +10,7 @@ import { SoftSkillList } from "@/components/molecules/SoftSkillList";
 import { TechTrail } from "@/components/molecules/TechTrail";
 import { StaggerText } from "@/components/molecules/StaggerText";
 import { SectionShell } from "@/components/templates/SectionShell";
-import { COPY } from "@/data/copy";
+import { getContent } from "@/lib/locale.server";
 import { SECTION_IDS } from "@/data/navigation";
 import { FIREFLY_COUNT } from "@/lib/constants";
 import type { Profile, QuickFact } from "@/types/profile";
@@ -38,7 +38,11 @@ const BACKGROUND = seamBackground(
   "linear-gradient(var(--seam-about-start) 0, var(--about-glow) var(--about-fade), var(--seam-about-end) 100%)",
 );
 
-export function About({ profile }: AboutProps) {
+export async function About({ profile }: AboutProps) {
+  const { copy: COPY, projects } = await getContent();
+  const projectNames = Object.fromEntries(
+    projects.map((project) => [project.slug, project.name]),
+  );
   const { about } = COPY;
   // Orden en la entrada escalonada: texto, datos rápidos, habilidades y tecnologías.
   const paragraphs = profile.aboutParagraphs;
@@ -108,7 +112,11 @@ export function About({ profile }: AboutProps) {
           <h3 className="text-fluid-xs mt-[var(--about-gap)] font-mono font-medium tracking-[.2em] opacity-70">
             {about.skillsTitle}
           </h3>
-          <TechTrail technologies={profile.technologies} startIndex={trailStart} />
+          <TechTrail
+            technologies={profile.technologies}
+            startIndex={trailStart}
+            projectNames={projectNames}
+          />
         </RevealGroup>
       </div>
     </SectionShell>

@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
+import { LanguageSwitch } from "@/components/molecules/LanguageSwitch";
 import { ThemeToggle } from "@/components/molecules/ThemeToggle";
-import { COPY } from "@/data/copy";
+import { useCopy, useLocalizeHref } from "@/hooks/useLocale";
 import Link from "next/link";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 import type { NavLink } from "@/types/navigation";
@@ -18,6 +19,8 @@ const LINK_STYLE =
   "relative py-2 no-underline opacity-80 transition hover:text-glow hover:opacity-100 after:absolute after:bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-glow after:transition-all after:duration-300 hover:after:w-full";
 
 export function Navbar({ profile, links }: NavbarProps) {
+  const COPY = useCopy();
+  const localize = useLocalizeHref();
   const { open, toggle, close, toggleRef, onBlur } = useMobileMenu();
   const { nav } = COPY;
 
@@ -27,11 +30,15 @@ export function Navbar({ profile, links }: NavbarProps) {
       className="-mb-nav border-line sticky top-0 z-60 border-b bg-(--nav-bg) backdrop-blur-[14px]"
     >
       <div className="h-nav px-gutter mx-auto flex max-w-[min(var(--content-max),calc(var(--u)*100.0))] items-center justify-between gap-4">
-        <Link href="/" className="inline-flex min-h-11 items-center gap-3 no-underline">
+        <Link
+          href={localize("/")}
+          className="inline-flex min-h-11 items-center gap-3 no-underline"
+        >
           <span className="font-display bg-glow text-fluid-base flex size-[max(2.25rem,calc(var(--u)*2.8))] items-center justify-center rounded-xl font-extrabold text-(--ink)">
             {profile.initials}
           </span>
-          <span className="font-display text-fluid-md font-extrabold tracking-[.03em]">
+          {/* En teléfonos angostos solo el monograma: el nombre completo está en el Hero. */}
+          <span className="font-display text-fluid-md font-extrabold tracking-[.03em] whitespace-nowrap max-[419px]:sr-only">
             {profile.firstName}
           </span>
         </Link>
@@ -41,7 +48,11 @@ export function Navbar({ profile, links }: NavbarProps) {
           className="gap-fluid-4 text-fluid-sm hidden items-center font-medium min-[1041px]:flex"
         >
           {links.map((link) => (
-            <a key={link.id} href={link.href ?? `/#${link.id}`} className={LINK_STYLE}>
+            <a
+              key={link.id}
+              href={localize(link.href ?? `/#${link.id}`)}
+              className={LINK_STYLE}
+            >
               {link.label}
             </a>
           ))}
@@ -52,6 +63,7 @@ export function Navbar({ profile, links }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageSwitch />
           <ThemeToggle toDarkLabel={nav.themeToDark} toLightLabel={nav.themeToLight} />
           <button
             ref={toggleRef}
@@ -76,7 +88,7 @@ export function Navbar({ profile, links }: NavbarProps) {
           {links.map((link) => (
             <a
               key={link.id}
-              href={link.href ?? `/#${link.id}`}
+              href={localize(link.href ?? `/#${link.id}`)}
               onClick={close}
               className="text-fluid-md border-line border-b px-1 py-4 font-medium no-underline"
             >
