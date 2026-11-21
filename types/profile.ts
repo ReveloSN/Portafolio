@@ -23,7 +23,8 @@ export type TechIconId =
   | "tailwind"
   | "godot"
   | "kotlin"
-  | "python";
+  | "python"
+  | "aws";
 
 /** Tecnología del camino de huellas: su logotipo llena la huella y brilla con su color. */
 /** Colores del interior de la huella; si faltan se derivan del color de marca. */

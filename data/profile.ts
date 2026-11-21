@@ -55,6 +55,7 @@ export const PROFILE: Profile = {
     { name: "React Native", icon: "react", color: "#61dafb" },
     { name: "Tailwind CSS", icon: "tailwind", color: "#06b6d4" },
     { name: "Godot", icon: "godot", color: "#478cbf" },
+    { name: "AWS", icon: "aws", color: "#ff9900" },
   ],
   socials: [
     { kind: "github", label: "GitHub", href: "https://github.com/ReveloSN" },
