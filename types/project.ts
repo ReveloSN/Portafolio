@@ -44,7 +44,8 @@ export interface Project {
   readonly summary: string;
   readonly tagline: string;
   readonly technologies: readonly string[];
-  readonly repoUrl: string;
+  /** Solo si el código es público: sin él no se pintan los botones de repositorio. */
+  readonly repoUrl?: string;
   readonly repositories?: readonly { readonly label: string; readonly href: string }[];
   /** Solo si hay algo que un visitante pueda instalar o abrir. */
   readonly download?: ProjectDownload;
