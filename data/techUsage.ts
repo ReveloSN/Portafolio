@@ -8,10 +8,11 @@ const repo = (name: string): TechRepo => ({ name, url: `${GITHUB}/${name}` });
  * Fuente: archivos de dependencias de los repositorios públicos de GitHub
  * (package.json, pom.xml, build.gradle, requirements.txt, pyproject.toml), revisados
  * el 8 de noviembre de 2026. Los repositorios que forman parte de un proyecto del
- * portafolio (NeuroLive, ARGUS, Verificador de Salida) se muestran como ese proyecto.
+ * portafolio (NeuroLive, ARGUS, Verificador de Salida, ArquiMetrics) se muestran como
+ * ese proyecto.
  */
 export const TECH_USAGE: TechUsageMap = {
-  fastapi: { projects: ["aurora", "volcan"], repos: [] },
+  fastapi: { projects: ["aurora", "volcan", "cumbre"], repos: [] },
   spring: {
     projects: ["aurora"],
     repos: [
@@ -36,6 +37,6 @@ export const TECH_USAGE: TechUsageMap = {
     ],
   },
   godot: { projects: ["selva"], repos: [] },
-  /* Servidor y generador de carga en una instancia EC2 t3.small (docs/SETUP-AWS.md). */
-  aws: { projects: [], repos: [repo("proyecto-final-arquitectura-computacional")] },
+  /* ArquiMetrics midió la API en una instancia EC2 t3.small (arquimetrics/deploy/aws). */
+  aws: { projects: ["cumbre"], repos: [] },
 };
