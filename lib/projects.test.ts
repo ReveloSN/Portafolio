@@ -8,9 +8,26 @@ const MIN_FEATURES = 3;
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 const PLACEHOLDER = /\[[^\]]+\]/;
 
-/** Ancho y alto reales de un PNG o JPEG, leídos de su cabecera. */
+/** Ancho y alto de un WebP según su primer bloque (VP8X, VP8 con pérdida o VP8L). */
+function webpSize(bytes: Buffer): { width: number; height: number } {
+  const chunk = bytes.toString("ascii", 12, 16);
+  if (chunk === "VP8X") {
+    return { width: 1 + bytes.readUIntLE(24, 3), height: 1 + bytes.readUIntLE(27, 3) };
+  }
+  if (chunk === "VP8L") {
+    const bits = bytes.readUInt32LE(21);
+    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+  }
+  return {
+    width: bytes.readUInt16LE(26) & 0x3fff,
+    height: bytes.readUInt16LE(28) & 0x3fff,
+  };
+}
+
+/** Ancho y alto reales de un PNG, WebP o JPEG, leídos de su cabecera. */
 function imageSize(file: string): { width: number; height: number } {
   const bytes = readFileSync(file);
+  if (bytes.toString("ascii", 8, 12) === "WEBP") return webpSize(bytes);
   if (bytes.toString("ascii", 1, 4) === "PNG") {
     return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
   }
