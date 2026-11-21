@@ -474,4 +474,134 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
   },
+  {
+    id: "arquimetrics",
+    slug: "cumbre",
+    name: "ArquiMetrics",
+    summary:
+      "Laboratorio de rendimiento para decidir en qué máquina debería correr una API REST hecha con FastAPI y SQLite. Mide CPU, memoria, disco, red y latencia bajo la misma carga en un PC, dos contenedores Docker y una instancia AWS EC2 t3.small.",
+    tagline:
+      "Pruebas de carga con mediciones propias para elegir dónde correr una API: PC, Docker o AWS.",
+    technologies: ["Node.js", "Python", "FastAPI", "SQLite", "Locust", "Docker", "AWS"],
+    repoUrl: "https://github.com/ReveloSN/proyecto-final-arquitectura-computacional",
+    facts: {
+      period: "Noviembre de 2026 (mediciones del 10 y 11 de noviembre)",
+      team: "Proyecto final del curso, adaptado del laboratorio abierto Shareboard Performance de Juan Diego López Arias (licencia MIT)",
+      platform:
+        "Windows 11, Docker Desktop con 1 y 2 CPU y AWS EC2 con Ubuntu; interfaz web local",
+      status: "Entregado, con informe, 48 pruebas formales y sus datos crudos",
+    },
+    problem:
+      "Elegir dónde publicar una aplicación suele hacerse a ojo. El proyecto final de Arquitectura Computacional pedía responder con mediciones propias en qué máquina debería correr una aplicación y explicar qué componente del computador causa cada número. La aplicación medida es una API en FastAPI con SQLite que registra usuarios, inicia sesión con JWT y lee y escribe ítems.",
+    roleItems: [
+      "ArquiMetrics adapta un laboratorio de referencia a esta API. Un agente en Node.js registra cada segundo la CPU (total, por núcleo y del proceso), la memoria residente, el disco, la red y los límites del contenedor, mientras Locust genera usuarios virtuales que se registran, inician sesión y hacen 8 lecturas por cada 2 escrituras.",
+      "Cada prueba calienta 60 s sin contarlos y mide 300 s, con tres repeticiones y la base de datos vacía al empezar. Los percentiles p50, p95 y p99 salen de juntar histogramas y cada cifra es la mediana de las repeticiones. En total, 48 pruebas formales: cuatro entornos por cuatro niveles de carga (10, 20, 50 y 100 usuarios).",
+      "La interfaz web local lanza campañas, compara los entornos con mediana y rango, superpone las curvas por segundo y propone un diagnóstico que cita cada métrica y su umbral. Para AWS, la misma API se empaquetó, se instaló en una instancia EC2 y sus resultados se trajeron al PC por SCP.",
+    ],
+    contribution: [
+      "Hasta 20 usuarios, el PC fue el más rápido: 31,7 peticiones por segundo con una latencia p95 de 707 ms, frente a 30,0 y 931 ms en la t3.small. Con 50 usuarios la API colapsó en los cuatro entornos con la CPU casi libre: el límite era el grupo de conexiones a la base de datos, no el hardware.",
+      "El informe explica cada diferencia con la arquitectura: un solo proceso de Python por el GIL, 2 vCPU que en la t3.small son un núcleo físico con hyperthreading (p99 de 497 ms frente a 153 ms del PC con 10 usuarios) y un contenedor de 1 CPU frenado por su límite el 73 % del tiempo con 20 usuarios. La recomendación: corregir primero la API y, si debe estar en la nube, usar la t3.small en modo Unlimited.",
+    ],
+    features: [
+      {
+        title: "Campañas repetibles",
+        description:
+          "Elige aplicación, perfil de carga, entorno y repeticiones; cada prueba guarda sus comandos, versiones y commit.",
+      },
+      {
+        title: "Telemetría cada segundo",
+        description:
+          "CPU total, por núcleo y del proceso, memoria, IOPS y espera del disco, red y periodos frenados del contenedor.",
+      },
+      {
+        title: "Comparar entornos",
+        description:
+          "Tabla lado a lado con la mediana y el rango de las repeticiones, en barras y en curvas por segundo superpuestas.",
+      },
+      {
+        title: "Diagnóstico con evidencia",
+        description:
+          "Señala el cuello de botella probable y cita la métrica, su valor, el umbral y la fuente de cada hallazgo.",
+      },
+      {
+        title: "Despliegue en AWS",
+        description:
+          "Empaqueta la API con una lista blanca de archivos y búsqueda de secretos, la instala en EC2 y trae las corridas sin sobrescribir.",
+      },
+      {
+        title: "Costos con fuentes",
+        description:
+          "Calcula el costo mensual de cada opción con precios oficiales de AWS y la tarifa eléctrica local.",
+      },
+    ],
+    cloud: {
+      title: "Servicios de AWS",
+      intro:
+        "La misma API se midió en la nube para compararla con el PC y con Docker. Estos son los servicios y funciones de AWS que usó el proyecto.",
+      services: [
+        {
+          title: "Amazon EC2 t3.small",
+          description:
+            "Instancia en us-east-1 con Ubuntu 26.04: 2 vCPU Intel Xeon Platinum 8259CL que son un solo núcleo físico con hyperthreading, y 2 GiB de memoria.",
+        },
+        {
+          title: "Créditos de CPU",
+          description:
+            "Como instancia burstable, garantiza el 20 % por vCPU y gana 24 créditos por hora. Con la carga medida, en modo Standard se agotarían en 13 a 37 horas; en Unlimited se paga el exceso.",
+        },
+        {
+          title: "Amazon EBS gp3",
+          description:
+            "Disco SSD de 8 GB. Con 20 usuarios atendió 70 IOPS en promedio con 0,96 ms de espera: el disco no fue el cuello de botella.",
+        },
+        {
+          title: "Grupo de seguridad y túnel SSH",
+          description:
+            "Ningún puerto nuevo además de SSH: la API escucha en 127.0.0.1 de la instancia y se consulta por un túnel. El paquete viaja y los resultados vuelven por SCP.",
+        },
+        {
+          title: "Metadatos de instancia (IMDSv2)",
+          description:
+            "El instalador lee el tipo de instancia, la zona y la región, y con ellos escribe la ficha del entorno que acompaña cada prueba.",
+        },
+        {
+          title: "Lista de precios de AWS",
+          description:
+            "El costo mensual sale de los precios oficiales de us-east-1: instancia, IPv4 pública y disco, unos US$19,5 al mes en modo Standard.",
+        },
+      ],
+    },
+    screenshots: [
+      {
+        src: `${SHOTS}/cumbre/comparacion-20-usuarios.webp`,
+        alt: "Tabla comparativa con 20 usuarios: el PC atiende 31,74 peticiones por segundo con p95 de 707,2 ms; Docker 1 CPU, 16,29 y 1.612 ms; Docker 2 CPU, 17,52 y 2.039 ms, y AWS t3.small, 30,04 y 930,6 ms, junto con la CPU, la memoria y el disco de cada entorno.",
+        width: 1440,
+        height: 900,
+      },
+      {
+        src: `${SHOTS}/cumbre/hardware-de-los-entornos.webp`,
+        alt: "Ficha de hardware de cada entorno: la instancia AWS t3.small con Ubuntu 26.04.1, Intel Xeon Platinum 8259CL de 1 núcleo físico y 2 lógicos, 1.905 MiB y disco Amazon Elastic Block Store; los contenedores Docker de 1 y 2 núcleos con 512 MiB, y el PC con un Ryzen 5 5500U.",
+        width: 1440,
+        height: 900,
+      },
+      {
+        src: `${SHOTS}/cumbre/curvas-por-segundo.webp`,
+        alt: "Curvas por segundo de los cuatro entornos superpuestas con 20 usuarios: throughput, latencia p95 y p50 en escala logarítmica y errores por segundo, con dos picos de fallos en Docker 1 CPU.",
+        width: 1440,
+        height: 900,
+      },
+      {
+        src: `${SHOTS}/cumbre/detalle-de-una-prueba.webp`,
+        alt: "Detalle de una prueba en el PC con 20 usuarios, repetición 1 de 3: 31,13 peticiones por segundo, p50 de 322,8 ms, p95 de 707,2 ms, 0 % de errores y 300 s medidos tras 60 s de calentamiento, con la tabla por ruta.",
+        width: 1440,
+        height: 900,
+      },
+      {
+        src: `${SHOTS}/cumbre/diagnostico-base-de-datos.webp`,
+        alt: "Diagnóstico de la prueba del PC con 50 usuarios: veredicto «Base de datos», cuello de botella probable, 3 hallazgos detectados y el primero, fallos de base de datos o conexiones, con 53,08 % de errores.",
+        width: 1440,
+        height: 900,
+      },
+    ],
+  },
 ];

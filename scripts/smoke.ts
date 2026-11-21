@@ -24,6 +24,7 @@ const WORLD_PATHS = [
   "/mundos/oceano",
   "/mundos/cueva",
   "/mundos/volcan",
+  "/mundos/cumbre",
   "/hobbies",
 ] as const;
 const MISSING_PATH = "/mundos/nada";

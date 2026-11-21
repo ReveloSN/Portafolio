@@ -73,4 +73,18 @@ export const PROJECT_JOURNEYS_EN: Readonly<Record<WorldSlug, readonly JourneySte
       text: "Dashboards show telemetry and history based on each role and the links between patient, caregiver and doctor.",
     },
   ],
+  cumbre: [
+    {
+      title: "Prepare the load",
+      text: "Locust simulates users who register, log in and alternate 8 reads for every 2 writes over 300 measured seconds.",
+    },
+    {
+      title: "Measure four environments",
+      text: "The same API runs on the PC, in Docker with 1 and 2 CPUs and on an EC2 t3.small while the agent records every second.",
+    },
+    {
+      title: "Compare and explain",
+      text: "The comparison and the diagnosis show where the application waits and which component explains each number.",
+    },
+  ],
 };

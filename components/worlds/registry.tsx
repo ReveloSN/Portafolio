@@ -17,6 +17,8 @@ import { VolcanThumbnail } from "./art/VolcanThumbnail";
 import { VolcanScene } from "./scenes/VolcanScene";
 import { AuroraThumbnail } from "./art/AuroraThumbnail";
 import { AuroraScene } from "./scenes/AuroraScene";
+import { CumbreThumbnail } from "./art/CumbreThumbnail";
+import { CumbreScene } from "./scenes/CumbreScene";
 
 type SvgComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -27,6 +29,7 @@ export const THUMBNAILS: Readonly<Record<WorldSlug, SvgComponent>> = {
   oceano: OceanoThumbnail,
   cueva: CuevaThumbnail,
   volcan: VolcanThumbnail,
+  cumbre: CumbreThumbnail,
 };
 
 /** Registro: ilustración de cada tipo de fósil. */
@@ -46,4 +49,5 @@ export const SCENES: Readonly<Record<WorldSlug, ComponentType>> = {
   oceano: OceanoScene,
   cueva: CuevaScene,
   volcan: VolcanScene,
+  cumbre: CumbreScene,
 };

@@ -130,6 +130,32 @@ main > [data-paused] *::after {
     display: none;
   }
 }
+/* Mundo cumbre: niebla que cruza sobre el mar de nubes */
+.cloud-drift {
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  top: 58%;
+  height: 22%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(214, 222, 240, 0.32),
+    transparent 70%
+  );
+  animation: cloud-drift 38s ease-in-out infinite alternate;
+}
+.cloud-drift-slow {
+  top: 66%;
+  opacity: 0.7;
+  animation-duration: 56s;
+  animation-direction: alternate-reverse;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cloud-drift {
+    animation: none;
+  }
+}
 
 /* Entrada al hacer scroll (IntersectionObserver) */
 .fade-up {

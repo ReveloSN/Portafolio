@@ -76,4 +76,18 @@ export const PROJECT_JOURNEYS: Readonly<Record<WorldSlug, readonly JourneyStep[]
       text: "Los paneles muestran telemetría e historial según el rol y los vínculos entre paciente, cuidador y médico.",
     },
   ],
+  cumbre: [
+    {
+      title: "Preparar la carga",
+      text: "Locust simula usuarios que se registran, inician sesión y alternan 8 lecturas por cada 2 escrituras durante 300 s medidos.",
+    },
+    {
+      title: "Medir cuatro entornos",
+      text: "La misma API corre en el PC, en Docker con 1 y 2 CPU y en una EC2 t3.small mientras el agente registra cada segundo.",
+    },
+    {
+      title: "Comparar y explicar",
+      text: "La comparación y el diagnóstico muestran dónde espera la aplicación y qué componente explica cada número.",
+    },
+  ],
 };

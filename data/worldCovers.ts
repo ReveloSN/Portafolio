@@ -7,4 +7,6 @@ export const WORLD_COVERS: Readonly<Record<WorldSlug, string>> = {
   oceano: "/art/projects/worlds/oceano.webp",
   volcan: "/art/projects/worlds/volcan.webp",
   aurora: "/art/projects/worlds/aurora.webp",
+  /* Dibujada en código: `npm run worlds:art` la genera desde `CumbreArt`. */
+  cumbre: "/art/projects/worlds/cumbre.webp",
 };

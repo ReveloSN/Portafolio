@@ -36,6 +36,14 @@ const EMBLEMS: Readonly<Record<WorldSlug, ReactNode>> = {
       <path d="M48 13v5m0 60v5M16 20l5 5m54 46 5 5M16 76l5-5m54-46 5-5" />
     </>
   ),
+  cumbre: (
+    <>
+      <path d="M10 80 38 36l12 18 12-14 24 40Z" />
+      <path d="m31 47 7 5 7-5" />
+      <path d="M57 31h22a7 7 0 0 0-2-13.6A10 10 0 0 0 58 19a6 6 0 0 0-1 12Z" />
+      <path d="M8 87h80" />
+    </>
+  ),
 };
 
 export function ProjectEmblem({
