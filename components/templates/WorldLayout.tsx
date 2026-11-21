@@ -5,6 +5,10 @@ import { SkipLink } from "@/components/atoms/SkipLink";
 import { WorldSwitcher } from "@/components/molecules/WorldSwitcher";
 import { WorldDetails } from "@/components/worlds/WorldDetails";
 import { WorldGallery } from "@/components/worlds/WorldGallery";
+import {
+  CLOUD_SECTION_ID,
+  WorldCloudServices,
+} from "@/components/worlds/WorldCloudServices";
 import { WorldHero } from "@/components/worlds/WorldHero";
 import { getCopy } from "@/lib/locale.server";
 import { MAIN_CONTENT_ID } from "@/data/navigation";
@@ -51,6 +55,11 @@ export async function WorldLayout({ world, worlds, project, profile }: WorldLayo
             <li>
               <a href="#funcionalidades">{copy.featuresTitle}</a>
             </li>
+            {project.cloud && (
+              <li>
+                <a href={`#${CLOUD_SECTION_ID}`}>{project.cloud.title}</a>
+              </li>
+            )}
             {project.screenshots.length > 0 && (
               <li>
                 <a href="#capturas">{copy.galleryTitle}</a>
@@ -63,6 +72,7 @@ export async function WorldLayout({ world, worlds, project, profile }: WorldLayo
           project={project}
           journey={<WorldJourney slug={project.slug} />}
         />
+        {project.cloud && <WorldCloudServices cloud={project.cloud} />}
         <WorldGallery project={project} />
       </main>
       <footer className="px-gutter pt-fluid-5 pb-14 text-center">

@@ -29,6 +29,14 @@ export interface ProjectDownload {
   readonly kind?: "install" | "web";
 }
 
+/** Servicios de un proveedor de nube que el proyecto usó, con lo que aportó cada uno. */
+export interface ProjectCloud {
+  /** Título de la sección, con el proveedor ("Servicios de AWS"). */
+  readonly title: string;
+  readonly intro: string;
+  readonly services: readonly ProjectFeature[];
+}
+
 export interface Project {
   readonly id: string;
   readonly slug: WorldSlug;
@@ -46,6 +54,8 @@ export interface Project {
   /** Utilidad de la solución y alcance actual, sin atribuir impacto no validado. */
   readonly contribution: readonly string[];
   readonly features: readonly ProjectFeature[];
+  /** Solo si el proyecto corrió en la nube: la página del mundo lista sus servicios. */
+  readonly cloud?: ProjectCloud;
   /** Puede ir vacío: la galería avisa que las capturas están en camino. */
   readonly screenshots: readonly ProjectScreenshot[];
 }
