@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
+import { TechPrints } from "@/components/molecules/TechPrints";
 import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 
 /** Captura principal a todo el ancho; secundarias en dos columnas. */
 const GALLERY_SIZES = "(min-width: 1200px) 560px, (min-width: 640px) 45vw, 100vw";
+/** Teléfono o reloj: todas en fila, cada una de unos 260 px. */
+const TALL_SIZES = "(min-width: 640px) 280px, 50vw";
 
 interface WorldGalleryProps {
   readonly project: Project;
@@ -13,6 +16,8 @@ interface WorldGalleryProps {
 export async function WorldGallery({ project }: WorldGalleryProps) {
   const COPY = await getCopy();
   const { world: copy } = COPY;
+  // Capturas verticales o cuadradas (teléfono, reloj) van en fila, sin una principal.
+  const tall = project.screenshots.every((shot) => shot.height >= shot.width);
   return (
     <section id="capturas" className="px-gutter pt-fluid-4 pb-20">
       <div className="mx-auto max-w-[min(var(--content-max),calc(var(--u)*86.1))]">
@@ -26,7 +31,7 @@ export async function WorldGallery({ project }: WorldGalleryProps) {
             <h2 className="font-display text-fluid-3xl mt-2.5 mb-7 leading-none font-extrabold">
               {copy.galleryTitle}
             </h2>
-            <ul className="world-gallery-grid">
+            <ul className="world-gallery-grid" data-layout={tall ? "tall" : "wide"}>
               {project.screenshots.map((shot, index) => (
                 <li key={shot.src}>
                   <figure>
@@ -43,7 +48,11 @@ export async function WorldGallery({ project }: WorldGalleryProps) {
                         width={shot.width}
                         height={shot.height}
                         sizes={
-                          index === 0 ? "(min-width: 1200px) 1120px, 95vw" : GALLERY_SIZES
+                          tall
+                            ? TALL_SIZES
+                            : index === 0
+                              ? "(min-width: 1200px) 1120px, 95vw"
+                              : GALLERY_SIZES
                         }
                       />
                     </a>
@@ -59,16 +68,12 @@ export async function WorldGallery({ project }: WorldGalleryProps) {
             <p className="text-fluid-xs font-mono tracking-[.22em] opacity-70">
               {copy.technologies}
             </p>
-            <ul className="mt-2.5 flex flex-wrap gap-2">
-              {project.technologies.map((tech) => (
-                <li
-                  key={tech}
-                  className="text-fluid-xs rounded-full border border-white/35 bg-white/8 px-3 py-[5px] font-mono"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
+            <TechPrints
+              technologies={project.technologies}
+              label={copy.technologies}
+              tone="night"
+              className="mt-2.5"
+            />
           </div>
           <ProjectRepoLinks project={project} label={copy.code} />
         </div>

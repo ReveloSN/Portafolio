@@ -1,10 +1,10 @@
 import type { CSSProperties } from "react";
 import { ProjectEmblem } from "@/components/molecules/ProjectEmblem";
 import { PortalLink } from "@/components/atoms/PortalLink";
+import { TechPrints } from "@/components/molecules/TechPrints";
 import { getCopy } from "@/lib/locale.server";
 import { Button } from "@/components/atoms/Button";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
-import { Tag } from "@/components/atoms/Tag";
 import { interpolate } from "@/lib/utils";
 import type { Project } from "@/types/project";
 
@@ -22,6 +22,9 @@ interface ProjectCardProps {
   readonly accent: string;
   readonly labels: ProjectCardLabels;
 }
+
+/** En la tarjeta solo caben tres tecnologías; el resto se resume en "+N". */
+const CARD_TECH_LIMIT = 3;
 
 export async function ProjectCard({
   project,
@@ -57,18 +60,11 @@ export async function ProjectCard({
           {project.name}
         </h3>
         <p className="project-card-summary text-fluid-base">{project.summary}</p>
-        <ul className="flex flex-wrap gap-2" aria-label={COPY.projects.technologiesLabel}>
-          {project.technologies.slice(0, 3).map((tech) => (
-            <li key={tech}>
-              <Tag>{tech}</Tag>
-            </li>
-          ))}
-          {project.technologies.length > 3 && (
-            <li aria-label={project.technologies.slice(3).join(", ")}>
-              <Tag>+{project.technologies.length - 3}</Tag>
-            </li>
-          )}
-        </ul>
+        <TechPrints
+          technologies={project.technologies}
+          label={COPY.projects.technologiesLabel}
+          limit={CARD_TECH_LIMIT}
+        />
         <div className="project-card-actions">
           <ProjectRepoLinks project={project} label={labels.github} size="sm" />
           <Button variant="ghost" size="sm" href={`/mundos/${project.slug}`}>

@@ -296,6 +296,28 @@
   border-radius: 10px;
   margin: auto;
 }
+/* Huellitas de las tecnologías: color del acento (verde del tema o el del mundo) y pie
+   izquierdo y derecho alternos a lo largo de la fila, como un rastro. */
+.stack-print {
+  color: var(--glow);
+  transform: rotate(-16deg);
+}
+.stack-prints li:nth-child(even) .stack-print {
+  transform: scaleX(-1) rotate(-16deg) translateY(1px);
+}
+
+/* Teléfono o reloj: en fila, dos por fila en móvil; la imagen se ve entera. */
+.world-gallery-grid[data-layout="tall"] {
+  grid-template-columns: repeat(auto-fit, minmax(min(45%, 200px), 1fr));
+}
+.world-gallery-grid[data-layout="tall"] li:first-child {
+  grid-column: auto;
+}
+.world-gallery-grid[data-layout="tall"] .world-gallery-shot img {
+  max-height: 560px;
+  width: auto;
+  max-width: 100%;
+}
 .world-gallery-grid figcaption {
   margin: 12px 4px 0;
   font-size: 14px;

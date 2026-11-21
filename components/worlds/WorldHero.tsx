@@ -3,6 +3,7 @@ import { Button } from "@/components/atoms/Button";
 import { Icon } from "@/components/atoms/Icon";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
 import { LanguageSwitch } from "@/components/molecules/LanguageSwitch";
+import { TechPrints } from "@/components/molecules/TechPrints";
 import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 import type { World } from "@/types/world";
@@ -43,16 +44,12 @@ export async function WorldHero({ project, ownerName }: WorldHeroProps) {
           {project.name}
         </h1>
         <p className="world-hero-description">{project.tagline}</p>
-        <ul className="mb-fluid-3 flex flex-wrap gap-2">
-          {project.technologies.map((tech) => (
-            <li
-              key={tech}
-              className="text-fluid-xs rounded-full border border-white/35 bg-white/8 px-3 py-[5px] font-mono"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
+        <TechPrints
+          technologies={project.technologies}
+          label={projects.technologiesLabel}
+          tone="night"
+          className="mb-fluid-3"
+        />
         <div className="flex flex-wrap gap-3">
           <ProjectRepoLinks
             project={project}
