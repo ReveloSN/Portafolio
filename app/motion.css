@@ -15,9 +15,6 @@ main [data-paused] *::after {
 .bob2 {
   animation: bob 4.5s ease-in-out infinite;
 }
-.blink {
-  animation: blink 6s ease-in-out infinite;
-}
 .fly {
   animation: fly 32s linear infinite;
 }
