@@ -347,6 +347,36 @@ export const PROJECTS_EN: readonly Project[] = [
         width: 630,
         height: 1400,
       },
+      {
+        src: `${SHOTS}/oceano/rutinas.webp`,
+        alt: "Routines screen: a greeting with the date, the «Próxima rutina» (next routine) card with its «Al salir del Wi-Fi» (when leaving Wi-Fi) trigger, the «Verificar ahora» (check now) and «Modo salida» (departure mode) buttons, and the routine with the time it was last checked.",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/verificar-una-por-una.webp`,
+        alt: "One-by-one check: the «Llaves» (keys) card marked as critical, with a hint to swipe right if you have it and left if not, and the «No lo llevo» (I don't have it) and «Lo llevo» (I have it) buttons.",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/verificar-lista.webp`,
+        alt: "List check: keys and wallet flagged as critical, charged phone, notebooks and notes, water bottle and «Revisar el escritorio» (check the desk), with the «Listo» (done), «Posponer 5 min» (snooze 5 min) and «Omitir por hoy» (skip for today) buttons.",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/modo-salida.webp`,
+        alt: "Departure mode: a 0/6 progress ring above the items in large type, the critical ones highlighted with an amber border, and the «Listo, salgo» (done, I'm leaving) button.",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/historial.webp`,
+        alt: "History: the «Tu semana» (your week) summary, filters by routine and by result, and the day's checks grouped by date, one skipped and one complete.",
+        width: 697,
+        height: 1400,
+      },
     ],
   },
   {

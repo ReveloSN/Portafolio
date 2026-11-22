@@ -346,6 +346,36 @@ export const PROJECTS: readonly Project[] = [
         width: 630,
         height: 1400,
       },
+      {
+        src: `${SHOTS}/oceano/rutinas.webp`,
+        alt: "Pantalla Rutinas: saludo con la fecha, la tarjeta «Próxima rutina» con su aviso «Al salir del Wi-Fi», los botones «Verificar ahora» y «Modo salida», y la rutina con la hora de su última verificación.",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/verificar-una-por-una.webp`,
+        alt: "Verificación una por una: la tarjeta «Llaves» marcada como crítica, con la indicación de deslizar a la derecha si se lleva y a la izquierda si no, y los botones «No lo llevo» y «Lo llevo».",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/verificar-lista.webp`,
+        alt: "Verificación en lista: llaves y billetera con bandera de críticos, celular cargado, cuadernos y apuntes, botella de agua y «Revisar el escritorio», con los botones «Listo», «Posponer 5 min» y «Omitir por hoy».",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/modo-salida.webp`,
+        alt: "Modo salida: un anillo de progreso 0/6 sobre los elementos en letra grande, los críticos resaltados con borde ámbar, y el botón «Listo, salgo».",
+        width: 697,
+        height: 1400,
+      },
+      {
+        src: `${SHOTS}/oceano/historial.webp`,
+        alt: "Historial: el resumen «Tu semana», filtros por rutina y por resultado, y las verificaciones del día agrupadas por fecha, una omitida y otra completa.",
+        width: 697,
+        height: 1400,
+      },
     ],
   },
   {
