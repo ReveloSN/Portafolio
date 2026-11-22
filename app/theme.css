@@ -8,58 +8,56 @@
 :root {
   color-scheme: light;
 
-  /* Contenido. De día la selva es verde pastel con color de verdad (no blanco ni
-     salvia gris): como en el oscuro, cada sección tiene su tono y su luz. */
-  --bg: #d8eacf;
-  --text: #15261a;
-  --text-muted: #3e5143;
-  --surface: rgba(242, 250, 236, 0.62);
-  --surface-strong: rgba(246, 252, 241, 0.9);
+  /* Verde hoja pastel de base, con superficies menta y texto verde bosque. */
+  --bg: #c9e7b5;
+  --text: #152a1a;
+  --text-muted: #344e3a;
+  --surface: rgba(232, 249, 221, 0.72);
+  --surface-strong: rgba(239, 252, 230, 0.92);
   --border: rgba(21, 52, 30, 0.17);
   --border-strong: rgba(21, 52, 30, 0.33);
-  --glow: #1b6340;
+  --glow: #195b3b;
   --ink: #ffffff;
   --amber-ink: #824600;
   --btn-dark-bg: #1c3a2a;
   --btn-dark-hover: #285039;
   --btn-dark-fg: #f1f8ea;
-  --field-bg: rgba(246, 252, 241, 0.85);
+  --field-bg: rgba(239, 252, 230, 0.9);
   --error-ink: #9c2318;
   --error-edge: #c2412f;
-  --focus-halo: rgba(27, 99, 64, 0.24);
+  --focus-halo: rgba(25, 91, 59, 0.24);
   --card-shadow: rgba(26, 60, 34, 0.26);
-  --card-glow: rgba(27, 99, 64, 0.3);
-  --panel: rgba(240, 249, 234, 0.82);
+  --card-glow: rgba(25, 91, 59, 0.3);
+  --panel: rgba(230, 249, 221, 0.86);
   --fact-cap: #0f6b62;
   --mist-color: color-mix(in srgb, #f3fbe8 30%, transparent);
 
-  /* Página. Las luces de cada sección, como los brillos del oscuro: sol en Sobre mí,
-     menta en Testimonios, musgo con ocre en Experiencia, hoja viva en Contacto. */
-  --nav-bg: rgba(216, 234, 207, 0.86);
-  --nav-bg-solid: rgba(216, 234, 207, 0.98);
-  --scrollbar: #7fa475;
-  --about-glow: #e8f5c6;
-  --testimonials-glow: #e0f4de;
-  --contact-glow: #d6efc0;
-  --experience-glow: #eeedc6;
+  /* Las luces de sección recorren verdes de brote, menta y musgo. */
+  --nav-bg: rgba(201, 231, 181, 0.86);
+  --nav-bg-solid: rgba(201, 231, 181, 0.98);
+  --scrollbar: #739b62;
+  --about-glow: #def1bc;
+  --testimonials-glow: #dcf5d7;
+  --contact-glow: #d1edb6;
+  --experience-glow: #e3edbf;
 
   /* Costuras: el Hero es de noche en los dos temas; Habilidades termina en tierra */
   --seam-hero-end: #07160f;
   /* Sobre mí sale de la noche del Hero y amanece rápido, bajo el dosel del divisor */
   --seam-about-start: var(--seam-hero-end);
   --about-fade: 14%;
-  --seam-about-end: #d6e9cc;
+  --seam-about-end: #c9e7b5;
   --seam-projects-start: var(--seam-about-end);
-  --seam-projects-end: #cee4c7;
+  --seam-projects-end: #bfe0aa;
   --seam-testimonials-start: var(--seam-projects-end);
-  --seam-testimonials-end: #c9e2cd;
+  --seam-testimonials-end: #c3e4be;
   --seam-experience-start: var(--seam-testimonials-end);
-  --seam-experience-end: #d8dbbb;
+  --seam-experience-end: #ccdfaf;
   /* Entre Experiencia y Contacto va la entrada de Hobbies, con el mismo color de costura. */
   --seam-contact-start: var(--seam-experience-end);
   /* El pie es de noche en los dos temas: Contacto oscurece bajo la línea de árboles */
   --seam-contact-end: #05100b;
-  --contact-bg: #c4dcb8;
+  --contact-bg: #bad9a7;
 
   /* Fósil de la experiencia: losa de piedra clara, huesos marfil */
   --fossil-stone: #c9bda5;
