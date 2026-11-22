@@ -19,7 +19,7 @@ interface HeroProps {
 }
 
 /** La portada usa un retrato más grande que el avatar de navegación. */
-const AVATAR_SIZES = "(max-width: 900px) 50vw, 320px";
+const AVATAR_SIZES = "(max-width: 900px) and (max-aspect-ratio: 4/5) 192px, 320px";
 /** Distancia de la canoa al borde inferior, en coordenadas del diseño. */
 const CANOE_PLACEMENT = { "--b": 64 } as StageVars;
 /** El final del Hero se funde con el color de inicio de Sobre mí. */

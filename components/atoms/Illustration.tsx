@@ -14,6 +14,8 @@ interface BaseProps {
   readonly priority?: boolean;
   readonly loading?: "eager" | "lazy";
   readonly testId?: string;
+  /** Por defecto 75; el arte de fondo usa ART_QUALITY. */
+  readonly quality?: number;
 }
 
 /** Una ilustración con contenido necesita alt; una decorativa se oculta a lectores de pantalla. */
@@ -39,6 +41,7 @@ export function Illustration(props: IllustrationProps) {
     priority,
     loading,
     testId,
+    quality,
   } = props;
   const decorative = props.decorative === true;
   // React precarga en el HTML toda imagen que no sea lazy; una carga inmediata que no es
@@ -56,6 +59,7 @@ export function Illustration(props: IllustrationProps) {
         width={width}
         height={height}
         sizes={sizes}
+        quality={quality}
         priority={priority}
         loading={priority ? undefined : loading}
         fetchPriority={eagerButSecondary ? "low" : undefined}

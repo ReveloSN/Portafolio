@@ -1,4 +1,10 @@
 export const PARALLAX_MAX_FPS = 60;
+/**
+ * Calidad del arte pintado de fondo (río, agua, troncos, portadas): no se distingue de 75
+ * a tamaño real y pesa una cuarta parte menos. Debe estar en `images.qualities`.
+ */
+export const ART_QUALITY = 68;
+
 /** Ancho más grande que pide el arte del fósil: el de sus archivos (ver `lib/imageUrl`). */
 export const BONE_ART_PX = 1080;
 export const SLAB_ART_PX = 1920;

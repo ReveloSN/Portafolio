@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Illustration } from "@/components/atoms/Illustration";
 import type { CSSProperties, ReactNode } from "react";
-import { HERO_LAYERS } from "@/lib/constants";
+import { ART_QUALITY, HERO_LAYERS } from "@/lib/constants";
 import { layerShift } from "@/lib/parallax";
 
 interface JungleBackdropProps {
@@ -84,6 +84,7 @@ export function JungleBackdrop({
           loading="eager"
           fetchPriority="high"
           sizes="100vw"
+          quality={ART_QUALITY}
           className="object-cover"
         />
       </div>
@@ -108,6 +109,7 @@ export function JungleBackdrop({
           alt=""
           fill
           sizes="112vw"
+          quality={ART_QUALITY}
           className="object-cover object-top"
           style={{ maskImage: WATER_MASK, WebkitMaskImage: WATER_MASK }}
         />
@@ -125,6 +127,7 @@ export function JungleBackdrop({
           width={1024}
           height={1536}
           sizes={TRUNK_SIZES}
+          quality={ART_QUALITY}
         />
       </div>
       <div
@@ -143,6 +146,7 @@ export function JungleBackdrop({
           width={1024}
           height={1536}
           sizes={TRUNK_RIGHT_SIZES}
+          quality={ART_QUALITY}
         />
       </div>
       {CORNERS.map((corner) => (

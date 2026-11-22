@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { WORLD_COVERS } from "@/data/worldCovers";
+import { ART_QUALITY } from "@/lib/constants";
 import type { WorldSlug } from "@/types/world";
 
 /** Portada estática: una sola imagen, sin personajes, capas ni eventos de puntero. */
@@ -16,6 +17,7 @@ export function WorldCover({
       alt=""
       data-world={slug}
       fill
+      quality={ART_QUALITY}
       sizes={
         hero
           ? "(max-width:600px) 1000px, 100vw"
