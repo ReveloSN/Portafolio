@@ -81,9 +81,9 @@ export const WORLDS_EN: readonly World[] = [
     background:
       "linear-gradient(180deg,#0b1430 0,#172a4d 900px,#1f3558 1900px,#121e3a 3000px,#0a1228 100%)",
     depths: [
-      { title: "Base camp", subtitle: "The question before the climb" },
-      { title: "Ascent", subtitle: "Four routes, the same load" },
-      { title: "Above the clouds", subtitle: "What the summit reveals" },
+      { title: "Base camp", subtitle: "A transfer between two accounts" },
+      { title: "Ascent", subtitle: "Queues, events and compensations" },
+      { title: "Above the clouds", subtitle: "What the tests showed" },
     ],
   },
 ];

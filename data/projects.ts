@@ -475,132 +475,177 @@ export const PROJECTS: readonly Project[] = [
     ],
   },
   {
-    id: "arquimetrics",
+    id: "banco-saga",
     slug: "cumbre",
-    name: "ArquiMetrics",
+    name: "Banco Saga",
     summary:
-      "Laboratorio de rendimiento para decidir en qué máquina debería correr una API REST hecha con FastAPI y SQLite. Mide CPU, memoria, disco, red y latencia bajo la misma carga en un PC, dos contenedores Docker y una instancia AWS EC2 t3.small.",
+      "Sistema bancario serverless en AWS con depósito, consulta y transferencia. La transferencia es una saga coreografiada sobre colas SQS: cada paso guarda un evento inmutable en DynamoDB y, si algo falla, una compensación devuelve el dinero.",
     tagline:
-      "Pruebas de carga con mediciones propias para elegir dónde correr una API: PC, Docker o AWS.",
-    technologies: ["Node.js", "Python", "FastAPI", "SQLite", "Locust", "Docker", "AWS"],
-    repoUrl: "https://github.com/ReveloSN/proyecto-final-arquitectura-computacional",
+      "Transferencias que se deshacen solas cuando un paso falla: microservicios con event sourcing y patrón Saga en AWS.",
+    technologies: [
+      "AWS Lambda",
+      "Python",
+      "API Gateway",
+      "Amazon SQS",
+      "DynamoDB",
+      "Aurora PostgreSQL",
+      "Amazon S3",
+      "AWS X-Ray",
+    ],
     facts: {
-      period: "Noviembre de 2026 (mediciones del 10 y 11 de noviembre)",
-      team: "Proyecto final del curso, adaptado del laboratorio abierto Shareboard Performance de Juan Diego López Arias (licencia MIT)",
+      period: "Noviembre de 2026",
+      team: "Individual: arquitectura, funciones, infraestructura e informe",
       platform:
-        "Windows 11, Docker Desktop con 1 y 2 CPU y AWS EC2 con Ubuntu; interfaz web local",
-      status: "Entregado, con informe, 48 pruebas formales y sus datos crudos",
+        "AWS serverless en us-east-1: API Gateway, Lambda, SQS, DynamoDB y Aurora Serverless v2",
+      status:
+        "Proyecto final de Cloud Computing terminado, con informe y capturas de la consola",
     },
     problem:
-      "Elegir dónde publicar una aplicación suele hacerse a ojo. El proyecto final de Arquitectura Computacional pedía responder con mediciones propias en qué máquina debería correr una aplicación y explicar qué componente del computador causa cada número. La aplicación medida es una API en FastAPI con SQLite que registra usuarios, inicia sesión con JWT y lee y escribe ítems.",
+      "Una transferencia toca dos cuentas y varios servicios (Aurora, DynamoDB y S3), entre los que no existe una transacción común. Si el crédito falla después del débito, el dinero no puede quedar a medio camino. El proyecto final de Cloud Computing pedía resolverlo con una saga coreografiada con compensación, Aurora Serverless v2 entre 0.5 y 4 ACU, trazas de X-Ray y una alarma de borrados masivos con CloudTrail.",
     roleItems: [
-      "ArquiMetrics adapta un laboratorio de referencia a esta API. Un agente en Node.js registra cada segundo la CPU (total, por núcleo y del proceso), la memoria residente, el disco, la red y los límites del contenedor, mientras Locust genera usuarios virtuales que se registran, inician sesión y hacen 8 lecturas por cada 2 escrituras.",
-      "Cada prueba calienta 60 s sin contarlos y mide 300 s, con tres repeticiones y la base de datos vacía al empezar. Los percentiles p50, p95 y p99 salen de juntar histogramas y cada cifra es la mediana de las repeticiones. En total, 48 pruebas formales: cuatro entornos por cuatro niveles de carga (10, 20, 50 y 100 usuarios).",
-      "La interfaz web local lanza campañas, compara los entornos con mediana y rango, superpone las curvas por segundo y propone un diagnóstico que cita cada métrica y su umbral. Para AWS, la misma API se empaquetó, se instaló en una instancia EC2 y sus resultados se trajeron al PC por SCP.",
+      "Seis funciones Lambda en Python 3.12 comparten un mismo paquete de código y API Gateway expone cinco rutas REST de transferencias, depósitos, cuentas y transacciones. La transferencia responde 202 y deja un mensaje en la cola banco-debito; desde allí cada Lambda pasa el trabajo a la siguiente cola (banco-credito y, si el crédito falla, banco-compensacion), con una DLQ que aparta los mensajes que fallan tres veces.",
+      "Cada paso registra su evento en la tabla DynamoDB banco-eventos, ordenado por clave (TransferInitiated, AccountDebited, CreditFailed…). La idempotencia evita débitos o créditos dobles cuando SQS entrega un mensaje dos veces: cada paso revisa si su evento ya existe y cada escritura usa attribute_not_exists. El rol de IAM no incluye UpdateItem ni DeleteItem, así que ningún evento escrito se puede modificar ni borrar.",
+      "Aurora Serverless v2 (PostgreSQL) guarda los saldos y se consulta con la RDS Data API, con las credenciales en Secrets Manager, para no meter las Lambdas en una VPC ni pagar un NAT Gateway. X-Ray sigue cada transacción con las anotaciones transactionId, userId y operationType, y CloudTrail con Data Events alimenta un filtro de métricas en CloudWatch y una alarma que avisa por SNS.",
     ],
     contribution: [
-      "Hasta 20 usuarios, el PC fue el más rápido: 31,7 peticiones por segundo con una latencia p95 de 707 ms, frente a 30,0 y 931 ms en la t3.small. Con 50 usuarios la API colapsó en los cuatro entornos con la CPU casi libre: el límite era el grupo de conexiones a la base de datos, no el hardware.",
-      "El informe explica cada diferencia con la arquitectura: un solo proceso de Python por el GIL, 2 vCPU que en la t3.small son un núcleo físico con hyperthreading (p99 de 497 ms frente a 153 ms del PC con 10 usuarios) y un contenedor de 1 CPU frenado por su límite el 73 % del tiempo con 20 usuarios. La recomendación: corregir primero la API y, si debe estar en la nube, usar la t3.small en modo Unlimited.",
+      "Las pruebas desde el frontend cubrieron los tres casos de la saga: una transferencia completada en 3,35 s, una rechazada por saldo insuficiente sin mover dinero y una compensada al llegar a una cuenta bloqueada, en la que el origen recuperó los $50 y DynamoDB dejó sus cinco eventos. La cola de mensajes fallidos terminó vacía.",
+      "X-Ray mostró que, sin contar el arranque en frío de 642 ms del reembolso, el subsegmento más lento es la Data API de Aurora (232 ms): el costo de evitar la VPC. En la prueba de carga, Aurora subió de 0.5 a 4 ACU y volvió sola al mínimo, y la alarma pasó a «En modo alarma» con 13 DeleteItem en un minuto y avisó por SNS.",
     ],
     features: [
       {
-        title: "Campañas repetibles",
+        title: "Saga con compensación",
         description:
-          "Elige aplicación, perfil de carga, entorno y repeticiones; cada prueba guarda sus comandos, versiones y commit.",
+          "Débito, crédito y reembolso unidos por colas SQS; si el crédito falla, el dinero vuelve al origen.",
       },
       {
-        title: "Telemetría cada segundo",
+        title: "Event sourcing",
         description:
-          "CPU total, por núcleo y del proceso, memoria, IOPS y espera del disco, red y periodos frenados del contenedor.",
+          "Cada paso guarda un evento inmutable en DynamoDB y el recorrido completo se reconstruye con una consulta.",
       },
       {
-        title: "Comparar entornos",
+        title: "Idempotencia",
         description:
-          "Tabla lado a lado con la mediana y el rango de las repeticiones, en barras y en curvas por segundo superpuestas.",
+          "Una entrega repetida de SQS no vuelve a debitar ni a acreditar: cada paso comprueba su evento antes de actuar.",
       },
       {
-        title: "Diagnóstico con evidencia",
+        title: "Demo en vivo",
         description:
-          "Señala el cuello de botella probable y cita la métrica, su valor, el umbral y la fuente de cada hallazgo.",
+          "Un frontend en S3 muestra las cuentas y dibuja cada paso de la saga mientras llegan los eventos.",
       },
       {
-        title: "Despliegue en AWS",
+        title: "Trazas de punta a punta",
         description:
-          "Empaqueta la API con una lista blanca de archivos y búsqueda de secretos, la instala en EC2 y trae las corridas sin sobrescribir.",
+          "X-Ray con anotaciones de negocio encuentra todas las trazas de una transferencia y mide cada subsegmento.",
       },
       {
-        title: "Costos con fuentes",
+        title: "Alerta de borrados masivos",
         description:
-          "Calcula el costo mensual de cada opción con precios oficiales de AWS y la tarifa eléctrica local.",
+          "CloudTrail con Data Events, un filtro de métricas y una alarma que avisa por SNS si hay más de 5 DeleteItem por minuto.",
       },
     ],
     cloud: {
       title: "Servicios de AWS",
       intro:
-        "La misma API se midió en la nube para compararla con el PC y con Docker. Estos son los servicios y funciones de AWS que usó el proyecto.",
+        "Cada pieza del sistema es un servicio administrado de AWS en la región us-east-1. Este es el papel de cada uno en la arquitectura.",
       services: [
         {
-          title: "Amazon EC2 t3.small",
+          title: "API Gateway (REST)",
           description:
-            "Instancia en us-east-1 con Ubuntu 26.04: 2 vCPU Intel Xeon Platinum 8259CL que son un solo núcleo físico con hyperthreading, y 2 GiB de memoria.",
+            "Punto de entrada HTTP de las cinco rutas. Se eligió la REST API porque, a diferencia de la HTTP API, admite seguimiento con X-Ray.",
         },
         {
-          title: "Créditos de CPU",
+          title: "AWS Lambda",
           description:
-            "Como instancia burstable, garantiza el 20 % por vCPU y gana 24 créditos por hora. Con la carga medida, en modo Standard se agotarían en 13 a 37 horas; en Unlimited se paga el exceso.",
+            "Seis funciones en Python 3.12, una por operación y por paso de la saga; se pagan por invocación y se integran con SQS y X-Ray.",
         },
         {
-          title: "Amazon EBS gp3",
+          title: "Amazon SQS",
           description:
-            "Disco SSD de 8 GB. Con 20 usuarios atendió 70 IOPS en promedio con 0,96 ms de espera: el disco no fue el cuello de botella.",
+            "Las colas banco-debito, banco-credito y banco-compensacion unen los pasos de la saga; banco-dlq aparta los mensajes que fallan tres veces.",
         },
         {
-          title: "Grupo de seguridad y túnel SSH",
+          title: "Amazon DynamoDB",
           description:
-            "Ningún puerto nuevo además de SSH: la API escucha en 127.0.0.1 de la instancia y se consulta por un túnel. El paquete viaja y los resultados vuelven por SCP.",
+            "Event store banco-eventos: el historial inmutable de cada transacción, ordenado por clave, con escrituras condicionales para la idempotencia.",
         },
         {
-          title: "Metadatos de instancia (IMDSv2)",
+          title: "Aurora Serverless v2",
           description:
-            "El instalador lee el tipo de instancia, la zona y la región, y con ellos escribe la ficha del entorno que acompaña cada prueba.",
+            "PostgreSQL con el saldo y el bloqueo de cada cuenta; mueve saldos con transacciones SQL y escala solo entre 0.5 y 4 ACU.",
         },
         {
-          title: "Lista de precios de AWS",
+          title: "RDS Data API",
           description:
-            "El costo mensual sale de los precios oficiales de us-east-1: instancia, IPv4 pública y disco, unos US$19,5 al mes en modo Standard.",
+            "Las Lambdas consultan Aurora por HTTPS, sin entrar en una VPC ni pagar un NAT Gateway.",
+        },
+        {
+          title: "AWS Secrets Manager",
+          description:
+            "Guarda las credenciales de Aurora; las Lambdas solo reciben el ARN del secreto.",
+        },
+        {
+          title: "Amazon S3",
+          description:
+            "Guarda un comprobante JSON por cada transferencia exitosa y aloja el sitio web estático del frontend.",
+        },
+        {
+          title: "AWS X-Ray",
+          description:
+            "Seguimiento activo en API Gateway y en las seis Lambdas, con Service Map, anotaciones de negocio y latencia por subsegmento.",
+        },
+        {
+          title: "AWS CloudTrail",
+          description:
+            "Registra con Data Events las operaciones sobre los ítems de DynamoDB y los objetos del bucket de comprobantes.",
+        },
+        {
+          title: "CloudWatch y SNS",
+          description:
+            "Un filtro de métricas cuenta los DeleteItem y una alarma avisa por correo con SNS si hay más de 5 en un minuto. CloudWatch también muestra el escalado de Aurora.",
+        },
+        {
+          title: "AWS IAM",
+          description:
+            "Un rol con permisos mínimos: sin UpdateItem ni DeleteItem, ninguna Lambda puede modificar o borrar un evento.",
         },
       ],
     },
     screenshots: [
       {
-        src: `${SHOTS}/cumbre/comparacion-20-usuarios.webp`,
-        alt: "Tabla comparativa con 20 usuarios: el PC atiende 31,74 peticiones por segundo con p95 de 707,2 ms; Docker 1 CPU, 16,29 y 1.612 ms; Docker 2 CPU, 17,52 y 2.039 ms, y AWS t3.small, 30,04 y 930,6 ms, junto con la CPU, la memoria y el disco de cada entorno.",
-        width: 1440,
-        height: 900,
+        src: `${SHOTS}/cumbre/arquitectura-aws.webp`,
+        alt: "Diagrama de la arquitectura en us-east-1: el navegador carga el frontend desde S3 y llama a API Gateway; banco-transferencia inicia la saga por las colas banco-debito, banco-credito y banco-compensacion, con sus Lambdas y la DLQ; abajo, DynamoDB, Aurora Serverless v2, Secrets Manager y S3, y la franja de X-Ray, IAM, CloudTrail, CloudWatch y SNS.",
+        width: 1600,
+        height: 978,
       },
       {
-        src: `${SHOTS}/cumbre/hardware-de-los-entornos.webp`,
-        alt: "Ficha de hardware de cada entorno: la instancia AWS t3.small con Ubuntu 26.04.1, Intel Xeon Platinum 8259CL de 1 núcleo físico y 2 lógicos, 1.905 MiB y disco Amazon Elastic Block Store; los contenedores Docker de 1 y 2 núcleos con 512 MiB, y el PC con un Ryzen 5 5500U.",
+        src: `${SHOTS}/cumbre/transferencia-completada.webp`,
+        alt: "Demo «Banco Saga»: transferencia de ACC-001 a ACC-002 por $100 completada en cuatro pasos (solicitud, débito, crédito y transferencia completada a los 3,35 s), con el aviso de que quedó un comprobante en S3 y el filtro para buscarla en X-Ray.",
         width: 1440,
-        height: 900,
+        height: 1080,
       },
       {
-        src: `${SHOTS}/cumbre/curvas-por-segundo.webp`,
-        alt: "Curvas por segundo de los cuatro entornos superpuestas con 20 usuarios: throughput, latencia p95 y p50 en escala logarítmica y errores por segundo, con dos picos de fallos en Docker 1 CPU.",
+        src: `${SHOTS}/cumbre/transferencia-compensada.webp`,
+        alt: "Transferencia de ACC-001 a la cuenta bloqueada ACC-004 por $50: débito, crédito rechazado, reembolso al origen y transferencia compensada a los 1,65 s, con el historial de la sesión: compensada, rechazada y completada.",
         width: 1440,
-        height: 900,
+        height: 1363,
       },
       {
-        src: `${SHOTS}/cumbre/detalle-de-una-prueba.webp`,
-        alt: "Detalle de una prueba en el PC con 20 usuarios, repetición 1 de 3: 31,13 peticiones por segundo, p50 de 322,8 ms, p95 de 707,2 ms, 0 % de errores y 300 s medidos tras 60 s de calentamiento, con la tabla por ruta.",
-        width: 1440,
-        height: 900,
+        src: `${SHOTS}/cumbre/eventos-de-la-compensacion.webp`,
+        alt: "Consulta en DynamoDB por el transactionId de una transferencia compensada: 5 elementos devueltos, de 01#TransferInitiated a 05#TransferCompensated, pasando por AccountDebited, CreditFailed y DebitRefunded.",
+        width: 782,
+        height: 850,
       },
       {
-        src: `${SHOTS}/cumbre/diagnostico-base-de-datos.webp`,
-        alt: "Diagnóstico de la prueba del PC con 50 usuarios: veredicto «Base de datos», cuello de botella probable, 3 hallazgos detectados y el primero, fallos de base de datos o conexiones, con 53,08 % de errores.",
-        width: 1440,
-        height: 900,
+        src: `${SHOTS}/cumbre/traza-del-reembolso.webp`,
+        alt: "Línea temporal de X-Ray de banco-reembolso, la cuarta de cuatro trazas vinculadas: 1,26 s en total, Init de 642 ms por el arranque en frío y ExecuteStatement de rds-data de 232 ms.",
+        width: 1366,
+        height: 1060,
+      },
+      {
+        src: `${SHOTS}/cumbre/aurora-capacidad-acu.webp`,
+        alt: "Métrica ServerlessDatabaseCapacity de Aurora en CloudWatch (promedio por minuto, 6 h): sube de 0,5 a 4 ACU hacia las 20:30 UTC y vuelve al mínimo.",
+        width: 1405,
+        height: 455,
       },
     ],
   },

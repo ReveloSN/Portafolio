@@ -80,9 +80,9 @@ export const WORLDS: readonly World[] = [
     background:
       "linear-gradient(180deg,#0b1430 0,#172a4d 900px,#1f3558 1900px,#121e3a 3000px,#0a1228 100%)",
     depths: [
-      { title: "Campamento base", subtitle: "La pregunta antes de subir" },
-      { title: "Ascenso", subtitle: "Cuatro rutas, la misma carga" },
-      { title: "Sobre las nubes", subtitle: "Lo que se ve desde la cumbre" },
+      { title: "Campamento base", subtitle: "Una transferencia entre dos cuentas" },
+      { title: "Ascenso", subtitle: "Colas, eventos y compensaciones" },
+      { title: "Sobre las nubes", subtitle: "Lo que mostraron las pruebas" },
     ],
   },
 ];

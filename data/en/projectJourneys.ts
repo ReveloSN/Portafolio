@@ -75,16 +75,16 @@ export const PROJECT_JOURNEYS_EN: Readonly<Record<WorldSlug, readonly JourneySte
   ],
   cumbre: [
     {
-      title: "Prepare the load",
-      text: "Locust simulates users who register, log in and alternate 8 reads for every 2 writes over 300 measured seconds.",
+      title: "Start the transfer",
+      text: "API Gateway calls banco-transferencia, which records TransferInitiated in DynamoDB and leaves the work in the debit queue.",
     },
     {
-      title: "Measure four environments",
-      text: "The same API runs on the PC, in Docker with 1 and 2 CPUs and on an EC2 t3.small while the agent records every second.",
+      title: "Move from queue to queue",
+      text: "Debit and credit act on Aurora and record their event; if the credit fails, the compensation queue leads to the refund.",
     },
     {
-      title: "Compare and explain",
-      text: "The comparison and the diagnosis show where the application waits and which component explains each number.",
+      title: "Trace and audit",
+      text: "X-Ray links the traces of every step, and CloudTrail with an alarm watches for deletions on the data.",
     },
   ],
 };

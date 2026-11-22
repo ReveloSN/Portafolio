@@ -78,16 +78,16 @@ export const PROJECT_JOURNEYS: Readonly<Record<WorldSlug, readonly JourneyStep[]
   ],
   cumbre: [
     {
-      title: "Preparar la carga",
-      text: "Locust simula usuarios que se registran, inician sesión y alternan 8 lecturas por cada 2 escrituras durante 300 s medidos.",
+      title: "Iniciar la transferencia",
+      text: "API Gateway llama a banco-transferencia, que registra TransferInitiated en DynamoDB y deja el trabajo en la cola de débito.",
     },
     {
-      title: "Medir cuatro entornos",
-      text: "La misma API corre en el PC, en Docker con 1 y 2 CPU y en una EC2 t3.small mientras el agente registra cada segundo.",
+      title: "Pasar de cola en cola",
+      text: "Débito y crédito actúan sobre Aurora y registran su evento; si el crédito falla, la cola de compensación lleva al reembolso.",
     },
     {
-      title: "Comparar y explicar",
-      text: "La comparación y el diagnóstico muestran dónde espera la aplicación y qué componente explica cada número.",
+      title: "Seguir y auditar",
+      text: "X-Ray vincula las trazas de cada paso, y CloudTrail con una alarma vigila los borrados sobre los datos.",
     },
   ],
 };
