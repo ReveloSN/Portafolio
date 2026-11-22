@@ -233,7 +233,7 @@
   color: #efe5cc;
   overflow: visible;
 }
-.tech-print-logo path {
+.tech-print-logo use {
   filter: url(#tech-engrave);
 }
 /* La huella responde igual al ratón, al foco con teclado y cuando está seleccionada. */

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CONTENT } from "@/data/content";
 import { TECH_CATALOG } from "@/data/techCatalog";
-import { TECH_ICON_PATHS } from "./techIcons";
+import { TECH_ICON_PATHS } from "./techIconPaths";
 
 describe("TECH_CATALOG", () => {
   it("tiene la huella de cada tecnología de cada proyecto", () => {

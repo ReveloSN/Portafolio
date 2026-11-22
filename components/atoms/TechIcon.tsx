@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { TECH_ICON_PATHS, TECH_ICON_VIEWBOXES } from "@/lib/techIcons";
+import { TECH_ICON_VIEWBOXES, techIconHref } from "@/lib/techIcons";
 import type { TechIconId } from "@/types/profile";
 
 interface TechIconProps {
@@ -8,7 +8,7 @@ interface TechIconProps {
   readonly style?: CSSProperties;
 }
 
-/** Logotipo decorativo de una tecnología; toma el color de `currentColor`. */
+/** Logotipo decorativo de una tecnología, del sprite; toma el color de `currentColor`. */
 export function TechIcon({ id, className, style }: TechIconProps) {
   return (
     <svg
@@ -18,7 +18,7 @@ export function TechIcon({ id, className, style }: TechIconProps) {
       className={className}
       style={style}
     >
-      <path d={TECH_ICON_PATHS[id]} fill="currentColor" />
+      <use href={techIconHref(id)} fill="currentColor" />
     </svg>
   );
 }
