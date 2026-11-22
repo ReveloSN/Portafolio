@@ -1,14 +1,19 @@
 /* ------------------------------------------------------------------ */
 /* Arte que espera a que termine la carga (useLoadedFlag): así no alarga */
 /* la pantalla «Cargando…». Sin JS no se difiere nada.                  */
+/* Un selector por clase, sin :is(): con :is() el navegador invalidaba el */
+/* estilo de toda la página (1500 elementos) al poner el atributo.      */
 /* ------------------------------------------------------------------ */
 @media (scripting: enabled) {
-  html:not([data-loaded])
-    :is(.tech-print-fill, .tech-print-shade, .tech-print-glow, .tech-print-logo),
+  html:not([data-loaded]) .tech-print-fill,
+  html:not([data-loaded]) .tech-print-shade,
+  html:not([data-loaded]) .tech-print-glow,
+  html:not([data-loaded]) .tech-print-logo,
   html:not([data-loaded]) .nest-shell-piece {
     display: none;
   }
   html:not([data-loaded]) .journal-sheet {
-    font-family: Georgia, serif;
+    /* El respaldo con métricas ajustadas de next/font: al llegar la serif nada salta */
+    font-family: "IM Fell English Fallback", Georgia, serif;
   }
 }

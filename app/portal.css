@@ -180,8 +180,22 @@
 .portal-veil[data-loading] + .portal-content {
   visibility: hidden;
 }
-/* Tapada, la portada no anima: el hilo principal queda para hidratar y abrir antes. */
-.portal-veil[data-loading] + .portal-content * {
+/* Tapada, la portada no anima: el hilo principal queda para hidratar y abrir antes. Una clase
+   por selector y no `*`: con `*`, quitar el velo recalculaba el estilo de toda la página. */
+.portal-veil[data-loading] + .portal-content .dino-body,
+.portal-veil[data-loading] + .portal-content .dino-lid,
+.portal-veil[data-loading] + .portal-content .dino-ripple,
+.portal-veil[data-loading] + .portal-content .ripple,
+.portal-veil[data-loading] + .portal-content .drift,
+.portal-veil[data-loading] + .portal-content .drift2,
+.portal-veil[data-loading] + .portal-content .fly,
+.portal-veil[data-loading] + .portal-content .fly2,
+.portal-veil[data-loading] + .portal-content .bob2,
+.portal-veil[data-loading] + .portal-content .firefly,
+.portal-veil[data-loading] + .portal-content .firefly-glow,
+.portal-veil[data-loading] + .portal-content .mist-layer,
+.portal-veil[data-loading] + .portal-content .foliage-sway,
+.portal-veil[data-loading] + .portal-content .tail-sway {
   animation-play-state: paused !important;
 }
 .portal-loading {
