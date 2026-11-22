@@ -17,7 +17,6 @@ export const ART = {
   roots: decorative("/art/dividers/roots.webp", 3072, 512),
   treeline: decorative("/art/dividers/treeline.webp", 3072, 512),
   leafBigLeft: decorative("/art/foliage/leaf-big-left.webp", 800, 1200),
-  vineHanging1: decorative("/art/foliage/vine-hanging-1.webp", 800, 1200),
   projectsFern: decorative("/art/foliage/projects-fern.webp", 560, 700),
   testimonialsBranch: decorative("/art/foliage/testimonials-branch.webp", 576, 266),
   dinoTail: decorative("/art/creatures/dino-tail.webp", 2612, 1200),

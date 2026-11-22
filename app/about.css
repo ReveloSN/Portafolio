@@ -19,12 +19,11 @@
 
 @media (min-width: 1024px) {
   .about-section {
-    /* La barra tapa el inicio y la cortina de hojas del Hero cuelga sobre él: el
-       contenido empieza bajo la franja densa de la cortina (~11% del ancho), con tope */
+    /* Separa el contenido de la franja central del dosel y de la barra fija. */
     --about-canopy: min(11vw, 16svh);
     --about-pt: max(
       calc(var(--nav-h) + clamp(0.75rem, calc(var(--u) * 2), 2.5rem)),
-      var(--about-canopy)
+      calc(var(--about-canopy) + clamp(1.25rem, 1.8vw, 2.25rem))
     );
     /* Los helechos de Proyectos suben: hueco hasta 18svh para no quitar media pantalla */
     --about-fern: 18svh;
