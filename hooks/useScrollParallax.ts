@@ -7,9 +7,9 @@ import { supportsScrollTimeline } from "@/lib/dom";
 type Subscriber = () => () => void;
 
 /**
- * Margen del observador: el borde que lo dispara queda lejos de la pantalla. Con margen 0,
- * una capa apoyada justo en el borde (la hoja del Hero al saltar a Sobre mí) cambiaba
- * `data-inview` en cada cuadro y repintaba la página sin parar.
+ * Se observa el contenedor, no la capa: la capa cambia de posición y de capa de composición
+ * por este mismo hook y, apoyada en el borde, prendía y apagaba `data-inview` en cada
+ * cuadro (la hoja del Hero al saltar a Sobre mí). El margen cubre lo que asoma de él.
  */
 const NEAR_MARGIN = "25% 0px";
 
@@ -77,7 +77,7 @@ export function useScrollParallax<T extends HTMLElement>() {
       },
       { rootMargin: NEAR_MARGIN },
     );
-    observer.observe(element);
+    observer.observe(element.parentElement ?? element);
     return () => {
       observer.disconnect();
       unsubscribe?.();
