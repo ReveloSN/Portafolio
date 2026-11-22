@@ -3,17 +3,21 @@
 import Image from "next/image";
 import { useParallax } from "@/hooks/useParallax";
 
-const LAYERS = ["fondo", "empleado", "cliente"] as const;
+export type ProjectLayers = readonly [
+  background: string,
+  subject: string,
+  foreground: string,
+];
 
-export function BancoSagaScene() {
+export function LayeredProjectScene({ layers }: { readonly layers: ProjectLayers }) {
   const ref = useParallax<HTMLDivElement>();
 
   return (
     <div ref={ref} className="project-scene" aria-hidden="true">
-      {LAYERS.map((layer) => (
-        <div key={layer} className="bank-scene-layer" data-layer={layer}>
+      {layers.map((layer) => (
+        <div key={layer} className="project-story-layer">
           <Image
-            src={`/art/projects/layers/banco-saga-${layer}.webp`}
+            src={`/art/projects/layers/${layer}.webp`}
             alt=""
             fill
             sizes="(max-width: 767px) 100vw, (max-width: 1200px) 55vw, 630px"

@@ -6,6 +6,8 @@ Las tarjetas y portadas usan paisajes estáticos de cada mundo, sin dinosaurios 
 
 Los dinosaurios generados se muestran dentro de «Así funciona» como ilustraciones de apoyo. Banco Saga compone el mostrador con tres WebP en `public/art/projects/layers/`: el fondo, el empleado y el cliente. Cada capa responde al puntero a una velocidad distinta. Su tarjeta y portada comparten el paisaje pintado `public/art/projects/worlds/cumbre-montanas.webp`. ARGUS usa `public/art/projects/argus-profesor.webp`, con un raptor que compara documentos en un archivo universitario.
 
+LOST separa la calle y el flujo de peatones, el dinosaurio que consulta su reloj y el peatón del primer plano. Verificador de Salida separa el recibidor, el tricerátops que se revisa el bolsillo y la consola con las llaves, la billetera y el teléfono. Isla Espejo usa `public/art/projects/isla-espejo-arquero.webp` y toma como referencia los sprites de los esqueletos del juego para el cráneo, los ojos y la espada.
+
 ## Ilustraciones interiores por capas
 
 Las escenas por capas usan `public/art/projects/layers/{slug}-background.webp` y `{slug}-dinosaur.webp`, junto con la vegetación existente del inicio. `ProjectScene` compone las capas de forma independiente y aplica paralaje por puntero mediante el hook existente. En movimiento reducido y dispositivos táctiles las capas permanecen quietas. Las tarjetas recuperan un marco arqueado de portal.

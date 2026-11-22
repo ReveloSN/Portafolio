@@ -57,7 +57,7 @@
   overflow: hidden;
   isolation: isolate;
 }
-.bank-scene-layer {
+.project-story-layer {
   position: absolute;
   inset: -1.5%;
   transform: translate3d(
@@ -66,15 +66,15 @@
     0
   );
 }
-.bank-scene-layer[data-layer="fondo"] {
+.project-story-layer:first-child {
   --depth-x: -1.5px;
   --depth-y: -0.8px;
 }
-.bank-scene-layer[data-layer="empleado"] {
+.project-story-layer:nth-child(2) {
   --depth-x: 1.5px;
   --depth-y: 0.8px;
 }
-.bank-scene-layer[data-layer="cliente"] {
+.project-story-layer:nth-child(3) {
   --depth-x: 4px;
   --depth-y: 2px;
 }
@@ -206,7 +206,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
-  .bank-scene-layer,
+  .project-story-layer,
   .project-scene-background,
   .project-scene-dinosaur,
   .project-scene-foreground {

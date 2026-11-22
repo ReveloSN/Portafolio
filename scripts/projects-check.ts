@@ -8,6 +8,11 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
 const failures: string[] = [];
 const results: unknown[] = [];
+const threeLayerWorlds: ReadonlySet<string> = new Set(["cumbre", "cueva", "oceano"]);
+const flatStoryImages: Readonly<Record<string, string>> = {
+  selva: "isla-espejo-arquero.webp",
+  volcan: "argus-profesor.webp",
+};
 try {
   for (const width of [320, 390, 768, 1440]) {
     const context = await browser.newContext({
@@ -27,40 +32,35 @@ try {
         .first()
         .evaluate((image) => (image as HTMLImageElement).decode());
       const storyArt = page.locator(".project-story-art");
-      if (slug === "cumbre" || slug === "volcan") {
-        await storyArt.scrollIntoViewIfNeeded();
-        await storyArt
-          .locator("img")
-          .evaluateAll((images) =>
-            Promise.all(images.map((image) => (image as HTMLImageElement).decode())),
-          );
-      }
-      const report = await page.evaluate((slug) => {
-        const links = [
-          ...document.querySelectorAll<HTMLAnchorElement>(".world-section-nav a"),
-        ];
-        return {
-          overflow: document.documentElement.scrollWidth > innerWidth,
-          h1: document.querySelectorAll("h1").length,
-          anchors: links.every((link) => document.querySelector(link.hash)),
-          broken: [...document.images]
-            .filter((image) => image.complete && !image.naturalWidth)
-            .map((image) => image.src),
-          clipped: [
-            ...document.querySelectorAll<HTMLElement>(
-              ".world-panel-card,.world-feature,.world-journey li",
-            ),
-          ].some((element) => element.scrollWidth > element.clientWidth + 1),
-          storyArt:
-            slug === "cumbre"
-              ? ["fondo", "empleado", "cliente"].every((layer) =>
-                  document.querySelector(
-                    `.project-story-art .bank-scene-layer[data-layer="${layer}"] img`,
-                  ),
-                )
-              : slug === "volcan"
+      await storyArt.scrollIntoViewIfNeeded();
+      await storyArt
+        .locator("img")
+        .evaluateAll((images) =>
+          Promise.all(images.map((image) => (image as HTMLImageElement).decode())),
+        );
+      const report = await page.evaluate(
+        ({ threeLayers, flatImage }) => {
+          const links = [
+            ...document.querySelectorAll<HTMLAnchorElement>(".world-section-nav a"),
+          ];
+          return {
+            overflow: document.documentElement.scrollWidth > innerWidth,
+            h1: document.querySelectorAll("h1").length,
+            anchors: links.every((link) => document.querySelector(link.hash)),
+            broken: [...document.images]
+              .filter((image) => image.complete && !image.naturalWidth)
+              .map((image) => image.src),
+            clipped: [
+              ...document.querySelectorAll<HTMLElement>(
+                ".world-panel-card,.world-feature,.world-journey li",
+              ),
+            ].some((element) => element.scrollWidth > element.clientWidth + 1),
+            storyArt: threeLayers
+              ? document.querySelectorAll(".project-story-art .project-story-layer > img")
+                  .length === 3
+              : flatImage
                 ? document.querySelectorAll(
-                    '.project-story-art > img[src*="argus-profesor.webp"]',
+                    `.project-story-art > img[src*="${flatImage}"]`,
                   ).length === 1
                 : document.querySelectorAll(
                     ".project-story-art .project-scene-background img",
@@ -68,8 +68,10 @@ try {
                   document.querySelectorAll(
                     ".project-story-art .project-scene-dinosaur img",
                   ).length === 1,
-        };
-      }, slug);
+          };
+        },
+        { threeLayers: threeLayerWorlds.has(slug), flatImage: flatStoryImages[slug] },
+      );
       if (
         response?.status() !== 200 ||
         report.overflow ||
@@ -86,7 +88,7 @@ try {
         await page
           .locator(".world-hero")
           .screenshot({ path: `${output}/${slug}-${width}-hero.png` });
-        if (slug === "cumbre" || slug === "volcan") {
+        if (slug !== "aurora") {
           await storyArt.screenshot({ path: `${output}/${slug}-${width}-recorrido.png` });
         }
         if (slug === "aurora") {
@@ -127,7 +129,11 @@ try {
       layers: ".project-scene-background, .project-scene-dinosaur",
       count: 2,
     },
-    { slug: "cumbre", layers: ".bank-scene-layer", count: 3 },
+    ...[...threeLayerWorlds].map((slug) => ({
+      slug,
+      layers: ".project-story-layer",
+      count: 3,
+    })),
   ];
   for (const { slug, layers, count } of animatedScenes) {
     await motionPage.goto(`${base}/mundos/${slug}`, { waitUntil: "networkidle" });
@@ -154,7 +160,11 @@ try {
       .evaluateAll((elements) =>
         elements.map((element) => getComputedStyle(element).transform),
       );
-    if (new Set(transforms).size !== count || transforms.length !== count)
+    if (
+      new Set(transforms).size !== count ||
+      transforms.length !== count ||
+      transforms.includes("none")
+    )
       failures.push(`${slug}: las capas deben moverse de forma independiente`);
   }
   await motionContext.close();
