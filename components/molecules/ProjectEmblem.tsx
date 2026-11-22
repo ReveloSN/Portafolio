@@ -38,10 +38,9 @@ const EMBLEMS: Readonly<Record<WorldSlug, ReactNode>> = {
   ),
   cumbre: (
     <>
-      <path d="M10 80 38 36l12 18 12-14 24 40Z" />
-      <path d="m31 47 7 5 7-5" />
-      <path d="M57 31h22a7 7 0 0 0-2-13.6A10 10 0 0 0 58 19a6 6 0 0 0-1 12Z" />
-      <path d="M8 87h80" />
+      <path d="M12 30 48 12l36 18v6H12Z" />
+      <path d="M20 36v40m8-40v40m40-40v40m8-40v40M16 76h64v8H16ZM9 84h78" />
+      <path d="M36 51a13 13 0 1 1 1 13m-1-13v-8m0 8h8" />
     </>
   ),
 };
