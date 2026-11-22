@@ -21,6 +21,9 @@ const Contact = dynamic(() =>
   import("@/components/organisms/Contact").then((m) => m.Contact),
 );
 
+/** Lo que se pausa al salir de pantalla: cada sección y sus adornos con animación en bucle. */
+const PAUSABLE = "main > section, main .foliage-accent, main .mist-band";
+
 export default async function Home() {
   const { copy, profile, navLinks, projects, testimonials, hobbies, channels } =
     await getContent();
@@ -47,7 +50,7 @@ export default async function Home() {
         <HobbiesTeaser hobbies={hobbies} />
         <Contact channels={channels} />
       </main>
-      <OffscreenPause selector="main > section" />
+      <OffscreenPause selector={PAUSABLE} />
       <Footer profile={profile} links={navLinks} />
     </>
   );

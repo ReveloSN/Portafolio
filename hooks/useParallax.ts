@@ -3,9 +3,14 @@
 import { useEffect, useRef } from "react";
 import { PARALLAX_FRAME_MS } from "@/lib/constants";
 
+/** Capas que se mueven con el puntero dentro de una escena. */
+const LAYERS = ".px, [data-pointer-layer]";
+
 /**
  * Publica la posición normalizada del puntero (-1..1) como variables CSS
- * (`--mx`, `--my`) y en píxeles (`--px`, `--py`) sobre el elemento.
+ * (`--mx`, `--my`) y en píxeles (`--px`, `--py`) sobre cada capa que se mueve. Son
+ * propiedades heredadas: en el contenedor obligaban a recalcular el estilo de toda la
+ * escena en cada cuadro. Una escena sin capas marcadas las recibe en el contenedor.
  * Escribe como máximo una vez por frame (rAF con throttling) y evita renders de React.
  */
 export function useParallax<T extends HTMLElement>() {
@@ -19,9 +24,12 @@ export function useParallax<T extends HTMLElement>() {
     const coarsePointer = window.matchMedia("(pointer: coarse)");
     if (reducedMotion.matches || coarsePointer.matches) return;
 
+    const layers = [...element.querySelectorAll<HTMLElement>(LAYERS)];
+    const outputs = layers.length > 0 ? layers : [element];
     let frame = 0;
     let lastPaint = 0;
-    let target = { mx: 0, my: 0, px: 0, py: 0, inside: 0 };
+    let point = { x: 0, y: 0 };
+    let inside = false;
 
     const paint = (now: number) => {
       frame = 0;
@@ -30,11 +38,24 @@ export function useParallax<T extends HTMLElement>() {
         return;
       }
       lastPaint = now;
-      element.style.setProperty("--mx", target.mx.toFixed(3));
-      element.style.setProperty("--my", target.my.toFixed(3));
-      element.style.setProperty("--px", `${Math.round(target.px)}px`);
-      element.style.setProperty("--py", `${Math.round(target.py)}px`);
-      element.style.setProperty("--inside", String(target.inside));
+      // Una sola lectura por cuadro y antes de escribir.
+      const rect = element.getBoundingClientRect();
+      const px = point.x - rect.left;
+      const py = point.y - rect.top;
+      const values = {
+        "--mx": (inside ? (px / rect.width - 0.5) * 2 : 0).toFixed(3),
+        "--my": (inside ? (py / rect.height - 0.5) * 2 : 0).toFixed(3),
+        // Al salir, la luz se apaga donde quedó.
+        ...(inside
+          ? { "--px": `${Math.round(px)}px`, "--py": `${Math.round(py)}px` }
+          : {}),
+        "--inside": inside ? "1" : "0",
+      };
+      for (const output of outputs) {
+        for (const [name, value] of Object.entries(values)) {
+          output.style.setProperty(name, value);
+        }
+      }
     };
 
     const schedule = () => {
@@ -42,21 +63,13 @@ export function useParallax<T extends HTMLElement>() {
     };
 
     const onMove = (event: PointerEvent) => {
-      const rect = element.getBoundingClientRect();
-      const px = event.clientX - rect.left;
-      const py = event.clientY - rect.top;
-      target = {
-        mx: (px / rect.width - 0.5) * 2,
-        my: (py / rect.height - 0.5) * 2,
-        px,
-        py,
-        inside: 1,
-      };
+      point = { x: event.clientX, y: event.clientY };
+      inside = true;
       schedule();
     };
 
     const onLeave = () => {
-      target = { ...target, mx: 0, my: 0, inside: 0 };
+      inside = false;
       schedule();
     };
 

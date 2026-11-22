@@ -11,8 +11,9 @@ import { useEffect } from "react";
 const ROOT_MARGIN = "-1px 0px 200px 0px";
 
 /**
- * Marca con `data-paused` las secciones que están fuera de pantalla; el CSS pausa sus
- * animaciones en bucle (luciérnagas, niebla, hojas, ondas). Sin renders de React: solo
+ * Marca con `data-paused` lo que está fuera de pantalla (cada sección y, dentro de ellas,
+ * los adornos sueltos que se mueven: una sección alta sigue en pantalla mucho después de
+ * que su helecho salió); el CSS pausa sus animaciones en bucle (luciérnagas, niebla, hojas, ondas). Sin renders de React: solo
  * un atributo. Así el navegador deja de producir frames para lo que nadie ve.
  */
 export function useOffscreenPause(selector: string) {

@@ -61,10 +61,10 @@ export async function Hero({ profile }: HeroProps) {
         <SeamLayer seam="hero-about" host="upper" />
         <div
           aria-hidden="true"
-          className="coarse:hidden pointer-events-none absolute size-[150px] -translate-1/2 rounded-full transition-[left,top,opacity] duration-150 ease-out"
+          data-pointer-layer
+          className="coarse:hidden pointer-events-none absolute top-0 left-0 size-[150px] -translate-1/2 rounded-full transition-[transform,opacity] duration-150 ease-out"
           style={{
-            left: "var(--px, 50%)",
-            top: "var(--py, 40%)",
+            transform: "translate(var(--px, 50vw), var(--py, 40svh))",
             opacity: "var(--inside, 0)",
             background: CURSOR_LIGHT,
           }}

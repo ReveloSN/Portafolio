@@ -3,7 +3,7 @@
 import { useOffscreenPause } from "@/hooks/useOffscreenPause";
 
 interface OffscreenPauseProps {
-  /** Secciones a observar, p. ej. "main > section". */
+  /** Qué observar, p. ej. "main > section, main .mist-band". */
   readonly selector: string;
 }
 

@@ -2,9 +2,9 @@
 
 /* Secciones fuera de pantalla (useOffscreenPause): sus bucles decorativos se detienen. */
 /* El paralaje no es un bucle: lo mueve el scroll y, pausado, saltaría al reanudarse. */
-main > [data-paused] :not(.art-parallax),
-main > [data-paused] *::before,
-main > [data-paused] *::after {
+main [data-paused] :not(.art-parallax),
+main [data-paused] *::before,
+main [data-paused] *::after {
   animation-play-state: paused !important;
 }
 
