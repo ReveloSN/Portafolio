@@ -113,6 +113,7 @@ public/         cv.pdf, images/, art/contact/{eggs,hatchlings,shells}/
 - La pantalla «Cargando…» espera `load`: nada fuera de la primera pantalla debe pedirse antes. El arte del fósil se pide al acercarse (`useInView` con margen, URL de `optimizedSrc`), y las máscaras de las huellas y la serif del diario tras la carga (`useLoadedFlag`, `app/deferred.css`, un selector por clase).
 - Un adorno nuevo con animación en bucle en la portada se agrega a la lista de pausa de `app/portal.css` y, si vive suelto dentro de una sección, a `PAUSABLE` (`app/[lang]/page.tsx`). Nunca `*` en un selector que cambia con un atributo del velo o de `<html>`: recalcula toda la página.
 - Un observador no mira un elemento al que él mismo le cambia posición, tamaño o capa: observa su contenedor (ver `useScrollParallax`). Con un margen solo se mueve el borde donde oscila.
+- Enlaces directos a secciones: `useAnchorSettle` vuelve a alinear el ancla al terminar carga y fuentes, salvo que la persona ya se haya movido.
 - Paralaje del puntero: las variables se escriben en cada capa (`.px`, `[data-pointer-layer]`), no en el contenedor de la escena.
 - Accesibilidad: HTML semántico, botones y enlaces reales, `alt`, foco visible, `aria-live` en los estados de juego. Mobile-first y 100% responsive. Sin emojis; íconos en SVG.
 - Tailwind: tokens de color, tipografía y espaciado en `tailwind.config`; clases repetidas extraídas a componentes, no a `@apply` masivo.
