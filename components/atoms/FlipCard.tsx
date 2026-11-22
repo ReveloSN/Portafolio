@@ -37,7 +37,6 @@ export function FlipCard({
   const id = useId();
   const frontId = `${id}-front`;
   const backId = `${id}-back`;
-  const labelId = `${id}-label`;
 
   return (
     <div
@@ -45,17 +44,14 @@ export function FlipCard({
       role="button"
       tabIndex={0}
       aria-pressed={flipped}
-      // Qué hace y lo que muestra la cara visible: el nombre incluye el texto que se ve.
-      aria-labelledby={`${labelId} ${flipped ? backId : frontId}`}
+      aria-label={label}
+      aria-describedby={flipped ? backId : frontId}
       data-testid={testId}
       data-flipped={flipped || undefined}
       data-turning={turning || undefined}
       className={cn("flip-card", className)}
       {...handlers}
     >
-      <span id={labelId} className="sr-only">
-        {label}
-      </span>
       <span aria-hidden="true" className="flip-shadow" />
       <div className="flip-tilt">
         <div className="flip-inner">

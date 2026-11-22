@@ -10,7 +10,7 @@
   html:not([data-loaded]) .tech-print-glow {
     display: none;
   }
-  html:not([data-loaded]) .journal-sheet {
+  html:not([data-journal-font]) .journal-sheet {
     /* El respaldo con métricas ajustadas de next/font: al llegar la serif nada salta */
     font-family: "IM Fell English Fallback", Georgia, serif;
   }

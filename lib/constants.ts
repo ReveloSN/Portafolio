@@ -13,6 +13,8 @@ export const SLAB_ART_PX = 1920;
 
 /** Atributo de `<html>` cuando el documento terminó de cargar (arte diferido). */
 export const LOADED_ATTR = "data-loaded";
+/** Atributo de `<html>` cuando la serif del diario ya puede mostrarse. */
+export const JOURNAL_FONT_ATTR = "data-journal-font";
 
 export const PARALLAX_FRAME_MS = 1000 / PARALLAX_MAX_FPS;
 

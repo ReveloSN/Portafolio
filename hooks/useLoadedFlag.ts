@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { PORTAL_ENTER_MS } from "@/data/portal";
-import { LOADED_ATTR } from "@/lib/constants";
+import { JOURNAL_FONT_ATTR, LOADED_ATTR } from "@/lib/constants";
 import { whenLoaded } from "@/lib/dom";
 
 /** La serif del diario (variable de next/font) en sus dos estilos. */
@@ -24,28 +24,36 @@ async function loadJournalFont() {
 
 /**
  * Marca `<html>` cuando termina `load`. La pantalla «Cargando…» espera ese evento, así que
- * lo que no está en la primera pantalla (máscaras de huellas, serif del diario)
- * se pide después, desde el CSS (`app/deferred.css`). Espera además a que abran las hojas,
- * para no meter ese layout en medio de la apertura.
+ * lo que no está en la primera pantalla se pide después, desde el CSS (`app/deferred.css`):
+ * - Máscaras de las huellas: al abrir las hojas; con un ancla en la dirección, enseguida
+ *   (pueden ser justo lo que se va a ver).
+ * - Serif del diario: siempre con las hojas abiertas y ya descargada. Cambiar de fuente
+ *   durante el salto a un ancla mueve la página.
  */
 export function useLoadedFlag() {
   useEffect(() => {
-    let timer = 0;
+    let timers: number[] = [];
     let mounted = true;
-    const mark = () => {
-      if (mounted) document.documentElement.setAttribute(LOADED_ATTR, "");
+    const mark = (attribute: string) => {
+      if (mounted) document.documentElement.setAttribute(attribute, "");
     };
     const schedule = () => {
-      timer = window.setTimeout(() => {
-        // Si la fuente falla se marca igual: el arte diferido no depende de ella.
-        loadJournalFont().then(mark, mark);
-      }, PORTAL_ENTER_MS);
+      const artDelay = window.location.hash ? 0 : PORTAL_ENTER_MS;
+      const showFont = () => mark(JOURNAL_FONT_ATTR);
+      timers = [
+        window.setTimeout(() => mark(LOADED_ATTR), artDelay),
+        // Si la fuente falla se marca igual y queda la de respaldo.
+        window.setTimeout(
+          () => loadJournalFont().then(showFont, showFont),
+          PORTAL_ENTER_MS,
+        ),
+      ];
     };
     const unlisten = whenLoaded(schedule);
     return () => {
       mounted = false;
       unlisten();
-      window.clearTimeout(timer);
+      timers.forEach((timer) => window.clearTimeout(timer));
     };
   }, []);
 }
