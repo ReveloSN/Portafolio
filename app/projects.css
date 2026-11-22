@@ -296,6 +296,121 @@
   border-radius: 10px;
   margin: auto;
 }
+/* Dispositivo físico: foto del prototipo, recorrido del sensor a la respuesta y conexiones. */
+.world-device-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+.world-device-photo a {
+  display: block;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.25);
+}
+.world-device-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.world-device-photo figcaption {
+  margin: 12px 4px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+/* Los pasos cuelgan de una línea, como la señal que va del sensor a la lámpara. */
+.world-device-flow {
+  position: relative;
+  margin-top: 20px;
+  display: grid;
+  gap: 22px;
+}
+.world-device-flow::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 15px;
+  width: 2px;
+  background: linear-gradient(
+    var(--glow),
+    color-mix(in srgb, var(--glow) 15%, transparent)
+  );
+}
+.world-device-flow li {
+  position: relative;
+  padding-left: 52px;
+}
+.world-device-flow p {
+  margin-top: 4px;
+}
+.world-device-step {
+  position: absolute;
+  left: 0;
+  top: -2px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--glow);
+  color: var(--ink);
+  font:
+    700 14px var(--font-jetbrains),
+    monospace;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--glow) 18%, transparent);
+}
+.world-device-parts {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 16px;
+}
+.world-device-part {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 20px;
+}
+.world-device-link {
+  align-self: flex-start;
+  border: 1px solid color-mix(in srgb, var(--glow) 55%, transparent);
+  color: var(--glow);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font:
+    500 12px var(--font-jetbrains),
+    monospace;
+  letter-spacing: 0.06em;
+}
+.world-device-signals {
+  margin-top: auto;
+  padding-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.world-device-signals li {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font:
+    500 12px var(--font-jetbrains),
+    monospace;
+}
+@media (max-width: 1023px) {
+  .world-device-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Huellitas de las tecnologías: color del acento (verde del tema o el del mundo) y pie
    izquierdo y derecho alternos a lo largo de la fila, como un rastro. */
 .stack-print {

@@ -80,6 +80,21 @@ describe("PROJECTS", () => {
     expect(project.repoUrl).toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+$/);
   });
 
+  it.each(PROJECTS.filter((project) => project.device))(
+    "$name: la foto del dispositivo existe y explica sus componentes",
+    (project) => {
+      const device = project.device!;
+      const file = path.join(PUBLIC_DIR, device.photo.src);
+      expect(existsSync(file), device.photo.src).toBe(true);
+      expect(imageSize(file)).toEqual({
+        width: device.photo.width,
+        height: device.photo.height,
+      });
+      expect(device.flow.length).toBeGreaterThan(0);
+      expect(device.components.every((part) => part.signals.length > 0)).toBe(true);
+    },
+  );
+
   it.each(PROJECTS)(
     "$name: cada captura existe, describe su contenido y declara su tamaño real",
     (project) => {

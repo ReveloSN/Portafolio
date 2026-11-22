@@ -194,6 +194,12 @@ export const COPY = {
     galleryEmpty: "Las capturas de este proyecto están en camino.",
     technologies: "TECNOLOGÍAS",
     code: "Ver código",
+    device: {
+      title: "El dispositivo",
+      flowTitle: "Del sensor a la luz",
+      connectionsTitle: "Conexiones",
+      connectionsIntro: "Cada componente y cómo se une a la placa ESP32.",
+    },
     chooseTitle: "Elige otro mundo",
     chooseIntro: "Cada proyecto vive en un lugar distinto.",
     here: "estás aquí",

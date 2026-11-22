@@ -3,6 +3,7 @@ import { WorldJourney } from "@/components/worlds/WorldJourney";
 import { Button } from "@/components/atoms/Button";
 import { SkipLink } from "@/components/atoms/SkipLink";
 import { WorldSwitcher } from "@/components/molecules/WorldSwitcher";
+import { DEVICE_SECTION_ID, WorldDevice } from "@/components/worlds/WorldDevice";
 import { WorldDetails } from "@/components/worlds/WorldDetails";
 import { WorldGallery } from "@/components/worlds/WorldGallery";
 import { WorldHero } from "@/components/worlds/WorldHero";
@@ -45,6 +46,11 @@ export async function WorldLayout({ world, worlds, project, profile }: WorldLayo
             <li>
               <a href="#recorrido">{copy.journeyTitle}</a>
             </li>
+            {project.device && (
+              <li>
+                <a href={`#${DEVICE_SECTION_ID}`}>{copy.device.title}</a>
+              </li>
+            )}
             <li>
               <a href="#aporte">{copy.result.title}</a>
             </li>
@@ -61,7 +67,12 @@ export async function WorldLayout({ world, worlds, project, profile }: WorldLayo
         <WorldDetails
           world={world}
           project={project}
-          journey={<WorldJourney slug={project.slug} />}
+          journey={
+            <>
+              <WorldJourney slug={project.slug} />
+              {project.device && <WorldDevice device={project.device} />}
+            </>
+          }
         />
         <WorldGallery project={project} />
       </main>

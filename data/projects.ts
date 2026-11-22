@@ -80,6 +80,66 @@ export const PROJECTS: readonly Project[] = [
           "Auditoría de accesos a la información y exportación de datos para su consulta y seguimiento.",
       },
     ],
+    device: {
+      intro:
+        "Un ESP32 lee el pulso y la oxigenación de la persona, los envía en tiempo real a la plataforma y ejecuta la intervención que esta decide: cambia la luz de la lámpara y reproduce audio relajante.",
+      photo: {
+        src: `${SHOTS}/aurora/dispositivo-esp32.webp`,
+        alt: "Prototipo de NeuroLive en una caja transparente: la placa ESP32 alimentada por USB, el sensor MAX30102 en una mini protoboard verde, un módulo MP3 con microSD sobre la protoboard, un parlante y una lámpara redonda de LED RGB.",
+        width: 1600,
+        height: 1578,
+      },
+      flow: [
+        {
+          title: "Medir",
+          text: "El sensor MAX30102 ilumina el dedo con luz roja e infrarroja; con lo que refleja, el ESP32 obtiene el pulso (BPM) y la oxigenación (SpO2) y sabe si el sensor está en contacto con la piel.",
+        },
+        {
+          title: "Enviar",
+          text: "Por Wi-Fi, el ESP32 abre un WebSocket con el servicio en tiempo real (FastAPI), se identifica con su dirección MAC y un token y manda las lecturas en JSON, junto con un latido que confirma que sigue conectado.",
+        },
+        {
+          title: "Decidir",
+          text: "El servicio en tiempo real y el backend en Spring Boot evalúan las lecturas: anticipan una posible crisis, actualizan el estado que ve el cuidador y eligen la intervención sensorial.",
+        },
+        {
+          title: "Responder",
+          text: "La orden vuelve al ESP32 por el mismo WebSocket: la lámpara cambia de color, intensidad y modo, y el módulo MP3 reproduce una pista preconfigurada. El ESP32 confirma cada orden. La meta del diseño es que todo, del sensor a la luz, tarde menos de 1,5 segundos.",
+        },
+      ],
+      components: [
+        {
+          name: "ESP32",
+          link: "Wi-Fi · USB",
+          role: "El centro del dispositivo: lee el sensor, habla con la plataforma por WebSocket y controla la luz y el audio. Se alimenta por USB.",
+          signals: ["Wi-Fi", "USB"],
+        },
+        {
+          name: "Sensor MAX30102",
+          link: "I2C",
+          role: "Mide el pulso y la oxigenación en el dedo con luz roja e infrarroja.",
+          signals: ["3,3 V", "GND", "SDA (datos)", "SCL (reloj)"],
+        },
+        {
+          name: "Módulo MP3 con microSD",
+          link: "Serie (UART)",
+          role: "Guarda y reproduce las pistas de audio; recibe las órdenes del ESP32 por el puerto serie, con una resistencia en serie en la línea de datos.",
+          signals: ["TX", "RX", "Alimentación", "GND"],
+        },
+        {
+          name: "Parlante",
+          link: "Audio",
+          role: "Reproduce las pistas relajantes del módulo MP3.",
+          signals: ["Salida de audio"],
+        },
+        {
+          name: "Lámpara LED RGB",
+          link: "PWM",
+          role: "Cambia de color e intensidad según la intervención; cada canal lleva una resistencia que limita la corriente.",
+          signals: ["Rojo", "Verde", "Azul", "Común"],
+        },
+      ],
+    },
     screenshots: [
       {
         src: `${SHOTS}/aurora/escritorio-paciente-metricas-en-vivo.webp`,
@@ -110,6 +170,12 @@ export const PROJECTS: readonly Project[] = [
         alt: "Panel clínico de la médica: evolución de BPM y SpO2, umbrales de activación y la tabla de eventos de crisis con duración, tipo de intervención y valores SAM.",
         width: 1440,
         height: 1188,
+      },
+      {
+        src: `${SHOTS}/aurora/dispositivo-esp32.webp`,
+        alt: "Prototipo de NeuroLive en una caja transparente: la placa ESP32 alimentada por USB, el sensor MAX30102 en una mini protoboard verde, un módulo MP3 con microSD sobre la protoboard, un parlante y una lámpara redonda de LED RGB.",
+        width: 1600,
+        height: 1578,
       },
     ],
   },

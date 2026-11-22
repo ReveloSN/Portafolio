@@ -81,6 +81,66 @@ export const PROJECTS_EN: readonly Project[] = [
           "Audits access to information and exports data for review and follow-up.",
       },
     ],
+    device: {
+      intro:
+        "An ESP32 reads the person's heart rate and blood oxygen, streams them to the platform in real time and carries out the intervention the platform chooses: it changes the lamp's light and plays relaxing audio.",
+      photo: {
+        src: `${SHOTS}/aurora/dispositivo-esp32.webp`,
+        alt: "NeuroLive prototype in a clear box: the USB-powered ESP32 board, the MAX30102 sensor on a small green breadboard, an MP3 module with a microSD card on the breadboard, a speaker and a round RGB LED lamp.",
+        width: 1600,
+        height: 1578,
+      },
+      flow: [
+        {
+          title: "Measure",
+          text: "The MAX30102 sensor shines red and infrared light into the finger; from what is reflected, the ESP32 gets the heart rate (BPM) and blood oxygen (SpO2) and knows whether the sensor is touching the skin.",
+        },
+        {
+          title: "Send",
+          text: "Over Wi-Fi, the ESP32 opens a WebSocket to the realtime service (FastAPI), identifies itself with its MAC address and a token, and sends the readings as JSON, along with a heartbeat that shows it is still connected.",
+        },
+        {
+          title: "Decide",
+          text: "The realtime service and the Spring Boot backend evaluate the readings: they anticipate a possible crisis, update the status the caregiver sees and choose the sensory intervention.",
+        },
+        {
+          title: "Respond",
+          text: "The command comes back to the ESP32 over the same WebSocket: the lamp changes color, intensity and mode, and the MP3 module plays a preset track. The ESP32 acknowledges every command. The design goal is for the whole loop, from sensor to light, to take under 1.5 seconds.",
+        },
+      ],
+      components: [
+        {
+          name: "ESP32",
+          link: "Wi-Fi · USB",
+          role: "The heart of the device: it reads the sensor, talks to the platform over WebSocket and controls the light and audio. It is powered over USB.",
+          signals: ["Wi-Fi", "USB"],
+        },
+        {
+          name: "MAX30102 sensor",
+          link: "I2C",
+          role: "Measures heart rate and blood oxygen at the finger using red and infrared light.",
+          signals: ["3.3 V", "GND", "SDA (data)", "SCL (clock)"],
+        },
+        {
+          name: "MP3 module with microSD",
+          link: "Serial (UART)",
+          role: "Stores and plays the audio tracks; it receives the ESP32's commands over the serial port, with a series resistor on the data line.",
+          signals: ["TX", "RX", "Power", "GND"],
+        },
+        {
+          name: "Speaker",
+          link: "Audio",
+          role: "Plays the MP3 module's relaxing tracks.",
+          signals: ["Audio output"],
+        },
+        {
+          name: "RGB LED lamp",
+          link: "PWM",
+          role: "Changes color and intensity according to the intervention; each channel has a current-limiting resistor.",
+          signals: ["Red", "Green", "Blue", "Common"],
+        },
+      ],
+    },
     screenshots: [
       {
         src: `${SHOTS}/aurora/escritorio-paciente-metricas-en-vivo.webp`,
@@ -111,6 +171,12 @@ export const PROJECTS_EN: readonly Project[] = [
         alt: "Doctor's clinical panel: BPM and SpO2 trends, activation thresholds and the crisis event table with duration, intervention type and SAM values.",
         width: 1440,
         height: 1188,
+      },
+      {
+        src: `${SHOTS}/aurora/dispositivo-esp32.webp`,
+        alt: "NeuroLive prototype in a clear box: the USB-powered ESP32 board, the MAX30102 sensor on a small green breadboard, an MP3 module with a microSD card on the breadboard, a speaker and a round RGB LED lamp.",
+        width: 1600,
+        height: 1578,
       },
     ],
   },
