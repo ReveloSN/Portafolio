@@ -200,7 +200,7 @@ export const COPY = {
       connectionsTitle: "Conexiones",
       connectionsIntro: "Cada componente y cómo se une a la placa ESP32.",
     },
-    chooseTitle: "Elige otro mundo",
+    chooseTitle: "Elige otro proyecto",
     chooseIntro: "Cada proyecto vive en un lugar distinto.",
     here: "estás aquí",
   },

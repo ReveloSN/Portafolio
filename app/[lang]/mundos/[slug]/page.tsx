@@ -32,12 +32,12 @@ export default async function WorldPage({ params }: WorldPageProps) {
   const { slug } = await params;
   if (!isWorldSlug(slug)) notFound();
   const { projectsBySlug, worldsBySlug } = await getCollections();
-  const { worlds, profile } = await getContent();
+  const { projects, profile } = await getContent();
   const world = worldsBySlug.get(slug);
   const project = projectsBySlug.get(slug);
   if (!world || !project) notFound();
 
   return (
-    <WorldLayout world={world} worlds={worlds} project={project} profile={profile} />
+    <WorldLayout world={world} projects={projects} project={project} profile={profile} />
   );
 }

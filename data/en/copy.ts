@@ -200,7 +200,7 @@ export const COPY_EN: Copy = {
       connectionsTitle: "Connections",
       connectionsIntro: "Each component and how it connects to the ESP32 board.",
     },
-    chooseTitle: "Choose another world",
+    chooseTitle: "Choose another project",
     chooseIntro: "Each project lives in a different place.",
     here: "you are here",
   },

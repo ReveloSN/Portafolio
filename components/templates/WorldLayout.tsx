@@ -19,13 +19,18 @@ import type { World } from "@/types/world";
 
 interface WorldLayoutProps {
   readonly world: World;
-  readonly worlds: readonly World[];
+  readonly projects: readonly Project[];
   readonly project: Project;
   readonly profile: Profile;
 }
 
 /** Plantilla común de las páginas de mundo: cambia la escena y los datos, no la estructura. */
-export async function WorldLayout({ world, worlds, project, profile }: WorldLayoutProps) {
+export async function WorldLayout({
+  world,
+  projects,
+  project,
+  profile,
+}: WorldLayoutProps) {
   const COPY = await getCopy();
   const { world: copy, site } = COPY;
   const theme = {
@@ -92,7 +97,7 @@ export async function WorldLayout({ world, worlds, project, profile }: WorldLayo
             {copy.chooseTitle}
           </h2>
           <p className="text-fluid-md mb-7 opacity-80">{copy.chooseIntro}</p>
-          <WorldSwitcher worlds={worlds} current={world.slug} hereLabel={copy.here} />
+          <WorldSwitcher projects={projects} current={world.slug} hereLabel={copy.here} />
           <div className="mt-fluid-4">
             <Button href="/">
               <span aria-hidden="true">←</span> {copy.back}
