@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import { MAIN_CONTENT_ID } from "@/data/navigation";
 import { PORTAL_ENTER_MS, PORTAL_FALLBACK_MS, PORTAL_TIMING } from "@/data/portal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { listen } from "@/lib/dom";
+import { listen, whenLoaded } from "@/lib/dom";
 import { initialPortalState, portalReducer, routeOf } from "@/lib/portal";
 import type { PortalApi } from "@/hooks/usePortalTransition";
 
@@ -64,12 +64,7 @@ export function usePortalController() {
 
   useEffect(() => {
     if (phase !== "covered" || !entrance) return;
-    const reveal = () => dispatch({ type: "arrived" });
-    if (document.readyState === "complete") {
-      reveal();
-      return;
-    }
-    return listen(window, "load", reveal, { once: true });
+    return whenLoaded(() => dispatch({ type: "arrived" }));
   }, [phase, entrance]);
 
   useEffect(() => {

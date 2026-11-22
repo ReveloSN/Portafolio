@@ -1,4 +1,5 @@
-import { BONE_ART_PX, SLAB_ART_PX } from "@/lib/constants";
+import { BoneArt } from "@/components/atoms/BoneShape";
+import { SLAB_ART_PX } from "@/lib/constants";
 import { optimizedSrc } from "@/lib/imageUrl";
 import type { BoneShape } from "@/types/puzzle";
 
@@ -58,14 +59,7 @@ export function FossilSlab({ width, height, shapes, placed, showArt }: FossilSla
             opacity=".16"
             overflow="hidden"
           >
-            <image
-              href={showArt ? optimizedSrc(shape.image, BONE_ART_PX) : undefined}
-              x={-(shape.imageOffset?.x ?? 0)}
-              y={-(shape.imageOffset?.y ?? 0)}
-              width={shape.imageSize?.width ?? shape.size.width}
-              height={shape.imageSize?.height ?? shape.size.height}
-              preserveAspectRatio="none"
-            />
+            <BoneArt shape={shape} showArt={showArt} />
           </svg>
         ) : (
           <path

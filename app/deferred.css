@@ -7,9 +7,7 @@
 @media (scripting: enabled) {
   html:not([data-loaded]) .tech-print-fill,
   html:not([data-loaded]) .tech-print-shade,
-  html:not([data-loaded]) .tech-print-glow,
-  html:not([data-loaded]) .tech-print-logo,
-  html:not([data-loaded]) .nest-shell-piece {
+  html:not([data-loaded]) .tech-print-glow {
     display: none;
   }
   html:not([data-loaded]) .journal-sheet {

@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 import { PARALLAX_FRAME_MS } from "@/lib/constants";
 
-/** Capas que se mueven con el puntero dentro de una escena. */
-const LAYERS = ".px, [data-pointer-layer]";
+/** Capas que se desplazan (leen `--mx`, `--my`). */
+const SHIFTED = ".px";
+/** Lo que sigue al puntero en píxeles (la luz del cursor: `--px`, `--py`, `--inside`). */
+const FOLLOWERS = "[data-pointer-layer]";
 
 /**
  * Publica la posición normalizada del puntero (-1..1) como variables CSS
@@ -24,8 +26,9 @@ export function useParallax<T extends HTMLElement>() {
     const coarsePointer = window.matchMedia("(pointer: coarse)");
     if (reducedMotion.matches || coarsePointer.matches) return;
 
-    const layers = [...element.querySelectorAll<HTMLElement>(LAYERS)];
-    const outputs = layers.length > 0 ? layers : [element];
+    const layers = [...element.querySelectorAll<HTMLElement>(SHIFTED)];
+    const shifted = layers.length > 0 ? layers : [element];
+    const followers = [...element.querySelectorAll<HTMLElement>(FOLLOWERS)];
     let frame = 0;
     let lastPaint = 0;
     let point = { x: 0, y: 0 };
@@ -42,19 +45,18 @@ export function useParallax<T extends HTMLElement>() {
       const rect = element.getBoundingClientRect();
       const px = point.x - rect.left;
       const py = point.y - rect.top;
-      const values = {
-        "--mx": (inside ? (px / rect.width - 0.5) * 2 : 0).toFixed(3),
-        "--my": (inside ? (py / rect.height - 0.5) * 2 : 0).toFixed(3),
+      const mx = (inside ? (px / rect.width - 0.5) * 2 : 0).toFixed(3);
+      const my = (inside ? (py / rect.height - 0.5) * 2 : 0).toFixed(3);
+      for (const layer of shifted) {
+        layer.style.setProperty("--mx", mx);
+        layer.style.setProperty("--my", my);
+      }
+      for (const follower of followers) {
+        follower.style.setProperty("--inside", inside ? "1" : "0");
         // Al salir, la luz se apaga donde quedó.
-        ...(inside
-          ? { "--px": `${Math.round(px)}px`, "--py": `${Math.round(py)}px` }
-          : {}),
-        "--inside": inside ? "1" : "0",
-      };
-      for (const output of outputs) {
-        for (const [name, value] of Object.entries(values)) {
-          output.style.setProperty(name, value);
-        }
+        if (!inside) continue;
+        follower.style.setProperty("--px", `${Math.round(px)}px`);
+        follower.style.setProperty("--py", `${Math.round(py)}px`);
       }
     };
 

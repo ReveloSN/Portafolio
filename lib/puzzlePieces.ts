@@ -1,7 +1,7 @@
 import type { ExperienceEntry } from "@/types/experience";
 import type { BoardPiece, BoneShape, PuzzleBoard } from "@/types/puzzle";
 import { layoutTray } from "./fossilPuzzle";
-import { interpolate } from "./utils";
+import { interpolate, pad2 } from "./utils";
 import { PUZZLE_TRAY_SCALE } from "@/data/fossilPuzzle";
 
 export interface BoardSetup {
@@ -30,7 +30,7 @@ export function buildBoardPieces(
   );
   const pieces = used.map((shape, i): BoardPiece => {
     const year = String(entries[i]!.startYear);
-    const tag = String(i + 1).padStart(2, "0");
+    const tag = pad2(i + 1);
     return {
       shape,
       trayOrigin: tray.positions[i]!,

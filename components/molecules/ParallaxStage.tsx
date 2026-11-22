@@ -12,7 +12,7 @@ interface ParallaxStageProps {
   readonly children: ReactNode;
 }
 
-/** Contenedor que publica `--mx/--my/--px/--py` para que sus capas hijas se muevan con el mouse. */
+/** Escena cuyas capas (`.px`, `[data-pointer-layer]`) se mueven con el mouse (useParallax). */
 export function ParallaxStage({
   as: Tag = "div",
   id,

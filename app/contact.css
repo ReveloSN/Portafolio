@@ -6,9 +6,6 @@
 .nest-stage {
   position: relative;
 }
-.nest-stage[data-paused] * {
-  animation-play-state: paused !important;
-}
 .nest-back,
 .nest-front {
   position: absolute;
@@ -151,6 +148,10 @@
   background-repeat: no-repeat;
   background-size: var(--bg-size);
   background-position: var(--bg-pos);
+}
+/* El sprite de cáscaras se pide al acercarse al huevo (hover) o al romperlo, no al cargar. */
+.nest-slot[data-phase="idle"] .nest-shell-piece {
+  display: none;
 }
 .nest-slot[data-phase="hatched"] .nest-shell {
   animation: shell-x 0.75s linear var(--delay) both;

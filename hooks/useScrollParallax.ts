@@ -35,7 +35,8 @@ function subscribe(update: Subscriber) {
   if (subscribers.size === 0)
     window.addEventListener("scroll", onScroll, { passive: true });
   subscribers.add(update);
-  update()();
+  // Varias capas pueden entrar a la vez: se miden juntas en el próximo cuadro.
+  onScroll();
   return () => {
     subscribers.delete(update);
     if (subscribers.size === 0) window.removeEventListener("scroll", onScroll);

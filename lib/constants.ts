@@ -4,6 +4,8 @@ export const PARALLAX_MAX_FPS = 60;
  * a tamaño real y pesa una cuarta parte menos. Debe estar en `images.qualities`.
  */
 export const ART_QUALITY = 68;
+/** La de `next/image` por defecto. */
+export const DEFAULT_IMAGE_QUALITY = 75;
 
 /** Ancho más grande que pide el arte del fósil: el de sus archivos (ver `lib/imageUrl`). */
 export const BONE_ART_PX = 1080;

@@ -15,7 +15,7 @@ interface PuzzlePieceProps {
   readonly placed: boolean;
   readonly showArt: boolean;
   readonly selected: boolean;
-  /** Texto corto visible sobre el hueso (el año de inicio). */
+  /** Texto corto visible sobre el hueso (su número, "01"). */
   readonly tag: string;
   readonly label: string;
   readonly describedBy: string;

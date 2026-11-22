@@ -79,9 +79,5 @@ export const TECH_ICON_FIT: Readonly<Record<TechIconId, number>> = {
   android: 0.864,
 };
 
-/** Sprite con los trazados (`app/tech-icons.svg/route.ts`). */
-export const TECH_SPRITE_PATH = "/tech-icons.svg";
-
-/** Dirección de un logo en el sprite; el número cambia al agregar uno y renueva la caché. */
-export const techIconHref = (id: TechIconId) =>
-  `${TECH_SPRITE_PATH}?v=${Object.keys(TECH_ICON_FIT).length}#${id}`;
+/** Dirección de un logo en el sprite (`app/tech-icons.svg/route.ts`). */
+export const techIconHref = (id: TechIconId) => `/tech-icons.svg#${id}`;

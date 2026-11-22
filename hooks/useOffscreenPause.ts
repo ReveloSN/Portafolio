@@ -19,7 +19,7 @@ const ROOT_MARGIN = "-1px 0px 200px 0px";
 export function useOffscreenPause(selector: string) {
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
-    const sections = [...document.querySelectorAll<HTMLElement>(selector)];
+    const targets = [...document.querySelectorAll<HTMLElement>(selector)];
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -28,10 +28,10 @@ export function useOffscreenPause(selector: string) {
       },
       { rootMargin: ROOT_MARGIN },
     );
-    sections.forEach((section) => observer.observe(section));
+    targets.forEach((target) => observer.observe(target));
     return () => {
       observer.disconnect();
-      sections.forEach((section) => section.removeAttribute("data-paused"));
+      targets.forEach((target) => target.removeAttribute("data-paused"));
     };
   }, [selector]);
 }

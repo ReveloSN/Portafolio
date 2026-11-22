@@ -3,8 +3,8 @@ import { TECH_ICON_PATHS } from "@/lib/techIconPaths";
 /** Se genera al compilar. */
 export const dynamic = "force-static";
 
-/** Un día fresco; después se usa mientras se renueva por detrás. */
-const CACHE_CONTROL = "public, max-age=86400, stale-while-revalidate=2592000";
+/** Una hora fresco y un día renovándose por detrás: un logo corregido llega pronto. */
+const CACHE_CONTROL = "public, max-age=3600, stale-while-revalidate=86400";
 
 /** Sprite de los logos: se baja una vez y se comparte entre todas las páginas e idiomas. */
 export function GET() {

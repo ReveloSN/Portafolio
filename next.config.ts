@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { ART_QUALITY, DEFAULT_IMAGE_QUALITY } from "./lib/constants";
 
 /**
  * Cabeceras de seguridad básicas. Sin X-Frame-Options a propósito: impediría mostrar
@@ -19,8 +20,8 @@ const nextConfig: NextConfig = {
     localPatterns: [{ pathname: "/**" }],
     // AVIF pesa menos que WebP con la misma calidad; quien no lo soporta recibe WebP.
     formats: ["image/avif", "image/webp"],
-    // 75 para fotos y capturas; 68 solo para el arte pintado de fondo (ART_QUALITY).
-    qualities: [68, 75],
+    // La de siempre para fotos y capturas; la menor solo para el arte pintado de fondo.
+    qualities: [ART_QUALITY, DEFAULT_IMAGE_QUALITY],
     // Anchos intermedios (192, 320 y 512): sin ellos una capa de 390 px reales bajaba la de 640.
     imageSizes: [32, 48, 64, 96, 128, 192, 256, 320, 384, 512],
   },

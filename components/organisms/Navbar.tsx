@@ -6,6 +6,7 @@ import { LanguageSwitch } from "@/components/molecules/LanguageSwitch";
 import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 import { useCopy, useLocalizeHref } from "@/hooks/useLocale";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 import { cn } from "@/lib/utils";
 import type { NavLink } from "@/types/navigation";
@@ -25,6 +26,8 @@ export function Navbar({ profile, links, backHref }: NavbarProps) {
   const localize = useLocalizeHref();
   const { open, toggle, close, toggleRef, onBlur } = useMobileMenu();
   const { nav } = COPY;
+  const home = localize("/");
+  const atHome = usePathname() === home;
 
   return (
     <header
@@ -46,8 +49,8 @@ export function Navbar({ profile, links, backHref }: NavbarProps) {
             </Button>
           ) : null}
           <Link
-            href={localize("/")}
-            prefetch={false}
+            href={home}
+            prefetch={atHome ? false : undefined}
             className="inline-flex min-h-11 items-center gap-3 no-underline"
           >
             <span className="font-display bg-glow text-fluid-base flex size-[max(2.25rem,calc(var(--u)*2.8))] items-center justify-center rounded-xl font-extrabold text-(--ink)">
