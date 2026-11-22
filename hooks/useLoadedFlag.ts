@@ -23,37 +23,38 @@ async function loadJournalFont() {
 }
 
 /**
- * Marca `<html>` cuando termina `load`. La pantalla «Cargando…» espera ese evento, así que
- * lo que no está en la primera pantalla se pide después, desde el CSS (`app/deferred.css`):
- * - Máscaras de las huellas: al abrir las hojas; con un ancla en la dirección, enseguida
- *   (pueden ser justo lo que se va a ver).
- * - Serif del diario: siempre con las hojas abiertas y ya descargada. Cambiar de fuente
- *   durante el salto a un ancla mueve la página.
+ * Marca `<html>` cuando termina `load` y abren las hojas. La pantalla «Cargando…» espera
+ * ese evento, así que lo que no está en la primera pantalla se pide después, desde el CSS
+ * (`app/deferred.css`): máscaras de las huellas y serif del diario.
+ *
+ * Con un ancla en la dirección no se difiere nada: puede ser justo lo que se va a ver, y
+ * cambiar de fuente después de saltar al ancla movería la página.
  */
 export function useLoadedFlag() {
   useEffect(() => {
-    let timers: number[] = [];
+    let timer = 0;
     let mounted = true;
     const mark = (attribute: string) => {
       if (mounted) document.documentElement.setAttribute(attribute, "");
     };
+    if (window.location.hash) {
+      mark(LOADED_ATTR);
+      mark(JOURNAL_FONT_ATTR);
+      return;
+    }
+    const showFont = () => mark(JOURNAL_FONT_ATTR);
     const schedule = () => {
-      const artDelay = window.location.hash ? 0 : PORTAL_ENTER_MS;
-      const showFont = () => mark(JOURNAL_FONT_ATTR);
-      timers = [
-        window.setTimeout(() => mark(LOADED_ATTR), artDelay),
+      timer = window.setTimeout(() => {
+        mark(LOADED_ATTR);
         // Si la fuente falla se marca igual y queda la de respaldo.
-        window.setTimeout(
-          () => loadJournalFont().then(showFont, showFont),
-          PORTAL_ENTER_MS,
-        ),
-      ];
+        loadJournalFont().then(showFont, showFont);
+      }, PORTAL_ENTER_MS);
     };
     const unlisten = whenLoaded(schedule);
     return () => {
       mounted = false;
       unlisten();
-      timers.forEach((timer) => window.clearTimeout(timer));
+      window.clearTimeout(timer);
     };
   }, []);
 }
