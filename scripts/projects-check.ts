@@ -26,7 +26,16 @@ try {
         .locator(".world-hero img")
         .first()
         .evaluate((image) => (image as HTMLImageElement).decode());
-      const report = await page.evaluate(() => {
+      const storyArt = page.locator(".project-story-art");
+      if (slug === "cumbre" || slug === "volcan") {
+        await storyArt.scrollIntoViewIfNeeded();
+        await storyArt
+          .locator("img")
+          .evaluateAll((images) =>
+            Promise.all(images.map((image) => (image as HTMLImageElement).decode())),
+          );
+      }
+      const report = await page.evaluate((slug) => {
         const links = [
           ...document.querySelectorAll<HTMLAnchorElement>(".world-section-nav a"),
         ];
@@ -42,13 +51,25 @@ try {
               ".world-panel-card,.world-feature,.world-journey li",
             ),
           ].some((element) => element.scrollWidth > element.clientWidth + 1),
-          layered:
-            document.querySelectorAll(".project-story-art .project-scene-background img")
-              .length === 1 &&
-            document.querySelectorAll(".project-story-art .project-scene-dinosaur img")
-              .length === 1,
+          storyArt:
+            slug === "cumbre"
+              ? ["fondo", "empleado", "cliente"].every((layer) =>
+                  document.querySelector(
+                    `.project-story-art .bank-scene-layer[data-layer="${layer}"] img`,
+                  ),
+                )
+              : slug === "volcan"
+                ? document.querySelectorAll(
+                    '.project-story-art > img[src*="argus-profesor.webp"]',
+                  ).length === 1
+                : document.querySelectorAll(
+                    ".project-story-art .project-scene-background img",
+                  ).length === 1 &&
+                  document.querySelectorAll(
+                    ".project-story-art .project-scene-dinosaur img",
+                  ).length === 1,
         };
-      });
+      }, slug);
       if (
         response?.status() !== 200 ||
         report.overflow ||
@@ -56,7 +77,7 @@ try {
         !report.anchors ||
         report.broken.length ||
         report.clipped ||
-        !report.layered ||
+        !report.storyArt ||
         errors.length
       )
         failures.push(`${width}/${slug}: ${JSON.stringify({ report, errors })}`);
@@ -65,6 +86,9 @@ try {
         await page
           .locator(".world-hero")
           .screenshot({ path: `${output}/${slug}-${width}-hero.png` });
+        if (slug === "cumbre" || slug === "volcan") {
+          await storyArt.screenshot({ path: `${output}/${slug}-${width}-recorrido.png` });
+        }
         if (slug === "aurora") {
           for (const id of ["contexto", "recorrido", "funcionalidades"])
             await page
@@ -97,35 +121,42 @@ try {
     reducedMotion: "no-preference",
   });
   const motionPage = await motionContext.newPage();
-  await motionPage.goto(`${base}/mundos/aurora`, { waitUntil: "networkidle" });
-  const scene = motionPage.locator(".project-story-art .project-scene");
-  await scene.scrollIntoViewIfNeeded();
-  const bounds = await scene.boundingBox();
-  if (!bounds) throw new Error("Falta la ilustración por capas dentro del proyecto");
-  await motionPage.mouse.move(
-    bounds.x + bounds.width * 0.8,
-    bounds.y + bounds.height * 0.3,
-  );
-  await motionPage.waitForFunction(
-    () =>
-      Math.abs(
-        Number(
-          document
-            .querySelector<HTMLElement>(".project-story-art .project-scene")
-            ?.style.getPropertyValue("--mx"),
-        ),
-      ) > 0.1,
-  );
-  const transforms = await motionPage.evaluate(() =>
-    [".project-scene-background", ".project-scene-dinosaur"].map(
-      (selector) =>
-        getComputedStyle(
-          document.querySelector(`.project-story-art .project-scene ${selector}`)!,
-        ).transform,
-    ),
-  );
-  if (transforms[0] === transforms[1])
-    failures.push("Las capas no se mueven de forma independiente");
+  const animatedScenes = [
+    {
+      slug: "aurora",
+      layers: ".project-scene-background, .project-scene-dinosaur",
+      count: 2,
+    },
+    { slug: "cumbre", layers: ".bank-scene-layer", count: 3 },
+  ];
+  for (const { slug, layers, count } of animatedScenes) {
+    await motionPage.goto(`${base}/mundos/${slug}`, { waitUntil: "networkidle" });
+    const scene = motionPage.locator(".project-story-art .project-scene");
+    await scene.scrollIntoViewIfNeeded();
+    const bounds = await scene.boundingBox();
+    if (!bounds) throw new Error(`${slug}: falta la ilustración por capas`);
+    await motionPage.mouse.move(
+      bounds.x + bounds.width * 0.8,
+      bounds.y + bounds.height * 0.3,
+    );
+    await motionPage.waitForFunction(
+      () =>
+        Math.abs(
+          Number(
+            document
+              .querySelector<HTMLElement>(".project-story-art .project-scene")
+              ?.style.getPropertyValue("--mx"),
+          ),
+        ) > 0.1,
+    );
+    const transforms = await scene
+      .locator(layers)
+      .evaluateAll((elements) =>
+        elements.map((element) => getComputedStyle(element).transform),
+      );
+    if (new Set(transforms).size !== count || transforms.length !== count)
+      failures.push(`${slug}: las capas deben moverse de forma independiente`);
+  }
   await motionContext.close();
 } finally {
   await browser.close();

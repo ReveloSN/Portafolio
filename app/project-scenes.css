@@ -57,6 +57,27 @@
   overflow: hidden;
   isolation: isolate;
 }
+.bank-scene-layer {
+  position: absolute;
+  inset: -1.5%;
+  transform: translate3d(
+    calc(var(--mx, 0) * var(--depth-x)),
+    calc(var(--my, 0) * var(--depth-y)),
+    0
+  );
+}
+.bank-scene-layer[data-layer="fondo"] {
+  --depth-x: -1.5px;
+  --depth-y: -0.8px;
+}
+.bank-scene-layer[data-layer="empleado"] {
+  --depth-x: 1.5px;
+  --depth-y: 0.8px;
+}
+.bank-scene-layer[data-layer="cliente"] {
+  --depth-x: 4px;
+  --depth-y: 2px;
+}
 .project-scene-background {
   position: absolute;
   inset: -4%;
@@ -185,6 +206,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .bank-scene-layer,
   .project-scene-background,
   .project-scene-dinosaur,
   .project-scene-foreground {

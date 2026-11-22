@@ -4,11 +4,11 @@
 
 Las tarjetas y portadas usan paisajes estáticos de cada mundo, sin dinosaurios ni paralaje. Se encuentran en `data/worldCovers.ts`; los nuevos archivos de océano, volcán y aurora están en `public/art/projects/worlds/`, mientras selva y cueva reutilizan sus fondos existentes. Los arcos son más compactos, las tarjetas muestran tres tecnologías y los enlaces de repositorios se conservan.
 
-Los dinosaurios generados se muestran dentro de «Así funciona» en cada proyecto, como ilustraciones de apoyo. Allí se conserva la composición por capas y el movimiento de profundidad. La entrada general solo carga una imagen por tarjeta.
+Los dinosaurios generados se muestran dentro de «Así funciona» como ilustraciones de apoyo. Banco Saga compone el mostrador con tres WebP en `public/art/projects/layers/`: el fondo, el empleado y el cliente. Cada capa responde al puntero a una velocidad distinta. Su tarjeta y portada comparten el paisaje pintado `public/art/projects/worlds/cumbre-montanas.webp`. ARGUS usa `public/art/projects/argus-profesor.webp`, con un raptor que compara documentos en un archivo universitario.
 
 ## Ilustraciones interiores por capas
 
-La versión vigente usa `public/art/projects/layers/{slug}-background.webp` y `{slug}-dinosaur.webp`, junto con la vegetación existente del inicio. `ProjectScene` compone las capas de forma independiente y aplica paralaje por puntero mediante el hook existente. En movimiento reducido y dispositivos táctiles las capas permanecen quietas. Las tarjetas recuperan un marco arqueado de portal.
+Las escenas por capas usan `public/art/projects/layers/{slug}-background.webp` y `{slug}-dinosaur.webp`, junto con la vegetación existente del inicio. `ProjectScene` compone las capas de forma independiente y aplica paralaje por puntero mediante el hook existente. En movimiento reducido y dispositivos táctiles las capas permanecen quietas. Las tarjetas recuperan un marco arqueado de portal.
 
 Los diez prompts exactos y la referencia visual están registrados en `docs/arte-portales-capas.json`. Los dinosaurios se generaron con transparencia real y se conservaron en WebP con alfa. Se utilizó la herramienta integrada de imágenes. La referencia es la captura del Hero proporcionada por el usuario, con dibujo de pinceladas mates y dinosaurios adultos de expresión contenida.
 

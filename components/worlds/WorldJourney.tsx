@@ -1,3 +1,5 @@
+import Image from "next/image";
+import { BancoSagaScene } from "@/components/worlds/BancoSagaScene";
 import { ProjectScene } from "@/components/worlds/ProjectScene";
 import { getContent } from "@/lib/locale.server";
 import type { WorldSlug } from "@/types/world";
@@ -23,7 +25,19 @@ export async function WorldJourney({ slug }: { readonly slug: WorldSlug }) {
             <p className="project-journey-lead">{COPY.world.journeyIntro}</p>
           </div>
           <figure className="project-story-art" aria-label={COPY.world.conceptArt}>
-            <ProjectScene slug={slug} />
+            {slug === "cumbre" ? (
+              <BancoSagaScene />
+            ) : slug === "volcan" ? (
+              <Image
+                src="/art/projects/argus-profesor.webp"
+                alt=""
+                fill
+                sizes="(max-width: 767px) 100vw, (max-width: 1200px) 55vw, 630px"
+                className="object-cover"
+              />
+            ) : (
+              <ProjectScene slug={slug} />
+            )}
             <figcaption className="project-story-caption">
               {COPY.world.conceptArt}
             </figcaption>
