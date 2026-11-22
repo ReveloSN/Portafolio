@@ -37,6 +37,26 @@ export interface ProjectDevice {
   readonly components: readonly DeviceComponent[];
 }
 
+/** Un momento del tráiler, contado en texto. */
+export interface TrailerScene {
+  /** Minuto y segundo en que empieza. */
+  readonly time: string;
+  readonly text: string;
+}
+
+/** Video del proyecto en `public/videos/projects/<slug>/`, con su tamaño (sin CLS). */
+export interface ProjectTrailer {
+  readonly title: string;
+  readonly intro: string;
+  readonly src: string;
+  readonly poster: string;
+  readonly width: number;
+  readonly height: number;
+  readonly credit: string;
+  readonly transcriptTitle: string;
+  readonly scenes: readonly TrailerScene[];
+}
+
 /** Ficha breve que acompaña al problema en la página del mundo. */
 export interface ProjectFacts {
   readonly period: string;
@@ -81,6 +101,8 @@ export interface Project {
   /** Utilidad de la solución y alcance actual, sin atribuir impacto no validado. */
   readonly contribution: readonly string[];
   readonly features: readonly ProjectFeature[];
+  /** Solo si el proyecto tiene video: se muestra al comienzo de su página. */
+  readonly trailer?: ProjectTrailer;
   /** Solo si el proyecto incluye un dispositivo físico. */
   readonly device?: ProjectDevice;
   /** Solo si el proyecto corrió en la nube: la página del mundo lista sus servicios. */

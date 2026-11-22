@@ -94,6 +94,20 @@ describe("PROJECTS", () => {
     },
   );
 
+  it.each(PROJECTS.filter((project) => project.trailer))(
+    "$name: el tráiler se reproduce mientras baja y su póster mide lo declarado",
+    (project) => {
+      const { src, poster, width, height, scenes } = project.trailer!;
+      const video = readFileSync(path.join(PUBLIC_DIR, src));
+      // El índice (moov) va antes de los datos (mdat): no hay que bajarlo entero.
+      const index = video.indexOf("moov");
+      expect(index).toBeGreaterThan(-1);
+      expect(index).toBeLessThan(video.indexOf("mdat"));
+      expect(imageSize(path.join(PUBLIC_DIR, poster))).toEqual({ width, height });
+      expect(scenes.length).toBeGreaterThan(0);
+    },
+  );
+
   it.each(PROJECTS.filter((project) => project.repoUrl))(
     "$name enlaza un repositorio de GitHub",
     (project) => {

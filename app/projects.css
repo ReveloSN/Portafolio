@@ -303,6 +303,52 @@
   border-radius: 10px;
   margin: auto;
 }
+/* Tráiler: cabe entero en pantallas bajas y reserva su alto antes de cargar. */
+.world-trailer {
+  max-width: min(100%, calc(75svh * 16 / 9));
+  margin-inline: auto;
+}
+.world-trailer video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  background: #1b123c;
+}
+.world-trailer video:focus-visible,
+.world-trailer-text summary:focus-visible {
+  outline: 3px solid var(--glow);
+  outline-offset: 4px;
+}
+.world-trailer-credit {
+  margin: 12px 4px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+.world-trailer-text {
+  margin: 8px 4px 0;
+}
+.world-trailer-text summary {
+  min-height: 44px;
+  width: fit-content;
+  padding-block: 10px;
+  color: var(--glow);
+  cursor: pointer;
+}
+.world-trailer-text li {
+  display: grid;
+  grid-template-columns: 4ch minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 8px;
+  line-height: 1.6;
+}
+.world-trailer-text li span {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
 /* Dispositivo físico: foto del prototipo, recorrido del sensor a la respuesta y conexiones. */
 .world-device-grid {
   display: grid;

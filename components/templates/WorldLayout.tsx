@@ -11,6 +11,7 @@ import {
   WorldCloudServices,
 } from "@/components/worlds/WorldCloudServices";
 import { WorldHero } from "@/components/worlds/WorldHero";
+import { TRAILER_SECTION_ID, WorldTrailer } from "@/components/worlds/WorldTrailer";
 import { getCopy } from "@/lib/locale.server";
 import { MAIN_CONTENT_ID } from "@/data/navigation";
 import type { Profile } from "@/types/profile";
@@ -46,6 +47,11 @@ export async function WorldLayout({
         <WorldHero world={world} project={project} ownerName={profile.firstName} />
         <nav className="world-section-nav" aria-label={copy.navigationLabel}>
           <ul>
+            {project.trailer && (
+              <li>
+                <a href={`#${TRAILER_SECTION_ID}`}>{project.trailer.title}</a>
+              </li>
+            )}
             <li>
               <a href="#contexto">{copy.problem.title}</a>
             </li>
@@ -78,6 +84,7 @@ export async function WorldLayout({
             )}
           </ul>
         </nav>
+        {project.trailer && <WorldTrailer trailer={project.trailer} />}
         <WorldDetails
           world={world}
           project={project}

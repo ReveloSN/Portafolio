@@ -265,6 +265,68 @@ export const PROJECTS_EN: readonly Project[] = [
           "A custom QR encoder in GDScript, following ISO/IEC 18004 with no plugins, to pair the controller.",
       },
     ],
+    trailer: {
+      title: "Trailer",
+      intro:
+        "A minute and a half across the island: the story, the three settings, their enemies and bosses, the AI that learns from you and the phone controller. These are real in-game scenes, staged for recording. On-screen text is in Spanish; an English description follows the video.",
+      src: "/videos/projects/selva/trailer.mp4",
+      poster: "/videos/projects/selva/trailer-poster.webp",
+      width: 1280,
+      height: 720,
+      credit:
+        "Music: «RPG Battle Theme II» by cleytonkauffman and «Iremos Forest Theme Loop» by beardalaxy (CC0).",
+      transcriptTitle: "What the video shows, in text",
+      scenes: [
+        {
+          time: "0:00",
+          text: "Fights against the island's guardians and creatures. «The island is watching you». «And it learns from you».",
+        },
+        {
+          time: "0:06",
+          text: "The prologue: a storm hits and Nico wakes up on an island beach. «A broken compass». «Recover its fragments». «Return home».",
+        },
+        {
+          time: "0:18",
+          text: "The title screen, with the «Start journey» option.",
+        },
+        {
+          time: "0:20",
+          text: "The three settings: Forest of the Aurora, Mountain Ruins and Temple of the Eclipse.",
+        },
+        {
+          time: "0:29",
+          text: "Full maps from different seeds. «Handcrafted rooms». «A new path every run».",
+        },
+        {
+          time: "0:35",
+          text: "Every enemy has its own mechanic: an echo that repeats shots, a spider that caves in the floor, a snail that leaves burning slag, plants that shoot seeds and charging slimes.",
+        },
+        {
+          time: "0:47",
+          text: "One ability per guardian: Roots, Current and Shadow.",
+        },
+        {
+          time: "0:51",
+          text: "The island remembers how you play. If you attack, it prepares tougher creatures and ambushes; if you hide, enemies that see farther and more guarded rooms.",
+        },
+        {
+          time: "1:00",
+          text: "The phone as a controller: scan a QR code and the page controls Nico.",
+        },
+        {
+          time: "1:06",
+          text: "A bot tests the difficulty and logs where damage happens and from whom. In that run it loses after 12 rooms.",
+        },
+        {
+          time: "1:10",
+          text: "The bosses: the Forest Guardian («No one leaves the island. Let the roots decide»), the Stone Serpent and the Ancient Guardian. «Fragment recovered».",
+        },
+        {
+          time: "1:20",
+          text: "Ending: «Isla Espejo. A way back home». A game made by a team of two with Godot 4.",
+        },
+      ],
+    },
     screenshots: [
       {
         src: `${SHOTS}/selva/menu-principal.webp`,

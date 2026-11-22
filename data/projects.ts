@@ -264,6 +264,68 @@ export const PROJECTS: readonly Project[] = [
           "Codificador QR propio en GDScript, según la norma ISO/IEC 18004 y sin plugins, para enlazar el mando.",
       },
     ],
+    trailer: {
+      title: "Tráiler",
+      intro:
+        "Un minuto y medio por la isla: la historia, los tres escenarios, sus enemigos y jefes, la IA que aprende de ti y el mando del celular. Son escenas del juego real, preparadas para la grabación.",
+      src: "/videos/projects/selva/trailer.mp4",
+      poster: "/videos/projects/selva/trailer-poster.webp",
+      width: 1280,
+      height: 720,
+      credit:
+        "Música: «RPG Battle Theme II» de cleytonkauffman e «Iremos Forest Theme Loop» de beardalaxy (CC0).",
+      transcriptTitle: "Qué muestra el video, en texto",
+      scenes: [
+        {
+          time: "0:00",
+          text: "Combates contra los guardianes y las criaturas de la isla. «La isla te observa». «Y aprende de ti».",
+        },
+        {
+          time: "0:06",
+          text: "El prólogo: llega una tormenta y Nico despierta en la playa de una isla. «Una brújula rota». «Recupera sus fragmentos». «Vuelve a casa».",
+        },
+        {
+          time: "0:18",
+          text: "La pantalla de título, con la opción «Comenzar viaje».",
+        },
+        {
+          time: "0:20",
+          text: "Los tres escenarios: Bosque de la Aurora, Ruinas de la Montaña y Templo del Eclipse.",
+        },
+        {
+          time: "0:29",
+          text: "Mapas completos de distintas semillas. «Salas hechas a mano». «Cada partida, otro camino».",
+        },
+        {
+          time: "0:35",
+          text: "Cada enemigo tiene su mecánica: un eco que repite disparos, una araña que hunde el suelo, un caracol que deja escoria ardiente, plantas que lanzan semillas y slimes que embisten.",
+        },
+        {
+          time: "0:47",
+          text: "Una habilidad por guardián: Raíces, Corriente y Sombra.",
+        },
+        {
+          time: "0:51",
+          text: "La isla recuerda cómo juegas. Si atacas, prepara criaturas más resistentes y emboscadas; si te escondes, enemigos que ven más lejos y más salas vigiladas.",
+        },
+        {
+          time: "1:00",
+          text: "El celular como mando: se escanea un QR y la página controla a Nico.",
+        },
+        {
+          time: "1:06",
+          text: "Un bot prueba la dificultad y anota dónde y quién le hace daño. En esa partida pierde tras 12 salas.",
+        },
+        {
+          time: "1:10",
+          text: "Los jefes: el Guardián del bosque («Nadie abandona la isla. Que las raíces decidan»), la Serpiente de piedra y el Guardián antiguo. «Fragmento recuperado».",
+        },
+        {
+          time: "1:20",
+          text: "Cierre: «Isla Espejo. Un camino de vuelta a casa». Un juego hecho en pareja con Godot 4.",
+        },
+      ],
+    },
     screenshots: [
       {
         src: `${SHOTS}/selva/menu-principal.webp`,
