@@ -180,6 +180,10 @@
 .portal-veil[data-loading] + .portal-content {
   visibility: hidden;
 }
+/* Tapada, la portada no anima: el hilo principal queda para hidratar y abrir antes. */
+.portal-veil[data-loading] + .portal-content * {
+  animation-play-state: paused !important;
+}
 .portal-loading {
   position: absolute;
   inset: 0;
@@ -193,11 +197,21 @@
     sans-serif;
 }
 .portal-runner {
+  position: relative;
   width: 4.25rem;
+  aspect-ratio: 64 / 54;
   animation: portal-runner-bob 0.26s ease-in-out infinite alternate;
 }
+.portal-runner > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
 .portal-runner-leg {
-  transform-origin: 30px 34px;
+  /* El punto 30,34 del lienzo de 64x54: la cadera */
+  transform-origin: 46.875% 62.963%;
   animation: portal-runner-stride 0.28s ease-in-out infinite alternate;
 }
 .portal-runner-leg-back {
