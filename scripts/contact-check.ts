@@ -62,7 +62,6 @@ async function open(
     ...extra,
   });
   await context.addInitScript(() => {
-    sessionStorage.setItem("portafolio:intro-seen", "1");
     // CLS de toda la visita
     (window as unknown as { __cls: number }).__cls = 0;
     new PerformanceObserver((list) => {

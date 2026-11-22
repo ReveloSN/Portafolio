@@ -3,14 +3,11 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import { MAIN_CONTENT_ID } from "@/data/navigation";
-import { PORTAL_DEFAULT_SKIN, PORTAL_FALLBACK_MS, PORTAL_TIMING } from "@/data/portal";
+import { PORTAL_ENTER_MS, PORTAL_FALLBACK_MS, PORTAL_TIMING } from "@/data/portal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { listen } from "@/lib/dom";
 import { initialPortalState, portalReducer, routeOf } from "@/lib/portal";
 import type { PortalApi } from "@/hooks/usePortalTransition";
-import type { PortalSkin, PortalSkinKey } from "@/types/portal";
-
-type SkinTimings = Readonly<Record<PortalSkinKey, Pick<PortalSkin, "enterMs">>>;
 
 /** Lleva el foco al contenido de la página nueva: el enlace pulsado ya no existe. */
 const focusMain = () =>
@@ -21,15 +18,15 @@ const focusMain = () =>
  * ruta nueva esté montada y lo abre. El scroll (arriba o al ancla) lo hace Next al
  * montar la ruta, aunque llegue tarde y el velo ya se haya abierto por el respaldo. Las fases se encadenan con temporizadores
  * (no con `animationend`) para que nunca quede atascado si una animación no corre.
- * Con movimiento reducido no hay velo: se navega directo.
+ * La portada abre después de la carga del documento. Con movimiento reducido
+ * conserva el estado de carga y salta las animaciones.
  */
-export function usePortalController(skins: SkinTimings) {
+export function usePortalController() {
   const pathname = usePathname();
   const router = useRouter();
   const reducedMotion = useReducedMotion();
   const [state, dispatch] = useReducer(portalReducer, pathname, initialPortalState);
-  const { phase, href, entrance, skin } = state;
-  const enterMs = skins[skin].enterMs;
+  const { phase, href, entrance } = state;
   /** Ruta a la que se está yendo; se limpia al llegar, sea cual sea la fase. */
   const pendingRoute = useRef<string | null>(null);
 
@@ -41,7 +38,7 @@ export function usePortalController(skins: SkinTimings) {
         return;
       }
       router.prefetch(target);
-      dispatch({ type: "navigate", href: target, skin: PORTAL_DEFAULT_SKIN });
+      dispatch({ type: "navigate", href: target });
     },
     [reducedMotion, router],
   );
@@ -55,11 +52,25 @@ export function usePortalController(skins: SkinTimings) {
       return () => window.clearTimeout(timer);
     }
     if (phase === "opening") {
-      const duration = entrance ? enterMs : PORTAL_TIMING.openMs;
+      const duration = reducedMotion
+        ? 0
+        : entrance
+          ? PORTAL_ENTER_MS
+          : PORTAL_TIMING.openMs;
       const timer = window.setTimeout(() => dispatch({ type: "settled" }), duration);
       return () => window.clearTimeout(timer);
     }
-  }, [phase, entrance, enterMs]);
+  }, [phase, entrance, reducedMotion]);
+
+  useEffect(() => {
+    if (phase !== "covered" || !entrance) return;
+    const reveal = () => dispatch({ type: "arrived" });
+    if (document.readyState === "complete") {
+      reveal();
+      return;
+    }
+    return listen(window, "load", reveal, { once: true });
+  }, [phase, entrance]);
 
   useEffect(() => {
     if (phase !== "covered" || !href) return;

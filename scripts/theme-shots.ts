@@ -126,12 +126,6 @@ async function runCase(
     hasTouch: viewport.mobile,
     colorScheme: theme,
   });
-  // Sin intro del T-rex: las capturas muestran el contenido
-  await context.addInitScript(() => {
-    try {
-      sessionStorage.setItem("portafolio:intro-seen", "1");
-    } catch {}
-  });
   const page = await context.newPage();
   const errors: string[] = [];
   page.on("console", (msg) => msg.type() === "error" && errors.push(msg.text()));

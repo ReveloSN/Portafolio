@@ -4,6 +4,7 @@ import type { Widen } from "@/types/i18n";
 export const COPY = {
   site: {
     madeWith: "Hecho con Next.js + Tailwind CSS",
+    loading: "Cargando…",
   },
   nav: {
     skipToContent: "Saltar al contenido",

@@ -4,6 +4,7 @@ import type { Copy } from "@/data/copy";
 export const COPY_EN: Copy = {
   site: {
     madeWith: "Built with Next.js + Tailwind CSS",
+    loading: "Loading…",
   },
   nav: {
     skipToContent: "Skip to content",

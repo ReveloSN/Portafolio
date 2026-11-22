@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  entranceSkin,
   initialPortalState,
   portalReducer,
   routeOf,
@@ -17,19 +16,17 @@ const PLAIN: PortalClick = {
   defaultPrevented: false,
 };
 
-const idle: PortalState = { phase: "idle", href: null, skin: "vines", entrance: false };
+const idle: PortalState = { phase: "idle", href: null, entrance: false };
 
 describe("portalReducer", () => {
   it("recorre cierre, pantalla oscura, apertura y reposo", () => {
     const closing = portalReducer(idle, {
       type: "navigate",
       href: "/mundos/selva",
-      skin: "vines",
     });
     expect(closing).toEqual({
       phase: "closing",
       href: "/mundos/selva",
-      skin: "vines",
       entrance: false,
     });
     const covered = portalReducer(closing, { type: "covered" });
@@ -38,27 +35,24 @@ describe("portalReducer", () => {
     expect(opening).toEqual({
       phase: "opening",
       href: null,
-      skin: "vines",
       entrance: false,
     });
     expect(portalReducer(opening, { type: "settled" }).phase).toBe("idle");
   });
 
   it("ignora un segundo clic mientras el portal está cerrado o cerrándose", () => {
-    const closing = portalReducer(idle, { type: "navigate", href: "/a", skin: "vines" });
-    const again = portalReducer(closing, { type: "navigate", href: "/b", skin: "vines" });
+    const closing = portalReducer(idle, { type: "navigate", href: "/a" });
+    const again = portalReducer(closing, { type: "navigate", href: "/b" });
     expect(again).toBe(closing);
     const covered = portalReducer(closing, { type: "covered" });
-    expect(portalReducer(covered, { type: "navigate", href: "/b", skin: "vines" })).toBe(
-      covered,
-    );
+    expect(portalReducer(covered, { type: "navigate", href: "/b" })).toBe(covered);
   });
 
   it("permite navegar o saltar durante la apertura, pero no saltar a mitad de un cierre", () => {
     const opening: PortalState = { ...idle, phase: "opening" };
-    expect(
-      portalReducer(opening, { type: "navigate", href: "/a", skin: "vines" }).phase,
-    ).toBe("closing");
+    expect(portalReducer(opening, { type: "navigate", href: "/a" }).phase).toBe(
+      "closing",
+    );
     expect(portalReducer(opening, { type: "skip" }).phase).toBe("idle");
     const closing: PortalState = { ...idle, phase: "closing", href: "/a" };
     expect(portalReducer(closing, { type: "skip" })).toBe(closing);
@@ -71,19 +65,26 @@ describe("portalReducer", () => {
 });
 
 describe("entrada", () => {
-  it("la carga empieza con el velo abriéndose", () => {
+  it("los enlaces directos a proyectos mantienen su apertura", () => {
     const state = initialPortalState("/mundos/cueva");
     expect(state.phase).toBe("opening");
     expect(state.entrance).toBe(true);
   });
 
-  it("saltar la entrada la da por terminada", () => {
-    const skipped = portalReducer(initialPortalState("/"), { type: "skip" });
-    expect(skipped).toMatchObject({ phase: "idle", entrance: false });
-  });
+  it.each(["/", "/es", "/en"])(
+    "la portada %s permanece cubierta hasta llegar",
+    (path) => {
+      const covered = initialPortalState(path);
+      expect(covered).toEqual({ phase: "covered", href: null, entrance: true });
+      expect(portalReducer(covered, { type: "skip" })).toBe(covered);
+      expect(portalReducer(covered, { type: "settled" })).toBe(covered);
+      expect(portalReducer(covered, { type: "arrived" }).phase).toBe("opening");
+    },
+  );
 
-  it("usa el arte por defecto en rutas sin entrada propia", () => {
-    expect(entranceSkin("/mundos/oceano")).toBe("vines");
+  it("permite saltar la apertura una vez que se cargó la portada", () => {
+    const opening = portalReducer(initialPortalState("/"), { type: "arrived" });
+    expect(portalReducer(opening, { type: "skip" })).toEqual(idle);
   });
 });
 

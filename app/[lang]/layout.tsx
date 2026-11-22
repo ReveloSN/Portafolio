@@ -6,7 +6,6 @@ import { PortalProvider } from "@/components/templates/PortalProvider";
 import { CONTENT } from "@/data/content";
 import { SITE_URL } from "@/data/site";
 import { LOCALE_META, LOCALES } from "@/lib/i18n";
-import { INTRO_BOOT_SCRIPT } from "@/lib/intro";
 import { getLocale } from "@/lib/locale.server";
 import { languageAlternates } from "@/lib/seo";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme";
@@ -79,9 +78,8 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Antes del primer pintado: tema (sin parpadeo) e intro vista */}
+        {/* Aplica el tema antes del primer pintado. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
-        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
       </head>
       <body>
         <LocaleProvider locale={locale}>

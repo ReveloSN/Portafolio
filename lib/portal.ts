@@ -1,23 +1,12 @@
-import { PORTAL_DEFAULT_SKIN, PORTAL_ENTRANCES } from "@/data/portal";
 import { splitLocale } from "@/lib/i18n";
-import type {
-  PortalAction,
-  PortalClick,
-  PortalPhase,
-  PortalSkinKey,
-  PortalState,
-} from "@/types/portal";
+import type { PortalAction, PortalClick, PortalPhase, PortalState } from "@/types/portal";
 
 const PRIMARY_BUTTON = 0;
 
-/** Al cargar el sitio el velo ya está abriéndose: la entrada al portafolio es la misma transición. */
+/** La portada espera la carga completa antes de revelar el contenido. */
 export function initialPortalState(pathname: string): PortalState {
-  return { phase: "opening", href: null, skin: entranceSkin(pathname), entrance: true };
-}
-
-/** La entrada depende de la página, no del idioma: `/` y `/en` abren igual. */
-export function entranceSkin(pathname: string): PortalSkinKey {
-  return PORTAL_ENTRANCES[splitLocale(pathname).path] ?? PORTAL_DEFAULT_SKIN;
+  const home = splitLocale(pathname).path === "/";
+  return { phase: home ? "covered" : "opening", href: null, entrance: true };
 }
 
 /** Desde qué fases es válida cada acción. Una acción fuera de lugar no cambia nada. */
@@ -33,7 +22,7 @@ export function portalReducer(state: PortalState, action: PortalAction): PortalS
   if (!ALLOWED[action.type].includes(state.phase)) return state;
   switch (action.type) {
     case "navigate":
-      return { phase: "closing", href: action.href, skin: action.skin, entrance: false };
+      return { phase: "closing", href: action.href, entrance: false };
     case "covered":
       return { ...state, phase: "covered" };
     case "arrived":
