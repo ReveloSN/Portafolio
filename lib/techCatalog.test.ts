@@ -12,6 +12,20 @@ describe("TECH_CATALOG", () => {
     }
   });
 
+  it.each(Object.keys(CONTENT) as (keyof typeof CONTENT)[])(
+    "%s: cada tecnología de cada proyecto dice para qué se usó, sin notas sobrantes",
+    (locale) => {
+      for (const project of CONTENT[locale].projects) {
+        expect(Object.keys(project.techNotes).sort(), project.name).toEqual(
+          [...project.technologies].sort(),
+        );
+        for (const note of Object.values(project.techNotes)) {
+          expect(note.trim().length, project.name).toBeGreaterThan(0);
+        }
+      }
+    },
+  );
+
   it("solo usa logos que existen y colores hex", () => {
     for (const [name, visual] of Object.entries(TECH_CATALOG)) {
       expect(TECH_ICON_PATHS[visual.icon], name).toBeTruthy();

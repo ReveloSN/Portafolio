@@ -21,6 +21,22 @@ export const PROJECTS_EN: readonly Project[] = [
       "ESP32",
       "Gemini",
     ],
+    techNotes: {
+      "Spring Boot":
+        "The main backend, in Java: the REST API, JWT sign-in, role-based permissions, the links between patients, caregivers and doctors, and the event history.",
+      "Next.js":
+        "The web platform, deployed on Vercel, with the patient, caregiver, doctor and personal user dashboards.",
+      PostgreSQL:
+        "The backend database: users, links, telemetry, crisis events, SAM responses and the access audit log.",
+      Python:
+        "The language of the real-time service that receives the ESP32 readings and talks to the backend.",
+      FastAPI:
+        "The WebSocket server: it authenticates each device, receives its telemetry, detects disconnections and sends back the light and audio commands.",
+      ESP32:
+        "The device board: it reads the MAX30102 sensor, sends heart rate and oxygen saturation over Wi-Fi and drives the RGB lamp and the MP3 module.",
+      Gemini:
+        "An optional integration that complements the local rules: it supports trend analysis and writes follow-up information after a crisis.",
+    },
     repoUrl: "https://github.com/ReveloSN/neuro-live-backend",
     repositories: [
       { label: "Frontend", href: "https://github.com/ReveloSN/neuro-live-frontend" },
@@ -188,6 +204,17 @@ export const PROJECTS_EN: readonly Project[] = [
       "I collaborated on a roguelike built in Godot with procedural levels and AI that adapts the experience to each player's style. My work focused on enemies, art, audio and phone-based controls.",
     tagline: "A pixel art adventure that adapts its challenges to the way you play.",
     technologies: ["Godot 4", "GDScript", "Python", "Aseprite", "GitHub Actions"],
+    techNotes: {
+      "Godot 4":
+        "The game engine: scenes, physics, animation, the procedurally connected rooms and the Windows export.",
+      GDScript:
+        "The language of all the logic: enemies, bosses, the AI that adapts each run, the WebSocket controller and a custom QR encoder.",
+      Python:
+        "Helper scripts that generate part of the enemy art, the forest rooms and synthesized sound effects.",
+      Aseprite: "Drawing and animating the pixel art: characters, enemies and effects.",
+      "GitHub Actions":
+        "Runs the game's tests in headless Godot on every change and builds the Windows version on release.",
+    },
     repoUrl: "https://github.com/Fabiann1809/isla-espejo",
     facts: {
       period: "October–November 2026 (3 weeks)",
@@ -286,6 +313,16 @@ export const PROJECTS_EN: readonly Project[] = [
     tagline:
       "Checklist routines that remind you on schedule, when you leave your Wi-Fi or when you get home.",
     technologies: ["React Native", "Expo", "TypeScript", "Supabase", "Gemini"],
+    techNotes: {
+      "React Native":
+        "The base of the Android app: the screens, the swipe-to-check gesture and the home screen widget.",
+      Expo: "The native modules (notifications, location and geofence, background tasks, Wi-Fi and voice input) and the APK build.",
+      TypeScript: "Strict typing across the whole app, organized into feature modules.",
+      Supabase:
+        "Accounts, including guest mode with an anonymous session, and the cloud backup. The app keeps everything on the phone and syncs through a queue when the connection returns.",
+      Gemini:
+        "Turns a plain-language description into a draft routine that the person reviews and edits before saving.",
+    },
     repoUrl: "https://github.com/ReveloSN/app_movil",
     download: {
       href: "https://github.com/ReveloSN/app_movil/releases/latest",
@@ -388,6 +425,17 @@ export const PROJECTS_EN: readonly Project[] = [
     tagline:
       "Guidance from your watch to spot possible detours and make it easier to get back on route.",
     technologies: ["Kotlin", "Wear OS", "Jetpack Compose", "Room", "OpenStreetMap"],
+    techNotes: {
+      Kotlin:
+        "The language of the whole app, including the DTW disorientation detection that runs on the watch itself.",
+      "Wear OS":
+        "The watch platform: the app works without the phone, with a foreground location service, a tile and a watch face complication.",
+      "Jetpack Compose":
+        "The interface for the round screen: monitoring, alerts, the arrow guide and «Your week».",
+      Room: "The local database: usual routes, walks and the places where LOST asked, never sent to anyone.",
+      OpenStreetMap:
+        "The real map and walking routes in new places. A switch turns it off so the app makes no internet requests at all.",
+    },
     repoUrl: "https://github.com/ReveloSN/LOST-smartwatch",
     facts: {
       period: "October–November 2026 (2 weeks)",
@@ -488,6 +536,20 @@ export const PROJECTS_EN: readonly Project[] = [
       "spaCy",
       "SQLite",
     ],
+    techNotes: {
+      Tauri:
+        "The lightweight desktop app and its MSI, DEB and AppImage installers for Windows and Linux.",
+      React:
+        "The interface: reviewing findings, comparing versions with a minimap and exporting reports.",
+      TypeScript: "Typing for the interface and for the data coming from the engine.",
+      Python:
+        "The language of the local engine: it reads PDF, DOCX, XLSX and emails, compares the data and extracts text from scans with Tesseract.",
+      FastAPI: "The local API that connects the interface to the analysis engine.",
+      spaCy:
+        "The language processing that helps find numbers, amounts, dates and parties in the text to compare them across files.",
+      SQLite:
+        "The local history database: reviews, comparisons, decisions with their evidence and metrics.",
+    },
     repoUrl: "https://github.com/ReveloSN/ARGOS_app_escritorio",
     facts: {
       period: "October–November 2026 (3 weeks)",
@@ -589,6 +651,23 @@ export const PROJECTS_EN: readonly Project[] = [
       "Amazon S3",
       "AWS X-Ray",
     ],
+    techNotes: {
+      "AWS Lambda":
+        "Six functions, one per operation and per saga step, sharing a single code package.",
+      Python: "The language of the six Lambda functions, on Python 3.12.",
+      "API Gateway":
+        "The REST API with the five routes for transfers, deposits, accounts and transactions. REST was chosen because it supports X-Ray.",
+      "Amazon SQS":
+        "The queues that link the saga steps (debit, credit and compensation) and a DLQ that sets aside messages that fail three times.",
+      DynamoDB:
+        "The immutable event store: each step saves its event, with conditional writes that prevent double debits or credits.",
+      "Aurora PostgreSQL":
+        "Each account's balance and lock, in Aurora Serverless v2 queried through the RDS Data API. It scales on its own between 0.5 and 4 ACU.",
+      "Amazon S3":
+        "A JSON receipt for every successful transfer and the static site for the demo frontend.",
+      "AWS X-Ray":
+        "End-to-end traces, with transactionId, userId and operationType annotations to measure every subsegment.",
+    },
     facts: {
       period: "November 2026",
       team: "Solo: architecture, functions, infrastructure and report",

@@ -1,10 +1,8 @@
-import Image from "next/image";
 import { DeviceConnections } from "@/components/molecules/DeviceConnections";
+import { DevicePhoto } from "@/components/molecules/DevicePhoto";
 import { getCopy } from "@/lib/locale.server";
 import type { ProjectDevice } from "@/types/project";
 
-/** La foto ocupa algo más de la mitad del contenedor de 1200 px en escritorio. */
-const PHOTO_SIZES = "(min-width: 1024px) 620px, 95vw";
 export const DEVICE_SECTION_ID = "dispositivo";
 
 interface WorldDeviceProps {
@@ -18,7 +16,6 @@ interface WorldDeviceProps {
 export async function WorldDevice({ device }: WorldDeviceProps) {
   const {
     world: { device: copy },
-    projects,
   } = await getCopy();
   const titleId = `${DEVICE_SECTION_ID}-title`;
   const connectionsId = `${DEVICE_SECTION_ID}-conexiones`;
@@ -32,23 +29,7 @@ export async function WorldDevice({ device }: WorldDeviceProps) {
           {device.intro}
         </p>
         <div className="world-device-grid mt-fluid-5">
-          <figure className="world-device-photo">
-            <a
-              href={device.photo.src}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${device.photo.alt} ${projects.newTab}`}
-            >
-              <Image
-                src={device.photo.src}
-                alt={device.photo.alt}
-                width={device.photo.width}
-                height={device.photo.height}
-                sizes={PHOTO_SIZES}
-              />
-            </a>
-            <figcaption>{device.photo.alt}</figcaption>
-          </figure>
+          <DevicePhoto photo={device.photo} />
           <div>
             <h3 className="font-display text-fluid-xl font-extrabold">
               {copy.flowTitle}

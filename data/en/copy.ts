@@ -175,7 +175,14 @@ export const COPY_EN: Copy = {
       "From problem to solution: this tour sums up how the parts of the project fit together.",
     conceptArt: "Concept illustration",
     journeyKicker: "",
-    galleryOpen: "Open full screenshot",
+    galleryOpen: "View larger",
+    viewer: {
+      label: "Screenshot viewer",
+      counter: "Screenshot {n} of {total}",
+      previous: "Previous screenshot",
+      next: "Next screenshot",
+      close: "Close viewer",
+    },
     back: "Back to the portal",
     problem: { kicker: "", title: "The problem" },
     facts: {
@@ -193,6 +200,9 @@ export const COPY_EN: Copy = {
     galleryTitle: "Project screenshots",
     galleryEmpty: "Screenshots for this project are on their way.",
     technologies: "TECHNOLOGIES",
+    techHint: "Tap a footprint to see what it did in this project.",
+    techUsedFor: "{name} in {project}",
+    techClose: "Close",
     code: "View code",
     device: {
       title: "The device",

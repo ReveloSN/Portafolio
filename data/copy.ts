@@ -175,7 +175,14 @@ export const COPY = {
       "Del problema a la solución: este recorrido resume cómo se conectan las partes del proyecto.",
     conceptArt: "Ilustración del concepto",
     journeyKicker: "",
-    galleryOpen: "Abrir captura completa",
+    galleryOpen: "Ver en grande",
+    viewer: {
+      label: "Visor de capturas",
+      counter: "Captura {n} de {total}",
+      previous: "Captura anterior",
+      next: "Captura siguiente",
+      close: "Cerrar visor",
+    },
     back: "Volver al portal",
     problem: { kicker: "", title: "El problema" },
     facts: {
@@ -193,6 +200,9 @@ export const COPY = {
     galleryTitle: "Capturas del proyecto",
     galleryEmpty: "Las capturas de este proyecto están en camino.",
     technologies: "TECNOLOGÍAS",
+    techHint: "Toca una huella para ver para qué se usó en este proyecto.",
+    techUsedFor: "{name} en {project}",
+    techClose: "Cerrar",
     code: "Ver código",
     device: {
       title: "El dispositivo",

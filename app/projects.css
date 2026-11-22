@@ -282,10 +282,17 @@
 }
 .world-gallery-shot {
   display: block;
+  width: 100%;
   padding: clamp(12px, 2vw, 24px);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(0, 0, 0, 0.25);
+  cursor: zoom-in;
+  transition: border-color 0.2s ease;
+}
+.world-gallery-shot:hover,
+.world-device-photo button:hover {
+  border-color: rgba(255, 255, 255, 0.42);
 }
 .world-gallery-shot img {
   display: block;
@@ -303,8 +310,11 @@
   gap: clamp(24px, 4vw, 56px);
   align-items: start;
 }
-.world-device-photo a {
+.world-device-photo button {
   display: block;
+  width: 100%;
+  padding: 0;
+  cursor: zoom-in;
   overflow: hidden;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -544,5 +554,102 @@
   .project-card:hover .project-card-art > svg,
   .project-card:hover .project-card-art > img {
     transform: none;
+  }
+}
+
+/* Visor de imágenes: <dialog> modal a pantalla completa, sin salir de la página. Es un
+   objeto oscuro en los dos temas (como un visor de fotos), con texto claro en contraste AA. */
+html:has(.lightbox[open]) {
+  overflow: hidden;
+}
+.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(5, 9, 11, 0.94);
+  color: #eef3ec;
+}
+.lightbox::backdrop {
+  background: transparent;
+}
+.lightbox[open] {
+  display: block;
+}
+.lightbox-frame {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+  width: min(1280px, 100%);
+  height: 100%;
+  margin-inline: auto;
+  padding: 12px clamp(16px, 7vw, 88px) 20px;
+}
+.lightbox-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.lightbox-figure {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 14px;
+  min-height: 0;
+  margin: 0;
+}
+.lightbox-image {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+.lightbox-figure figcaption {
+  max-width: 72ch;
+  margin-inline: auto;
+  text-align: center;
+  color: #c9d3c8;
+}
+.lightbox-button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.lightbox-button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+.lightbox-button:focus-visible {
+  outline: 2px solid #eef3ec;
+  outline-offset: 3px;
+}
+.lightbox-step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+.lightbox-step[data-side="prev"] {
+  left: clamp(4px, 1.5vw, 24px);
+}
+.lightbox-step[data-side="next"] {
+  right: clamp(4px, 1.5vw, 24px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lightbox[open] {
+    animation: lightbox-in 0.2s ease-out;
+  }
+}
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
   }
 }

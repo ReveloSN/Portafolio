@@ -68,6 +68,8 @@ export interface Project {
   readonly summary: string;
   readonly tagline: string;
   readonly technologies: readonly string[];
+  /** Para qué se usó cada tecnología en este proyecto, por su nombre (panel de la huella). */
+  readonly techNotes: Readonly<Record<string, string>>;
   /** Solo si el código es público: sin él no se pintan los botones de repositorio. */
   readonly repoUrl?: string;
   readonly repositories?: readonly { readonly label: string; readonly href: string }[];
