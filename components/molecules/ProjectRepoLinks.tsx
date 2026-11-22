@@ -16,8 +16,11 @@ export async function ProjectRepoLinks({
   size,
   testId,
 }: ProjectRepoLinksProps) {
+  const repositories =
+    project.repositories ?? (project.repoUrl ? [{ label, href: project.repoUrl }] : []);
+  // Proyectos sin repositorio público (por ejemplo, montados solo en la consola de AWS)
+  if (repositories.length === 0) return null;
   const COPY = await getCopy();
-  const repositories = project.repositories ?? [{ label, href: project.repoUrl }];
   return (
     <>
       {repositories.map((repository) => (

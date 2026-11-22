@@ -76,4 +76,18 @@ export const PROJECT_JOURNEYS: Readonly<Record<WorldSlug, readonly JourneyStep[]
       text: "Los paneles muestran telemetría e historial según el rol y los vínculos entre paciente, cuidador y médico.",
     },
   ],
+  cumbre: [
+    {
+      title: "Iniciar la transferencia",
+      text: "API Gateway llama a banco-transferencia, que registra TransferInitiated en DynamoDB y deja el trabajo en la cola de débito.",
+    },
+    {
+      title: "Pasar de cola en cola",
+      text: "Débito y crédito actúan sobre Aurora y registran su evento; si el crédito falla, la cola de compensación lleva al reembolso.",
+    },
+    {
+      title: "Seguir y auditar",
+      text: "X-Ray vincula las trazas de cada paso, y CloudTrail con una alarma vigila los borrados sobre los datos.",
+    },
+  ],
 };

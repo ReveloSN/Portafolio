@@ -72,4 +72,18 @@ export const WORLDS_EN: readonly World[] = [
       { title: "Magma", subtitle: "What came out of the fire" },
     ],
   },
+  {
+    slug: "cumbre",
+    number: "06",
+    name: "SUMMIT",
+    accent: "#a8c8ff",
+    ink: "#0a1530",
+    background:
+      "linear-gradient(180deg,#0b1430 0,#172a4d 900px,#1f3558 1900px,#121e3a 3000px,#0a1228 100%)",
+    depths: [
+      { title: "Base camp", subtitle: "A transfer between two accounts" },
+      { title: "Ascent", subtitle: "Queues, events and compensations" },
+      { title: "Above the clouds", subtitle: "What the tests showed" },
+    ],
+  },
 ];

@@ -541,4 +541,179 @@ export const PROJECTS_EN: readonly Project[] = [
       },
     ],
   },
+  {
+    id: "banco-saga",
+    slug: "cumbre",
+    name: "Banco Saga",
+    summary:
+      "A serverless banking system on AWS with deposits, balance checks and transfers. A transfer is a choreographed saga over SQS queues: each step stores an immutable event in DynamoDB and, if something fails, a compensation returns the money.",
+    tagline:
+      "Transfers that undo themselves when a step fails: microservices with event sourcing and the Saga pattern on AWS.",
+    technologies: [
+      "AWS Lambda",
+      "Python",
+      "API Gateway",
+      "Amazon SQS",
+      "DynamoDB",
+      "Aurora PostgreSQL",
+      "Amazon S3",
+      "AWS X-Ray",
+    ],
+    facts: {
+      period: "November 2026",
+      team: "Solo: architecture, functions, infrastructure and report",
+      platform:
+        "AWS serverless in us-east-1: API Gateway, Lambda, SQS, DynamoDB and Aurora Serverless v2",
+      status:
+        "Completed Cloud Computing final project, with a report and console screenshots",
+    },
+    problem:
+      "A transfer touches two accounts and several services (Aurora, DynamoDB and S3) that share no common transaction. If the credit fails after the debit, the money cannot be left halfway. The Cloud Computing final project asked for a choreographed saga with compensation, Aurora Serverless v2 between 0.5 and 4 ACUs, X-Ray tracing and a CloudTrail alarm for mass deletions.",
+    roleItems: [
+      "Six Lambda functions in Python 3.12 share one code package, and API Gateway exposes five REST routes for transfers, deposits, accounts and transactions. A transfer returns 202 and drops a message in the banco-debito queue; from there each Lambda hands the work to the next queue (banco-credito and, if the credit fails, banco-compensacion), with a DLQ that sets aside messages that fail three times.",
+      "Each step records its event in the DynamoDB table banco-eventos, ordered by key (TransferInitiated, AccountDebited, CreditFailed…). Idempotency prevents double debits or credits when SQS delivers a message twice: each step checks whether its event already exists and every write uses attribute_not_exists. The IAM role has no UpdateItem or DeleteItem, so no stored event can be changed or deleted.",
+      "Aurora Serverless v2 (PostgreSQL) holds the balances and is queried through the RDS Data API, with credentials in Secrets Manager, to keep the Lambdas out of a VPC and avoid paying for a NAT Gateway. X-Ray follows each transaction with the transactionId, userId and operationType annotations, and CloudTrail Data Events feed a CloudWatch metric filter and an alarm that notifies through SNS.",
+    ],
+    contribution: [
+      "Tests from the frontend covered the saga's three cases: a transfer completed in 3.35 s, one rejected for insufficient funds without moving any money, and one compensated on reaching a blocked account, where the source got its $50 back and DynamoDB kept all five events. The dead-letter queue ended up empty.",
+      "X-Ray showed that, leaving aside the refund's 642 ms cold start, the slowest subsegment is Aurora's Data API (232 ms): the price of avoiding the VPC. In the load test Aurora scaled from 0.5 to 4 ACUs and returned to the minimum on its own, and the alarm went into the alarm state with 13 DeleteItem calls in one minute and notified through SNS.",
+    ],
+    features: [
+      {
+        title: "Saga with compensation",
+        description:
+          "Debit, credit and refund linked by SQS queues; if the credit fails, the money returns to the source.",
+      },
+      {
+        title: "Event sourcing",
+        description:
+          "Each step stores an immutable event in DynamoDB, and the whole path is rebuilt with a single query.",
+      },
+      {
+        title: "Idempotency",
+        description:
+          "A repeated SQS delivery never debits or credits twice: each step checks its event before acting.",
+      },
+      {
+        title: "Live demo",
+        description:
+          "A frontend on S3 shows the accounts and draws each saga step as the events arrive.",
+      },
+      {
+        title: "End-to-end tracing",
+        description:
+          "X-Ray with business annotations finds every trace of a transfer and measures each subsegment.",
+      },
+      {
+        title: "Mass-deletion alert",
+        description:
+          "CloudTrail Data Events, a metric filter and an alarm that notifies through SNS on more than 5 DeleteItem calls per minute.",
+      },
+    ],
+    cloud: {
+      title: "AWS services",
+      intro:
+        "Every piece of the system is a managed AWS service in the us-east-1 region. This is the role each one plays in the architecture.",
+      services: [
+        {
+          title: "API Gateway (REST)",
+          description:
+            "HTTP entry point for the five routes. The REST API was chosen because, unlike the HTTP API, it supports X-Ray tracing.",
+        },
+        {
+          title: "AWS Lambda",
+          description:
+            "Six functions in Python 3.12, one per operation and per saga step; billed per invocation and natively integrated with SQS and X-Ray.",
+        },
+        {
+          title: "Amazon SQS",
+          description:
+            "The banco-debito, banco-credito and banco-compensacion queues link the saga's steps; banco-dlq sets aside messages that fail three times.",
+        },
+        {
+          title: "Amazon DynamoDB",
+          description:
+            "The banco-eventos event store: each transaction's immutable history, ordered by key, with conditional writes for idempotency.",
+        },
+        {
+          title: "Aurora Serverless v2",
+          description:
+            "PostgreSQL with each account's balance and lock; moves money with SQL transactions and scales on its own between 0.5 and 4 ACUs.",
+        },
+        {
+          title: "RDS Data API",
+          description:
+            "The Lambdas query Aurora over HTTPS, without joining a VPC or paying for a NAT Gateway.",
+        },
+        {
+          title: "AWS Secrets Manager",
+          description:
+            "Stores Aurora's credentials; the Lambdas only receive the secret's ARN.",
+        },
+        {
+          title: "Amazon S3",
+          description:
+            "Stores a JSON receipt for every successful transfer and hosts the frontend's static website.",
+        },
+        {
+          title: "AWS X-Ray",
+          description:
+            "Active tracing on API Gateway and the six Lambdas, with a service map, business annotations and per-subsegment latency.",
+        },
+        {
+          title: "AWS CloudTrail",
+          description:
+            "Records, through Data Events, operations on DynamoDB items and on the objects in the receipts bucket.",
+        },
+        {
+          title: "CloudWatch and SNS",
+          description:
+            "A metric filter counts DeleteItem calls and an alarm sends an email through SNS on more than 5 in a minute. CloudWatch also shows Aurora's scaling.",
+        },
+        {
+          title: "AWS IAM",
+          description:
+            "A least-privilege role: with no UpdateItem or DeleteItem, no Lambda can change or delete an event.",
+        },
+      ],
+    },
+    screenshots: [
+      {
+        src: `${SHOTS}/cumbre/arquitectura-aws.webp`,
+        alt: "Architecture diagram in us-east-1: the browser loads the frontend from S3 and calls API Gateway; banco-transferencia starts the saga through the banco-debito, banco-credito and banco-compensacion queues, with their Lambdas and the DLQ; below, DynamoDB, Aurora Serverless v2, Secrets Manager and S3, and a band with X-Ray, IAM, CloudTrail, CloudWatch and SNS.",
+        width: 1600,
+        height: 978,
+      },
+      {
+        src: `${SHOTS}/cumbre/transferencia-completada.webp`,
+        alt: "“Banco Saga” demo: a $100 transfer from ACC-001 to ACC-002 completed in four steps (request, debit, credit and transfer completed at 3.35 s), with a note that a receipt was stored in S3 and the filter to find it in X-Ray.",
+        width: 1440,
+        height: 1080,
+      },
+      {
+        src: `${SHOTS}/cumbre/transferencia-compensada.webp`,
+        alt: "A $50 transfer from ACC-001 to the blocked account ACC-004: debit, credit rejected, refund to the source and transfer compensated at 1.65 s, with the session history: compensated, rejected and completed.",
+        width: 1440,
+        height: 1363,
+      },
+      {
+        src: `${SHOTS}/cumbre/eventos-de-la-compensacion.webp`,
+        alt: "DynamoDB query by the transactionId of a compensated transfer: 5 items returned, from 01#TransferInitiated to 05#TransferCompensated, through AccountDebited, CreditFailed and DebitRefunded.",
+        width: 782,
+        height: 850,
+      },
+      {
+        src: `${SHOTS}/cumbre/traza-del-reembolso.webp`,
+        alt: "X-Ray timeline of banco-reembolso, the fourth of four linked traces: 1.26 s in total, a 642 ms Init from the cold start and a 232 ms rds-data ExecuteStatement.",
+        width: 1366,
+        height: 1060,
+      },
+      {
+        src: `${SHOTS}/cumbre/aurora-capacidad-acu.webp`,
+        alt: "Aurora's ServerlessDatabaseCapacity metric in CloudWatch (one-minute average, 6 h): it rises from 0.5 to 4 ACUs around 20:30 UTC and returns to the minimum.",
+        width: 1405,
+        height: 455,
+      },
+    ],
+  },
 ];

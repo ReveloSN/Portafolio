@@ -36,6 +36,6 @@ export const TECH_USAGE: TechUsageMap = {
     ],
   },
   godot: { projects: ["selva"], repos: [] },
-  /* Servidor y generador de carga en una instancia EC2 t3.small (docs/SETUP-AWS.md). */
-  aws: { projects: [], repos: [repo("proyecto-final-arquitectura-computacional")] },
+  /* Banco Saga: microservicios serverless en AWS (informe del proyecto, sin repositorio). */
+  aws: { projects: ["cumbre"], repos: [] },
 };

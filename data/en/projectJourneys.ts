@@ -73,4 +73,18 @@ export const PROJECT_JOURNEYS_EN: Readonly<Record<WorldSlug, readonly JourneySte
       text: "Dashboards show telemetry and history based on each role and the links between patient, caregiver and doctor.",
     },
   ],
+  cumbre: [
+    {
+      title: "Start the transfer",
+      text: "API Gateway calls banco-transferencia, which records TransferInitiated in DynamoDB and leaves the work in the debit queue.",
+    },
+    {
+      title: "Move from queue to queue",
+      text: "Debit and credit act on Aurora and record their event; if the credit fails, the compensation queue leads to the refund.",
+    },
+    {
+      title: "Trace and audit",
+      text: "X-Ray links the traces of every step, and CloudTrail with an alarm watches for deletions on the data.",
+    },
+  ],
 };

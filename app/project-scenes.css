@@ -116,6 +116,14 @@
 .project-scene[data-world="volcan"] .project-scene-dinosaur {
   height: 72%;
 }
+/* Sobre las nubes no crecen helechos; el banco de nubes del personaje llega al borde. */
+.project-scene[data-world="cumbre"] .project-scene-foreground {
+  display: none;
+}
+.project-scene[data-world="cumbre"] .project-scene-dinosaur {
+  right: -3%;
+  width: 76%;
+}
 .project-scene-hero .project-scene-background {
   inset: -3%;
 }

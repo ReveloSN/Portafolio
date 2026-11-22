@@ -77,7 +77,6 @@ describe("PROJECTS", () => {
     expect(Object.values(project.facts).every((value) => value.trim().length > 0)).toBe(
       true,
     );
-    expect(project.repoUrl).toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+$/);
   });
 
   it.each(PROJECTS.filter((project) => project.device))(
@@ -92,6 +91,13 @@ describe("PROJECTS", () => {
       });
       expect(device.flow.length).toBeGreaterThan(0);
       expect(device.components.every((part) => part.signals.length > 0)).toBe(true);
+    },
+  );
+
+  it.each(PROJECTS.filter((project) => project.repoUrl))(
+    "$name enlaza un repositorio de GitHub",
+    (project) => {
+      expect(project.repoUrl).toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+$/);
     },
   );
 

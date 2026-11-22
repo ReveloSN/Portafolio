@@ -14,7 +14,6 @@ export const TECH_CATALOG: Readonly<Record<string, TechVisual>> = {
   "Spring Boot": { icon: "spring", color: "#6db33f" },
   FastAPI: { icon: "fastapi", color: "#05a594" },
   Python: { icon: "python", color: "#3776ab" },
-  "Node.js": { icon: "nodejs", color: "#5fa04e" },
   PostgreSQL: { icon: "postgresql", color: "#4169e1" },
   SQLite: { icon: "sqlite", color: "#4f9fd1" },
   Supabase: { icon: "supabase", color: "#3fcf8e" },
@@ -41,7 +40,14 @@ export const TECH_CATALOG: Readonly<Record<string, TechVisual>> = {
   // Hardware, nube y herramientas
   ESP32: { icon: "espressif", color: "#e7352c" },
   AWS: { icon: "aws", color: "#ff9900" },
-  Docker: { icon: "docker", color: "#2496ed" },
-  Locust: { icon: "locust", color: "#b8ee4b" },
+  // Servicios de AWS: Simple Icons no trae sus logos, así que llevan el de AWS con el color
+  // de su categoría en la paleta oficial (cómputo, integración, bases de datos, almacenamiento).
+  "AWS Lambda": { icon: "aws", color: "#ed7100" },
+  "API Gateway": { icon: "aws", color: "#e7157b" },
+  "Amazon SQS": { icon: "aws", color: "#e7157b" },
+  DynamoDB: { icon: "aws", color: "#c925d1" },
+  "Amazon S3": { icon: "aws", color: "#7aa116" },
+  "AWS X-Ray": { icon: "aws", color: "#e7157b" },
+  "Aurora PostgreSQL": { icon: "postgresql", color: "#4169e1" },
   "GitHub Actions": { icon: "githubactions", color: "#2088ff" },
 };
