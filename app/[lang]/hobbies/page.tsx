@@ -3,7 +3,7 @@ import { SkipLink } from "@/components/atoms/SkipLink";
 import { Footer } from "@/components/organisms/Footer";
 import { Hobbies } from "@/components/organisms/Hobbies";
 import { Navbar } from "@/components/organisms/Navbar";
-import { HOBBIES_PATH, MAIN_CONTENT_ID } from "@/data/navigation";
+import { HOBBIES_PATH, MAIN_CONTENT_ID, SECTION_IDS } from "@/data/navigation";
 import { getContent, getLocale } from "@/lib/locale.server";
 import { languageAlternates } from "@/lib/seo";
 
@@ -22,7 +22,7 @@ export default async function HobbiesPage() {
   return (
     <>
       <SkipLink href={`#${MAIN_CONTENT_ID}`}>{copy.nav.skipToContent}</SkipLink>
-      <Navbar profile={profile} links={navLinks} />
+      <Navbar profile={profile} links={navLinks} backHref={`/#${SECTION_IDS.hobbies}`} />
       <main
         id={MAIN_CONTENT_ID}
         tabIndex={-1}

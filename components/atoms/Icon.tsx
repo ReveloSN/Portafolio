@@ -19,6 +19,7 @@ export type IconName =
   | "chevronRight"
   | "burger"
   | "close"
+  | "arrowLeft"
   | "arrowUp"
   | "arrowDown"
   | "shovel"
@@ -114,6 +115,7 @@ const ICONS: Readonly<Record<IconName, IconSpec>> = {
   chevronRight: { paths: <path d="M9 5l7 7-7 7" /> },
   burger: { paths: <path d="M4 7h16M4 12h16M4 17h16" /> },
   close: { paths: <path d="M6 6l12 12M18 6 6 18" /> },
+  arrowLeft: { paths: <path d="M20 12H5m7-7-7 7 7 7" /> },
   arrowUp: { paths: <path d="M12 20V5M5 12l7-7 7 7" /> },
   arrowDown: { viewBox: "0 0 18 26", paths: <path d="M9 2v20M2 15l7 8 7-8" /> },
   shovel: { paths: <path d="M14 3l7 7-3 3-7-7zM11 6L3 21l15-8" /> },
