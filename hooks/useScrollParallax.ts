@@ -6,6 +6,13 @@ import { supportsScrollTimeline } from "@/lib/dom";
 /** Mide (solo lee el DOM) y devuelve la escritura que se hará después. */
 type Subscriber = () => () => void;
 
+/**
+ * Margen del observador: el borde que lo dispara queda lejos de la pantalla. Con margen 0,
+ * una capa apoyada justo en el borde (la hoja del Hero al saltar a Sobre mí) cambiaba
+ * `data-inview` en cada cuadro y repintaba la página sin parar.
+ */
+const NEAR_MARGIN = "25% 0px";
+
 /** Un único listener de scroll (con rAF) compartido por todos los elementos visibles. */
 const subscribers = new Set<Subscriber>();
 let frame = 0;
@@ -37,17 +44,16 @@ function subscribe(update: Subscriber) {
 
 /**
  * Paralaje de scroll. Con soporte de `animation-timeline: view()` lo hace el CSS
- * (clase `.art-parallax`); si no, un listener compartido escribe `--scroll-shift`.
- * En ambos casos marca `data-inview` para activar `will-change` solo en pantalla.
+ * (clase `.art-parallax`) y el hook no hace nada. Si no, un listener compartido escribe
+ * `--scroll-shift` y `data-inview` activa `will-change` solo cerca de la pantalla.
  */
 export function useScrollParallax<T extends HTMLElement>() {
   const ref = useRef<T>(null);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const cssDriven = supportsScrollTimeline();
+    if (!element || supportsScrollTimeline()) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let unsubscribe: (() => void) | null = null;
 
     const update = () => {
@@ -58,16 +64,18 @@ export function useScrollParallax<T extends HTMLElement>() {
       return () => element.style.setProperty("--scroll-shift", shift);
     };
 
-    const observer = new IntersectionObserver(([entry]) => {
-      const visible = entry?.isIntersecting ?? false;
-      element.toggleAttribute("data-inview", visible);
-      if (cssDriven || reducedMotion) return;
-      if (visible && !unsubscribe) unsubscribe = subscribe(update);
-      if (!visible && unsubscribe) {
-        unsubscribe();
-        unsubscribe = null;
-      }
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry?.isIntersecting ?? false;
+        element.toggleAttribute("data-inview", visible);
+        if (visible && !unsubscribe) unsubscribe = subscribe(update);
+        if (!visible && unsubscribe) {
+          unsubscribe();
+          unsubscribe = null;
+        }
+      },
+      { rootMargin: NEAR_MARGIN },
+    );
     observer.observe(element);
     return () => {
       observer.disconnect();

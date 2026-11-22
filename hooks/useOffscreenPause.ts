@@ -2,8 +2,13 @@
 
 import { useEffect } from "react";
 
-/** Margen antes de entrar en pantalla: cuando la sección asoma, sus animaciones ya corren. */
-const ROOT_MARGIN = "200px 0px";
+/**
+ * Por abajo, 200 px antes de entrar: cuando la sección asoma, sus animaciones ya corren (y
+ * lo que cruza su costura hacia arriba, como la cola, no se ve congelado). Por arriba, 1 px
+ * hacia dentro: una sección que solo toca el borde (el Hero al saltar a Sobre mí) ya no se
+ * ve y se pausa.
+ */
+const ROOT_MARGIN = "-1px 0px 200px 0px";
 
 /**
  * Marca con `data-paused` las secciones que están fuera de pantalla; el CSS pausa sus
