@@ -30,11 +30,13 @@ export function buildBoardPieces(
   );
   const pieces = used.map((shape, i): BoardPiece => {
     const year = String(entries[i]!.startYear);
+    const tag = String(i + 1).padStart(2, "0");
     return {
       shape,
       trayOrigin: tray.positions[i]!,
-      tag: String(i + 1).padStart(2, "0"),
-      label: interpolate(labelTemplate, { n: i + 1, bone: shape.label, year }),
+      tag,
+      // El mismo número que se ve sobre el hueso ("01"), por WCAG 2.5.3.
+      label: interpolate(labelTemplate, { n: tag, bone: shape.label, year }),
     };
   });
   return { pieces, height: board.slabHeight + tray.height };

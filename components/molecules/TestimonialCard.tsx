@@ -24,6 +24,8 @@ export function TestimonialCard({
   return (
     <article
       aria-hidden={hidden}
+      // Los laterales son vista previa inactiva: se leen al pasar a ellos con los botones.
+      inert={hidden}
       style={style}
       className="relative mx-auto w-[min(580px,88%)] transition duration-700 ease-out [grid-area:1/1]"
     >

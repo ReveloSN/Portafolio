@@ -16,7 +16,8 @@ export function LanguageSwitch() {
       hrefLang={htmlLang}
       lang={htmlLang}
       onClick={choose}
-      aria-label={switchLabel}
+      // El nombre empieza por lo que se ve ("EN"), para quien navega con la voz (WCAG 2.5.3).
+      aria-label={`${code}: ${switchLabel}`}
       title={switchLabel}
       data-testid="language-switch"
       className="text-fg border-line-strong bg-surface hover:bg-surface-strong font-display text-fluid-sm inline-flex size-11 items-center justify-center rounded-xl border font-extrabold tracking-[.06em] no-underline transition"
