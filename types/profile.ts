@@ -24,7 +24,25 @@ export type TechIconId =
   | "godot"
   | "kotlin"
   | "python"
-  | "aws";
+  | "aws"
+  | "postgresql"
+  | "espressif"
+  | "gemini"
+  | "aseprite"
+  | "githubactions"
+  | "expo"
+  | "typescript"
+  | "supabase"
+  | "wearos"
+  | "compose"
+  | "openstreetmap"
+  | "tauri"
+  | "spacy"
+  | "sqlite"
+  | "nodejs"
+  | "locust"
+  | "docker"
+  | "android";
 
 /** Tecnología del camino de huellas: su logotipo llena la huella y brilla con su color. */
 /** Colores del interior de la huella; si faltan se derivan del color de marca. */

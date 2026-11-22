@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ProjectRepoLinks } from "@/components/molecules/ProjectRepoLinks";
-import { TechPrints } from "@/components/molecules/TechPrints";
+import { ProjectTechTrail } from "@/components/molecules/ProjectTechTrail";
 import { getCopy } from "@/lib/locale.server";
 import type { Project } from "@/types/project";
 
@@ -63,19 +63,17 @@ export async function WorldGallery({ project }: WorldGalleryProps) {
             </ul>
           </>
         )}
-        <div className="px-fluid-4 py-fluid-3 mt-11 flex flex-wrap items-center gap-3.5 rounded-3xl border border-white/18 bg-white/7">
-          <div className="min-w-[220px] flex-1">
-            <p className="text-fluid-xs font-mono tracking-[.22em] opacity-70">
-              {copy.technologies}
-            </p>
-            <TechPrints
-              technologies={project.technologies}
-              label={copy.technologies}
-              tone="night"
-              className="mt-2.5"
-            />
+        <div className="px-fluid-4 py-fluid-4 mt-11 rounded-3xl border border-white/18 bg-white/7">
+          <p className="text-fluid-xs text-center font-mono tracking-[.22em] opacity-70">
+            {copy.technologies}
+          </p>
+          <ProjectTechTrail
+            technologies={project.technologies}
+            label={copy.technologies}
+          />
+          <div className="mt-fluid-4 flex justify-center">
+            <ProjectRepoLinks project={project} label={copy.code} />
           </div>
-          <ProjectRepoLinks project={project} label={copy.code} />
         </div>
       </div>
     </section>
