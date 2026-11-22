@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { Icon } from "@/components/atoms/Icon";
-import { GlyphBand } from "@/components/molecules/GlyphBand";
-import { JournalEntry } from "@/components/molecules/JournalEntry";
+import { JournalLeaf } from "@/components/molecules/JournalLeaf";
 import { useExperienceLink } from "@/hooks/useExperienceLink";
 import { usePager } from "@/hooks/usePager";
 import { pageLabel } from "@/lib/pager";
@@ -31,9 +30,10 @@ interface JournalBookProps {
 }
 
 /**
- * Un diario de papel antiguo con una experiencia por página. Todas las hojas se apilan en
- * la misma celda: el libro mide su página más alta y no salta. Pasar de página gira la
- * hoja sobre el lomo. Al encajar un hueso del fósil, su diario abre esa página.
+ * Un diario de papel antiguo con una experiencia por hoja. Todas las hojas se apilan en
+ * la misma celda: el libro mide su hoja más alta y no salta. Pasar de página gira la hoja
+ * entera sobre el lomo; los botones quedan fuera del papel y conservan el foco. Al encajar
+ * un hueso del fósil, su diario abre esa página.
  */
 export function JournalBook({ id, title, entries, bones, labels }: JournalBookProps) {
   const pager = usePager(entries.length);
@@ -50,13 +50,8 @@ export function JournalBook({ id, title, entries, bones, labels }: JournalBookPr
   }, [requested?.seq]);
 
   return (
-    <article
-      id={id}
-      className="journal-sheet journal-book"
-      aria-labelledby={`${id}-title`}
-    >
-      <GlyphBand />
-      <h3 id={`${id}-title`} className="journal-heading">
+    <article id={id} className="journal-book" aria-labelledby={`${id}-title`}>
+      <h3 id={`${id}-title`} className="sr-only">
         {title}
       </h3>
       <ol
@@ -65,23 +60,18 @@ export function JournalBook({ id, title, entries, bones, labels }: JournalBookPr
         data-testid="experience-list"
       >
         {entries.map((entry, i) => {
-          const active = i === pager.index;
           const bone = bones[entry.id];
           return (
-            <li
+            <JournalLeaf
               key={entry.id}
-              className="journal-page"
-              data-active={active || undefined}
-              data-leaving={i === pager.previous || undefined}
-              inert={!active}
-              aria-hidden={!active}
-            >
-              <JournalEntry
-                entry={entry}
-                achievementsLabel={labels.achievements}
-                fragment={bone ? labels.fragment.replace("{bone}", bone) : undefined}
-              />
-            </li>
+              title={title}
+              entry={entry}
+              achievementsLabel={labels.achievements}
+              fragment={bone ? labels.fragment.replace("{bone}", bone) : undefined}
+              folio={pageLabel(labels.pageOf, i, entries.length)}
+              active={i === pager.index}
+              leaving={i === pager.previous}
+            />
           );
         })}
       </ol>
@@ -95,7 +85,7 @@ export function JournalBook({ id, title, entries, bones, labels }: JournalBookPr
         >
           <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
         </button>
-        <p className="journal-page-count" aria-live="polite">
+        <p className="sr-only" aria-live="polite">
           {pageLabel(labels.pageOf, pager.index, entries.length)}
         </p>
         <button

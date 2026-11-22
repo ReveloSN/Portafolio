@@ -3,14 +3,16 @@
 /* trayectoria, enmarcada por jeroglíficos. Es un objeto: se ve igual  */
 /* en los dos temas. Serif de grabado y tinta oscura; sin imágenes.    */
 /* ------------------------------------------------------------------ */
+.journal-book,
 .journal-sheet {
   --journal-paper: #e6d6b2;
   --journal-ink: #2b2117;
   --journal-faded: #5f5343;
   --journal-rust: #8b4a1f;
   --journal-rule: rgba(43, 33, 23, 0.3);
+}
+.journal-sheet {
   position: relative;
-  margin-top: max(2.5rem, calc(var(--u) * 4.5));
   padding: max(1.25rem, calc(var(--u) * 2.6)) max(1.1rem, calc(var(--u) * 3.6));
   border-radius: 4px;
   color: var(--journal-ink);
@@ -23,8 +25,7 @@
     var(--journal-paper);
   box-shadow:
     inset 0 0 70px rgba(110, 72, 30, 0.38),
-    inset 0 0 6px rgba(80, 50, 20, 0.45),
-    0 24px 60px rgba(0, 0, 0, 0.4);
+    inset 0 0 6px rgba(80, 50, 20, 0.45);
 }
 
 /* Franja de jeroglíficos entre dos líneas de tinta ---------------- */
@@ -48,9 +49,6 @@
   .journal-glyph:nth-child(n + 8) {
     display: none;
   }
-}
-.journal-band:last-child {
-  margin-top: max(1.5rem, calc(var(--u) * 2.4));
 }
 
 .journal-heading {
@@ -132,31 +130,27 @@
     grid-template-columns: 1fr 1fr;
   }
 }
-.journal-books > .journal-sheet {
-  margin-top: 0;
-}
-/* Los dos libros miden lo mismo: las páginas ocupan el alto libre y los botones quedan abajo */
+/* Los dos libros miden lo mismo: las hojas ocupan el alto libre y los botones quedan abajo */
 .journal-book {
   display: flex;
   flex-direction: column;
-}
-.journal-book .journal-pages {
-  flex: 1 1 auto;
-}
-.journal-book .journal-heading {
-  font-size: var(--fs-xl);
+  min-width: 0;
 }
 
-/* Páginas apiladas en la misma celda: el libro mide su página más alta.
-   Con perspectiva, para que la hoja gire sobre el lomo (borde izquierdo). */
+/* Hojas completas apiladas en la misma celda: el libro mide su hoja más alta.
+   La sombra del libro queda quieta; el papel es de cada hoja, que gira sobre el lomo. */
 .journal-pages {
+  position: relative;
+  z-index: 1;
   display: grid;
-  margin-top: max(1rem, calc(var(--u) * 1.6));
-  border-top: 1px solid var(--journal-rule);
-  perspective: 1800px;
+  flex: 1 1 auto;
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  perspective: 2600px;
 }
 .journal-page {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   grid-area: 1 / 1;
   min-width: 0;
   transform-origin: left center;
@@ -164,74 +158,96 @@
 }
 .journal-page:not([data-active]) {
   visibility: hidden;
+  pointer-events: none;
+}
+.journal-page .journal-heading {
+  font-size: var(--fs-xl);
 }
 .journal-page .journal-entry {
+  flex: 1 1 auto;
+  margin-top: max(1rem, calc(var(--u) * 1.6));
+  border-top: 1px solid var(--journal-rule);
   border-bottom: 0;
+}
+/* Número impreso al pie: gira con su hoja */
+.journal-folio {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--journal-rule);
+  color: var(--journal-faded);
+  font-size: var(--fs-sm);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  text-align: center;
 }
 
 /* Pasar hoja. Solo después de pulsar (data-dir): nada gira al cargar.
-   Adelante: la hoja actual se levanta y gira hacia el lomo y deja ver la siguiente.
-   Atrás: la hoja anterior vuelve girando encima de la actual. */
+   Adelante: la hoja actual se levanta hacia el lomo y deja ver la siguiente.
+   Atrás: la hoja anterior vuelve girando encima de la actual.
+   El giro llega a -104deg y no a -180deg: pasado el canto la hoja ya no se ve, y al volver
+   parecería que el botón tarda en responder. */
 .journal-pages[data-dir] .journal-page[data-leaving] {
   visibility: visible;
 }
 .journal-pages[data-dir="forward"] .journal-page[data-leaving] {
   z-index: 2;
-  animation: journal-page-away 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) forwards;
+  animation: journal-page-away 0.8s cubic-bezier(0.45, 0.05, 0.3, 1) forwards;
 }
 .journal-pages[data-dir="back"] .journal-page[data-active] {
   z-index: 2;
-  animation: journal-page-return 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) backwards;
+  animation: journal-page-return 0.8s cubic-bezier(0.45, 0.05, 0.3, 1) backwards;
 }
 .journal-pages[data-dir="back"] .journal-page[data-leaving] {
-  animation: journal-page-hold 0.7s step-end forwards;
+  animation: journal-page-hold 0.8s step-end forwards;
 }
-/* Sombra del lomo sobre la página de abajo mientras la otra gira */
-.journal-pages[data-dir="forward"] .journal-page[data-active]::after {
+/* Sombra del lomo: se aclara en la hoja que se descubre y se oscurece en la que se tapa */
+.journal-pages[data-dir="forward"] .journal-page[data-active]::after,
+.journal-pages[data-dir="back"] .journal-page[data-leaving]::after {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   pointer-events: none;
-  background: linear-gradient(to right, rgba(70, 45, 20, 0.28), transparent 65%);
-  animation: journal-page-shade 0.7s ease-out forwards;
+  background: linear-gradient(to right, rgba(70, 45, 20, 0.45), transparent 75%);
 }
-/* La hoja que gira lleva papel propio para tapar la de abajo */
+.journal-pages[data-dir="forward"] .journal-page[data-active]::after {
+  animation: journal-page-uncover 0.8s ease-out forwards;
+}
+.journal-pages[data-dir="back"] .journal-page[data-leaving]::after {
+  animation: journal-page-cover 0.8s ease-in forwards;
+}
 @keyframes journal-page-away {
   from {
     transform: rotateY(0deg);
-    background-color: var(--journal-paper);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
-  45% {
-    box-shadow: -18px 10px 28px rgba(60, 38, 15, 0.35);
+    visibility: visible;
   }
   to {
-    transform: rotateY(-180deg);
-    background-color: var(--journal-paper);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transform: rotateY(-104deg);
+    visibility: hidden;
   }
 }
 @keyframes journal-page-return {
   from {
-    transform: rotateY(-180deg);
-    background-color: var(--journal-paper);
-  }
-  55% {
-    box-shadow: -18px 10px 28px rgba(60, 38, 15, 0.35);
+    transform: rotateY(-104deg);
   }
   to {
     transform: rotateY(0deg);
-    background-color: var(--journal-paper);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   }
 }
 @keyframes journal-page-hold {
+  from {
+    visibility: visible;
+  }
   to {
     visibility: hidden;
   }
 }
-@keyframes journal-page-shade {
+@keyframes journal-page-uncover {
   to {
+    opacity: 0;
+  }
+}
+@keyframes journal-page-cover {
+  from {
     opacity: 0;
   }
 }
@@ -253,15 +269,13 @@
   height: 1.1rem;
 }
 
-/* Paso de página: dos botones de tinta y el número de página */
+/* Paso de página: dos botones de papel bajo el libro, fuera de la hoja que gira */
 .journal-pager {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--journal-rule);
 }
 .journal-turn {
   display: inline-flex;
@@ -271,6 +285,7 @@
   height: 2.75rem;
   border: 1px solid rgba(43, 33, 23, 0.4);
   border-radius: 50%;
+  background: var(--journal-paper);
   color: var(--journal-ink);
   cursor: pointer;
   transition:
@@ -282,18 +297,12 @@
   color: var(--journal-paper);
 }
 .journal-turn:focus-visible {
-  outline: 2px solid var(--journal-rust);
+  outline: 2px solid var(--glow);
   outline-offset: 2px;
 }
 .journal-turn:disabled {
   cursor: default;
-  opacity: 0.35;
-}
-.journal-page-count {
-  color: var(--journal-faded);
-  font-size: var(--fs-sm);
-  font-variant: small-caps;
-  letter-spacing: 0.05em;
+  opacity: 0.5;
 }
 
 @media (prefers-reduced-motion: reduce) {
