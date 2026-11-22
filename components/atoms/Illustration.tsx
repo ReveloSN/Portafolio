@@ -8,6 +8,11 @@ interface BaseProps {
   readonly width: number;
   readonly height: number;
   readonly sizes: string;
+  /**
+   * Adornos pequeños de ancho fijo (px): piden solo 1x y 2x de ese ancho, en vez de un
+   * `srcset` con los 18 anchos (las luciérnagas sumaban 36 KB de HTML).
+   */
+  readonly fixedWidth?: number;
   readonly className?: string;
   readonly imageClassName?: string;
   readonly style?: CSSProperties;
@@ -35,6 +40,7 @@ export function Illustration(props: IllustrationProps) {
     width,
     height,
     sizes,
+    fixedWidth,
     className,
     imageClassName,
     style,
@@ -56,9 +62,9 @@ export function Illustration(props: IllustrationProps) {
       <Image
         src={src}
         alt={decorative ? "" : props.alt}
-        width={width}
-        height={height}
-        sizes={sizes}
+        width={fixedWidth ?? width}
+        height={fixedWidth ? Math.round((fixedWidth * height) / width) : height}
+        sizes={fixedWidth ? undefined : sizes}
         quality={quality}
         priority={priority}
         loading={priority ? undefined : loading}

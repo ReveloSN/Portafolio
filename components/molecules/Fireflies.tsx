@@ -4,6 +4,9 @@ import { FIREFLY_SPRITES } from "@/data/art";
 import { makeFlights } from "@/lib/fireflies";
 import { cn } from "@/lib/utils";
 
+/** Ancho servido de cada luciérnaga. */
+const SPRITE_PX = 48;
+
 interface FirefliesProps {
   /** Entre 8 y 12 en escritorio; en móvil el CSS deja solo 4. */
   readonly count: number;
@@ -36,7 +39,8 @@ export function Fireflies({ count, className }: FirefliesProps) {
               src={sprite.src}
               width={sprite.width}
               height={sprite.height}
-              sizes="48px"
+              sizes={`${SPRITE_PX}px`}
+              fixedWidth={SPRITE_PX}
               className="firefly-glow"
             />
           </span>
