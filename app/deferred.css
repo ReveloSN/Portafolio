@@ -1,0 +1,13 @@
+/* ------------------------------------------------------------------ */
+/* Arte que espera a que termine la carga (useLoadedFlag): así no alarga */
+/* la pantalla «Cargando…». Sin JS no se difiere nada.                  */
+/* ------------------------------------------------------------------ */
+@media (scripting: enabled) {
+  html:not([data-loaded]) :is(.tech-print-fill, .tech-print-shade, .tech-print-glow),
+  html:not([data-loaded]) .nest-shell-piece {
+    display: none;
+  }
+  html:not([data-loaded]) .journal-sheet {
+    font-family: Georgia, serif;
+  }
+}

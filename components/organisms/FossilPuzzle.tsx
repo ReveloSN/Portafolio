@@ -7,6 +7,7 @@ import { PuzzleToolbar } from "@/components/molecules/PuzzleToolbar";
 import { PUZZLE_BOARD } from "@/data/fossilPuzzle";
 import { useExperienceLink } from "@/hooks/useExperienceLink";
 import { useFossilPuzzle } from "@/hooks/useFossilPuzzle";
+import { useInView } from "@/hooks/useInView";
 import { useCopy } from "@/hooks/useLocale";
 import { countPlaced } from "@/lib/fossilPuzzle";
 import { describePuzzleEvent } from "@/lib/puzzleAnnouncement";
@@ -24,6 +25,8 @@ interface FossilPuzzleProps {
 
 const INSTRUCTIONS_ID = "fossil-instrucciones";
 const RESULT_ID = "fossil-resultado";
+/** El arte de los huesos se pide una pantalla y media antes de llegar al fósil. */
+const ART_MARGIN = "150% 0px";
 
 /** Fósil tipo puzle: cada pieza encajada revela una experiencia; completo, la lista entera. */
 export default function FossilPuzzle({ entries, bones }: FossilPuzzleProps) {
@@ -51,6 +54,7 @@ export default function FossilPuzzle({ entries, bones }: FossilPuzzleProps) {
     placeAll,
     reset,
   } = useFossilPuzzle(pieces);
+  const { ref: nearRef, inView: near } = useInView<HTMLDivElement>(0, ART_MARGIN);
   const placed = countPlaced(state);
   const shown = state.lastPlaced;
   // Al encajar un hueso, su diario abre la página de esa experiencia (vínculo con los libros).
@@ -67,7 +71,11 @@ export default function FossilPuzzle({ entries, bones }: FossilPuzzleProps) {
   );
 
   return (
-    <div className="mt-fluid-4 flex flex-col gap-5" data-testid="fossil-puzzle">
+    <div
+      ref={nearRef}
+      className="mt-fluid-4 flex flex-col gap-5"
+      data-testid="fossil-puzzle"
+    >
       <p
         id={INSTRUCTIONS_ID}
         className="text-fluid-sm max-w-[60ch] leading-normal opacity-85"
@@ -96,6 +104,7 @@ export default function FossilPuzzle({ entries, bones }: FossilPuzzleProps) {
           board={PUZZLE_BOARD}
           height={complete ? PUZZLE_BOARD.slabHeight : height}
           pieces={pieces}
+          showArt={near}
           state={state}
           describedBy={INSTRUCTIONS_ID}
           pxPerUnit={pxPerUnit}

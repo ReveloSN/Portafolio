@@ -1,3 +1,5 @@
+import { BONE_ART_PX, SLAB_ART_PX } from "@/lib/constants";
+import { optimizedSrc } from "@/lib/imageUrl";
 import type { BoneShape } from "@/types/puzzle";
 
 interface FossilSlabProps {
@@ -5,14 +7,16 @@ interface FossilSlabProps {
   readonly height: number;
   readonly shapes: readonly BoneShape[];
   readonly placed?: readonly boolean[];
+  readonly showArt: boolean;
 }
 
 /** Margen del canto de la losa respecto al tablero (unidades). */
 const EDGE = 16;
 const RADIUS = 36;
+const SLAB_ART = "/art/experience/bones/empty-slab.webp";
 
 /** Losa de piedra con el hueco punteado de cada hueso. Decorativa: el puzle se lee aparte. */
-export function FossilSlab({ width, height, shapes, placed }: FossilSlabProps) {
+export function FossilSlab({ width, height, shapes, placed, showArt }: FossilSlabProps) {
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
@@ -37,7 +41,7 @@ export function FossilSlab({ width, height, shapes, placed }: FossilSlabProps) {
         strokeWidth="2"
       />
       <image
-        href="/art/experience/bones/empty-slab.webp"
+        href={showArt ? optimizedSrc(SLAB_ART, SLAB_ART_PX) : undefined}
         width={width}
         height={height}
         preserveAspectRatio="none"
@@ -55,7 +59,7 @@ export function FossilSlab({ width, height, shapes, placed }: FossilSlabProps) {
             overflow="hidden"
           >
             <image
-              href={shape.image}
+              href={showArt ? optimizedSrc(shape.image, BONE_ART_PX) : undefined}
               x={-(shape.imageOffset?.x ?? 0)}
               y={-(shape.imageOffset?.y ?? 0)}
               width={shape.imageSize?.width ?? shape.size.width}

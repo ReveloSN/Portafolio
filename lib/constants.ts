@@ -1,4 +1,11 @@
 export const PARALLAX_MAX_FPS = 60;
+/** Ancho más grande que pide el arte del fósil: el de sus archivos (ver `lib/imageUrl`). */
+export const BONE_ART_PX = 1080;
+export const SLAB_ART_PX = 1920;
+
+/** Atributo de `<html>` cuando el documento terminó de cargar (arte diferido). */
+export const LOADED_ATTR = "data-loaded";
+
 export const PARALLAX_FRAME_MS = 1000 / PARALLAX_MAX_FPS;
 
 /** Multiplicadores (px) de cada capa del paralaje del Hero. */

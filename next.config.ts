@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
     localPatterns: [{ pathname: "/**" }],
     // AVIF pesa menos que WebP con la misma calidad; quien no lo soporta recibe WebP.
     formats: ["image/avif", "image/webp"],
+    // Anchos intermedios (192, 320 y 512): sin ellos una capa de 390 px reales bajaba la de 640.
+    imageSizes: [32, 48, 64, 96, 128, 192, 256, 320, 384, 512],
   },
 };
 

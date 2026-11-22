@@ -26,7 +26,7 @@ type Vars = CSSProperties & Record<`--${string}`, string | number>;
  * Ancho servido de la huella (`--print-size` en app/art.css): hasta 240 px (15rem) desde
  * tablet y unos 80 px en móvil.
  */
-const PRINT_SIZES = "(min-width: 768px) 240px, 96px";
+const PRINT_SIZES = "(min-width: 768px) 240px, 88px";
 
 /**
  * Huella de dinosaurio con el logo de una tecnología grabado en el fondo. Capas, de

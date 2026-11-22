@@ -30,6 +30,7 @@ export async function Footer({ profile, links }: FooterProps) {
           <div className="max-w-[calc(var(--u)*26.4)] flex-[1_1_280px]">
             <Link
               href={localizeHref(locale, "/")}
+              prefetch={false}
               className="inline-flex items-center gap-3 no-underline"
             >
               <span className="font-display bg-glow text-fluid-base flex h-11 w-11 items-center justify-center rounded-xl font-extrabold text-(--ink)">

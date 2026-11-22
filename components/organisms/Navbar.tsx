@@ -47,6 +47,7 @@ export function Navbar({ profile, links, backHref }: NavbarProps) {
           ) : null}
           <Link
             href={localize("/")}
+            prefetch={false}
             className="inline-flex min-h-11 items-center gap-3 no-underline"
           >
             <span className="font-display bg-glow text-fluid-base flex size-[max(2.25rem,calc(var(--u)*2.8))] items-center justify-center rounded-xl font-extrabold text-(--ink)">

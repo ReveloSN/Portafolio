@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Figtree, IM_Fell_English, JetBrains_Mono, Outfit } from "next/font/google";
+import { LoadedFlag } from "@/components/atoms/LoadedFlag";
 import { LocaleProvider } from "@/components/templates/LocaleProvider";
 import { PortalProvider } from "@/components/templates/PortalProvider";
 import { CONTENT } from "@/data/content";
@@ -84,6 +85,7 @@ export default async function RootLayout({
       <body>
         <LocaleProvider locale={locale}>
           <PortalProvider>{children}</PortalProvider>
+          <LoadedFlag />
         </LocaleProvider>
       </body>
     </html>

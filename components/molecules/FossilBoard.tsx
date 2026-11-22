@@ -11,6 +11,8 @@ interface FossilBoardProps {
   readonly height: number;
   readonly pieces: readonly BoardPiece[];
   readonly state: PuzzleState;
+  /** `false` mientras el fósil está lejos: aún no se piden sus imágenes. */
+  readonly showArt: boolean;
   readonly describedBy: string;
   readonly pxPerUnit: () => number;
   readonly onToggle: (index: number) => void;
@@ -25,6 +27,7 @@ export function FossilBoard({
   height,
   pieces,
   state,
+  showArt,
   describedBy,
   pxPerUnit,
   onToggle,
@@ -48,6 +51,7 @@ export function FossilBoard({
         height={board.slabHeight}
         shapes={pieces.map((piece) => piece.shape)}
         placed={state.placed}
+        showArt={showArt}
       />
       {pieces.map((piece, i) => {
         const placed = state.placed[i] ?? false;
@@ -55,6 +59,7 @@ export function FossilBoard({
           <PuzzlePiece
             key={piece.shape.id}
             shape={piece.shape}
+            showArt={showArt}
             origin={placed ? piece.shape.slot : piece.trayOrigin}
             board={board}
             boardHeight={height}

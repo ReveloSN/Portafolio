@@ -13,6 +13,7 @@ interface PuzzlePieceProps {
   readonly board: PuzzleBoard;
   readonly boardHeight: number;
   readonly placed: boolean;
+  readonly showArt: boolean;
   readonly selected: boolean;
   /** Texto corto visible sobre el hueso (el año de inicio). */
   readonly tag: string;
@@ -36,6 +37,7 @@ export function PuzzlePiece({
   board,
   boardHeight,
   placed,
+  showArt,
   selected,
   tag,
   label,
@@ -78,7 +80,7 @@ export function PuzzlePiece({
       data-testid="fossil-piece"
       {...handlers}
     >
-      <BoneShape shape={shape} className="fossil-bone" />
+      <BoneShape shape={shape} showArt={showArt} className="fossil-bone" />
       {!placed && (
         <span className="fossil-piece-tag" aria-hidden="true">
           <span>{tag}</span>

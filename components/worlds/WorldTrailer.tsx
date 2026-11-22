@@ -1,7 +1,10 @@
+import { optimizedSrc } from "@/lib/imageUrl";
 import type { ProjectTrailer } from "@/types/project";
 
 /** Ancla de la sección; la navegación del mundo enlaza aquí cuando el proyecto tiene tráiler. */
 export const TRAILER_SECTION_ID = "trailer";
+/** El póster no admite `srcset`: un ancho que sirve al reproductor en escritorio y celular. */
+const POSTER_PX = 1200;
 
 /**
  * Tráiler con el reproductor del navegador: no arranca solo ni descarga el video hasta que
@@ -27,7 +30,7 @@ export function WorldTrailer({ trailer }: { readonly trailer: ProjectTrailer }) 
             controls
             playsInline
             preload="none"
-            poster={trailer.poster}
+            poster={optimizedSrc(trailer.poster, POSTER_PX)}
             width={trailer.width}
             height={trailer.height}
             aria-labelledby={titleId}

@@ -15,6 +15,7 @@
 @import "./contact.css";
 @import "./projects.css";
 @import "./project-scenes.css";
+@import "./deferred.css";
 
 /* Variantes por forma de pantalla (no por dispositivo) */
 @custom-variant short (@media (max-height: 640px));

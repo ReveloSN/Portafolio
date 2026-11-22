@@ -48,6 +48,9 @@ const TRUNK_WIDTH = "min(680px, 50cqw, calc(100cqh * var(--trunk-ratio, 1.1)))";
 /** El tronco derecho es más angosto, anclado al borde y completo, para no tapar la cola del dino. */
 const TRUNK_RIGHT_WIDTH = `calc(${TRUNK_WIDTH} * 0.75)`;
 const TRUNK_RIGHT_OFFSET = 0;
+/** Anchos servidos de cada tronco (el derecho mide tres cuartos del izquierdo). */
+const TRUNK_SIZES = "(min-width: 1400px) 680px, 50vw";
+const TRUNK_RIGHT_SIZES = "(min-width: 1400px) 510px, 38vw";
 
 const GLOW =
   "radial-gradient(ellipse 46% 44% at 52% 34%, color-mix(in srgb, var(--glow) 55%, transparent) 0%, color-mix(in srgb, var(--glow) 16%, transparent) 45%, transparent 100%)";
@@ -78,7 +81,8 @@ export function JungleBackdrop({
           src="/images/rio.webp"
           alt=""
           fill
-          priority
+          loading="eager"
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover"
         />
@@ -120,7 +124,7 @@ export function JungleBackdrop({
           src="/images/trunkL.webp"
           width={1024}
           height={1536}
-          sizes="(min-width: 1400px) 680px, 50vw"
+          sizes={TRUNK_SIZES}
         />
       </div>
       <div
@@ -138,7 +142,7 @@ export function JungleBackdrop({
           src="/images/trunkR.webp"
           width={1024}
           height={1536}
-          sizes="(min-width: 1400px) 680px, 50vw"
+          sizes={TRUNK_RIGHT_SIZES}
         />
       </div>
       {CORNERS.map((corner) => (
