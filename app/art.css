@@ -64,6 +64,16 @@
   transform-origin: top center;
   animation: vine-sway var(--sway-duration, 7s) ease-in-out var(--sway-delay, 0s) infinite;
 }
+.foliage-accent[data-accent="projects-fern"] {
+  margin-right: calc(var(--u) * 1.1);
+}
+.foliage-accent[data-accent="testimonials-branch"] {
+  margin-top: calc(var(--u) * 2);
+  mask-image: linear-gradient(to right, transparent, #000 10%);
+}
+.foliage-accent[data-accent="testimonials-branch"] .foliage-sway {
+  transform-origin: left 64%;
+}
 /* Cola del dino: gira desde el borde derecho, por donde entra a la pantalla */
 .tail-sway {
   transform-origin: right center;
