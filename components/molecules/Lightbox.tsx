@@ -5,13 +5,18 @@ import { Icon } from "@/components/atoms/Icon";
 import type { useLightbox } from "@/hooks/useLightbox";
 import { useCopy } from "@/hooks/useLocale";
 import { formatCounter } from "@/lib/lightbox";
-import type { ProjectScreenshot } from "@/types/project";
+import type { Copy } from "@/data/copy";
+import type { ArtEntry } from "@/types/art";
 
 type LightboxController = ReturnType<typeof useLightbox>;
+type LightboxImage = Pick<ArtEntry, "src" | "alt" | "width" | "height"> & {
+  readonly unoptimized?: boolean;
+};
 
 interface LightboxProps {
-  readonly shots: readonly ProjectScreenshot[];
+  readonly shots: readonly LightboxImage[];
   readonly controller: LightboxController;
+  readonly labels?: Copy["world"]["viewer"];
 }
 
 /**
@@ -19,10 +24,9 @@ interface LightboxProps {
  * descripción y flechas para pasar a las demás (también con el teclado o deslizando).
  * Solo carga la imagen que se está viendo.
  */
-export function Lightbox({ shots, controller }: LightboxProps) {
-  const {
-    world: { viewer },
-  } = useCopy();
+export function Lightbox({ shots, controller, labels }: LightboxProps) {
+  const { world } = useCopy();
+  const viewer = labels ?? world.viewer;
   const { dialogRef, index, close, step, dialogProps } = controller;
   const shot = index === null ? undefined : shots[index];
   const many = shots.length > 1;
@@ -59,6 +63,7 @@ export function Lightbox({ shots, controller }: LightboxProps) {
               height={shot.height}
               sizes="100vw"
               loading="eager"
+              unoptimized={shot.unoptimized}
               className="lightbox-image"
             />
             <figcaption aria-hidden="true" className="text-fluid-sm leading-normal">

@@ -6,9 +6,9 @@ export interface Hobby {
   readonly name: string;
   readonly description: string;
   readonly glyph: HobbyGlyphKind;
-  /** Ocupa dos columnas y dos filas en escritorio. */
+  /** Ocupa la fila completa y pone la imagen junto al texto en escritorio. */
   readonly featured?: boolean;
-  /** Ocupa toda la fila en escritorio (útil para cerrar la rejilla sin huecos). */
+  /** Ocupa las dos columnas en tabletas para cerrar la rejilla. */
   readonly wide?: boolean;
   /** Dato de ejemplo: la tarjeta lo indica hasta que la persona lo reemplace. */
   readonly example?: boolean;
